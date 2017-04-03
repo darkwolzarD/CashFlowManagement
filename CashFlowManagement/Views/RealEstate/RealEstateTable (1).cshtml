@@ -1,0 +1,150 @@
+﻿@using CashFlowManagement.Utilities
+@model List<CashFlowManagement.EntityModel.RealEstateIncomes>
+
+@{
+    double totalMortgageValue = 0,
+           totalPaymentPeriod = 0,
+           totalMonthlyOriginalPayment = 0,
+           totalMonthlyInterestPayment = 0,
+           totalAnnualPayment = 0,
+           totalRemainedValue = 0;
+}
+
+@{ 
+    double financialPeriods;
+    double annualPayment = 0;
+    int iMonths;
+    double averageInterestRate;
+}
+
+<table class="table table-bordered table-striped real-estate-table">
+    <thead>
+        <tr>
+            <th class="text-center" width="200">Real Estate Name</th>
+            <th class="text-center">Original Value</th>
+            <th class="text-center">Monthly Rent Income</th>
+            <th class="text-center">Annual Rent Income</th>
+            <th class="text-center">Rent Yield</th>
+            <th colspan="8"></th>
+            <th><strong>Today: @(DateTime.Now.ToString("MM/yyyy"))</strong></th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Count > 0)
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td class="hidden">
+                        <span class="real-estate-id">@item.Id</span>
+                    </td>
+                    <td class="text-center" rowspan="@(item.Loans != null && item.Loans.Count > 0 ? item.Loans.Count + 2 : 3)" style="vertical-align: middle">@item.Source</td>
+                    <td>@FormatUtility.DisplayThousandSeparatorsForNumber(item.OriginalValue)</td>
+                    <td>@FormatUtility.DisplayThousandSeparatorsForNumber(item.Income)</td>
+                    <td>@FormatUtility.DisplayThousandSeparatorsForNumber(item.Income * 12)</td>                    
+                    <td>@(String.Format("{0:0.00}",(item.Income * 1200 / (double)item.OriginalValue)) + "%")</td>
+                    <td class="text-center" colspan="9">
+                        <button class="btn btn-success update-real-estate">Update</button>
+                        <button class="btn btn-danger delete-real-estate">Delete</button>
+                    </td>
+                </tr>
+                <tr>
+                    <th class="text-center">Source of loan</th>
+                    <th class="text-center">Mortgate value</th>
+                    <th class="text-center">Interest type</th>
+                    <th class="text-center">Interest rate</th>
+                    <th class="text-center">From</th>
+                    <th class="text-center">To</th>
+                    <th class="text-center">Total payment period (month)</th>
+                    <th class="text-center">Monthly Orginary Payment</th>
+                    <th class="text-center">Monthly Interest Payment</th>
+                    <th class="text-center">Monthly payment</th>
+                    <th class="text-center">Annual payment</th>
+                    <th class="text-center">Remained value</th>
+                    <th class="text-center" style="vertical-align: middle">
+                        <button type="button" class="btn btn-primary create-new-loan" data-real-estate-id="@item.Id">Add Loan</button>
+                    </th>
+                </tr>
+                if (item.Loans != null && item.Loans.Count > 0)
+                {
+                    foreach (var loan in item.Loans)
+                    {
+
+                        {
+                            financialPeriods = (loan.EndDate.Year - loan.StartDate.Year) * 12 + loan.EndDate.Month - loan.StartDate.Month;
+                            iMonths = (DateTime.Now.Year - loan.StartDate.Year) * 12 + DateTime.Now.Month - loan.StartDate.Month;
+                            if (iMonths > 0)
+                            {
+                                loan.OriginalPayment = loan.MortgageValue / financialPeriods;
+                                loan.InterestPayment = (loan.MortgageValue - loan.OriginalPayment * (iMonths - 1)) * loan.InterestRatePerYear / 1200;
+                            }
+                            else
+                            {
+                                loan.OriginalPayment = loan.InterestPayment = 0;
+                            }
+                            annualPayment = loan.MortgageValue * loan.InterestRatePerYear / 100;
+                        }
+                        <tr>
+                            <td>@loan.Source</td>
+                            <td>@(String.Format("{0:0,000}", loan.MortgageValue))</td>
+                            <td>@loan.InterestType</td>
+                            <td>@(String.Format("{0:0.00}", loan.InterestRatePerYear) + "%")</td>
+                            <td>@loan.StartDate.ToString("MM/yyyy")</td>
+                            <td>@loan.EndDate.ToString("MM/yyyy")</td>
+                            <td>@(String.Format("{0:0}", financialPeriods))</td>
+                            <td>@(String.Format("{0:0,000}", loan.OriginalPayment))</td>   
+                            @{ 
+                                var loanId = loan.ParentLoanId == null ? loan.Id : loan.ParentLoanId;
+                            }                         
+                            <td><a href="#" class="interest-info" data-loan-id="@loanId">@(String.Format("{0:0,000}", loan.InterestPayment))</a></td>
+                            <td>@(String.Format("{0:0,000}", loan.OriginalPayment + loan.InterestPayment))</td>
+                            <td>@(String.Format("{0:0,000}", annualPayment))</td>
+                            <td>@(String.Format("{0:0,000}", loan.MortgageValue - loan.OriginalPayment * iMonths))</td>
+                            <td class="text-center" width="200" style="vertical-align: middle">
+                                <button class="btn btn-success update-loan" data-loan-id="@loan.Id">Update</button>
+                                <button class="btn btn-danger delete-loan" data-loan-id="@loan.Id">Delete</button>
+                                <button class="btn btn-info details-loan" data-loan-id="@loan.Id">Loans Details</button>
+                            </td>
+                        </tr>
+                        {
+                            totalMortgageValue += loan.MortgageValue;
+                            totalPaymentPeriod += loan.OriginalPayment + loan.InterestPayment;
+                            totalMonthlyOriginalPayment += loan.OriginalPayment;
+                            totalMonthlyInterestPayment += loan.InterestPayment;
+                            totalAnnualPayment += annualPayment;
+                            totalRemainedValue += loan.MortgageValue - loan.OriginalPayment * iMonths;
+                        }
+                    }
+                    <tr>
+                        <td class="text-center"><strong>Total value</strong></td>
+                        <td></td>
+                        <td><strong>@(String.Format("{0:0,000}", totalMortgageValue))</strong></td>
+                        <td></td>
+                        <td><strong>@(String.Format("{0:0.00}", 100 * totalAnnualPayment / totalMortgageValue) + "%")</strong></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(totalMonthlyOriginalPayment)</strong></td>
+                        <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(totalMonthlyInterestPayment)</strong></td>
+                        <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(totalAnnualPayment / 12)</strong></td>
+                        <td><strong>@(String.Format("{0:0,000}", totalAnnualPayment))</strong></td>
+                        <td><strong>@(String.Format("{0:0,000}", totalRemainedValue))</strong></td>
+                        <td></td>
+                    </tr>
+                }
+                else
+                {
+                    <tr>
+                        <td class="text-center" colspan="13">No loan available</td>
+                    </tr>
+                }
+            }
+        }
+        else
+        {
+            <tr>
+                <td class="text-center" colspan="14">No real estate income available</td>
+            </tr>
+        }
+    </tbody>
+</table>

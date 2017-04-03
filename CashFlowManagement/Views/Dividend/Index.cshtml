@@ -1,0 +1,46 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="background">
+    <h3 class="text-center">DIVIDEND INCOMES</h3>
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#create-new-stock-modal">Add Devidend Income</button>
+    <div class="stock-table">
+        @{ Html.RenderAction("StockCodeTable", "Dividend");  }
+    </div>
+</div>
+
+<div class="stock-modal">
+    @{ Html.RenderPartial("StockCodeModal");  }
+</div>
+
+<div class="update-modal">
+    @{ Html.RenderPartial("UpdateStockCodeModal");  }
+</div>
+
+<div class="transaction-modal">
+    @{ Html.RenderPartial("TransactionModal");  }
+</div>
+
+<div class="update-transaction-modal-div">
+    @{ Html.RenderPartial("UpdateTransactionModal");  }
+</div>
+
+
+<script type="text/javascript" src="~/Scripts/dividend.js"></script>
+<script type="text/javascript">
+    var Url = new Object();
+    Url.CreateStockCode = '@Url.Action("CreateStockCode", "Dividend")';
+    Url.LoadTable = '@Url.Action("StockCodeTable", "Dividend")';
+    Url.LoadStockCode = '@Url.Action("UpdateStockCodeModal", "Dividend")';
+    Url.UpdateStockCode = '@Url.Action("UpdateStockCode", "Dividend")';
+    Url.DeleteStockCode = '@Url.Action("DeleteStockCode", "Dividend")';
+    Url.TransactionModal = '@Url.Action("TransactionModal", "Dividend")';
+    Url.CreateTransaction = '@Url.Action("CreateTransaction", "Dividend")';
+    Url.LoadTransaction = '@Url.Action("UpdateTransactionModal", "Dividend")';
+    Url.UpdateTransaction = '@Url.Action("UpdateTransaction", "Dividend")';
+    Url.DeleteTransaction = '@Url.Action("DeleteTransaction", "Dividend")';
+</script>
+

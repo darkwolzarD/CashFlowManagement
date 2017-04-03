@@ -1,0 +1,32 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="background">
+    <h3 class="text-center">BUSINESS INCOMES</h3>
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#create-new-business-modal">Add Business Income</button>
+    <div class="business-table">
+        @{ Html.RenderAction("BusinessTable", "Business");  }
+    </div>
+</div>
+
+<div class="business-modal">
+    @{ Html.RenderPartial("BusinessModal");  }
+</div>
+
+<div class="update-modal">
+    @{ Html.RenderPartial("UpdateBusinessModal");  }
+</div>
+
+
+<script type="text/javascript" src="~/Scripts/business.js"></script>
+<script type="text/javascript">
+    var Url = new Object();
+    Url.CreateBusiness = '@Url.Action("CreateBusiness", "Business")';
+    Url.LoadTable = '@Url.Action("BusinessTable", "Business")';
+    Url.LoadBusiness = '@Url.Action("UpdateBusinessModal", "Business")';
+    Url.UpdateBusiness = '@Url.Action("UpdateBusiness", "Business")';
+    Url.DeleteBusiness = '@Url.Action("DeleteBusiness", "Business")';
+</script>
+

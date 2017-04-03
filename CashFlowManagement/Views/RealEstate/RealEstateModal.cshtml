@@ -1,0 +1,38 @@
+﻿@model CashFlowManagement.EntityModel.RealEstateIncomes
+<div id="create-new-real-estate-modal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Add new real estate</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label class="control-label col-sm-3">Real estate name:</label>
+                        <div class="col-sm-9">
+                            @Html.TextBoxFor(x => x.Source, new { @type = "text", @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-3">Original Value:</label>
+                        <div class="col-sm-9">
+                            @Html.TextBoxFor(x => x.OriginalValue, new { @type = "text", @class = "form-control input-mask" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-3">Monthly Rent Income:</label>
+                        <div class="col-sm-9">
+                            @Html.TextBoxFor(x => x.Income, new { @type = "text", @class = "form-control input-mask" })
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer text-center">
+                <button type="button" class="btn btn-success create-real-estate">Create</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+

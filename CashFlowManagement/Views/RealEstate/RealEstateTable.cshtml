@@ -1,0 +1,149 @@
+﻿@using CashFlowManagement.Utilities
+@model CashFlowManagement.ViewModels.RealEstate.RealEstateListViewModel
+
+@{
+    double totalMortgageValue = 0,
+           totalPaymentPeriod = 0,
+           totalMonthlyOriginalPayment = 0,
+           totalMonthlyInterestPayment = 0,
+           totalAnnualPayment = 0,
+           totalRemainedValue = 0;
+}
+
+@{ 
+    double financialPeriods;
+    double annualPayment = 0;
+    int iMonths;
+    double averageInterestRate;
+}
+
+<table class="table table-bordered table-striped real-estate-table">
+    <thead>
+        <tr>
+            <th class="text-center" width="200">Real Estate Name</th>
+            <th class="text-center">Original Value</th>
+            <th class="text-center">Monthly Rent Income</th>
+            <th class="text-center">Annual Rent Income</th>
+            <th class="text-center">Rent Yield</th>
+            <th colspan="8"></th>
+            <th><strong>Today: @(DateTime.Now.ToString("MM/yyyy"))</strong></th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.ListRealEstateInfoViewModel != null && Model.ListRealEstateInfoViewModel.Count > 0)
+        {
+            foreach (var item in Model.ListRealEstateInfoViewModel)
+            {
+                <tr>
+                    <td class="hidden">
+                        <span class="real-estate-id">@item.RealEstate.Id</span>
+                    </td>
+                    <td class="text-center" rowspan="@(item.RealEstate.Loans != null && item.RealEstate.Loans.Count > 0 ? item.RealEstate.Loans.Count + 2 : 3)" style="vertical-align: middle">@item.RealEstate.Source</td>
+                    <td>@FormatUtility.DisplayThousandSeparatorsForNumber(item.RealEstate.OriginalValue)</td>
+                    <td>@FormatUtility.DisplayThousandSeparatorsForNumber(item.RealEstate.Income)</td>
+                    <td>@FormatUtility.DisplayThousandSeparatorsForNumber(item.AnnualRentIncome)</td>                    
+                    <td>@FormatUtility.DisplayPercentageForNumber(item.RentYield)</td>
+                    <td class="text-center" colspan="9">
+                        <button class="btn btn-success update-real-estate">Update</button>
+                        <button class="btn btn-danger delete-real-estate">Delete</button>
+                    </td>
+                </tr>
+                <tr>
+                    <th class="text-center">Source of loan</th>
+                    <th class="text-center">Mortgate value</th>
+                    <th class="text-center">Interest type</th>
+                    <th class="text-center">Interest rate</th>
+                    <th class="text-center">From</th>
+                    <th class="text-center">To</th>
+                    <th class="text-center">Total payment period (month)</th>
+                    <th class="text-center">Monthly Orginary Payment</th>
+                    <th class="text-center">Monthly Interest Payment</th>
+                    <th class="text-center">Monthly payment</th>
+                    <th class="text-center">Annual payment</th>
+                    <th class="text-center">Remained value</th>
+                    <th class="text-center" style="vertical-align: middle">
+                        <button type="button" class="btn btn-primary create-new-loan" data-real-estate-id="@item.RealEstate.Id">Add Loan</button>
+                    </th>
+                </tr>
+                if (item.ListLoanViewModel != null && item.ListLoanViewModel.Count > 0)
+                {
+                    foreach (var loanViewModel in item.ListLoanViewModel)
+                    {
+
+                        //{
+                        //    financialPeriods = (loan.EndDate.Year - loan.StartDate.Year) * 12 + loan.EndDate.Month - loan.StartDate.Month;
+                        //    iMonths = (DateTime.Now.Year - loan.StartDate.Year) * 12 + DateTime.Now.Month - loan.StartDate.Month;
+                        //    if (iMonths > 0)
+                        //    {
+                        //        loan.OriginalPayment = loan.MortgageValue / financialPeriods;
+                        //        loan.InterestPayment = (loan.MortgageValue - loan.OriginalPayment * (iMonths - 1)) * loan.InterestRatePerYear / 1200;
+                        //    }
+                        //    else
+                        //    {
+                        //        loan.OriginalPayment = loan.InterestPayment = 0;
+                        //    }
+                        //    annualPayment = loan.MortgageValue * loan.InterestRatePerYear / 100;
+                        //}
+                        <tr>
+                            <td>@loanViewModel.Loan.Source</td>
+                            <td>@FormatUtility.DisplayThousandSeparatorsForNumber(loanViewModel.Loan.MortgageValue)</td>
+                            <td>@loanViewModel.Loan.InterestType</td>
+                            <td>@FormatUtility.DisplayPercentageForNumber(loanViewModel.CurrentInterestRate)</td>
+                            <td>@loanViewModel.Loan.StartDate.ToString("MM/yyyy")</td>
+                            <td>@loanViewModel.Loan.EndDate.ToString("MM/yyyy")</td>
+                            <td>@FormatUtility.DisplayThousandSeparatorsForNumber(loanViewModel.TotalPaymentPeriod)</td>
+                            <td>@FormatUtility.DisplayThousandSeparatorsForNumber(loanViewModel.MonthlyOriginalPayment)</td>   
+                            @{ 
+                                var loanId = loanViewModel.Loan.ParentLoanId == null ? loanViewModel.Loan.Id : loanViewModel.Loan.ParentLoanId;
+                            }                         
+                            <td><a href="#" class="interest-info" data-loan-id="@loanId">@FormatUtility.DisplayThousandSeparatorsForNumber(loanViewModel.MonthlyInterestPayment)</a></td>
+                            <td>@FormatUtility.DisplayThousandSeparatorsForNumber(loanViewModel.MonthlyPayment)</td>
+                            <td>@FormatUtility.DisplayThousandSeparatorsForNumber(loanViewModel.AnnualPayment)</td>
+                            <td>@FormatUtility.DisplayThousandSeparatorsForNumber(loanViewModel.RemainedValue)</td>
+                            <td class="text-center" width="200" style="vertical-align: middle">
+                                <button class="btn btn-success update-loan" data-loan-id="@loanViewModel.Loan.Id">Update</button>
+                                <button class="btn btn-danger delete-loan" data-loan-id="@loanViewModel.Loan.Id">Delete</button>
+                            </td>
+                        </tr>
+                                    {
+                                        //totalMortgageValue += loan.MortgageValue;
+                                        //totalPaymentPeriod += loan.OriginalPayment + loan.InterestPayment;
+                                        //totalMonthlyOriginalPayment += loan.OriginalPayment;
+                                        //totalMonthlyInterestPayment += loan.InterestPayment;
+                                        //totalAnnualPayment += annualPayment;
+                                        //totalRemainedValue += loan.MortgageValue - loan.OriginalPayment * iMonths;
+                                    }
+                                }
+                    <tr>
+                        <td class="text-center"><strong>Total value</strong></td>
+                        <td></td>
+                        <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(item.TotalMorgageValue)</strong></td>
+                        <td></td>
+                        <td><strong>@FormatUtility.DisplayPercentageForNumber(item.AverageInterestRate)</strong></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(item.TotalOriginalPayment)</strong></td>
+                        <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(item.TotalInterestPayment)</strong></td>
+                        <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(item.TotalMonthlyPayment)</strong></td>
+                        <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(item.TotalAnnualPayment)</strong></td>
+                        <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(item.TotalRemainingValue)</strong></td>
+                        <td></td>
+                    </tr>
+                }
+                else
+                {
+                    <tr>
+                        <td class="text-center" colspan="13">No loan available</td>
+                    </tr>
+                }
+            }
+        }
+        else
+        {
+            <tr>
+                <td class="text-center" colspan="14">No real estate income available</td>
+            </tr>
+        }
+    </tbody>
+</table>

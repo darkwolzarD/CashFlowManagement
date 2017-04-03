@@ -1,0 +1,50 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="background">
+    <h3 class="text-center">REAL ESTATE INCOMES</h3>
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#create-new-real-estate-modal">Add Real Estate Income</button>
+    <div class="real-estate-table">
+        @{ Html.RenderAction("RealEstateTable", "RealEstate");  }
+    </div>
+</div>
+
+<div class="real-estate-modal">
+    @{ Html.RenderPartial("RealEstateModal");  }
+</div>
+
+<div class="update-modal">
+    @{ Html.RenderPartial("UpdateRealEstateModal");  }
+</div>
+
+<div class="loan-modal">
+    @{ Html.RenderPartial("LoanModal");  }
+</div>
+
+<div class="update-loan-modal-div">
+    @{ Html.RenderPartial("UpdateLoanModal");  }
+</div>
+
+<div class="interest-modal-div">
+    
+</div>
+
+
+<script type="text/javascript" src="~/Scripts/realestate.js"></script>
+<script type="text/javascript">
+    var Url = new Object();
+    Url.CreateRealEstate = '@Url.Action("CreateRealEstate", "RealEstate")';
+    Url.LoadTable = '@Url.Action("RealEstateTable", "RealEstate")';
+    Url.LoadRealEstate = '@Url.Action("UpdateRealEstateModal", "RealEstate")';
+    Url.UpdateRealEstate = '@Url.Action("UpdateRealEstate", "RealEstate")';
+    Url.DeleteRealEstate = '@Url.Action("DeleteRealEstate", "RealEstate")';
+    Url.LoanModal = '@Url.Action("LoanModal", "RealEstate")';
+    Url.CreateLoan = '@Url.Action("CreateLoan", "RealEstate")';
+    Url.LoadLoan = '@Url.Action("UpdateLoanModal", "RealEstate")';
+    Url.UpdateLoan = '@Url.Action("UpdateLoan", "RealEstate")';
+    Url.DeleteLoan = '@Url.Action("DeleteLoan", "RealEstate")';
+    Url.PaymentsPerMonth = '@Url.Action("PaymentsPerMonth", "RealEstate")';
+</script>
+

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="dafd82af35ca4756b248e4a4cf825c11" Name="Diagram1">
+        <EntityTypeShape EntityType="CashFlowManagementModel.BankDepositIncomes" Width="1.5" PointX="3" PointY="16.875" />
+        <EntityTypeShape EntityType="CashFlowManagementModel.BusinessIncomes" Width="1.5" PointX="3" PointY="9.5" />
+        <EntityTypeShape EntityType="CashFlowManagementModel.Expenses" Width="1.5" PointX="3" PointY="13.5" />
+        <EntityTypeShape EntityType="CashFlowManagementModel.FinancialStatus" Width="1.5" PointX="3" PointY="20.5" />
+        <EntityTypeShape EntityType="CashFlowManagementModel.Loans" Width="1.5" PointX="5.25" PointY="23.5" />
+        <EntityTypeShape EntityType="CashFlowManagementModel.RealEstateIncomes" Width="1.5" PointX="3" PointY="24.125" />
+        <EntityTypeShape EntityType="CashFlowManagementModel.Salary" Width="1.5" PointX="3" PointY="2.125" />
+        <EntityTypeShape EntityType="CashFlowManagementModel.StockCodes" Width="1.5" PointX="3" PointY="5.75" />
+        <EntityTypeShape EntityType="CashFlowManagementModel.StockTransactions" Width="1.5" PointX="5.25" PointY="5.25" />
+        <EntityTypeShape EntityType="CashFlowManagementModel.Users" Width="1.5" PointX="0.75" PointY="13.125" />
+        <EntityTypeShape EntityType="CashFlowManagementModel.TransactionFee" Width="1.5" PointX="5.75" PointY="0.75" />
+        <AssociationConnector Association="CashFlowManagementModel.FK_BankDepositIncomes_Users" />
+        <AssociationConnector Association="CashFlowManagementModel.FK_BusinessIncomes_Users" />
+        <AssociationConnector Association="CashFlowManagementModel.FK_Expenses_Users" />
+        <AssociationConnector Association="CashFlowManagementModel.FK_FinancialStatus_Users" />
+        <AssociationConnector Association="CashFlowManagementModel.FK_Loans_Loans" />
+        <AssociationConnector Association="CashFlowManagementModel.FK_Loans_RealEstateIncomes" />
+        <AssociationConnector Association="CashFlowManagementModel.FK_RealEstateIncomes_Users" />
+        <AssociationConnector Association="CashFlowManagementModel.FK_Salary_Users" />
+        <AssociationConnector Association="CashFlowManagementModel.FK_StockCodes_Users" />
+        <AssociationConnector Association="CashFlowManagementModel.FK_StockTransactions_StockCodes" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

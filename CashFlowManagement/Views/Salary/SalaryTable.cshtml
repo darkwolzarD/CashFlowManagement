@@ -1,0 +1,63 @@
+﻿@using CashFlowManagement.Utilities
+@model List<CashFlowManagement.EntityModel.Salary>
+@{
+    double totalSalary = 0;
+}
+
+<table class="table table-bordered table-striped salary-table">
+    <thead>
+        <tr>
+            <th class="text-center" width="600">Thu nhập từ lương</th>
+            <th class="text-center">Thu hàng tháng</th>
+            <th class="text-center">Thu hàng năm</th>
+            <th width="200"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Count > 0)
+        {
+            foreach (var item in Model)
+            {
+                { totalSalary += item.Income; }
+            }
+            <tr>
+                <td><strong>Tổng giá trị</strong></td>
+                <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(totalSalary)</strong></td>
+                <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(totalSalary * 12)</strong></td>
+                <td></td>
+            </tr>
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td class="hidden" name="Id">@item.Id</td>
+                    <td>@item.Source</td>
+                    <td name="Income">@FormatUtility.DisplayThousandSeparatorsForNumber(item.Income)</td>
+                    <td>@FormatUtility.DisplayThousandSeparatorsForNumber(item.Income * 12)</td>
+                    <td class="text-center">
+                        <button class="btn btn-success update-salary">Cập nhật</button>
+                        <button class="btn btn-danger delete-salary">Xóa</button>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td class="text-center" colspan="4">Chưa có thu nhập từ lương</td>
+            </tr>
+        }
+        <tr id="create-new-salary">
+            <td>
+                <input type="text" class="form-control" name="Source" placeholder="Thu nhập từ lương" />
+            </td>
+            <td>
+                <input type="text" class="form-control input-mask input" name="Income" placeholder="Thu hàng tháng" />
+            </td>
+            <td class="annualIncome"></td>
+            <td class="text-center">
+                <button class="btn btn-primary create-salary">Tạo mới</button>
+            </td>
+        </tr>
+    </tbody>
+</table>
+

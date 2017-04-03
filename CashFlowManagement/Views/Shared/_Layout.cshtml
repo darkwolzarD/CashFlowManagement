@@ -1,0 +1,96 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    @Styles.Render("https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css")
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs/jq-2.2.4/dt-1.10.13/b-1.2.4/r-2.1.1/se-1.2.0/datatables.min.css" />
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.10/jquery.mask.min.js")
+
+</head>
+<body>
+    <div class="container-fluid">
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#menu">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#">CF Management</a>
+                    <div class="minimize-sidebar">
+                        <span class="fa fa-bars"></span>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <div class="menu">
+            <div class="sidebar">
+                <div class="user-info">
+                    <div class="avatar">
+                        <img src="~/images/Generic_Avatar.png" class="img-circle" width="80">
+                    </div>
+                    <span class="username">ROBERT RAZER</span>
+                    <span class="income-this-month">$1,000,000</span>
+                </div>
+                <ul class="navigation-bar">
+                    <li><a href="#">Báo cáo tài chính</a></li>
+                    <li>
+                        <a href="@Url.Action("Index", "Salary")">
+                            <span class="nav-label">Thu nhập lương</span>
+                        </a>
+                        
+                    </li>
+                    <li>
+                        <a href="#">
+                            <span class="nav-label">Tài sản</span>
+                            <span class="fa fa-angle-left"></span>
+                        </a>
+                        <ul class="second-navbar">
+                            <li><a href="@Url.Action("Index", "RealEstate")">Bất động sản</a></li>
+                            <li><a href="@Url.Action("Index", "Business")">Kinh doanh</a></li>
+                            <li><a href="@Url.Action("Index", "BankDeposit")">Tài khoản tiết kiệm</a></li>
+                            <li><a href="@Url.Action("Index", "Dividend")">Chứng khoán</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <span class="nav-label">Chi tiêu</span>
+                            <span class="fa fa-angle-left"></span>
+                        </a>
+                        <ul class="second-navbar">
+                            <li><a href="#">Chi tiêu gia đình</a></li>
+                            <li><a href="#">Chi tiêu khác</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <span class="nav-label">Các khoản nợ</span>
+                            <span class="fa fa-angle-left"></span>
+                        </a>
+                        <ul class="second-navbar">
+                            <li><a href="#">Xe hơi và tiêu sản</a></li>
+                            <li><a href="#">Credit cards</a></li>
+                            <li><a href="#">Nợ khác</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#">Log</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="content">
+            @RenderBody()
+        </div>
+    </div>
+
+    @Scripts.Render("~/bundles/layout")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

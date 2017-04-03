@@ -1,0 +1,32 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="background">
+    <h3 class="text-center">BANK DEPOSIT INCOMES</h3>
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#create-new-bank-deposit-modal">Add Bank Deposit Income</button>
+    <div class="bank-deposit-table">
+        @{ Html.RenderAction("BankDepositTable", "BankDeposit");  }
+    </div>
+</div>
+
+<div class="bank-deposit-modal">
+    @{ Html.RenderPartial("BankDepositModal");  }
+</div>
+
+<div class="update-modal">
+    @{ Html.RenderPartial("UpdateBankDepositModal");  }
+</div>
+
+
+<script type="text/javascript" src="~/Scripts/bankdeposit.js"></script>
+<script type="text/javascript">
+    var Url = new Object();
+    Url.CreateBankDeposit = '@Url.Action("CreateBankDeposit", "BankDeposit")';
+    Url.LoadTable = '@Url.Action("BankDepositTable", "BankDeposit")';
+    Url.LoadBankDeposit = '@Url.Action("UpdateBankDepositModal", "BankDeposit")';
+    Url.UpdateBankDeposit = '@Url.Action("UpdateBankDeposit", "BankDeposit")';
+    Url.DeleteBankDeposit = '@Url.Action("DeleteBankDeposit", "BankDeposit")';
+</script>
+

@@ -1,0 +1,16 @@
+﻿@model CashFlowManagement.EntityModel.FinancialStatus
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row text-center">
+    <h2>FINANCIAL STATUS</h2>
+</div>
+
+<div class="row">
+    <h3>Monthly Cashflow: @Model.MonthlyCashflow</h3>
+    <h3>Passive Income: @Model.PassiveIncome</h3>
+    <h3>Financial Freedom: @Model.FinancialFreedom %</h3>
+</div>
+

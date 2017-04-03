@@ -1,0 +1,9 @@
+.SN-Facebook-Like-Dark {background-color:#333333 !important;color:white;border-color:#000000 !important}
+.SN-Facebook-Like-Dark a,
+.SN-Facebook-Like-Dark .sn-footer-url a {color:white}
+
+.SN-Facebook-Like-Corners {
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+}
