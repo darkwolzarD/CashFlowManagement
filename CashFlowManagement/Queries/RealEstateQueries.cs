@@ -18,7 +18,7 @@ namespace CashFlowManagement.Queries
                                                                         .Select(x => new
                                                                         {
                                                                             x,
-                                                                            Loans = x.Loans.Where(m => m.ParentLoanId == null)
+                                                                            Loans = x.Loans.Where(m => !m.DisabledDate.HasValue)
                                                                         }).AsEnumerable().Select(m => m.x).OrderByDescending(x => x.Income).ToList();
             return result;
         }

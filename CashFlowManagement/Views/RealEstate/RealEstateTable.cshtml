@@ -2,19 +2,7 @@
 @model CashFlowManagement.ViewModels.RealEstate.RealEstateListViewModel
 
 @{
-    double totalMortgageValue = 0,
-           totalPaymentPeriod = 0,
-           totalMonthlyOriginalPayment = 0,
-           totalMonthlyInterestPayment = 0,
-           totalAnnualPayment = 0,
-           totalRemainedValue = 0;
-}
-
-@{ 
-    double financialPeriods;
-    double annualPayment = 0;
-    int iMonths;
-    double averageInterestRate;
+    double count = 0;
 }
 
 <table class="table table-bordered table-striped real-estate-table">
@@ -41,11 +29,15 @@
                     <td class="text-center" rowspan="@(item.RealEstate.Loans != null && item.RealEstate.Loans.Count > 0 ? item.RealEstate.Loans.Count + 2 : 3)" style="vertical-align: middle">@item.RealEstate.Source</td>
                     <td>@FormatUtility.DisplayThousandSeparatorsForNumber(item.RealEstate.OriginalValue)</td>
                     <td>@FormatUtility.DisplayThousandSeparatorsForNumber(item.RealEstate.Income)</td>
-                    <td>@FormatUtility.DisplayThousandSeparatorsForNumber(item.AnnualRentIncome)</td>                    
+                    <td>@FormatUtility.DisplayThousandSeparatorsForNumber(item.AnnualRentIncome)</td>
                     <td>@FormatUtility.DisplayPercentageForNumber(item.RentYield)</td>
                     <td class="text-center" colspan="9">
-                        <button class="btn btn-success update-real-estate">Update</button>
-                        <button class="btn btn-danger delete-real-estate">Delete</button>
+                        <button class="btn btn-success update-real-estate">
+                            <span class="glyphicon glyphicon-pencil"></span>
+                        </button>
+                        <button class="btn btn-danger delete-real-estate">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </button>
                     </td>
                 </tr>
                 <tr>
@@ -62,28 +54,15 @@
                     <th class="text-center">Annual payment</th>
                     <th class="text-center">Remained value</th>
                     <th class="text-center" style="vertical-align: middle">
-                        <button type="button" class="btn btn-primary create-new-loan" data-real-estate-id="@item.RealEstate.Id">Add Loan</button>
+                        <button type="button" class="btn btn-primary create-new-loan" data-real-estate-id="@item.RealEstate.Id">
+                            <span class="glyphicon glyphicon-plus"></span>
+                        </button>
                     </th>
                 </tr>
                 if (item.ListLoanViewModel != null && item.ListLoanViewModel.Count > 0)
                 {
-                    foreach (var loanViewModel in item.ListLoanViewModel)
+                    foreach (var loanViewModel in item.ListLoanViewModel.Where(x => !x.Loan.ParentLoanId.HasValue))
                     {
-
-                        //{
-                        //    financialPeriods = (loan.EndDate.Year - loan.StartDate.Year) * 12 + loan.EndDate.Month - loan.StartDate.Month;
-                        //    iMonths = (DateTime.Now.Year - loan.StartDate.Year) * 12 + DateTime.Now.Month - loan.StartDate.Month;
-                        //    if (iMonths > 0)
-                        //    {
-                        //        loan.OriginalPayment = loan.MortgageValue / financialPeriods;
-                        //        loan.InterestPayment = (loan.MortgageValue - loan.OriginalPayment * (iMonths - 1)) * loan.InterestRatePerYear / 1200;
-                        //    }
-                        //    else
-                        //    {
-                        //        loan.OriginalPayment = loan.InterestPayment = 0;
-                        //    }
-                        //    annualPayment = loan.MortgageValue * loan.InterestRatePerYear / 100;
-                        //}
                         <tr>
                             <td>@loanViewModel.Loan.Source</td>
                             <td>@FormatUtility.DisplayThousandSeparatorsForNumber(loanViewModel.Loan.MortgageValue)</td>
@@ -92,28 +71,70 @@
                             <td>@loanViewModel.Loan.StartDate.ToString("MM/yyyy")</td>
                             <td>@loanViewModel.Loan.EndDate.ToString("MM/yyyy")</td>
                             <td>@FormatUtility.DisplayThousandSeparatorsForNumber(loanViewModel.TotalPaymentPeriod)</td>
-                            <td>@FormatUtility.DisplayThousandSeparatorsForNumber(loanViewModel.MonthlyOriginalPayment)</td>   
-                            @{ 
-                                var loanId = loanViewModel.Loan.ParentLoanId == null ? loanViewModel.Loan.Id : loanViewModel.Loan.ParentLoanId;
-                            }                         
-                            <td><a href="#" class="interest-info" data-loan-id="@loanId">@FormatUtility.DisplayThousandSeparatorsForNumber(loanViewModel.MonthlyInterestPayment)</a></td>
+                            <td>@FormatUtility.DisplayThousandSeparatorsForNumber(loanViewModel.MonthlyOriginalPayment)</td>
+                            <td><a href="#" class="interest-info" data-loan-id="@loanViewModel.Loan.Id">@FormatUtility.DisplayThousandSeparatorsForNumber(loanViewModel.MonthlyInterestPayment)</a></td>
                             <td>@FormatUtility.DisplayThousandSeparatorsForNumber(loanViewModel.MonthlyPayment)</td>
                             <td>@FormatUtility.DisplayThousandSeparatorsForNumber(loanViewModel.AnnualPayment)</td>
                             <td>@FormatUtility.DisplayThousandSeparatorsForNumber(loanViewModel.RemainedValue)</td>
                             <td class="text-center" width="200" style="vertical-align: middle">
-                                <button class="btn btn-success update-loan" data-loan-id="@loanViewModel.Loan.Id">Update</button>
-                                <button class="btn btn-danger delete-loan" data-loan-id="@loanViewModel.Loan.Id">Delete</button>
+                                <button class="btn btn-success update-loan" data-loan-id="@loanViewModel.Loan.Id">
+                                    <span class="glyphicon glyphicon-pencil"></span>
+                                </button>
+                                <button class="btn btn-danger delete-loan" data-loan-id="@loanViewModel.Loan.Id">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                                <button class="btn btn-primary" href=".detail-@count" data-toggle="collapse">
+                                    <span class="glyphicon glyphicon-zoom-in"></span>
+                                </button>
                             </td>
                         </tr>
-                                    {
-                                        //totalMortgageValue += loan.MortgageValue;
-                                        //totalPaymentPeriod += loan.OriginalPayment + loan.InterestPayment;
-                                        //totalMonthlyOriginalPayment += loan.OriginalPayment;
-                                        //totalMonthlyInterestPayment += loan.InterestPayment;
-                                        //totalAnnualPayment += annualPayment;
-                                        //totalRemainedValue += loan.MortgageValue - loan.OriginalPayment * iMonths;
-                                    }
-                                }
+
+                        <tr class="detail-@count collapse">
+                            <td colspan="13">
+                                <table class="table-bordered table-condensed">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">Interest rate</th>
+                                            <th class="text-center">From</th>
+                                            <th class="text-center">To</th>
+                                            <th class="text-center">Total payment period (month)</th>
+                                            <th class="text-center">Monthly Orginary Payment</th>
+                                            <th class="text-center">Monthly Interest Payment</th>
+                                            <th class="text-center">Monthly payment</th>
+                                            <th class="text-center">Annual payment</th>
+                                            <th class="text-center">Remained value</th>
+                                            <th>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var childLoanViewModel in item.ListLoanViewModel.Where(x => x.Loan.ParentLoanId == loanViewModel.Loan.Id))
+                                        {
+                                            <tr>
+                                                <td>@FormatUtility.DisplayPercentageForNumber(childLoanViewModel.CurrentInterestRate)</td>
+                                                <td>@childLoanViewModel.Loan.StartDate.ToString("MM/yyyy")</td>
+                                                <td>@childLoanViewModel.Loan.EndDate.ToString("MM/yyyy")</td>
+                                                <td>@FormatUtility.DisplayThousandSeparatorsForNumber(childLoanViewModel.TotalPaymentPeriod)</td>
+                                                <td>@FormatUtility.DisplayThousandSeparatorsForNumber(childLoanViewModel.MonthlyOriginalPayment)</td>
+                                                <td><a href="#" class="interest-info" data-loan-id="@childLoanViewModel.Loan.Id">@FormatUtility.DisplayThousandSeparatorsForNumber(childLoanViewModel.MonthlyInterestPayment)</a></td>
+                                                <td>@FormatUtility.DisplayThousandSeparatorsForNumber(childLoanViewModel.MonthlyPayment)</td>
+                                                <td>@FormatUtility.DisplayThousandSeparatorsForNumber(childLoanViewModel.AnnualPayment)</td>
+                                                <td>@FormatUtility.DisplayThousandSeparatorsForNumber(childLoanViewModel.RemainedValue)</td>
+                                                <td class="text-center" width="200" style="vertical-align: middle">
+                                                    <button class="btn btn-success update-loan" data-loan-id="@childLoanViewModel.Loan.Id">
+                                                        <span class="glyphicon glyphicon-pencil"></span>
+                                                    </button>
+                                                    <button class="btn btn-danger delete-loan" data-loan-id="@childLoanViewModel.Loan.Id">
+                                                        <span class="glyphicon glyphicon-remove"></span>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                    }
                     <tr>
                         <td class="text-center"><strong>Total value</strong></td>
                         <td></td>

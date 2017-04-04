@@ -7,24 +7,28 @@
                 <h4 class="modal-title">Update loan</h4>
             </div>
             <div class="modal-body">
-                <form class="form-horizontal">
-                    <div class="form-group">
-                        <label class="control-label col-sm-3">Source of loan:</label>
-                        <div class="col-sm-9">
-                            @Html.HiddenFor(x => x.Id)
-                            @Html.TextBoxFor(x => x.Source, new { @type = "text", @class = "form-control", @readonly = "true" })
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-sm-3">Mortgage Value:</label>
-                        <div class="col-sm-9">
-                            @Html.TextBoxFor(x => x.MortgageValue, new { @type = "text", @class = "form-control input-mask" })
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-sm-3">Interest type:</label>
-                        <div class="col-sm-9">
-                            @Html.DropDownListFor(x => x.InterestType, new List<SelectListItem> {
+                @if (Model != null)
+                {
+                    if (Model.ParentLoanId.HasValue)
+                    {
+                        <form class="form-horizontal">
+                            <div class="form-group">
+                                <label class="control-label col-sm-3">Source of loan:</label>
+                                <div class="col-sm-9">
+                                    @Html.HiddenFor(x => x.Id)
+                                    @Html.TextBoxFor(x => x.Source, new { @type = "text", @class = "form-control", @readonly = "true" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-3">Mortgage Value:</label>
+                                <div class="col-sm-9">
+                                    @Html.TextBoxFor(x => x.MortgageValue, new { @type = "text", @class = "form-control input-mask", @readonly = "true" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-3">Interest type:</label>
+                                <div class="col-sm-9">
+                                    @Html.DropDownListFor(x => x.InterestType, new List<SelectListItem> {
                                                                                                    new SelectListItem
                                                                                                    {
                                                                                                        Text = "Fixed",
@@ -37,28 +41,85 @@
                                                                                                        Value = "2",
                                                                                                        Selected = true
                                                                                                    },
-                                                                                                }, new { @type = "text", @class = "form-control" })
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-sm-3">Interest Rate (%):</label>
-                        <div class="col-sm-9">
-                            @Html.TextBoxFor(x => x.InterestRatePerYear, new { @type = "text", @class = "form-control input-mask" })
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-sm-3">From:</label>
-                        <div class="col-sm-9">
-                            @Html.TextBoxFor(x => x.StartDate, "{0:MM/yyyy}", new { @type = "text", @class = "form-control date-picker" })
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-sm-3">To:</label>
-                        <div class="col-sm-9">
-                            @Html.TextBoxFor(x => x.EndDate, "{0:MM/yyyy}", new { @type = "text", @class = "form-control date-picker" })
-                        </div>
-                    </div>
-                </form>
+                                                                                                }, new { @type = "text", @class = "form-control", @disabled = "true" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-3">Interest Rate (%):</label>
+                                <div class="col-sm-9">
+                                    @Html.TextBoxFor(x => x.InterestRatePerYear, new { @type = "text", @class = "form-control input-mask" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-3">From:</label>
+                                <div class="col-sm-9">
+                                    @Html.TextBoxFor(x => x.StartDate, "{0:MM/yyyy}", new { @type = "text", @class = "form-control date-picker" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-3">To:</label>
+                                <div class="col-sm-9">
+                                    @Html.TextBoxFor(x => x.EndDate, "{0:MM/yyyy}", new { @type = "text", @class = "form-control date-picker" })
+                                </div>
+                            </div>
+                        </form>
+                    }
+                    else
+                    {
+                        <form class="form-horizontal">
+                            <div class="form-group">
+                                <label class="control-label col-sm-3">Source of loan:</label>
+                                <div class="col-sm-9">
+                                    @Html.HiddenFor(x => x.Id)
+                                    @Html.TextBoxFor(x => x.Source, new { @type = "text", @class = "form-control"})
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-3">Mortgage Value:</label>
+                                <div class="col-sm-9">
+                                    @Html.TextBoxFor(x => x.MortgageValue, new { @type = "text", @class = "form-control input-mask"})
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-3">Interest type:</label>
+                                <div class="col-sm-9">
+                                    @Html.DropDownListFor(x => x.InterestType, new List<SelectListItem> {
+                                                                                                   new SelectListItem
+                                                                                                   {
+                                                                                                       Text = "Fixed",
+                                                                                                       Value = "1",
+                                                                                                       Selected = true
+                                                                                                   },
+                                                                                                   new SelectListItem
+                                                                                                   {
+                                                                                                       Text = "Reducing",
+                                                                                                       Value = "2",
+                                                                                                       Selected = true
+                                                                                                   },
+                                                                                                }, new { @type = "text", @class = "form-control"})
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-3">Interest Rate (%):</label>
+                                <div class="col-sm-9">
+                                    @Html.TextBoxFor(x => x.InterestRatePerYear, new { @type = "text", @class = "form-control input-mask" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-3">From:</label>
+                                <div class="col-sm-9">
+                                    @Html.TextBoxFor(x => x.StartDate, "{0:MM/yyyy}", new { @type = "text", @class = "form-control date-picker" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-3">To:</label>
+                                <div class="col-sm-9">
+                                    @Html.TextBoxFor(x => x.EndDate, "{0:MM/yyyy}", new { @type = "text", @class = "form-control date-picker" })
+                                </div>
+                            </div>
+                        </form>
+                    }
+                }
             </div>
             <div class="modal-footer text-center">
                 <button type="button" class="btn btn-success save-loan">Update</button>

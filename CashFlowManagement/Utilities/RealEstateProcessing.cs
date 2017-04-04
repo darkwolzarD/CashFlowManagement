@@ -22,7 +22,14 @@ namespace CashFlowManagement.Utilities
             result.Loan = loan;
             result.TotalPaymentPeriod = CalculateTimePeriod(loan.StartDate, loan.EndDate);
             result.MonthlyOriginalPayment = loan.MortgageValue / result.TotalPaymentPeriod;
-            result.CurrentInterestRate = RealEstateQueries.GetCurrentInterestRate(loan.Id);
+            if(loan.ParentLoanId.HasValue)
+            {
+                result.CurrentInterestRate = loan.InterestRatePerYear;
+            }
+            else
+            {
+                result.CurrentInterestRate = RealEstateQueries.GetCurrentInterestRate(loan.Id);
+            }
 
             int currentPeriod = CalculateTimePeriod(loan.StartDate, DateTime.Now);
 
