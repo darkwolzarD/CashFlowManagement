@@ -150,7 +150,7 @@ namespace CashFlowManagement.Queries
             List<Loans> loans = entities.Loans.Where(x => x.ParentLoanId == data.Id && !x.DisabledDate.HasValue).OrderByDescending(x => x.StartDate).ToList();
 
 
-            Loans start = loans.Where(x => x.StartDate <= data.StartDate).OrderByDescending(x => x.StartDate).FirstOrDefault();
+            Loans start = loans.Where(x => x.StartDate < data.StartDate).OrderByDescending(x => x.StartDate).FirstOrDefault();
             if(start != null)
             {
                 start.EndDate = data.StartDate;
@@ -182,7 +182,7 @@ namespace CashFlowManagement.Queries
             updated_loan.ParentLoanId = parentLoan.Id;
             entities.Loans.Add(updated_loan);
 
-            Loans end = loans.Where(x => x.EndDate >= data.EndDate).OrderBy(x => x.EndDate).FirstOrDefault();
+            Loans end = loans.Where(x => x.EndDate > data.EndDate).OrderBy(x => x.EndDate).FirstOrDefault();
             if (end != null)
             {
                 end.StartDate = data.EndDate;
@@ -195,7 +195,7 @@ namespace CashFlowManagement.Queries
                 entry.Property(x => x.StartDate).IsModified = true;
                 entry.Property(x => x.InterestRatePerYear).IsModified = true;
             }
-            else
+            else if (data.EndDate != parentLoan.EndDate)
             {
                 end = new Loans();
                 end.Source = data.Source;
