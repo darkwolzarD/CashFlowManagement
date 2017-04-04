@@ -246,7 +246,6 @@
     <Compile Include="Utilities\LoanProcessing.cs" />
     <Compile Include="Utilities\RealEstateProcessing.cs" />
     <Compile Include="ViewModels\RealEstate\LoanInterestTableViewModel.cs" />
-    <Compile Include="ViewModels\RealEstate\RealEstatesViewModel_OLD.cs" />
     <Compile Include="ViewModels\RealEstate\RealEstateViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
