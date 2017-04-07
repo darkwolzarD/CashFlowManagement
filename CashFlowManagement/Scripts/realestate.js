@@ -171,22 +171,42 @@
 
     $(document).on("click", ".update-loan", function () {
         var id = $(this).data("loan-id");
+        var trigger = $(this).data("trigger");
 
-        $.ajax({
-            url: Url.LoadLoan,
-            type: "get",
-            data: { id: id },
-            contentType: "html",
-            success: function (data) {
-                if (data.length > 0) {
-                    $(".update-loan-modal-div").html(data);
-                    $("#update-loan-modal").modal("show");
+        if (trigger == "edit-no-rate") {
+            $.ajax({
+                url: Url.LoadLoan,
+                type: "get",
+                data: { id: id },
+                contentType: "html",
+                success: function (data) {
+                    if (data.length > 0) {
+                        $(".update-loan-modal-div").html(data);
+                        $("#update-loan-modal").modal("show");
+                    }
+                    else {
+                        alert("Có lỗi xảy ra");
+                    }
                 }
-                else {
-                    alert("Có lỗi xảy ra");
+            })
+        }
+        else {
+            $.ajax({
+                url: Url.LoadLoanWithRate,
+                type: "get",
+                data: { id: id },
+                contentType: "html",
+                success: function (data) {
+                    if (data.length > 0) {
+                        $(".update-loan-modal-div").html(data);
+                        $("#update-loan-modal").modal("show");
+                    }
+                    else {
+                        alert("Có lỗi xảy ra");
+                    }
                 }
-            }
-        })
+            })
+        }
     })
 
     $(document).on("click", ".save-loan", function () {
@@ -243,5 +263,15 @@
                 $("#interest-modal").modal("show");
             }
         })
+    })
+
+    $(document).on("show.bs.collapse", "tr[class^='detail-']", function () {
+        var count = $(document).find("table tbody tr:not(.collapse)").length;
+        $(document).find("table tbody tr:nth-child(1) td:nth-child(2)").attr("rowspan", count);
+    })
+
+    $(document).on("hidden.bs.collapse", "tr[class^='detail-']", function () {
+        var count = $(document).find("table tbody tr:not(.collapse)").length - 2;
+        $(document).find("table tbody tr:nth-child(1) td:nth-child(2)").attr("rowspan", count);
     })
 })
