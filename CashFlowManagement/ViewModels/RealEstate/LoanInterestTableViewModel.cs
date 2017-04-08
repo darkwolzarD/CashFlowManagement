@@ -12,5 +12,7 @@ namespace CashFlowManagement.ViewModels.RealEstate
         public double MonthlyOriginalPayment { get; set; }
         public double MonthlyInterestPayment { get; set; }
         public double MonthlyTotalPayment { get; set; }
+        public DateTime CurrentMonth { get; set; }
+        public bool Highlight { get; set; }
     }
 }

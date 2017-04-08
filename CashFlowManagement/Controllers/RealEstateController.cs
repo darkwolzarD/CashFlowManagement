@@ -50,6 +50,12 @@ namespace CashFlowManagement.Controllers
             return PartialView(model);
         }
 
+        public PartialViewResult UpdateLoanWithRateModal(int id)
+        {
+            Loans model = RealEstateQueries.GetLoanById(id);
+            return PartialView(model);
+        }
+
         public JsonResult CreateRealEstate(RealEstateIncomes model)
         {
             model.Username = "test";
@@ -91,10 +97,24 @@ namespace CashFlowManagement.Controllers
             return Json(new { result = result });
         }
 
-        public PartialViewResult PaymentsPerMonth(int parentLoanId)
+        [HttpGet]
+        public PartialViewResult PaymentsPerMonth(int loanId)
         {
-            List<Loans> list = RealEstateQueries.GetLoanByParentId(parentLoanId);
-            List<LoanInterestTableViewModel> result = LoanProcessing.CalculatePaymentsByMonth(list);
+            Loans loan = RealEstateQueries.GetLoanById(loanId);
+            List<Loans> list = RealEstateQueries.GetLoanByParentId(loanId);
+            List<LoanInterestTableViewModel> result = LoanProcessing.CalculatePaymentsByMonth(list, loan, false);
+            return PartialView(result);
+        }
+
+        [HttpPost]
+        public PartialViewResult PaymentsPerMonth(Loans loan)
+        {
+            Loans ln = RealEstateQueries.GetLoanById(loan.Id);
+            ln.StartDate = loan.StartDate;
+            ln.EndDate = loan.EndDate;
+            ln.InterestRatePerYear = loan.InterestRatePerYear;
+            List<Loans> list = RealEstateQueries.GetLoanByParentId(loan.Id);
+            List<LoanInterestTableViewModel> result = LoanProcessing.CalculatePaymentsByMonth(list, loan, true);
             return PartialView(result);
         }
     }

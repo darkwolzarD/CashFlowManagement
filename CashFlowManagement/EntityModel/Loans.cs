@@ -27,8 +27,6 @@ namespace CashFlowManagement.EntityModel
         public double InterestRatePerYear { get; set; }
         public System.DateTime StartDate { get; set; }
         public System.DateTime EndDate { get; set; }
-        public double OriginalPayment { get; set; }
-        public double InterestPayment { get; set; }
         public System.DateTime CreatedDate { get; set; }
         public Nullable<System.DateTime> DisabledDate { get; set; }
         public int RealEstateIncomeId { get; set; }
