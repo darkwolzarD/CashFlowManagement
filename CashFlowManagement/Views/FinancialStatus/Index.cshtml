@@ -1,4 +1,5 @@
-﻿@model CashFlowManagement.EntityModel.FinancialStatus
+﻿@using CashFlowManagement.Utilities;
+@model CashFlowManagement.ViewModels.FinancialStatus.FinancialStatusViewModel
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -9,8 +10,144 @@
 </div>
 
 <div class="row">
-    <h3>Monthly Cashflow: @Model.MonthlyCashflow</h3>
-    <h3>Passive Income: @Model.PassiveIncome</h3>
-    <h3>Financial Freedom: @Model.FinancialFreedom %</h3>
+    <h4>Monthly Cashflow: @Model.MonthlyCashflow</h4>
+    <h4>Passive Income: @Model.PassiveIncome</h4>
+    <h4>Financial Freedom: @Model.FinancialFreedom %</h4>
+
+    <div class="col-md-6">
+        <table class="table table-bordered table-condensed table-striped">
+            <thead>
+                <tr>
+                    <th><strong>Income (monthly)</strong></th>
+                    <th><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.TotalIncomes)</strong></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Salary</td>
+                    <td>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.SalaryIncome)</td>
+                </tr>
+                <tr>
+                    <td>Real estate</td>
+                    <td>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.RealEstateIncome)</td>
+                </tr>
+                <tr>
+                    <td>Businesses</td>
+                    <td>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.BusinessIncome)</td>
+                </tr>
+                <tr>
+                    <td>Interest</td>
+                    <td>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.InterestIncome)</td>
+                </tr>
+                <tr>
+                    <td>Dividends</td>
+                    <td>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.DividendIncome)</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="col-md-6">
+        <table class="table table-bordered table-condensed table-striped">
+            <thead>
+                <tr>
+                    <th><strong>Assets</strong></th>
+                    <th><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.TotalAssets)</strong></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Available money (cash)</td>
+                    <td>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.AvailableMoney)</td>
+                </tr>
+                <tr>
+                    <td>Total value of real estate</td>
+                    <td>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.RealEstateValue)</td>
+                </tr>
+                <tr>
+                    <td>Total value of businesses</td>
+                    <td>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.BusinessValue)</td>
+                </tr>
+                <tr>
+                    <td>Total value of bank deposit</td>
+                    <td>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.BankDepositValue)</td>
+                </tr>
+                <tr>
+                    <td>Totoal value of stocks</td>
+                    <td>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.StockValue)</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="col-md-6">
+        <table class="table table-bordered table-condensed table-striped">
+            <thead>
+                <tr>
+                    <th><strong>Expenses (monthly)</strong></th>
+                    <th><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.TotalExpenses)</strong></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Home morgate</td>
+                    <td>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.HomeMortgage)</td>
+                </tr>
+                <tr>
+                    <td>Car payment</td>
+                    <td>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.CarPayment)</td>
+                </tr>
+                <tr>
+                    <td>Credit card</td>
+                    <td>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.CreditCard)</td>
+                </tr>
+                <tr>
+                    <td>Bank loan</td>
+                    <td>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.BankLoanExpenses)</td>
+                </tr>
+                <tr>
+                    <td>Family expenses</td>
+                    <td>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.FamilyExpenses)</td>
+                </tr>
+                <tr>
+                    <td>Other expenses</td>
+                    <td>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.OtherExpenses)</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="col-md-6">
+        <table class="table table-bordered table-condensed table-striped">
+            <thead>
+                <tr>
+                    <th><strong>Liabilities</strong></th>
+                    <th><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.TotalLiabilities)</strong></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Home morgate</td>
+                    <td>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.HomeMortgageLiability)</td>
+                </tr>
+                <tr>
+                    <td>Car loan</td>
+                    <td>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.CarLoan)</td>
+                </tr>
+                <tr>
+                    <td>Credit card</td>
+                    <td>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.CreditCard)</td>
+                </tr>
+                <tr>
+                    <td>Bank loans</td>
+                    <td>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.BankLoan)</td>
+                </tr>
+                <tr>
+                    <td>Others loans</td>
+                    <td>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.OtherLoans)</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
 

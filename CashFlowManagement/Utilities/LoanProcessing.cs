@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using CashFlowManagement.EntityModel;
+using CashFlowManagement.Queries;
 
 namespace CashFlowManagement.Utilities
 {
@@ -11,7 +12,6 @@ namespace CashFlowManagement.Utilities
     {
         public static List<LoanInterestTableViewModel> CalculatePaymentsByMonth(List<Loans> list, Loans loan, bool append)
         {
-
             list = list.OrderBy(x => x.StartDate).ToList();
 
             Loans parentLoan = list.Where(x => !x.ParentLoanId.HasValue).FirstOrDefault();
@@ -81,6 +81,30 @@ namespace CashFlowManagement.Utilities
                     }
                 }
             }
+
+            return result;
+        }
+
+        public static double GetCurrentMonthlyPaymentByUser(string username)
+        {
+            double result = 0;
+            DateTime current = DateTime.Now;
+            current = new DateTime(current.Year, current.Month, 1);
+
+            List<RealEstateIncomes> realEstateList = RealEstateQueries.GetRealEstateByUser(username);
+            foreach (var realEstate in realEstateList)
+            {
+                var loanList = realEstate.Loans.Where(x => !x.DisabledDate.HasValue).ToList();
+                foreach (var loan in loanList)
+                {
+                    List<LoanInterestTableViewModel> list = CalculatePaymentsByMonth(loanList, loan, false);
+                    foreach (var item in list)
+                    {
+                        if (item.CurrentMonth.Equals(current)) result += item.MonthlyTotalPayment;
+                    }
+                }
+            }
+
             return result;
         }
     }

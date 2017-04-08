@@ -1,5 +1,6 @@
-﻿using CashFlowManagement.EntityModel;
-using CashFlowManagement.Queries;
+﻿using CashFlowManagement.Queries;
+using CashFlowManagement.Utilities;
+using CashFlowManagement.ViewModels.FinancialStatus;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,7 @@ namespace CashFlowManagement.Controllers
         // GET: FinancialStatus
         public ActionResult Index()
         {
-            FinancialStatus model = FinancialStatusQueries.GetCurrentFinancialStatus();
+            FinancialStatusViewModel model = FinancialStatusProcessing.GetFinancialStatusByUser("test");
             return View(model);
         }
     }
