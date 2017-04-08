@@ -15,37 +15,53 @@ namespace CashFlowManagement.Utilities
             return (endDate.Year - startDate.Year) * 12 + endDate.Month - startDate.Month;
         }
 
-        public static LoanViewModel GetLoanViewModel(Loans loan)
+        public static LoanViewModel GetLoanViewModel(Loans loan, List<Loans> loans)
         {
             LoanViewModel result = new LoanViewModel();
+            DateTime current = DateTime.Now;
+            current = new DateTime(current.Year, current.Month, 1);
+
+            Loans parentLoan = loans.Where(x => !x.ParentLoanId.HasValue).FirstOrDefault();
             
             result.Loan = loan;
-            result.TotalPaymentPeriod = CalculateTimePeriod(loan.StartDate, loan.EndDate);
-            result.MonthlyOriginalPayment = loan.MortgageValue / result.TotalPaymentPeriod;
-            if(loan.ParentLoanId.HasValue)
+            result.TotalPaymentPeriod = CalculateTimePeriod(loan.StartDate, loan.EndDate) + 1;
+            if (loan.ParentLoanId.HasValue)
             {
                 result.CurrentInterestRate = loan.InterestRatePerYear;
             }
             else
             {
-                result.CurrentInterestRate = RealEstateQueries.GetCurrentInterestRate(loan.Id);
+                result.CurrentInterestRate = RealEstateQueries.GetCurrentInterestRate(parentLoan.Id);
             }
-
-            int currentPeriod = CalculateTimePeriod(loan.StartDate, DateTime.Now);
-
-            if (currentPeriod > 0)
+            if (loan.StartDate <= current && current <= loan.EndDate)
             {
-                result.RemainedValue = loan.MortgageValue - (currentPeriod - 1) * result.MonthlyOriginalPayment;
-                result.MonthlyInterestPayment = result.RemainedValue * loan.InterestRatePerYear / 1200;
+                result.MonthlyOriginalPayment = loan.MortgageValue / CalculateTimePeriod(parentLoan.StartDate, parentLoan.EndDate);
+
+                int currentPeriod = CalculateTimePeriod(parentLoan.StartDate, DateTime.Now);
+
+                if (currentPeriod > 0)
+                {
+                    //result.RemainedValue = loan.MortgageValue - (currentPeriod - 1) * result.MonthlyOriginalPayment;
+                    result.RemainedValue = loan.MortgageValue - currentPeriod * result.MonthlyOriginalPayment;
+                    result.MonthlyInterestPayment = result.RemainedValue * result.CurrentInterestRate / 1200;
+                }
+                else
+                {
+                    result.RemainedValue = loan.MortgageValue;
+                    result.MonthlyInterestPayment = 0;
+                }
+
+                result.MonthlyPayment = result.MonthlyInterestPayment + result.MonthlyOriginalPayment;
+                result.AnnualPayment = loan.MortgageValue * result.CurrentInterestRate / 100;           //chua xu ly// 
             }
             else
             {
-                result.RemainedValue = loan.MortgageValue;
                 result.MonthlyInterestPayment = 0;
-            }
-
-            result.MonthlyPayment = result.MonthlyInterestPayment + result.MonthlyOriginalPayment;
-            result.AnnualPayment = loan.MortgageValue * loan.InterestRatePerYear / 100;           //chua xu ly//            
+                result.MonthlyOriginalPayment = 0;
+                result.MonthlyPayment = 0;
+                result.AnnualPayment = 0;
+                result.RemainedValue = 0;
+            }           
 
             return result;
         }
@@ -71,14 +87,26 @@ namespace CashFlowManagement.Utilities
 
             foreach (var item in realEstateIncome.Loans)
             {
-                LoanViewModel loanViewModel = GetLoanViewModel(item);
+                List<Loans> list = new List<Loans>();
+                if(item.ParentLoanId.HasValue)
+                {
+                    list = realEstateIncome.Loans.Where(x => x.Id == item.ParentLoanId || x.ParentLoanId == item.ParentLoanId).ToList();
+                }
+                else
+                {
+                    list = realEstateIncome.Loans.Where(x => x.Id == item.Id || x.ParentLoanId == item.Id).ToList(); ;
+                }
+                LoanViewModel loanViewModel = GetLoanViewModel(item, list);
                 lstLoanViewModel.Add(loanViewModel);
-                TotalMorgageValue += loanViewModel.Loan.MortgageValue;
-                TotalInterestPayment += loanViewModel.MonthlyInterestPayment;
-                TotalOriginalPayment += loanViewModel.MonthlyOriginalPayment;
-                TotalMonthlyPayment += loanViewModel.MonthlyPayment;
-                TotalRemainingValue += loanViewModel.RemainedValue;
-                TotalAnnualPayment += loanViewModel.AnnualPayment;
+                if (!item.ParentLoanId.HasValue)
+                {
+                    TotalMorgageValue += loanViewModel.Loan.MortgageValue;
+                    TotalInterestPayment += loanViewModel.MonthlyInterestPayment;
+                    TotalOriginalPayment += loanViewModel.MonthlyOriginalPayment;
+                    TotalMonthlyPayment += loanViewModel.MonthlyPayment;
+                    TotalRemainingValue += loanViewModel.RemainedValue;
+                    TotalAnnualPayment += loanViewModel.AnnualPayment;
+                }
             }
             result.ListLoanViewModel = lstLoanViewModel;
             result.TotalMorgageValue = TotalMorgageValue;

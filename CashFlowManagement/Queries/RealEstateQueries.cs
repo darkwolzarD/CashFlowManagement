@@ -204,7 +204,7 @@ namespace CashFlowManagement.Queries
                     end.Source = parentLoan.Source;
                     end.MortgageValue = parentLoan.MortgageValue;
                     end.InterestType = parentLoan.InterestType;
-                    end.InterestRatePerYear = data.InterestRatePerYear;
+                    end.InterestRatePerYear = parentLoan.InterestRatePerYear;
                     end.CreatedDate = current;
                     end.StartDate = data.EndDate.AddMonths(1);
                     end.EndDate = parentLoan.EndDate;
@@ -246,7 +246,7 @@ namespace CashFlowManagement.Queries
                 childLoan.InterestRatePerYear = parentLoan.InterestRatePerYear;
                 childLoan.StartDate = data.StartDate;
                 childLoan.EndDate = data.EndDate;
-                childLoan.CreatedDate = data.CreatedDate;
+                childLoan.CreatedDate = current;
                 childLoan.RealEstateIncomeId = parentLoan.RealEstateIncomeId;
                 childLoan.ParentLoanId = data.Id;
 

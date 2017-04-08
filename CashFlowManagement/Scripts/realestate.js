@@ -310,13 +310,19 @@
     })
 
     $(document).on("show.bs.collapse", "tr[class^='detail-']", function () {
-        var count = $(document).find("table tbody tr:not(.collapse)").length;
-        $(document).find("table tbody tr:nth-child(1) td:nth-child(2)").attr("rowspan", count);
+        var rs_cls = $(this).closest("tr").attr("class").split(' ')[2];
+        var child_cls = $(this).closest("tr").attr("class").split(' ')[3];
+        var current = $(document).find("table tbody ." + rs_cls + ":not(.collapse)").length + 1;
+        var collapse = $(document).find("table tbody ." + child_cls + ".collapse").length;
+        $(document).find("table tbody tr." + rs_cls + ":first td:nth-child(2)").attr("rowspan", current + collapse);
     })
 
     $(document).on("hidden.bs.collapse", "tr[class^='detail-']", function () {
-        var count = $(document).find("table tbody tr:not(.collapse)").length - 2;
-        $(document).find("table tbody tr:nth-child(1) td:nth-child(2)").attr("rowspan", count);
+        var rs_cls = $(this).closest("tr").attr("class").split(' ')[1];
+        var child_cls = $(this).closest("tr").attr("class").split(' ')[2];
+        var current = $(document).find("table tbody ." + rs_cls + ":not(.collapse)").length;
+        var collapse = $(document).find("table tbody ." + child_cls + ".collapse").length;
+        $(document).find("table tbody tr." + rs_cls + ":first td:nth-child(2)").attr("rowspan", current - collapse);
     })
 
     $(document).on("changeDate", ".with-rate .date-picker", function () {
@@ -335,5 +341,6 @@
                 }
             })
         }
+        MaskInput();
     })
 })

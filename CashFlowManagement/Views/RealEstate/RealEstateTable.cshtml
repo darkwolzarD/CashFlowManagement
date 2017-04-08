@@ -3,6 +3,8 @@
 
 @{
     double count = 0;
+    int rsCount = 0;
+    int childCount = 0;
 }
 
 <table class="table table-bordered table-striped real-estate-table">
@@ -22,11 +24,11 @@
         {
             foreach (var item in Model.ListRealEstateInfoViewModel)
             {
-                <tr>
+                <tr class="rs-@rsCount">
                     <td class="hidden">
                         <span class="real-estate-id">@item.RealEstate.Id</span>
                     </td>
-                    <td class="text-center" rowspan="@(item.RealEstate.Loans != null && item.RealEstate.Loans.Count > 3 ? item.RealEstate.Loans.Count - 1 : 3)" style="vertical-align: middle">@item.RealEstate.Source</td>
+                    <td class="text-center" rowspan="@(item.RealEstate.Loans != null && item.RealEstate.Loans.Count > 3 ? item.RealEstate.Loans.Count - 2 : 3)" style="vertical-align: middle">@item.RealEstate.Source</td>
                     <td>@FormatUtility.DisplayThousandSeparatorsForNumber(item.RealEstate.OriginalValue)</td>
                     <td>@FormatUtility.DisplayThousandSeparatorsForNumber(item.RealEstate.Income)</td>
                     <td>@FormatUtility.DisplayThousandSeparatorsForNumber(item.AnnualRentIncome)</td>
@@ -63,7 +65,7 @@
                 {
                     foreach (var loanViewModel in item.ListLoanViewModel.Where(x => !x.Loan.ParentLoanId.HasValue))
                     {
-                        <tr>
+                        <tr class="rs-@rsCount child-@childCount">
                             <td><a class="update-loan" href="#" data-loan-id="@loanViewModel.Loan.Id" data-trigger="edit-no-rate">@loanViewModel.Loan.Source</a></td>
                             <td>
                                 <a class="update-loan" href="#" data-loan-id="@loanViewModel.Loan.Id" data-trigger="edit-no-rate">@FormatUtility.DisplayThousandSeparatorsForNumber(loanViewModel.Loan.MortgageValue)</a>
@@ -80,15 +82,17 @@
                                 <a class="update-loan" href="#" data-loan-id="@loanViewModel.Loan.Id" data-trigger="edit-no-rate">@loanViewModel.Loan.EndDate.ToString("MM/yyyy")</a>
                             </td>
                             <td>@FormatUtility.DisplayThousandSeparatorsForNumber(loanViewModel.TotalPaymentPeriod)</td>
-                            <td>@FormatUtility.DisplayThousandSeparatorsForNumber(loanViewModel.MonthlyOriginalPayment)</td>
+                            <td>
+                                @FormatUtility.DisplayThousandSeparatorsForNumber(loanViewModel.MonthlyOriginalPayment)
+                            </td>
                             <td><a href="#" class="interest-info" data-loan-id="@loanViewModel.Loan.Id">@FormatUtility.DisplayThousandSeparatorsForNumber(loanViewModel.MonthlyInterestPayment)</a></td>
                             <td>@FormatUtility.DisplayThousandSeparatorsForNumber(loanViewModel.MonthlyPayment)</td>
                             <td>@FormatUtility.DisplayThousandSeparatorsForNumber(loanViewModel.AnnualPayment)</td>
                             <td>@FormatUtility.DisplayThousandSeparatorsForNumber(loanViewModel.RemainedValue)</td>
                             <td class="text-center" width="200" style="vertical-align: middle">
                                 @*<button class="btn btn-success update-loan" data-loan-id="@loanViewModel.Loan.Id">
-                                    <span class="glyphicon glyphicon-pencil"></span>
-                                </button>*@
+                                        <span class="glyphicon glyphicon-pencil"></span>
+                                    </button>*@
                                 <button class="btn btn-danger delete-loan" data-loan-id="@loanViewModel.Loan.Id">
                                     <span class="glyphicon glyphicon-remove"></span>
                                 </button>
@@ -99,22 +103,43 @@
                         </tr>
                         foreach (var childLoanViewModel in item.ListLoanViewModel.Where(x => x.Loan.ParentLoanId == loanViewModel.Loan.Id).OrderBy(x => x.Loan.StartDate))
                         {
-                            <tr class="detail-@count collapse">
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td>@FormatUtility.DisplayPercentageForNumber(childLoanViewModel.CurrentInterestRate)</td>
-                                <td>@childLoanViewModel.Loan.StartDate.ToString("MM/yyyy")</td>
-                                <td>@childLoanViewModel.Loan.EndDate.ToString("MM/yyyy")</td>
-                                <td>@FormatUtility.DisplayThousandSeparatorsForNumber(childLoanViewModel.TotalPaymentPeriod)</td>
-                                <td>@FormatUtility.DisplayThousandSeparatorsForNumber(childLoanViewModel.MonthlyOriginalPayment)</td>
-                                <td><a href="#" class="interest-info" data-loan-id="@childLoanViewModel.Loan.Id">@FormatUtility.DisplayThousandSeparatorsForNumber(childLoanViewModel.MonthlyInterestPayment)</a></td>
-                                <td>@FormatUtility.DisplayThousandSeparatorsForNumber(childLoanViewModel.MonthlyPayment)</td>
-                                <td>@FormatUtility.DisplayThousandSeparatorsForNumber(childLoanViewModel.AnnualPayment)</td>
-                                <td>@FormatUtility.DisplayThousandSeparatorsForNumber(childLoanViewModel.RemainedValue)</td>
-                                <td class="text-center" width="200" style="vertical-align: middle">
-                                </td>
-                            </tr>
+                            if (childLoanViewModel.MonthlyOriginalPayment > 0)
+                            {
+                                <tr class="detail-@count collapse rs-@rsCount child-@childCount">
+                                    <td style="background-color: aquamarine"></td>
+                                    <td style="background-color: aquamarine"></td>
+                                    <td style="background-color: aquamarine"></td>
+                                    <td style="background-color: aquamarine">@FormatUtility.DisplayPercentageForNumber(childLoanViewModel.CurrentInterestRate)</td>
+                                    <td style="background-color: aquamarine">@childLoanViewModel.Loan.StartDate.ToString("MM/yyyy")</td>
+                                    <td style="background-color: aquamarine">@childLoanViewModel.Loan.EndDate.ToString("MM/yyyy")</td>
+                                    <td style="background-color: aquamarine">@FormatUtility.DisplayThousandSeparatorsForNumber(childLoanViewModel.TotalPaymentPeriod)</td>
+                                    <td style="background-color: aquamarine">@FormatUtility.DisplayThousandSeparatorsForNumber(loanViewModel.MonthlyOriginalPayment)</td>
+                                    <td style="background-color: aquamarine"><a href="#" class="interest-info" data-loan-id="@childLoanViewModel.Loan.Id">@FormatUtility.DisplayThousandSeparatorsForNumber(childLoanViewModel.MonthlyInterestPayment)</a></td>
+                                    <td style="background-color: aquamarine">@FormatUtility.DisplayThousandSeparatorsForNumber(childLoanViewModel.MonthlyPayment)</td>
+                                    <td style="background-color: aquamarine">@FormatUtility.DisplayThousandSeparatorsForNumber(childLoanViewModel.AnnualPayment)</td>
+                                    <td style="background-color: aquamarine">@FormatUtility.DisplayThousandSeparatorsForNumber(childLoanViewModel.RemainedValue)</td>
+                                    <td class="text-center" width="200" style="vertical-align: middle; background-color: aquamarine;"></td>
+                                </tr>
+                            }
+                            else
+                            {
+                                <tr class="detail-@count collapse rs-@rsCount child-@childCount">
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>@FormatUtility.DisplayPercentageForNumber(childLoanViewModel.CurrentInterestRate)</td>
+                                    <td>@childLoanViewModel.Loan.StartDate.ToString("MM/yyyy")</td>
+                                    <td>@childLoanViewModel.Loan.EndDate.ToString("MM/yyyy")</td>
+                                    <td>@FormatUtility.DisplayThousandSeparatorsForNumber(childLoanViewModel.TotalPaymentPeriod)</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            }
+                            { childCount++; }
                         }
                         { count++; }
                     }
@@ -141,6 +166,7 @@
                         <td class="text-center" colspan="13">No loan available</td>
                     </tr>
                 }
+                { rsCount++; }
             }
         }
         else
