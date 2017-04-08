@@ -26,7 +26,7 @@
                     <td class="hidden">
                         <span class="real-estate-id">@item.RealEstate.Id</span>
                     </td>
-                    <td class="text-center" rowspan="@(item.RealEstate.Loans != null && item.RealEstate.Loans.Count > 0 ? item.RealEstate.Loans.Count - 1 : 3)" style="vertical-align: middle">@item.RealEstate.Source</td>
+                    <td class="text-center" rowspan="@(item.RealEstate.Loans != null && item.RealEstate.Loans.Count > 3 ? item.RealEstate.Loans.Count - 1 : 3)" style="vertical-align: middle">@item.RealEstate.Source</td>
                     <td>@FormatUtility.DisplayThousandSeparatorsForNumber(item.RealEstate.OriginalValue)</td>
                     <td>@FormatUtility.DisplayThousandSeparatorsForNumber(item.RealEstate.Income)</td>
                     <td>@FormatUtility.DisplayThousandSeparatorsForNumber(item.AnnualRentIncome)</td>
@@ -97,7 +97,7 @@
                                 </button>
                             </td>
                         </tr>
-                        foreach (var childLoanViewModel in item.ListLoanViewModel.Where(x => x.Loan.ParentLoanId == loanViewModel.Loan.Id))
+                        foreach (var childLoanViewModel in item.ListLoanViewModel.Where(x => x.Loan.ParentLoanId == loanViewModel.Loan.Id).OrderBy(x => x.Loan.StartDate))
                         {
                             <tr class="detail-@count collapse">
                                 <td></td>

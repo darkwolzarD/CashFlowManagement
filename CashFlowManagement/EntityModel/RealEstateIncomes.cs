@@ -28,8 +28,8 @@ namespace CashFlowManagement.EntityModel
         public Nullable<System.DateTime> EndDate { get; set; }
         public string Username { get; set; }
     
+        public virtual Users Users { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Loans> Loans { get; set; }
-        public virtual Users Users { get; set; }
     }
 }

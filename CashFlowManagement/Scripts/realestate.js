@@ -20,6 +20,25 @@
         });
     }
 
+    function isValidDate(dateString) {
+        // First check for the pattern
+        var regex_date = /^\d{2}\/\d{4}$/;
+
+        if (!regex_date.test(dateString)) {
+            return false;
+
+            var parts = dateString.split("/");
+            var month = parseInt(parts[0], 10);
+            var year = parseInt(parts[1], 10);
+
+            if (year < 1000 || year > 3000 || month == 0 || month > 12) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     $(document).on("shown.bs.modal", "#create-new-real-estate-modal, #create-new-loan-modal", function () {
         MaskInput();
         InitiateDatePicker();
@@ -199,6 +218,8 @@
                 success: function (data) {
                     if (data.length > 0) {
                         $(".update-loan-modal-div").html(data);
+                        $(".update-loan-modal-div").find("input[name='StartDate']").attr("data-date-start-date", $(".update-loan-modal-div").find("input[name='StartDate']").val());
+                        $(".update-loan-modal-div").find("input[name='EndDate']").attr("data-date-end-date", $(".update-loan-modal-div").find("input[name='EndDate']").val());
                         $("#update-loan-modal").modal("show");
                     }
                     else {
@@ -212,22 +233,45 @@
     $(document).on("click", ".save-loan", function () {
         RemoveMask();
         var data = $("#update-loan-modal .form-horizontal").serialize();
-
-        $.ajax({
-            url: Url.UpdateLoan,
-            type: "post",
-            data: data,
-            success: function (data) {
-                if (data.result > 0) {
-                    $("#update-loan-modal").modal("hide");
-                    LoadTable();
-                }
-                else {
-                    alert("Có lỗi xảy ra");
-                }
+        if ($(this).data("trigger") == "save-no-rate") {
+            if (confirm("Thay đổi kì hạn của khoản vay sẽ hủy bỏ các kì hạn con trước đó. Bạn có muốn tiếp tục?")) {
+                $.ajax({
+                    url: Url.UpdateLoan,
+                    type: "post",
+                    data: data,
+                    success: function (data) {
+                        if (data.result > 0) {
+                            $("#update-loan-modal").modal("hide");
+                            LoadTable();
+                        }
+                        else {
+                            alert("Có lỗi xảy ra");
+                        }
+                    }
+                })
+                MaskInput();
             }
-        })
-        MaskInput();
+            else {
+                alert("Không có dữ liệu nào bị thay đổi");
+            }
+        }
+        else {
+            $.ajax({
+                url: Url.UpdateLoan,
+                type: "post",
+                data: data,
+                success: function (data) {
+                    if (data.result > 0) {
+                        $("#update-loan-modal").modal("hide");
+                        LoadTable();
+                    }
+                    else {
+                        alert("Có lỗi xảy ra");
+                    }
+                }
+            })
+            MaskInput();
+        }
     })
 
     $(document).on("click", ".delete-loan", function () {
@@ -256,7 +300,7 @@
         $.ajax({
             url: Url.PaymentsPerMonth,
             type: "get",
-            data: { parentLoanId: _data },
+            data: { loanId: _data },
             dataType: "html",
             success: function (data) {
                 $(".interest-modal-div").html(data);
@@ -273,5 +317,23 @@
     $(document).on("hidden.bs.collapse", "tr[class^='detail-']", function () {
         var count = $(document).find("table tbody tr:not(.collapse)").length - 2;
         $(document).find("table tbody tr:nth-child(1) td:nth-child(2)").attr("rowspan", count);
+    })
+
+    $(document).on("changeDate", ".with-rate .date-picker", function () {
+        RemoveMask();
+        var startDate = $(this).closest("#update-loan-modal").find("input[name='StartDate']").val();
+        var endDate = $(this).closest("#update-loan-modal").find("input[name='EndDate']").val();
+        if (isValidDate(startDate) && isValidDate(endDate)) {
+            var data = $("#update-loan-modal .form-horizontal").serialize();
+
+            $.ajax({
+                url: Url.PaymentsPerMonth,
+                type: "post",
+                data: data,
+                success: function (data) {
+                    $(".payments-per-month-table").html($(data).find(".modal-body").html());
+                }
+            })
+        }
     })
 })

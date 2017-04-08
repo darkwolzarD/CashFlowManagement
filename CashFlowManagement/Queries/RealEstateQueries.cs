@@ -54,8 +54,6 @@ namespace CashFlowManagement.Queries
                     InterestRatePerYear = loan.InterestRatePerYear,
                     StartDate = loan.StartDate,
                     EndDate = loan.EndDate,
-                    OriginalPayment = loan.OriginalPayment,
-                    InterestPayment = loan.InterestPayment,
                     CreatedDate = loan.CreatedDate,
                     DisabledDate = loan.DisabledDate
                 });
@@ -137,82 +135,124 @@ namespace CashFlowManagement.Queries
         public static List<Loans> GetLoanByParentId(int id)
         {
             CashFlowManagementEntities entities = new CashFlowManagementEntities();
-            List<Loans> list = entities.Loans.Where(x => x.Id == id || x.ParentLoanId == id).ToList();
-            return list;
+            Loans loan = entities.Loans.Where(x => x.Id == id).FirstOrDefault();
+            if (loan.ParentLoanId.HasValue)
+            {
+                List<Loans> list = entities.Loans.Where(x => (x.Id == loan.ParentLoanId || x.ParentLoanId == loan.ParentLoanId) && !x.DisabledDate.HasValue).ToList();
+                return list;
+            }
+            else
+            {
+                List<Loans> list = entities.Loans.Where(x => (x.Id == id || x.ParentLoanId == id) && !x.DisabledDate.HasValue).ToList();
+                return list;
+            }
         }
 
         public static int UpdateLoan(Loans data)
         {
             CashFlowManagementEntities entities = new CashFlowManagementEntities();
             DateTime current = DateTime.Now;
+            int result = 0;
 
             Loans parentLoan = entities.Loans.Where(x => x.Id == data.Id).FirstOrDefault();
             List<Loans> loans = entities.Loans.Where(x => x.ParentLoanId == data.Id && !x.DisabledDate.HasValue).OrderByDescending(x => x.StartDate).ToList();
 
-
-            Loans start = loans.Where(x => x.StartDate < data.StartDate).OrderByDescending(x => x.StartDate).FirstOrDefault();
-            if(start != null)
+            if (data.InterestRatePerYear > 0)
             {
-                start.EndDate = data.StartDate;
-                entities.Loans.Attach(start);
-                var entry = entities.Entry(start);
-                entry.Property(x => x.EndDate).IsModified = true;
-            }
-
-            List<Loans> middle = loans.Where(x => x.StartDate >= data.StartDate && x.EndDate <= data.EndDate).ToList();
-            if (middle.Any())
-            {
-                foreach (var item in middle)
+                Loans start = loans.Where(x => x.StartDate < data.StartDate).OrderByDescending(x => x.StartDate).FirstOrDefault();
+                if (start != null)
                 {
-                    item.DisabledDate = current;
+                    start.EndDate = data.StartDate.AddMonths(-1);
+                    entities.Loans.Attach(start);
+                    var entry = entities.Entry(start);
+                    entry.Property(x => x.EndDate).IsModified = true;
                 }
-            }
 
-            Loans updated_loan = new Loans();
-            updated_loan.Source = data.Source;
-            updated_loan.MortgageValue = data.MortgageValue;
-            updated_loan.InterestType = data.InterestType;
-            updated_loan.InterestRatePerYear = data.InterestRatePerYear;
-            updated_loan.CreatedDate = current;
-            updated_loan.StartDate = data.StartDate;
-            updated_loan.EndDate = data.EndDate;
-            updated_loan.OriginalPayment = data.OriginalPayment;
-            updated_loan.InterestPayment = data.InterestPayment;
-            updated_loan.RealEstateIncomeId = parentLoan.RealEstateIncomeId;
-            updated_loan.ParentLoanId = parentLoan.Id;
-            entities.Loans.Add(updated_loan);
-
-            Loans end = loans.Where(x => x.EndDate > data.EndDate).OrderBy(x => x.EndDate).FirstOrDefault();
-            if (end != null)
-            {
-                end.StartDate = data.EndDate;
-                if(end.EndDate.Equals(parentLoan.EndDate))
+                List<Loans> middle = loans.Where(x => x.StartDate >= data.StartDate && x.EndDate <= data.EndDate).ToList();
+                if (middle.Any())
                 {
+                    foreach (var item in middle)
+                    {
+                        item.DisabledDate = current;
+                    }
+                }
+
+                Loans updated_loan = new Loans();
+                updated_loan.Source = parentLoan.Source;
+                updated_loan.MortgageValue = parentLoan.MortgageValue;
+                updated_loan.InterestType = parentLoan.InterestType;
+                updated_loan.InterestRatePerYear = data.InterestRatePerYear;
+                updated_loan.CreatedDate = current;
+                updated_loan.StartDate = data.StartDate;
+                updated_loan.EndDate = data.EndDate;
+                updated_loan.RealEstateIncomeId = parentLoan.RealEstateIncomeId;
+                updated_loan.ParentLoanId = parentLoan.Id;
+                entities.Loans.Add(updated_loan);
+
+                Loans end = loans.Where(x => x.EndDate > data.EndDate).OrderBy(x => x.EndDate).FirstOrDefault();
+                if (end != null)
+                {
+                    end.StartDate = data.EndDate.AddMonths(1);
+                    entities.Loans.Attach(end);
+                    var entry = entities.Entry(end);
+                    entry.Property(x => x.StartDate).IsModified = true;
+                    entry.Property(x => x.InterestRatePerYear).IsModified = true;
+                }
+                else if (data.EndDate != parentLoan.EndDate)
+                {
+                    end = new Loans();
+                    end.Source = parentLoan.Source;
+                    end.MortgageValue = parentLoan.MortgageValue;
+                    end.InterestType = parentLoan.InterestType;
                     end.InterestRatePerYear = data.InterestRatePerYear;
+                    end.CreatedDate = current;
+                    end.StartDate = data.EndDate.AddMonths(1);
+                    end.EndDate = parentLoan.EndDate;
+                    end.RealEstateIncomeId = parentLoan.RealEstateIncomeId;
+                    end.ParentLoanId = parentLoan.Id;
+                    entities.Loans.Add(end);
                 }
-                entities.Loans.Attach(end);
-                var entry = entities.Entry(end);
-                entry.Property(x => x.StartDate).IsModified = true;
-                entry.Property(x => x.InterestRatePerYear).IsModified = true;
-            }
-            else if (data.EndDate != parentLoan.EndDate)
-            {
-                end = new Loans();
-                end.Source = data.Source;
-                end.MortgageValue = data.MortgageValue;
-                end.InterestType = data.InterestType;
-                end.InterestRatePerYear = data.InterestRatePerYear;
-                end.CreatedDate = current;
-                end.StartDate = data.EndDate;
-                end.EndDate = parentLoan.EndDate;
-                end.OriginalPayment = data.OriginalPayment;
-                end.InterestPayment = data.InterestPayment;
-                end.RealEstateIncomeId = parentLoan.RealEstateIncomeId;
-                end.ParentLoanId = parentLoan.Id;
-                entities.Loans.Add(end);
-            }
 
-            int result = entities.SaveChanges();
+                result = entities.SaveChanges();
+            }
+            else
+            {
+                parentLoan.Source = data.Source;
+                parentLoan.MortgageValue = data.MortgageValue;
+                parentLoan.InterestType = data.InterestType;
+                parentLoan.StartDate = data.StartDate;
+                parentLoan.EndDate = data.EndDate;
+
+                entities.Loans.Attach(parentLoan);
+                var entry = entities.Entry(parentLoan);
+                entry.Property(x => x.Source).IsModified = true;
+                entry.Property(x => x.MortgageValue).IsModified = true;
+                entry.Property(x => x.InterestType).IsModified = true;
+                entry.Property(x => x.StartDate).IsModified = true;
+                entry.Property(x => x.EndDate).IsModified = true;
+
+                foreach (var loan in loans)
+                {
+                    loan.DisabledDate = current;
+                    entities.Loans.Attach(loan);
+                    entry = entities.Entry(loan);
+                    entry.Property(x => x.DisabledDate).IsModified = true;
+                }
+
+                Loans childLoan = new Loans();
+                childLoan.Source = data.Source;
+                childLoan.MortgageValue = data.MortgageValue;
+                childLoan.InterestType = data.InterestType;
+                childLoan.InterestRatePerYear = parentLoan.InterestRatePerYear;
+                childLoan.StartDate = data.StartDate;
+                childLoan.EndDate = data.EndDate;
+                childLoan.CreatedDate = data.CreatedDate;
+                childLoan.RealEstateIncomeId = parentLoan.RealEstateIncomeId;
+                childLoan.ParentLoanId = data.Id;
+
+                entities.Loans.Add(childLoan);
+                result = entities.SaveChanges();
+            }
             return result;
         }
 

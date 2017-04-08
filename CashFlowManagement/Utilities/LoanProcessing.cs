@@ -9,60 +9,77 @@ namespace CashFlowManagement.Utilities
 {
     public class LoanProcessing
     {
-        public static List<LoanInterestTableViewModel> CalculatePaymentsByMonth(List<Loans> list)
+        public static List<LoanInterestTableViewModel> CalculatePaymentsByMonth(List<Loans> list, Loans loan, bool append)
         {
-            list = list.OrderBy(x => x.Id).ToList();
+
+            list = list.OrderBy(x => x.StartDate).ToList();
+
+            Loans parentLoan = list.Where(x => !x.ParentLoanId.HasValue).FirstOrDefault();
+
             List<LoanInterestTableViewModel> result = new List<LoanInterestTableViewModel>();
 
-            double remainLoan = list[0].MortgageValue;
-            double numberOfOriginalMonths = (list[0].EndDate.Year - list[0].StartDate.Year) * 12 + list[0].EndDate.Month - list[0].StartDate.Month;
-            double monthlyOriginalPayment = list[0].MortgageValue / numberOfOriginalMonths;
+            double remainLoan = parentLoan.MortgageValue;
+            double numberOfOriginalMonths = (parentLoan.EndDate.Year - parentLoan.StartDate.Year) * 12 + parentLoan.EndDate.Month - parentLoan.StartDate.Month;
+            double monthlyOriginalPayment = parentLoan.MortgageValue / numberOfOriginalMonths;
+            DateTime startDate = list.Where(x => x.ParentLoanId.HasValue).OrderBy(x => x.StartDate).FirstOrDefault().StartDate;
 
-            int i = 0;
             double monthlyTotalOriginalPayment = 0;
-            for (; i < list.Count - 1; i++)
+            foreach (var item in list)
             {
-                double interestPerMonth = list[i].InterestRatePerYear / 1200;
-
-                double numberOfRealMonths = (list[i + 1].StartDate.Year - list[i].StartDate.Year) * 12 + list[i + 1].StartDate.Month - list[i].StartDate.Month;
-                for (int j = 1; j <= numberOfRealMonths; j++)
+                if (item.ParentLoanId.HasValue)
                 {
-                    
-                    LoanInterestTableViewModel item = new LoanInterestTableViewModel
+                    double interestPerMonth = item.InterestRatePerYear / 1200;
+
+                    double numberOfRealMonths = (item.EndDate.Year - item.StartDate.Year) * 12 + item.EndDate.Month - item.StartDate.Month + 1;
+                    for (int j = 1; j <= numberOfRealMonths; j++)
                     {
-                        MonthlyOriginalPayment = monthlyOriginalPayment,
-                        MonthlyInterestPayment = remainLoan * interestPerMonth,
-                        CurrentInterestRatePerYear = list[i].InterestRatePerYear
-                    };
+                        LoanInterestTableViewModel model = new LoanInterestTableViewModel();
+                        if (append)
+                        {
+                            if (loan.StartDate <= startDate && startDate <= loan.EndDate)
+                            {
+                                model.MonthlyOriginalPayment = monthlyOriginalPayment;
+                                model.MonthlyInterestPayment = remainLoan * loan.InterestRatePerYear / 1200;
+                                model.CurrentInterestRatePerYear = loan.InterestRatePerYear;
+                                model.CurrentMonth = startDate;
+                                model.Highlight = true;
+                            }
+                            else
+                            {
+                                model.MonthlyOriginalPayment = monthlyOriginalPayment;
+                                model.MonthlyInterestPayment = remainLoan * interestPerMonth;
+                                model.CurrentInterestRatePerYear = item.InterestRatePerYear;
+                                model.CurrentMonth = startDate;
+                            }
+                        }
+                        else
+                        {
+                            model.MonthlyOriginalPayment = monthlyOriginalPayment;
+                            model.MonthlyInterestPayment = remainLoan * interestPerMonth;
+                            model.CurrentInterestRatePerYear = item.InterestRatePerYear;
+                            model.CurrentMonth = startDate;
+                        }
 
-                    item.MonthlyTotalPayment = item.MonthlyOriginalPayment + item.MonthlyInterestPayment;
-                    item.RemainingLoan = remainLoan;
+                        model.MonthlyTotalPayment = model.MonthlyOriginalPayment + model.MonthlyInterestPayment;
+                        model.RemainingLoan = remainLoan;
 
-                    result.Add(item);
+                        if (!append)
+                        {
+                            if (loan.StartDate <= startDate && startDate <= loan.EndDate)
+                            {
+                                result.Add(model);
+                            }
+                        }
+                        else
+                        {
+                            result.Add(model);
+                        }
 
-                    monthlyTotalOriginalPayment += monthlyOriginalPayment;
-                    remainLoan -= monthlyOriginalPayment;
-                }                
-            }
-
-            double _interestPerMonth = list[i].InterestRatePerYear / 1200;
-            double _numberOfRealMonths = (list[i].EndDate.Year - list[i].StartDate.Year) * 12 + list[i].EndDate.Month - list[i].StartDate.Month;
-            for (int j = 1; j <= _numberOfRealMonths; j++)
-            {
-                LoanInterestTableViewModel _item = new LoanInterestTableViewModel
-                {
-                    MonthlyOriginalPayment = monthlyOriginalPayment,
-                    MonthlyInterestPayment = remainLoan * _interestPerMonth,
-                    CurrentInterestRatePerYear = list[i].InterestRatePerYear
-                };
-
-                _item.MonthlyTotalPayment = _item.MonthlyOriginalPayment + _item.MonthlyInterestPayment;
-                _item.RemainingLoan = remainLoan;
-
-                result.Add(_item);
-
-                monthlyTotalOriginalPayment += monthlyOriginalPayment;
-                remainLoan -= monthlyOriginalPayment;
+                        monthlyTotalOriginalPayment += monthlyOriginalPayment;
+                        remainLoan -= monthlyOriginalPayment;
+                        startDate = startDate.AddMonths(1);
+                    }
+                }
             }
             return result;
         }

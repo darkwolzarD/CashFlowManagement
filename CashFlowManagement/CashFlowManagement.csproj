@@ -661,6 +661,7 @@
     <Content Include="Views\FinancialStatus\Index.cshtml" />
     <Content Include="Views\RealEstate\PaymentsPerMonth.cshtml" />
     <Content Include="Views\RealEstate\RealEstateTable.cshtml" />
+    <Content Include="Views\RealEstate\UpdateLoanWithRateModal.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
