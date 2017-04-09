@@ -24,8 +24,6 @@ namespace CashFlowManagement.EntityModel
         public string Source { get; set; }
         public double Income { get; set; }
         public double CapitalValue { get; set; }
-        public double LoanValue { get; set; }
-        public double ExpenseInterest { get; set; }
         public string ParticipantBank { get; set; }
         public string Note { get; set; }
         public System.DateTime StartDate { get; set; }

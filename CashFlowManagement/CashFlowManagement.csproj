@@ -251,9 +251,11 @@
     <Compile Include="Utilities\BusinessProcessing.cs" />
     <Compile Include="Utilities\FinancialStatusProcessing.cs" />
     <Compile Include="Utilities\FormatUtility.cs" />
+    <Compile Include="Utilities\BusinessLoanProcessing.cs" />
     <Compile Include="Utilities\LoanProcessing.cs" />
     <Compile Include="Utilities\RealEstateProcessing.cs" />
     <Compile Include="ViewModels\Business\BusinessViewModel.cs" />
+    <Compile Include="ViewModels\Business\LoanInterestTableViewModel.cs" />
     <Compile Include="ViewModels\FinancialStatus\FinancialStatusViewModel.cs" />
     <Compile Include="ViewModels\RealEstate\LoanInterestTableViewModel.cs" />
     <Compile Include="ViewModels\RealEstate\RealEstateViewModel.cs" />

@@ -6,38 +6,40 @@ using System.Web;
 
 namespace CashFlowManagement.ViewModels.Business
 {
-    public class BusinessViewModel
+    public class BusinessListViewModel
     {
-        public BusinessIncomes Business { get; set; }
-        public int Period { get; set; }
-        public double MonthlyInterestPayment { get; set; }
-        public double MonthlyOriginalPayment { get; set; }
-        public double MonthlyTotalPayment { get; set; }
-        public double RemainLoan { get; set; }
-
-        public BusinessViewModel()
+        public List<BusinessInfoViewModel> ListBusinessInfoViewModel { get; set; }
+        public BusinessListViewModel()
         {
-            Business = new BusinessIncomes();
+            this.ListBusinessInfoViewModel = new List<BusinessInfoViewModel>();
         }
     }
 
-    public class BusinessListViewModel
+    public class LoanViewModel
     {
-        public List<BusinessViewModel> BusinessList { get; set; }
-        public double TotalMonthlyIncome { get; set; }
-        public double TotalAnnualIncome { get; set; }
-        public double TotalCapitalValue { get; set; }
-        public double TotalLoanValue { get; set; }
-        public double TotalExpenseInterest { get; set; }
-        public double TotalPeriod { get; set; }
+        public BusinessLoan Loan { get; set; }
+        public int TotalPaymentPeriod { get; set; }
+        public double MonthlyOriginalPayment { get; set; }
+        public double MonthlyInterestPayment { get; set; }
+        public double MonthlyPayment { get; set; }
+        public double AnnualPayment { get; set; }
+        public double RemainedValue { get; set; }
+
+        public double CurrentInterestRate { get; set; }
+    }
+
+    public class BusinessInfoViewModel
+    {
+        public BusinessIncomes Business { get; set; }
+        public double AnnualIncome { get; set; }
+        public double Yield { get; set; }
+        public List<LoanViewModel> ListLoanViewModel { get; set; }
+        public double TotalMorgageValue { get; set; }
+        public double TotalAnnualPayment { get; set; }
+        public double TotalMonthlyPayment { get; set; }
         public double TotalInterestPayment { get; set; }
         public double TotalOriginalPayment { get; set; }
-        public double TotalTotalPayment { get; set; }
-        public double TotalRemainLoan { get; set; }
-
-        public BusinessListViewModel()
-        {
-            BusinessList = new List<BusinessViewModel>();
-        }
+        public double TotalRemainingValue { get; set; }
+        public double AverageInterestRate { get; set; }
     }
 }

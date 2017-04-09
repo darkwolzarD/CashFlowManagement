@@ -27,8 +27,6 @@ namespace CashFlowManagement.EntityModel
         }
     
         public virtual DbSet<BankDepositIncomes> BankDepositIncomes { get; set; }
-        public virtual DbSet<BusinessIncomes> BusinessIncomes { get; set; }
-        public virtual DbSet<BusinessLoan> BusinessLoan { get; set; }
         public virtual DbSet<Expenses> Expenses { get; set; }
         public virtual DbSet<FinancialStatus> FinancialStatus { get; set; }
         public virtual DbSet<Loans> Loans { get; set; }
@@ -39,5 +37,7 @@ namespace CashFlowManagement.EntityModel
         public virtual DbSet<StockTransactions> StockTransactions { get; set; }
         public virtual DbSet<Users> Users { get; set; }
         public virtual DbSet<TransactionFee> TransactionFee { get; set; }
+        public virtual DbSet<BusinessIncomes> BusinessIncomes { get; set; }
+        public virtual DbSet<BusinessLoan> BusinessLoan { get; set; }
     }
 }

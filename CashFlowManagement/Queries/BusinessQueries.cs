@@ -18,7 +18,7 @@ namespace CashFlowManagement.Queries
                                                                         .Select(x => new
                                                                         {
                                                                             x,
-                                                                            Loans = x.BusinessLoan.Where(m => !m.DisabledDate.HasValue)
+                                                                            BusinessLoan = x.BusinessLoan.Where(m => !m.DisabledDate.HasValue)
                                                                         }).AsEnumerable().Select(m => m.x).OrderByDescending(x => x.Income).ToList();
             return result;
         }
@@ -41,8 +41,6 @@ namespace CashFlowManagement.Queries
             updated_business.Source = data.Source;
             updated_business.Income = data.Income;
             updated_business.CapitalValue = data.CapitalValue;
-            updated_business.LoanValue = data.LoanValue;
-            updated_business.ExpenseInterest = data.ExpenseInterest;
             updated_business.ParticipantBank = data.ParticipantBank;
             updated_business.Note = data.Note;
             updated_business.StartDate = data.StartDate;
@@ -80,31 +78,31 @@ namespace CashFlowManagement.Queries
         public static int DeleteBusiness(int id)
         {
             CashFlowManagementEntities entities = new CashFlowManagementEntities();
-            RealEstateIncomes realEstate = entities.RealEstateIncomes.Where(x => x.Id == id).FirstOrDefault();
+            BusinessIncomes business = entities.BusinessIncomes.Where(x => x.Id == id).FirstOrDefault();
             DateTime current = DateTime.Now;
-            realEstate.EndDate = new DateTime(current.Year, current.Month, 1);
-            entities.RealEstateIncomes.Attach(realEstate);
-            var entry = entities.Entry(realEstate);
+            business.EndDate = new DateTime(current.Year, current.Month, 1);
+            entities.BusinessIncomes.Attach(business);
+            var entry = entities.Entry(business);
             entry.Property(x => x.EndDate).IsModified = true;
             int result = entities.SaveChanges();
             return result;
         }
 
-        public static RealEstateIncomes GetRealEstateById(int id)
+        public static BusinessIncomes GetBusinessById(int id)
         {
             CashFlowManagementEntities entities = new CashFlowManagementEntities();
-            RealEstateIncomes realEstate = entities.RealEstateIncomes.Where(x => x.Id == id).FirstOrDefault();
-            return realEstate;
+            BusinessIncomes business = entities.BusinessIncomes.Where(x => x.Id == id).FirstOrDefault();
+            return business;
         }
 
-        public static int CreateLoan(Loans data)
+        public static int CreateLoan(BusinessLoan data)
         {
             CashFlowManagementEntities entities = new CashFlowManagementEntities();
             data.CreatedDate = DateTime.Now;
-            entities.Loans.Add(data);
+            entities.BusinessLoan.Add(data);
             int result = entities.SaveChanges();
 
-            Loans childLoan = new Loans();
+            BusinessLoan childLoan = new BusinessLoan();
             childLoan.Source = data.Source;
             childLoan.MortgageValue = data.MortgageValue;
             childLoan.InterestType = data.InterestType;
@@ -112,10 +110,10 @@ namespace CashFlowManagement.Queries
             childLoan.StartDate = data.StartDate;
             childLoan.EndDate = data.EndDate;
             childLoan.CreatedDate = data.CreatedDate;
-            childLoan.RealEstateIncomeId = data.RealEstateIncomeId;
+            childLoan.BusinessId = data.BusinessId;
             childLoan.ParentLoanId = data.Id;
 
-            entities.Loans.Add(childLoan);
+            entities.BusinessLoan.Add(childLoan);
             result = entities.SaveChanges();
             return result;
         }
@@ -123,60 +121,60 @@ namespace CashFlowManagement.Queries
         public static int DeleteLoan(int id)
         {
             CashFlowManagementEntities entities = new CashFlowManagementEntities();
-            Loans loan = entities.Loans.Where(x => x.Id == id).FirstOrDefault();
+            BusinessLoan loan = entities.BusinessLoan.Where(x => x.Id == id).FirstOrDefault();
             DateTime current = DateTime.Now;
             loan.DisabledDate = new DateTime(current.Year, current.Month, 1);
-            entities.Loans.Attach(loan);
+            entities.BusinessLoan.Attach(loan);
             var entry = entities.Entry(loan);
             entry.Property(x => x.DisabledDate).IsModified = true;
             int result = entities.SaveChanges();
             return result;
         }
 
-        public static Loans GetLoanById(int id)
+        public static BusinessLoan GetLoanById(int id)
         {
             CashFlowManagementEntities entities = new CashFlowManagementEntities();
-            Loans loan = entities.Loans.Where(x => x.Id == id).FirstOrDefault();
+            BusinessLoan loan = entities.BusinessLoan.Where(x => x.Id == id).FirstOrDefault();
             return loan;
         }
 
-        public static List<Loans> GetLoanByParentId(int id)
+        public static List<BusinessLoan> GetLoanByParentId(int id)
         {
             CashFlowManagementEntities entities = new CashFlowManagementEntities();
-            Loans loan = entities.Loans.Where(x => x.Id == id).FirstOrDefault();
+            BusinessLoan loan = entities.BusinessLoan.Where(x => x.Id == id).FirstOrDefault();
             if (loan.ParentLoanId.HasValue)
             {
-                List<Loans> list = entities.Loans.Where(x => (x.Id == loan.ParentLoanId || x.ParentLoanId == loan.ParentLoanId) && !x.DisabledDate.HasValue).ToList();
+                List<BusinessLoan> list = entities.BusinessLoan.Where(x => (x.Id == loan.ParentLoanId || x.ParentLoanId == loan.ParentLoanId) && !x.DisabledDate.HasValue).ToList();
                 return list;
             }
             else
             {
-                List<Loans> list = entities.Loans.Where(x => (x.Id == id || x.ParentLoanId == id) && !x.DisabledDate.HasValue).ToList();
+                List<BusinessLoan> list = entities.BusinessLoan.Where(x => (x.Id == id || x.ParentLoanId == id) && !x.DisabledDate.HasValue).ToList();
                 return list;
             }
         }
 
-        public static int UpdateLoan(Loans data)
+        public static int UpdateLoan(BusinessLoan data)
         {
             CashFlowManagementEntities entities = new CashFlowManagementEntities();
             DateTime current = DateTime.Now;
             int result = 0;
 
-            Loans parentLoan = entities.Loans.Where(x => x.Id == data.Id).FirstOrDefault();
-            List<Loans> loans = entities.Loans.Where(x => x.ParentLoanId == data.Id && !x.DisabledDate.HasValue).OrderByDescending(x => x.StartDate).ToList();
+            BusinessLoan parentLoan = entities.BusinessLoan.Where(x => x.Id == data.Id).FirstOrDefault();
+            List<BusinessLoan> loans = entities.BusinessLoan.Where(x => x.ParentLoanId == data.Id && !x.DisabledDate.HasValue).OrderByDescending(x => x.StartDate).ToList();
 
             if (data.InterestRatePerYear > 0)
             {
-                Loans start = loans.Where(x => x.StartDate < data.StartDate).OrderByDescending(x => x.StartDate).FirstOrDefault();
+                BusinessLoan start = loans.Where(x => x.StartDate < data.StartDate).OrderByDescending(x => x.StartDate).FirstOrDefault();
                 if (start != null)
                 {
                     start.EndDate = data.StartDate.AddMonths(-1);
-                    entities.Loans.Attach(start);
+                    entities.BusinessLoan.Attach(start);
                     var entry = entities.Entry(start);
                     entry.Property(x => x.EndDate).IsModified = true;
                 }
 
-                List<Loans> middle = loans.Where(x => x.StartDate >= data.StartDate && x.EndDate <= data.EndDate).ToList();
+                List<BusinessLoan> middle = loans.Where(x => x.StartDate >= data.StartDate && x.EndDate <= data.EndDate).ToList();
                 if (middle.Any())
                 {
                     foreach (var item in middle)
@@ -185,7 +183,7 @@ namespace CashFlowManagement.Queries
                     }
                 }
 
-                Loans updated_loan = new Loans();
+                BusinessLoan updated_loan = new BusinessLoan();
                 updated_loan.Source = parentLoan.Source;
                 updated_loan.MortgageValue = parentLoan.MortgageValue;
                 updated_loan.InterestType = parentLoan.InterestType;
@@ -193,22 +191,22 @@ namespace CashFlowManagement.Queries
                 updated_loan.CreatedDate = current;
                 updated_loan.StartDate = data.StartDate;
                 updated_loan.EndDate = data.EndDate;
-                updated_loan.RealEstateIncomeId = parentLoan.RealEstateIncomeId;
+                updated_loan.BusinessId = parentLoan.BusinessId;
                 updated_loan.ParentLoanId = parentLoan.Id;
-                entities.Loans.Add(updated_loan);
+                entities.BusinessLoan.Add(updated_loan);
 
-                Loans end = loans.Where(x => x.EndDate > data.EndDate).OrderBy(x => x.EndDate).FirstOrDefault();
+                BusinessLoan end = loans.Where(x => x.EndDate > data.EndDate).OrderBy(x => x.EndDate).FirstOrDefault();
                 if (end != null)
                 {
                     end.StartDate = data.EndDate.AddMonths(1);
-                    entities.Loans.Attach(end);
+                    entities.BusinessLoan.Attach(end);
                     var entry = entities.Entry(end);
                     entry.Property(x => x.StartDate).IsModified = true;
                     entry.Property(x => x.InterestRatePerYear).IsModified = true;
                 }
                 else if (data.EndDate != parentLoan.EndDate)
                 {
-                    end = new Loans();
+                    end = new BusinessLoan();
                     end.Source = parentLoan.Source;
                     end.MortgageValue = parentLoan.MortgageValue;
                     end.InterestType = parentLoan.InterestType;
@@ -216,9 +214,9 @@ namespace CashFlowManagement.Queries
                     end.CreatedDate = current;
                     end.StartDate = data.EndDate.AddMonths(1);
                     end.EndDate = parentLoan.EndDate;
-                    end.RealEstateIncomeId = parentLoan.RealEstateIncomeId;
+                    end.BusinessId = parentLoan.BusinessId;
                     end.ParentLoanId = parentLoan.Id;
-                    entities.Loans.Add(end);
+                    entities.BusinessLoan.Add(end);
                 }
 
                 result = entities.SaveChanges();
@@ -231,7 +229,7 @@ namespace CashFlowManagement.Queries
                 parentLoan.StartDate = data.StartDate;
                 parentLoan.EndDate = data.EndDate;
 
-                entities.Loans.Attach(parentLoan);
+                entities.BusinessLoan.Attach(parentLoan);
                 var entry = entities.Entry(parentLoan);
                 entry.Property(x => x.Source).IsModified = true;
                 entry.Property(x => x.MortgageValue).IsModified = true;
@@ -242,12 +240,12 @@ namespace CashFlowManagement.Queries
                 foreach (var loan in loans)
                 {
                     loan.DisabledDate = current;
-                    entities.Loans.Attach(loan);
+                    entities.BusinessLoan.Attach(loan);
                     entry = entities.Entry(loan);
                     entry.Property(x => x.DisabledDate).IsModified = true;
                 }
 
-                Loans childLoan = new Loans();
+                BusinessLoan childLoan = new BusinessLoan();
                 childLoan.Source = data.Source;
                 childLoan.MortgageValue = data.MortgageValue;
                 childLoan.InterestType = data.InterestType;
@@ -255,10 +253,10 @@ namespace CashFlowManagement.Queries
                 childLoan.StartDate = data.StartDate;
                 childLoan.EndDate = data.EndDate;
                 childLoan.CreatedDate = current;
-                childLoan.RealEstateIncomeId = parentLoan.RealEstateIncomeId;
+                childLoan.BusinessId = parentLoan.BusinessId;
                 childLoan.ParentLoanId = data.Id;
 
-                entities.Loans.Add(childLoan);
+                entities.BusinessLoan.Add(childLoan);
                 result = entities.SaveChanges();
             }
             return result;
@@ -269,7 +267,7 @@ namespace CashFlowManagement.Queries
             DateTime current = DateTime.Now;
             current = new DateTime(current.Year, current.Month, 1);
             CashFlowManagementEntities entities = new CashFlowManagementEntities();
-            double interestRate = entities.Loans.Where(x => x.ParentLoanId.HasValue && x.ParentLoanId == parentLoanId && x.StartDate <= current && x.EndDate > current).FirstOrDefault().InterestRatePerYear;
+            double interestRate = entities.BusinessLoan.Where(x => x.ParentLoanId.HasValue && x.ParentLoanId == parentLoanId && x.StartDate <= current && x.EndDate > current).FirstOrDefault().InterestRatePerYear;
             return interestRate;
         }
     }

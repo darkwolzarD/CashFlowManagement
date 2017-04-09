@@ -18,12 +18,12 @@ namespace CashFlowManagement.EntityModel
         public Users()
         {
             this.BankDepositIncomes = new HashSet<BankDepositIncomes>();
-            this.BusinessIncomes = new HashSet<BusinessIncomes>();
             this.Expenses = new HashSet<Expenses>();
             this.FinancialStatus = new HashSet<FinancialStatus>();
             this.RealEstateIncomes = new HashSet<RealEstateIncomes>();
             this.Salary = new HashSet<Salary>();
             this.StockCodes = new HashSet<StockCodes>();
+            this.BusinessIncomes = new HashSet<BusinessIncomes>();
         }
     
         public string Username { get; set; }
@@ -35,8 +35,6 @@ namespace CashFlowManagement.EntityModel
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<BankDepositIncomes> BankDepositIncomes { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<BusinessIncomes> BusinessIncomes { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Expenses> Expenses { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<FinancialStatus> FinancialStatus { get; set; }
@@ -46,5 +44,7 @@ namespace CashFlowManagement.EntityModel
         public virtual ICollection<Salary> Salary { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<StockCodes> StockCodes { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<BusinessIncomes> BusinessIncomes { get; set; }
     }
 }
