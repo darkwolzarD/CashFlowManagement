@@ -97,10 +97,14 @@ namespace CashFlowManagement.Utilities
                 var loanList = realEstate.Loans.Where(x => !x.DisabledDate.HasValue).ToList();
                 foreach (var loan in loanList)
                 {
-                    List<LoanInterestTableViewModel> list = CalculatePaymentsByMonth(loanList, loan, false);
-                    foreach (var item in list)
+                    if (!loan.ParentLoanId.HasValue)
                     {
-                        if (item.CurrentMonth.Equals(current)) result += item.MonthlyTotalPayment;
+                        List<LoanInterestTableViewModel> list = CalculatePaymentsByMonth(loanList.Where(x => x.Id == loan.Id || x.ParentLoanId == loan.Id).ToList(), loan, false);
+                        foreach (var item in list)
+                        {
+                            if (item.CurrentMonth.Equals(current))
+                                result += item.MonthlyTotalPayment;
+                        }
                     }
                 }
             }

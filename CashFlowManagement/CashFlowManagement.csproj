@@ -184,6 +184,9 @@
     <Compile Include="EntityModel\BusinessIncomes.cs">
       <DependentUpon>CashFlowDataModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="EntityModel\BusinessLoan.cs">
+      <DependentUpon>CashFlowDataModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="EntityModel\CashFlowDataModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -217,6 +220,9 @@
     <Compile Include="EntityModel\StockCodes.cs">
       <DependentUpon>CashFlowDataModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="EntityModel\StockLoan.cs">
+      <DependentUpon>CashFlowDataModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="EntityModel\StockTransactions.cs">
       <DependentUpon>CashFlowDataModel.tt</DependentUpon>
     </Compile>
@@ -242,10 +248,12 @@
     <Compile Include="Queries\RealEstateQueries.cs" />
     <Compile Include="Queries\SalaryQueries.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="Utilities\BusinessProcessing.cs" />
     <Compile Include="Utilities\FinancialStatusProcessing.cs" />
     <Compile Include="Utilities\FormatUtility.cs" />
     <Compile Include="Utilities\LoanProcessing.cs" />
     <Compile Include="Utilities\RealEstateProcessing.cs" />
+    <Compile Include="ViewModels\Business\BusinessViewModel.cs" />
     <Compile Include="ViewModels\FinancialStatus\FinancialStatusViewModel.cs" />
     <Compile Include="ViewModels\RealEstate\LoanInterestTableViewModel.cs" />
     <Compile Include="ViewModels\RealEstate\RealEstateViewModel.cs" />
@@ -664,6 +672,7 @@
     <Content Include="Views\RealEstate\PaymentsPerMonth.cshtml" />
     <Content Include="Views\RealEstate\RealEstateTable.cshtml" />
     <Content Include="Views\RealEstate\UpdateLoanWithRateModal.cshtml" />
+    <Content Include="Views\RealEstate\RealEstateSummary.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

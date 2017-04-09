@@ -32,8 +32,26 @@
           <Property Name="ParticipantBank" Type="nvarchar" MaxLength="100" />
           <Property Name="Note" Type="nvarchar" MaxLength="100" />
           <Property Name="StartDate" Type="date" Nullable="false" />
-          <Property Name="EndDate" Type="date" />
+          <Property Name="EndDate" Type="date" Nullable="false" />
+          <Property Name="CreateDate" Type="datetime" Nullable="false" />
+          <Property Name="DisabledDate" Type="datetime" />
           <Property Name="Username" Type="nvarchar" MaxLength="10" Nullable="false" />
+        </EntityType>
+        <EntityType Name="BusinessLoan">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Source" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="MortgageValue" Type="float" Nullable="false" />
+          <Property Name="InterestType" Type="int" Nullable="false" />
+          <Property Name="InterestRatePerYear" Type="float" Nullable="false" />
+          <Property Name="StartDate" Type="date" Nullable="false" />
+          <Property Name="EndDate" Type="date" Nullable="false" />
+          <Property Name="CreatedDate" Type="date" Nullable="false" />
+          <Property Name="DisabledDate" Type="date" />
+          <Property Name="BusinessId" Type="int" Nullable="false" />
+          <Property Name="ParentLoanId" Type="int" />
         </EntityType>
         <EntityType Name="Expenses">
           <Key>
@@ -106,6 +124,22 @@
           <Property Name="EndDate" Type="date" />
           <Property Name="Username" Type="nvarchar" MaxLength="10" Nullable="false" />
         </EntityType>
+        <EntityType Name="StockLoan">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Source" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="MortgageValue" Type="float" Nullable="false" />
+          <Property Name="InterestType" Type="int" Nullable="false" />
+          <Property Name="InterestRatePerYear" Type="float" Nullable="false" />
+          <Property Name="StartDate" Type="date" Nullable="false" />
+          <Property Name="EndDate" Type="date" Nullable="false" />
+          <Property Name="CreatedDate" Type="date" Nullable="false" />
+          <Property Name="DisabledDate" Type="date" />
+          <Property Name="StockId" Type="int" Nullable="false" />
+          <Property Name="ParentLoanId" Type="int" />
+        </EntityType>
         <EntityType Name="StockTransactions">
           <Key>
             <PropertyRef Name="Id" />
@@ -166,6 +200,30 @@ warning 6002: The table/view 'CashFlowManagement.dbo.TransactionFee' does not ha
             </Principal>
             <Dependent Role="BusinessIncomes">
               <PropertyRef Name="Username" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BusinessLoan_BusinessIncomes">
+          <End Role="BusinessIncomes" Type="Self.BusinessIncomes" Multiplicity="1" />
+          <End Role="BusinessLoan" Type="Self.BusinessLoan" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BusinessIncomes">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="BusinessLoan">
+              <PropertyRef Name="BusinessId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BusinessLoan_BusinessLoan">
+          <End Role="BusinessLoan" Type="Self.BusinessLoan" Multiplicity="0..1" />
+          <End Role="BusinessLoan1" Type="Self.BusinessLoan" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BusinessLoan">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="BusinessLoan1">
+              <PropertyRef Name="ParentLoanId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -253,6 +311,30 @@ warning 6002: The table/view 'CashFlowManagement.dbo.TransactionFee' does not ha
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_StockLoan_StockCodes">
+          <End Role="StockCodes" Type="Self.StockCodes" Multiplicity="1" />
+          <End Role="StockLoan" Type="Self.StockLoan" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="StockCodes">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="StockLoan">
+              <PropertyRef Name="StockId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StockLoan_StockLoan">
+          <End Role="StockLoan" Type="Self.StockLoan" Multiplicity="0..1" />
+          <End Role="StockLoan1" Type="Self.StockLoan" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="StockLoan">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="StockLoan1">
+              <PropertyRef Name="ParentLoanId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_StockTransactions_StockCodes">
           <End Role="StockCodes" Type="Self.StockCodes" Multiplicity="1" />
           <End Role="StockTransactions" Type="Self.StockTransactions" Multiplicity="*" />
@@ -268,12 +350,14 @@ warning 6002: The table/view 'CashFlowManagement.dbo.TransactionFee' does not ha
         <EntityContainer Name="CashFlowManagementModelStoreContainer">
           <EntitySet Name="BankDepositIncomes" EntityType="Self.BankDepositIncomes" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="BusinessIncomes" EntityType="Self.BusinessIncomes" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BusinessLoan" EntityType="Self.BusinessLoan" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Expenses" EntityType="Self.Expenses" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FinancialStatus" EntityType="Self.FinancialStatus" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Loans" EntityType="Self.Loans" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RealEstateIncomes" EntityType="Self.RealEstateIncomes" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Salary" EntityType="Self.Salary" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="StockCodes" EntityType="Self.StockCodes" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="StockLoan" EntityType="Self.StockLoan" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="StockTransactions" EntityType="Self.StockTransactions" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TransactionFee" EntityType="Self.TransactionFee" store:Type="Tables" store:Schema="dbo">
@@ -290,6 +374,14 @@ warning 6002: The table/view 'CashFlowManagement.dbo.TransactionFee' does not ha
           <AssociationSet Name="FK_BusinessIncomes_Users" Association="Self.FK_BusinessIncomes_Users">
             <End Role="Users" EntitySet="Users" />
             <End Role="BusinessIncomes" EntitySet="BusinessIncomes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BusinessLoan_BusinessIncomes" Association="Self.FK_BusinessLoan_BusinessIncomes">
+            <End Role="BusinessIncomes" EntitySet="BusinessIncomes" />
+            <End Role="BusinessLoan" EntitySet="BusinessLoan" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BusinessLoan_BusinessLoan" Association="Self.FK_BusinessLoan_BusinessLoan">
+            <End Role="BusinessLoan" EntitySet="BusinessLoan" />
+            <End Role="BusinessLoan1" EntitySet="BusinessLoan" />
           </AssociationSet>
           <AssociationSet Name="FK_Expenses_Users" Association="Self.FK_Expenses_Users">
             <End Role="Users" EntitySet="Users" />
@@ -319,6 +411,14 @@ warning 6002: The table/view 'CashFlowManagement.dbo.TransactionFee' does not ha
             <End Role="Users" EntitySet="Users" />
             <End Role="StockCodes" EntitySet="StockCodes" />
           </AssociationSet>
+          <AssociationSet Name="FK_StockLoan_StockCodes" Association="Self.FK_StockLoan_StockCodes">
+            <End Role="StockCodes" EntitySet="StockCodes" />
+            <End Role="StockLoan" EntitySet="StockLoan" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StockLoan_StockLoan" Association="Self.FK_StockLoan_StockLoan">
+            <End Role="StockLoan" EntitySet="StockLoan" />
+            <End Role="StockLoan1" EntitySet="StockLoan" />
+          </AssociationSet>
           <AssociationSet Name="FK_StockTransactions_StockCodes" Association="Self.FK_StockTransactions_StockCodes">
             <End Role="StockCodes" EntitySet="StockCodes" />
             <End Role="StockTransactions" EntitySet="StockTransactions" />
@@ -331,12 +431,14 @@ warning 6002: The table/view 'CashFlowManagement.dbo.TransactionFee' does not ha
         <EntityContainer Name="CashFlowManagementEntities" annotation:LazyLoadingEnabled="false">
           <EntitySet Name="BankDepositIncomes" EntityType="CashFlowManagementModel.BankDepositIncomes" />
           <EntitySet Name="BusinessIncomes" EntityType="CashFlowManagementModel.BusinessIncomes" />
+          <EntitySet Name="BusinessLoan" EntityType="CashFlowManagementModel.BusinessLoan" />
           <EntitySet Name="Expenses" EntityType="CashFlowManagementModel.Expenses" />
           <EntitySet Name="FinancialStatus" EntityType="CashFlowManagementModel.FinancialStatus" />
           <EntitySet Name="Loans" EntityType="CashFlowManagementModel.Loans" />
           <EntitySet Name="RealEstateIncomes" EntityType="CashFlowManagementModel.RealEstateIncomes" />
           <EntitySet Name="Salary" EntityType="CashFlowManagementModel.Salary" />
           <EntitySet Name="StockCodes" EntityType="CashFlowManagementModel.StockCodes" />
+          <EntitySet Name="StockLoan" EntityType="CashFlowManagementModel.StockLoan" />
           <EntitySet Name="StockTransactions" EntityType="CashFlowManagementModel.StockTransactions" />
           <EntitySet Name="Users" EntityType="CashFlowManagementModel.Users" />
           <EntitySet Name="TransactionFee" EntityType="CashFlowManagementModel.TransactionFee" />
@@ -347,6 +449,14 @@ warning 6002: The table/view 'CashFlowManagement.dbo.TransactionFee' does not ha
           <AssociationSet Name="FK_BusinessIncomes_Users" Association="CashFlowManagementModel.FK_BusinessIncomes_Users">
             <End Role="Users" EntitySet="Users" />
             <End Role="BusinessIncomes" EntitySet="BusinessIncomes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BusinessLoan_BusinessIncomes" Association="CashFlowManagementModel.FK_BusinessLoan_BusinessIncomes">
+            <End Role="BusinessIncomes" EntitySet="BusinessIncomes" />
+            <End Role="BusinessLoan" EntitySet="BusinessLoan" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BusinessLoan_BusinessLoan" Association="CashFlowManagementModel.FK_BusinessLoan_BusinessLoan">
+            <End Role="BusinessLoan" EntitySet="BusinessLoan" />
+            <End Role="BusinessLoan1" EntitySet="BusinessLoan" />
           </AssociationSet>
           <AssociationSet Name="FK_Expenses_Users" Association="CashFlowManagementModel.FK_Expenses_Users">
             <End Role="Users" EntitySet="Users" />
@@ -376,9 +486,17 @@ warning 6002: The table/view 'CashFlowManagement.dbo.TransactionFee' does not ha
             <End Role="Users" EntitySet="Users" />
             <End Role="StockCodes" EntitySet="StockCodes" />
           </AssociationSet>
+          <AssociationSet Name="FK_StockLoan_StockCodes" Association="CashFlowManagementModel.FK_StockLoan_StockCodes">
+            <End Role="StockCodes" EntitySet="StockCodes" />
+            <End Role="StockLoan" EntitySet="StockLoan" />
+          </AssociationSet>
           <AssociationSet Name="FK_StockTransactions_StockCodes" Association="CashFlowManagementModel.FK_StockTransactions_StockCodes">
             <End Role="StockCodes" EntitySet="StockCodes" />
             <End Role="StockTransactions" EntitySet="StockTransactions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StockLoan_StockLoan" Association="CashFlowManagementModel.FK_StockLoan_StockLoan">
+            <End Role="StockLoan" EntitySet="StockLoan" />
+            <End Role="StockLoan1" EntitySet="StockLoan" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="BankDepositIncomes">
@@ -409,9 +527,31 @@ warning 6002: The table/view 'CashFlowManagement.dbo.TransactionFee' does not ha
           <Property Name="ParticipantBank" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="Note" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="EndDate" Type="DateTime" Precision="0" />
+          <Property Name="EndDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DisabledDate" Type="DateTime" Precision="3" />
           <Property Name="Username" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Users" Relationship="CashFlowManagementModel.FK_BusinessIncomes_Users" FromRole="BusinessIncomes" ToRole="Users" />
+          <NavigationProperty Name="BusinessLoan" Relationship="CashFlowManagementModel.FK_BusinessLoan_BusinessIncomes" FromRole="BusinessIncomes" ToRole="BusinessLoan" />
+        </EntityType>
+        <EntityType Name="BusinessLoan">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Source" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="MortgageValue" Type="Double" Nullable="false" />
+          <Property Name="InterestType" Type="Int32" Nullable="false" />
+          <Property Name="InterestRatePerYear" Type="Double" Nullable="false" />
+          <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="EndDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="DisabledDate" Type="DateTime" Precision="0" />
+          <Property Name="BusinessId" Type="Int32" Nullable="false" />
+          <Property Name="ParentLoanId" Type="Int32" />
+          <NavigationProperty Name="BusinessIncomes" Relationship="CashFlowManagementModel.FK_BusinessLoan_BusinessIncomes" FromRole="BusinessLoan" ToRole="BusinessIncomes" />
+          <NavigationProperty Name="BusinessLoan1" Relationship="CashFlowManagementModel.FK_BusinessLoan_BusinessLoan" FromRole="BusinessLoan" ToRole="BusinessLoan1" />
+          <NavigationProperty Name="BusinessLoan2" Relationship="CashFlowManagementModel.FK_BusinessLoan_BusinessLoan" FromRole="BusinessLoan1" ToRole="BusinessLoan" />
         </EntityType>
         <EntityType Name="Expenses">
           <Key>
@@ -492,7 +632,27 @@ warning 6002: The table/view 'CashFlowManagement.dbo.TransactionFee' does not ha
           <Property Name="EndDate" Type="DateTime" Precision="0" />
           <Property Name="Username" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Users" Relationship="CashFlowManagementModel.FK_StockCodes_Users" FromRole="StockCodes" ToRole="Users" />
+          <NavigationProperty Name="StockLoan" Relationship="CashFlowManagementModel.FK_StockLoan_StockCodes" FromRole="StockCodes" ToRole="StockLoan" />
           <NavigationProperty Name="StockTransactions" Relationship="CashFlowManagementModel.FK_StockTransactions_StockCodes" FromRole="StockCodes" ToRole="StockTransactions" />
+        </EntityType>
+        <EntityType Name="StockLoan">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Source" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="MortgageValue" Type="Double" Nullable="false" />
+          <Property Name="InterestType" Type="Int32" Nullable="false" />
+          <Property Name="InterestRatePerYear" Type="Double" Nullable="false" />
+          <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="EndDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="DisabledDate" Type="DateTime" Precision="0" />
+          <Property Name="StockId" Type="Int32" Nullable="false" />
+          <Property Name="ParentLoanId" Type="Int32" />
+          <NavigationProperty Name="StockCodes" Relationship="CashFlowManagementModel.FK_StockLoan_StockCodes" FromRole="StockLoan" ToRole="StockCodes" />
+          <NavigationProperty Name="StockLoan1" Relationship="CashFlowManagementModel.FK_StockLoan_StockLoan" FromRole="StockLoan" ToRole="StockLoan1" />
+          <NavigationProperty Name="StockLoan2" Relationship="CashFlowManagementModel.FK_StockLoan_StockLoan" FromRole="StockLoan1" ToRole="StockLoan" />
         </EntityType>
         <EntityType Name="StockTransactions">
           <Key>
@@ -560,6 +720,30 @@ warning 6002: The table/view 'CashFlowManagement.dbo.TransactionFee' does not ha
             </Principal>
             <Dependent Role="BusinessIncomes">
               <PropertyRef Name="Username" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BusinessLoan_BusinessIncomes">
+          <End Type="CashFlowManagementModel.BusinessIncomes" Role="BusinessIncomes" Multiplicity="1" />
+          <End Type="CashFlowManagementModel.BusinessLoan" Role="BusinessLoan" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BusinessIncomes">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="BusinessLoan">
+              <PropertyRef Name="BusinessId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BusinessLoan_BusinessLoan">
+          <End Type="CashFlowManagementModel.BusinessLoan" Role="BusinessLoan" Multiplicity="0..1" />
+          <End Type="CashFlowManagementModel.BusinessLoan" Role="BusinessLoan1" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BusinessLoan">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="BusinessLoan1">
+              <PropertyRef Name="ParentLoanId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -647,6 +831,18 @@ warning 6002: The table/view 'CashFlowManagement.dbo.TransactionFee' does not ha
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_StockLoan_StockCodes">
+          <End Type="CashFlowManagementModel.StockCodes" Role="StockCodes" Multiplicity="1" />
+          <End Type="CashFlowManagementModel.StockLoan" Role="StockLoan" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="StockCodes">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="StockLoan">
+              <PropertyRef Name="StockId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_StockTransactions_StockCodes">
           <End Type="CashFlowManagementModel.StockCodes" Role="StockCodes" Multiplicity="1" />
           <End Type="CashFlowManagementModel.StockTransactions" Role="StockTransactions" Multiplicity="*" />
@@ -656,6 +852,18 @@ warning 6002: The table/view 'CashFlowManagement.dbo.TransactionFee' does not ha
             </Principal>
             <Dependent Role="StockTransactions">
               <PropertyRef Name="StockId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StockLoan_StockLoan">
+          <End Type="CashFlowManagementModel.StockLoan" Role="StockLoan" Multiplicity="0..1" />
+          <End Type="CashFlowManagementModel.StockLoan" Role="StockLoan1" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="StockLoan">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="StockLoan1">
+              <PropertyRef Name="ParentLoanId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -684,6 +892,8 @@ warning 6002: The table/view 'CashFlowManagement.dbo.TransactionFee' does not ha
             <EntityTypeMapping TypeName="CashFlowManagementModel.BusinessIncomes">
               <MappingFragment StoreEntitySet="BusinessIncomes">
                 <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="DisabledDate" ColumnName="DisabledDate" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
                 <ScalarProperty Name="EndDate" ColumnName="EndDate" />
                 <ScalarProperty Name="StartDate" ColumnName="StartDate" />
                 <ScalarProperty Name="Note" ColumnName="Note" />
@@ -692,6 +902,23 @@ warning 6002: The table/view 'CashFlowManagement.dbo.TransactionFee' does not ha
                 <ScalarProperty Name="LoanValue" ColumnName="LoanValue" />
                 <ScalarProperty Name="CapitalValue" ColumnName="CapitalValue" />
                 <ScalarProperty Name="Income" ColumnName="Income" />
+                <ScalarProperty Name="Source" ColumnName="Source" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BusinessLoan">
+            <EntityTypeMapping TypeName="CashFlowManagementModel.BusinessLoan">
+              <MappingFragment StoreEntitySet="BusinessLoan">
+                <ScalarProperty Name="ParentLoanId" ColumnName="ParentLoanId" />
+                <ScalarProperty Name="BusinessId" ColumnName="BusinessId" />
+                <ScalarProperty Name="DisabledDate" ColumnName="DisabledDate" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="InterestRatePerYear" ColumnName="InterestRatePerYear" />
+                <ScalarProperty Name="InterestType" ColumnName="InterestType" />
+                <ScalarProperty Name="MortgageValue" ColumnName="MortgageValue" />
                 <ScalarProperty Name="Source" ColumnName="Source" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
@@ -770,6 +997,23 @@ warning 6002: The table/view 'CashFlowManagement.dbo.TransactionFee' does not ha
                 <ScalarProperty Name="EndDate" ColumnName="EndDate" />
                 <ScalarProperty Name="StartDate" ColumnName="StartDate" />
                 <ScalarProperty Name="StockCode" ColumnName="StockCode" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="StockLoan">
+            <EntityTypeMapping TypeName="CashFlowManagementModel.StockLoan">
+              <MappingFragment StoreEntitySet="StockLoan">
+                <ScalarProperty Name="ParentLoanId" ColumnName="ParentLoanId" />
+                <ScalarProperty Name="StockId" ColumnName="StockId" />
+                <ScalarProperty Name="DisabledDate" ColumnName="DisabledDate" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="InterestRatePerYear" ColumnName="InterestRatePerYear" />
+                <ScalarProperty Name="InterestType" ColumnName="InterestType" />
+                <ScalarProperty Name="MortgageValue" ColumnName="MortgageValue" />
+                <ScalarProperty Name="Source" ColumnName="Source" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

@@ -10,9 +10,9 @@
 </div>
 
 <div class="row">
-    <h4>Monthly Cashflow: @Model.MonthlyCashflow</h4>
-    <h4>Passive Income: @Model.PassiveIncome</h4>
-    <h4>Financial Freedom: @Model.FinancialFreedom %</h4>
+    <h4>Monthly Cashflow: @FormatUtility.DisplayThousandSeparatorsForNumber(Model.MonthlyCashflow)</h4>
+    <h4>Passive Income: @FormatUtility.DisplayThousandSeparatorsForNumber(Model.PassiveIncome)</h4>
+    <h4>Financial Freedom: @FormatUtility.DisplayPercentageForNumber(Model.FinancialFreedom)</h4>
 
     <div class="col-md-6">
         <table class="table table-bordered table-condensed table-striped">

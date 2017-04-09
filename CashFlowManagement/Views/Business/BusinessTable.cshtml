@@ -1,69 +1,69 @@
 ﻿@using CashFlowManagement.Utilities
-@model List<CashFlowManagement.EntityModel.BusinessIncomes>
-@{
-    double totalBusinessIncome = 0,
-           totalCapitalValue = 0,
-           totalLoanValue = 0,
-           totalAnnualPayment = 0;
-}
+@model CashFlowManagement.ViewModels.Business.BusinessListViewModel
 
 <table class="table table-bordered table-striped business-table">
     <thead>
         <tr>
-            <th class="text-center">Business Incomes</th>
-            <th class="text-center">Monthly Income</th>
-            <th class="text-center">Annual Income</th>
-            <th class="text-center">Capital value</th>
-            <th class="text-center">Loan value</th>
-            <th class="text-center">Expense Interest</th>
-            <th class="text-center">Annual paymnent</th>
-            <th class="text-center">Monthly paymnent</th>
-            <th class="text-center">Participant Bank</th>
-            <th class="text-center">Note</th>
+            <th class="text-center">Kinh doanh</th>
+            <th class="text-center">Thu hàng tháng</th>
+            <th class="text-center">Thu hàng năm</th>
+            <th class="text-center">Giá trị vốn góp</th>
+            <th class="text-center">Vốn vay</th>
+            <th class="text-center">Lãi vay</th>
+            <th class="text-center">Vay từ ngày</th>
+            <th class="text-center">Vay đến ngày</th>
+            <th class="text-center">Tổng số tháng phải trả</th>
+            <th class="text-center">Trả lãi vay tháng</th>
+            <th class="text-center">Trả vốn vay tháng</th>
+            <th class="text-center">Tổng phải trả hàng tháng</th>
+            <th class="text-center">Tiền vay còn phải trả</th>
+            <th class="text-center">Ghi chú</th>
             <th width="200"></th>
         </tr>
     </thead>
     <tbody>
-        @if (Model != null && Model.Count > 0)
+        @if (Model.BusinessList.Any())
         {
-            foreach (var item in Model)
+            foreach (var item in Model.BusinessList)
             {
             <tr>
                 <td class="hidden">
-                    <span class="business-id">@item.Id</span>
+                    <span class="business-id">@item.Business.Id</span>
                 </td>
-                <td>@item.Source</td>
-                <td>@FormatUtility.DisplayThousandSeparatorsForNumber(item.Income)</td>
-                <td>@FormatUtility.DisplayThousandSeparatorsForNumber(item.Income * 12)</td>
-                <td>@FormatUtility.DisplayThousandSeparatorsForNumber(item.CapitalValue)</td>
-                <td>@FormatUtility.DisplayThousandSeparatorsForNumber(item.LoanValue)</td>
-                <td>@FormatUtility.DisplayThousandSeparatorsForNumber(item.ExpenseInterest)</td>
-                <td>@FormatUtility.DisplayThousandSeparatorsForNumber(item.LoanValue * item.ExpenseInterest / 100)</td>
-                <td>@FormatUtility.DisplayThousandSeparatorsForNumber(item.LoanValue * item.ExpenseInterest / 1200)</td>
-                <td>@item.ParticipantBank</td>
-                <td>@item.Note</td>
+                <td>@item.Business.Source</td>
+                <td>@FormatUtility.DisplayThousandSeparatorsForNumber(item.Business.Income)</td>
+                <td>@FormatUtility.DisplayThousandSeparatorsForNumber(item.Business.Income * 12)</td>
+                <td>@FormatUtility.DisplayThousandSeparatorsForNumber(item.Business.CapitalValue)</td>
+                <td>@FormatUtility.DisplayThousandSeparatorsForNumber(item.Business.LoanValue)</td>
+                <td>@FormatUtility.DisplayThousandSeparatorsForNumber(item.Business.ExpenseInterest)</td>
+                <td>@item.Business.CreateDate.ToString("MM/yyyy")</td>
+                <td>@item.Business.EndDate.ToString("MM/yyyy")</td>
+                <td>@FormatUtility.DisplayThousandSeparatorsForNumber(item.Period)</td>
+                <td>@FormatUtility.DisplayThousandSeparatorsForNumber(item.MonthlyInterestPayment)</td>
+                <td>@FormatUtility.DisplayThousandSeparatorsForNumber(item.MonthlyOriginalPayment)</td>
+                <td>@FormatUtility.DisplayThousandSeparatorsForNumber(item.MonthlyTotalPayment)</td>
+                <td>@FormatUtility.DisplayThousandSeparatorsForNumber(item.RemainLoan)</td>
+                <td>@item.Business.Note</td>
                 <td class="text-center">
                     <button class="btn btn-success update-business">Update</button>
                     <button class="btn btn-danger delete-business">Delete</button>
                 </td>
             </tr>
-                {
-                    totalBusinessIncome += item.Income;
-                    totalCapitalValue += item.CapitalValue;
-                    totalLoanValue += item.LoanValue;
-                    totalAnnualPayment += (item.LoanValue * item.ExpenseInterest / 100);
-                }
             }
         <tr>
             <td><strong>Total value</strong></td>
-            <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(totalBusinessIncome)</strong></td>
-            <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(totalBusinessIncome * 12)</strong></td>
-            <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(totalCapitalValue)</strong></td>
-            <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(totalLoanValue)</strong></td>
-            <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(totalLoanValue > 0 ? totalAnnualPayment / totalLoanValue : 0)</strong></td>
-            <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(totalAnnualPayment)</strong></td>
-            <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(totalAnnualPayment / 12)</strong></td>
+            <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.TotalMonthlyIncome)</strong></td>
+            <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.TotalAnnualIncome)</strong></td>
+            <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.TotalCapitalValue)</strong></td>
+            <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.TotalLoanValue)</strong></td>
+            <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.TotalExpenseInterest)</strong></td>
             <td></td>
+            <td></td>
+            <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.TotalPeriod)</strong></td>
+            <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.TotalInterestPayment)</strong></td>
+            <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.TotalOriginalPayment)</strong></td>
+            <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.TotalTotalPayment)</strong></td>
+            <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.TotalRemainLoan)</strong></td>
             <td></td>
             <td></td>
         </tr>
@@ -71,7 +71,7 @@
         else
         {
             <tr>
-                <td class="text-center" colspan="11">No business income available</td>
+                <td class="text-center" colspan="14">No business income available</td>
             </tr>
         }
     </tbody>

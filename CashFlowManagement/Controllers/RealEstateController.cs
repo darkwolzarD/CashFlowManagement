@@ -117,5 +117,12 @@ namespace CashFlowManagement.Controllers
             List<LoanInterestTableViewModel> result = LoanProcessing.CalculatePaymentsByMonth(list, loan, true);
             return PartialView(result);
         }
+
+        public ActionResult RealEstateSummary()
+        {
+            List<RealEstateIncomes> ListRealEstateIncomes = RealEstateQueries.GetRealEstateByUser("test");
+            RealEstateListViewModel result = RealEstateProcessing.GetRealEstateListViewModel(ListRealEstateIncomes);
+            return View(result);
+        }
     }
 }

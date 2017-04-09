@@ -1,0 +1,46 @@
+﻿@model CashFlowManagement.ViewModels.RealEstate.RealEstateListViewModel
+@using CashFlowManagement.Utilities
+@{
+    ViewBag.Title = "RealEstateSummary";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="background">
+    <h3 class="text-center">TỔNG HỢP BẤT ĐỘNG SẢN</h3>
+    <div class="real-estate-summary-table">
+        <table class="table table-bordered table-condensed table-striped">
+            <thead>
+                <tr>
+                    <th>Bất động sản</th>
+                    <th>Thu hàng tháng</th>
+                    <th>Thu hàng năm</th>
+                    <th>Giá trị tài sản</th>
+                    <th>Tỷ lệ lợi tức cho thuê</th>
+                    <th>Giá trị tiền vay</th>
+                    <th>Chi phí lãi vay</th>
+                    <th>Phải trả hàng tháng</th>
+                    <th>Phải trả hàng năm</th>
+                    <th>Số tiền gốc còn phải trả</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var realEstate in Model.ListRealEstateInfoViewModel)
+                {
+                    <tr>
+                        <td>@realEstate.RealEstate.Source</td>
+                        <td>@FormatUtility.DisplayThousandSeparatorsForNumber(realEstate.RealEstate.Income)</td>
+                        <td>@FormatUtility.DisplayThousandSeparatorsForNumber(realEstate.RealEstate.Income * 12)</td>
+                        <td>@FormatUtility.DisplayThousandSeparatorsForNumber(realEstate.RealEstate.OriginalValue)</td>
+                        <td>@FormatUtility.DisplayPercentageForNumber(realEstate.RentYield)</td>
+                        <td>@FormatUtility.DisplayThousandSeparatorsForNumber(realEstate.TotalMorgageValue)</td>
+                        <td>@FormatUtility.DisplayPercentageForNumber(realEstate.AverageInterestRate)</td>
+                        <td>@FormatUtility.DisplayThousandSeparatorsForNumber(realEstate.TotalMonthlyPayment)</td>
+                        <td>@FormatUtility.DisplayThousandSeparatorsForNumber(realEstate.TotalAnnualPayment)</td>
+                        <td>@FormatUtility.DisplayThousandSeparatorsForNumber(realEstate.TotalRemainingValue)</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+

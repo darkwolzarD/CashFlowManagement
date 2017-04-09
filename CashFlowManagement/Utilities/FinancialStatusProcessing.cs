@@ -59,6 +59,9 @@ namespace CashFlowManagement.Utilities
             result.TotalAssets = result.RealEstateValue + result.BusinessValue + result.BankDepositValue + result.StockValue;
             result.TotalExpenses = result.HomeMortgage + result.CarPayment + result.CreditCard + result.BankLoanExpenses + result.FamilyExpenses + result.OtherExpenses;
             result.TotalLiabilities = result.HomeMortgageLiability + result.CarLoan + result.CreditCardLiability + result.BankLoan + result.OtherLoans;
+            result.MonthlyCashflow = result.TotalIncomes - result.TotalExpenses;
+            result.PassiveIncome = result.RealEstateIncome + result.BusinessIncome + result.InterestIncome + result.DividendIncome;
+            result.FinancialFreedom = result.TotalExpenses > 0 ? result.PassiveIncome / result.TotalExpenses * 100 : 0;
 
             return result;
         }

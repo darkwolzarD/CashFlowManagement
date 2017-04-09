@@ -28,12 +28,14 @@ namespace CashFlowManagement.EntityModel
     
         public virtual DbSet<BankDepositIncomes> BankDepositIncomes { get; set; }
         public virtual DbSet<BusinessIncomes> BusinessIncomes { get; set; }
+        public virtual DbSet<BusinessLoan> BusinessLoan { get; set; }
         public virtual DbSet<Expenses> Expenses { get; set; }
         public virtual DbSet<FinancialStatus> FinancialStatus { get; set; }
         public virtual DbSet<Loans> Loans { get; set; }
         public virtual DbSet<RealEstateIncomes> RealEstateIncomes { get; set; }
         public virtual DbSet<Salary> Salary { get; set; }
         public virtual DbSet<StockCodes> StockCodes { get; set; }
+        public virtual DbSet<StockLoan> StockLoan { get; set; }
         public virtual DbSet<StockTransactions> StockTransactions { get; set; }
         public virtual DbSet<Users> Users { get; set; }
         public virtual DbSet<TransactionFee> TransactionFee { get; set; }

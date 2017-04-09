@@ -14,6 +14,12 @@ namespace CashFlowManagement.EntityModel
     
     public partial class BusinessIncomes
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public BusinessIncomes()
+        {
+            this.BusinessLoan = new HashSet<BusinessLoan>();
+        }
+    
         public int Id { get; set; }
         public string Source { get; set; }
         public double Income { get; set; }
@@ -23,9 +29,13 @@ namespace CashFlowManagement.EntityModel
         public string ParticipantBank { get; set; }
         public string Note { get; set; }
         public System.DateTime StartDate { get; set; }
-        public Nullable<System.DateTime> EndDate { get; set; }
+        public System.DateTime EndDate { get; set; }
+        public System.DateTime CreateDate { get; set; }
+        public Nullable<System.DateTime> DisabledDate { get; set; }
         public string Username { get; set; }
     
         public virtual Users Users { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<BusinessLoan> BusinessLoan { get; set; }
     }
 }

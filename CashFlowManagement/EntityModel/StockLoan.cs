@@ -12,25 +12,29 @@ namespace CashFlowManagement.EntityModel
     using System;
     using System.Collections.Generic;
     
-    public partial class StockCodes
+    public partial class StockLoan
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public StockCodes()
+        public StockLoan()
         {
-            this.StockLoan = new HashSet<StockLoan>();
-            this.StockTransactions = new HashSet<StockTransactions>();
+            this.StockLoan1 = new HashSet<StockLoan>();
         }
     
         public int Id { get; set; }
-        public string StockCode { get; set; }
+        public string Source { get; set; }
+        public double MortgageValue { get; set; }
+        public int InterestType { get; set; }
+        public double InterestRatePerYear { get; set; }
         public System.DateTime StartDate { get; set; }
-        public Nullable<System.DateTime> EndDate { get; set; }
-        public string Username { get; set; }
+        public System.DateTime EndDate { get; set; }
+        public System.DateTime CreatedDate { get; set; }
+        public Nullable<System.DateTime> DisabledDate { get; set; }
+        public int StockId { get; set; }
+        public Nullable<int> ParentLoanId { get; set; }
     
-        public virtual Users Users { get; set; }
+        public virtual StockCodes StockCodes { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<StockLoan> StockLoan { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<StockTransactions> StockTransactions { get; set; }
+        public virtual ICollection<StockLoan> StockLoan1 { get; set; }
+        public virtual StockLoan StockLoan2 { get; set; }
     }
 }

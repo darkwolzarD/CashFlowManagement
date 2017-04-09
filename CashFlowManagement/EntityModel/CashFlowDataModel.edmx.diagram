@@ -4,20 +4,24 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="dafd82af35ca4756b248e4a4cf825c11" Name="Diagram1">
-        <EntityTypeShape EntityType="CashFlowManagementModel.BankDepositIncomes" Width="1.5" PointX="3" PointY="13.5" />
-        <EntityTypeShape EntityType="CashFlowManagementModel.BusinessIncomes" Width="1.5" PointX="3" PointY="2.125" />
-        <EntityTypeShape EntityType="CashFlowManagementModel.Expenses" Width="1.5" PointX="3" PointY="24.625" />
-        <EntityTypeShape EntityType="CashFlowManagementModel.FinancialStatus" Width="1.5" PointX="3" PointY="10.625" />
-        <EntityTypeShape EntityType="CashFlowManagementModel.Loans" Width="1.5" PointX="5.25" PointY="6.125" />
-        <EntityTypeShape EntityType="CashFlowManagementModel.RealEstateIncomes" Width="1.5" PointX="3" PointY="6.625" />
-        <EntityTypeShape EntityType="CashFlowManagementModel.Salary" Width="1.5" PointX="3" PointY="17.25" />
-        <EntityTypeShape EntityType="CashFlowManagementModel.StockCodes" Width="1.5" PointX="3" PointY="20.875" />
-        <EntityTypeShape EntityType="CashFlowManagementModel.StockTransactions" Width="1.5" PointX="5.25" PointY="20.375" />
-        <EntityTypeShape EntityType="CashFlowManagementModel.Users" Width="1.5" PointX="0.75" PointY="13" />
+      <Diagram DiagramId="dafd82af35ca4756b248e4a4cf825c11" Name="Diagram1" ZoomLevel="98">
+        <EntityTypeShape EntityType="CashFlowManagementModel.BankDepositIncomes" Width="1.5" PointX="3" PointY="5.25" />
+        <EntityTypeShape EntityType="CashFlowManagementModel.BusinessIncomes" Width="1.5" PointX="3" PointY="12" />
+        <EntityTypeShape EntityType="CashFlowManagementModel.BusinessLoan" Width="1.5" PointX="5.25" PointY="12.125" />
+        <EntityTypeShape EntityType="CashFlowManagementModel.Expenses" Width="1.5" PointX="3" PointY="25.5" />
+        <EntityTypeShape EntityType="CashFlowManagementModel.FinancialStatus" Width="1.5" PointX="3" PointY="2.375" />
+        <EntityTypeShape EntityType="CashFlowManagementModel.Loans" Width="1.5" PointX="5.25" PointY="28.75" />
+        <EntityTypeShape EntityType="CashFlowManagementModel.RealEstateIncomes" Width="1.5" PointX="3" PointY="29.25" />
+        <EntityTypeShape EntityType="CashFlowManagementModel.Salary" Width="1.5" PointX="3" PointY="9" />
+        <EntityTypeShape EntityType="CashFlowManagementModel.StockCodes" Width="1.5" PointX="3" PointY="19.375" />
+        <EntityTypeShape EntityType="CashFlowManagementModel.StockLoan" Width="1.5" PointX="5.25" PointY="16.75" />
+        <EntityTypeShape EntityType="CashFlowManagementModel.StockTransactions" Width="1.5" PointX="5.25" PointY="21.125" />
+        <EntityTypeShape EntityType="CashFlowManagementModel.Users" Width="1.5" PointX="0.75" PointY="15.75" />
         <EntityTypeShape EntityType="CashFlowManagementModel.TransactionFee" Width="1.5" PointX="5.75" PointY="0.75" />
         <AssociationConnector Association="CashFlowManagementModel.FK_BankDepositIncomes_Users" />
         <AssociationConnector Association="CashFlowManagementModel.FK_BusinessIncomes_Users" />
+        <AssociationConnector Association="CashFlowManagementModel.FK_BusinessLoan_BusinessIncomes" />
+        <AssociationConnector Association="CashFlowManagementModel.FK_BusinessLoan_BusinessLoan" />
         <AssociationConnector Association="CashFlowManagementModel.FK_Expenses_Users" />
         <AssociationConnector Association="CashFlowManagementModel.FK_FinancialStatus_Users" />
         <AssociationConnector Association="CashFlowManagementModel.FK_Loans_Loans" />
@@ -25,7 +29,9 @@
         <AssociationConnector Association="CashFlowManagementModel.FK_RealEstateIncomes_Users" />
         <AssociationConnector Association="CashFlowManagementModel.FK_Salary_Users" />
         <AssociationConnector Association="CashFlowManagementModel.FK_StockCodes_Users" />
+        <AssociationConnector Association="CashFlowManagementModel.FK_StockLoan_StockCodes" />
         <AssociationConnector Association="CashFlowManagementModel.FK_StockTransactions_StockCodes" />
+        <AssociationConnector Association="CashFlowManagementModel.FK_StockLoan_StockLoan" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
