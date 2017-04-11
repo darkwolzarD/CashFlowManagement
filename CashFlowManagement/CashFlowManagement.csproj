@@ -675,6 +675,10 @@
     <Content Include="Views\RealEstate\RealEstateTable.cshtml" />
     <Content Include="Views\RealEstate\UpdateLoanWithRateModal.cshtml" />
     <Content Include="Views\RealEstate\RealEstateSummary.cshtml" />
+    <Content Include="Views\Business\LoanModal.cshtml" />
+    <Content Include="Views\Business\UpdateLoanModal.cshtml" />
+    <Content Include="Views\Business\UpdateLoanWithRateModal.cshtml" />
+    <Content Include="Views\Business\PaymentsPerMonth.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

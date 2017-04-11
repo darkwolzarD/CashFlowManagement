@@ -39,7 +39,7 @@ namespace CashFlowManagement.Controllers
         public PartialViewResult LoanModal(int id)
         {
             BusinessLoan model = new BusinessLoan();
-            model.Id = id;
+            model.BusinessId = id;
             return PartialView(model);
         }
 

@@ -135,6 +135,10 @@ namespace CashFlowManagement.Queries
         {
             CashFlowManagementEntities entities = new CashFlowManagementEntities();
             BusinessLoan loan = entities.BusinessLoan.Where(x => x.Id == id).FirstOrDefault();
+            if (!loan.ParentLoanId.HasValue)
+            {
+                loan.InterestRatePerYear = BusinessQueries.GetCurrentInterestRate(id);
+            }
             return loan;
         }
 
@@ -267,7 +271,7 @@ namespace CashFlowManagement.Queries
             DateTime current = DateTime.Now;
             current = new DateTime(current.Year, current.Month, 1);
             CashFlowManagementEntities entities = new CashFlowManagementEntities();
-            double interestRate = entities.BusinessLoan.Where(x => x.ParentLoanId.HasValue && x.ParentLoanId == parentLoanId && x.StartDate <= current && x.EndDate > current).FirstOrDefault().InterestRatePerYear;
+            double interestRate = entities.BusinessLoan.Where(x => x.ParentLoanId.HasValue && x.ParentLoanId == parentLoanId && !x.DisabledDate.HasValue && x.StartDate <= current && x.EndDate > current).FirstOrDefault().InterestRatePerYear;
             return interestRate;
         }
     }
