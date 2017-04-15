@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="9cca8935e9b7431d8abda1c2b37bede0" Name="Diagram1">
+        <EntityTypeShape EntityType="CFMModel.Assets" Width="1.5" PointX="3" PointY="9.75" />
+        <EntityTypeShape EntityType="CFMModel.AvailableMoney" Width="1.5" PointX="5.25" PointY="8.375" />
+        <EntityTypeShape EntityType="CFMModel.BankDeposits" Width="1.5" PointX="5.25" PointY="15.125" />
+        <EntityTypeShape EntityType="CFMModel.Businesses" Width="1.5" PointX="5.25" PointY="21.375" />
+        <EntityTypeShape EntityType="CFMModel.Expenses" Width="1.5" PointX="10.5" PointY="10.125" />
+        <EntityTypeShape EntityType="CFMModel.Incomes" Width="1.5" PointX="5.25" PointY="11.125" />
+        <EntityTypeShape EntityType="CFMModel.Liabilities" Width="1.5" PointX="8.25" PointY="9.75" />
+        <EntityTypeShape EntityType="CFMModel.RealEstates" Width="1.5" PointX="5.25" PointY="23.75" />
+        <EntityTypeShape EntityType="CFMModel.Stocks" Width="1.5" PointX="5.25" PointY="5.75" />
+        <EntityTypeShape EntityType="CFMModel.Users" Width="1.5" PointX="0.75" PointY="10.5" />
+        <AssociationConnector Association="CFMModel.FK_Assets_Users" />
+        <AssociationConnector Association="CFMModel.FK_AvailableMoney_Assets" />
+        <AssociationConnector Association="CFMModel.FK_BankDeposit_Assets" />
+        <AssociationConnector Association="CFMModel.FK_Business_Assets" />
+        <AssociationConnector Association="CFMModel.FK_Incomes_Assets" />
+        <AssociationConnector Association="CFMModel.FK_Liabilities_Assets" />
+        <AssociationConnector Association="CFMModel.FK_RealEstate_Assets" />
+        <AssociationConnector Association="CFMModel.FK_Stock_Assets" />
+        <AssociationConnector Association="CFMModel.FK_Expenses_Liabilities" />
+        <AssociationConnector Association="CFMModel.FK_Expenses_Users" />
+        <AssociationConnector Association="CFMModel.FK_Incomes_Users" />
+        <AssociationConnector Association="CFMModel.FK_Liabilities_Users" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

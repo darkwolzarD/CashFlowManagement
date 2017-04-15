@@ -1,0 +1,54 @@
+﻿@using CashFlowManagement.Constants
+@using CashFlowManagement.EntityModel
+@model CashFlowManagement.ViewModels.AssetViewModel
+<div id="create-new-asset-modal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">
+                    @if (Model.SpecificAsset is Businesses)
+                    {
+                        @Html.Raw("Add new bank deposit")
+                    }
+                </h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label class="control-label col-sm-3">
+                            @if (Model.SpecificAsset is Businesses)
+                            {
+                                @Html.Raw("Bank deposit income:")
+                            }
+                        </label>
+                        <div class="col-sm-9">
+                            @Html.TextBoxFor(x => x.Asset.AssetName, new { @type = "text", @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-3">
+                            @if (Model.SpecificAsset is Businesses)
+                            {
+                                @Html.Raw("Capital value:")
+                            }
+                        </label>
+                        <div class="col-sm-9">
+                            @Html.TextBoxFor(x => x.Asset.Value, new { @Value = string.Empty, @type = "text", @class = "form-control input-mask" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-3">Monthly Income:</label>
+                        <div class="col-sm-9">
+                            @Html.TextBoxFor(x => x.Income.Value, new { @Value = string.Empty, @type = "text", @class = "form-control input-mask" })
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer text-center">
+                <button type="button" class="btn btn-success create-asset">Create</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

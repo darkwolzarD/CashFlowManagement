@@ -12,17 +12,13 @@ namespace CashFlowManagement.EntityModel
     using System;
     using System.Collections.Generic;
     
-    public partial class Expenses
+    public partial class BankDeposits
     {
         public int Id { get; set; }
-        public double Value { get; set; }
-        public int ExpenseType { get; set; }
-        public System.DateTime CreatedDate { get; set; }
-        public Nullable<System.DateTime> DisabledDate { get; set; }
-        public Nullable<int> LiabilityId { get; set; }
-        public string Username { get; set; }
+        public string ParticipantBank { get; set; }
+        public string Note { get; set; }
+        public int AssetId { get; set; }
     
-        public virtual Liabilities Liabilities { get; set; }
-        public virtual Users Users { get; set; }
+        public virtual Assets Assets { get; set; }
     }
 }

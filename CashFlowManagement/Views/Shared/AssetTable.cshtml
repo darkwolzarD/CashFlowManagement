@@ -1,0 +1,86 @@
+﻿@model CashFlowManagement.ViewModels.AssetListViewModel
+@using CashFlowManagement.Utilities
+@using CashFlowManagement.EntityModel
+@using CashFlowManagement.Constants
+@using CashFlowManagement.ViewModels
+@{
+    ViewBag.Title = "AssetTable";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    string title = string.Empty;
+    string type = string.Empty;
+    if (Model.Type == (int)Constants.ASSET_TYPE.BANK_DEPOSIT)
+    {
+        title = "BANK DEPOSIT";
+    }
+}
+
+<div class="background">
+    <h3 class="text-center">@title</h3>
+    @if (Model.Type == (int)Constants.ASSET_TYPE.BANK_DEPOSIT)
+    {
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#create-new-asset-modal">
+            Add bank deposit income
+        </button>
+    }
+    <div class="asset-table">
+        <table class="table table-bordered table-condensed table-responsive">
+            <thead>
+                <tr>
+                    @if (Model.Type == (int)Constants.ASSET_TYPE.BANK_DEPOSIT)
+                    {
+                        <th>Bank deposit income</th>
+                        <th>Monthly income</th>
+                        <th>Annual income</th>
+                        <th>Capital value</th>
+                        <th>Interest Yield</th>
+                        <th>Participant bank</th>
+                        <th>Note</th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.List)
+                {
+                    <tr>
+                        <td>@item.Asset.AssetName</td>
+                        <td>@FormatUtility.DisplayThousandSeparatorsForNumber(item.Income.Value)</td>
+                        <td>@FormatUtility.DisplayThousandSeparatorsForNumber(item.Income.Value * 12)</td>
+                        <td>@FormatUtility.DisplayThousandSeparatorsForNumber(item.Asset.Value)</td>
+                        <td>@FormatUtility.DisplayThousandSeparatorsForNumber(item.Income.Value / item.Asset.Value)</td>
+                        @if (item.SpecificAsset is BankDeposits)
+                        {
+                            <td>@item.SpecificAsset.ParticipantBank</td>
+                            <td>@item.SpecificAsset.Note</td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="asset-modal">
+    @{ Html.RenderPartial("_AssetModal", new AssetViewModel { Asset = new Assets(),
+                                                              Income = new Incomes(),
+                                                              SpecificAsset = new Businesses()}); }
+</div>
+
+@*<div class="update-modal">
+    @{ Html.RenderPartial("UpdateRealEstateModal");  }
+</div>
+
+<div class="loan-modal">
+    @{ Html.RenderPartial("LoanModal");  }
+</div>
+
+<div class="update-loan-modal-div">
+    @{ Html.RenderPartial("UpdateLoanModal");  }
+</div>
+
+<div class="interest-modal-div">
+
+</div>*@
+

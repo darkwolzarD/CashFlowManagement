@@ -24,17 +24,17 @@
         MaskInput();
     })
 
-    $(document).on("click", ".create-bank-deposit", function () {
+    $(document).on("click", ".create-asset", function () {
         RemoveMask();
-        var data = $("#create-new-bank-deposit-modal .form-horizontal").serialize();
+        var data = $("#create-new-asset-modal .form-horizontal").serialize();
 
         $.ajax({
-            url: Url.CreateBankDeposit,
+            url: Url.CreateAsset,
             type: "post",
             data: data,
             success: function (data) {
                 if (data.result > 0) {
-                    $("#create-new-bank-deposit-modal").modal("hide");
+                    $("#create-new-asset-modal").modal("hide");
                     LoadTable();
                 }
                 else {

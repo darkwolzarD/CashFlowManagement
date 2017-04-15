@@ -12,27 +12,41 @@ namespace CashFlowManagement.EntityModel
     using System;
     using System.Collections.Generic;
     
-    public partial class Users
+    public partial class Assets
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Users()
+        public Assets()
         {
-            this.Assets = new HashSet<Assets>();
-            this.Expenses = new HashSet<Expenses>();
+            this.AvailableMoney = new HashSet<AvailableMoney>();
+            this.BankDeposits = new HashSet<BankDeposits>();
+            this.Businesses = new HashSet<Businesses>();
             this.Incomes = new HashSet<Incomes>();
             this.Liabilities = new HashSet<Liabilities>();
+            this.RealEstates = new HashSet<RealEstates>();
+            this.Stocks = new HashSet<Stocks>();
         }
     
+        public int Id { get; set; }
+        public string AssetName { get; set; }
+        public double Value { get; set; }
+        public System.DateTime CreatedDate { get; set; }
+        public Nullable<System.DateTime> DisabledDate { get; set; }
         public string Username { get; set; }
-        public string Password { get; set; }
     
+        public virtual Users Users { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Assets> Assets { get; set; }
+        public virtual ICollection<AvailableMoney> AvailableMoney { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Expenses> Expenses { get; set; }
+        public virtual ICollection<BankDeposits> BankDeposits { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Businesses> Businesses { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Incomes> Incomes { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Liabilities> Liabilities { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<RealEstates> RealEstates { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Stocks> Stocks { get; set; }
     }
 }

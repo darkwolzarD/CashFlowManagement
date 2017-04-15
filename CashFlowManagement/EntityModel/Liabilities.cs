@@ -12,17 +12,29 @@ namespace CashFlowManagement.EntityModel
     using System;
     using System.Collections.Generic;
     
-    public partial class Expenses
+    public partial class Liabilities
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Liabilities()
+        {
+            this.Expenses = new HashSet<Expenses>();
+        }
+    
         public int Id { get; set; }
         public double Value { get; set; }
-        public int ExpenseType { get; set; }
+        public double InterestRate { get; set; }
+        public System.DateTime StartDate { get; set; }
+        public System.DateTime EndDate { get; set; }
+        public int LiabilityType { get; set; }
         public System.DateTime CreatedDate { get; set; }
         public Nullable<System.DateTime> DisabledDate { get; set; }
-        public Nullable<int> LiabilityId { get; set; }
+        public Nullable<int> AssetId { get; set; }
+        public int ParentLiabilityId { get; set; }
         public string Username { get; set; }
     
-        public virtual Liabilities Liabilities { get; set; }
+        public virtual Assets Assets { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Expenses> Expenses { get; set; }
         public virtual Users Users { get; set; }
     }
 }
