@@ -169,68 +169,46 @@
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="Constants\Constants.cs" />
     <Compile Include="Controllers\AccountController.cs" />
-    <Compile Include="Controllers\BankDepositController.cs" />
-    <Compile Include="Controllers\BusinessController.cs" />
-    <Compile Include="Controllers\DividendController.cs" />
-    <Compile Include="Controllers\FinancialStatusController.cs" />
+    <Compile Include="Controllers\AssetController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\RealEstateController.cs" />
-    <Compile Include="Controllers\SalaryController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
-    <Compile Include="EntityModel\BankDepositIncomes.cs">
-      <DependentUpon>CashFlowDataModel.tt</DependentUpon>
+    <Compile Include="EntityModel\Assets.cs">
+      <DependentUpon>EntityModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="EntityModel\BusinessIncomes.cs">
-      <DependentUpon>CashFlowDataModel.tt</DependentUpon>
+    <Compile Include="EntityModel\AssetType.cs">
+      <DependentUpon>EntityModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="EntityModel\BusinessLoan.cs">
-      <DependentUpon>CashFlowDataModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="EntityModel\CashFlowDataModel.Context.cs">
+    <Compile Include="EntityModel\EntityModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>CashFlowDataModel.Context.tt</DependentUpon>
+      <DependentUpon>EntityModel.Context.tt</DependentUpon>
     </Compile>
-    <Compile Include="EntityModel\CashFlowDataModel.cs">
+    <Compile Include="EntityModel\EntityModel.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>CashFlowDataModel.tt</DependentUpon>
+      <DependentUpon>EntityModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="EntityModel\CashFlowDataModel.Designer.cs">
+    <Compile Include="EntityModel\EntityModel.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>CashFlowDataModel.edmx</DependentUpon>
+      <DependentUpon>EntityModel.edmx</DependentUpon>
     </Compile>
     <Compile Include="EntityModel\Expenses.cs">
-      <DependentUpon>CashFlowDataModel.tt</DependentUpon>
+      <DependentUpon>EntityModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="EntityModel\FinancialStatus.cs">
-      <DependentUpon>CashFlowDataModel.tt</DependentUpon>
+    <Compile Include="EntityModel\Incomes.cs">
+      <DependentUpon>EntityModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="EntityModel\Loans.cs">
-      <DependentUpon>CashFlowDataModel.tt</DependentUpon>
+    <Compile Include="EntityModel\Liabilities.cs">
+      <DependentUpon>EntityModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="EntityModel\RealEstateIncomes.cs">
-      <DependentUpon>CashFlowDataModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="EntityModel\Salary.cs">
-      <DependentUpon>CashFlowDataModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="EntityModel\StockCodes.cs">
-      <DependentUpon>CashFlowDataModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="EntityModel\StockLoan.cs">
-      <DependentUpon>CashFlowDataModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="EntityModel\StockTransactions.cs">
-      <DependentUpon>CashFlowDataModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="EntityModel\TransactionFee.cs">
-      <DependentUpon>CashFlowDataModel.tt</DependentUpon>
+    <Compile Include="EntityModel\Stocks.cs">
+      <DependentUpon>EntityModel.tt</DependentUpon>
     </Compile>
     <Compile Include="EntityModel\Users.cs">
-      <DependentUpon>CashFlowDataModel.tt</DependentUpon>
+      <DependentUpon>EntityModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -238,27 +216,12 @@
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
-    <Compile Include="Models\RealEstate\LoanInterestTableViewModel.cs" />
-    <Compile Include="Models\RealEstate\RealEstatesViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Queries\BankDepositQueries.cs" />
-    <Compile Include="Queries\BusinessQueries.cs" />
-    <Compile Include="Queries\DividendQueries.cs" />
-    <Compile Include="Queries\FinancialStatusQueries.cs" />
-    <Compile Include="Queries\RealEstateQueries.cs" />
-    <Compile Include="Queries\SalaryQueries.cs" />
+    <Compile Include="Queries\AssetQueries.cs" />
     <Compile Include="Startup.cs" />
-    <Compile Include="Utilities\BusinessProcessing.cs" />
-    <Compile Include="Utilities\FinancialStatusProcessing.cs" />
     <Compile Include="Utilities\FormatUtility.cs" />
-    <Compile Include="Utilities\BusinessLoanProcessing.cs" />
-    <Compile Include="Utilities\LoanProcessing.cs" />
-    <Compile Include="Utilities\RealEstateProcessing.cs" />
-    <Compile Include="ViewModels\Business\BusinessViewModel.cs" />
-    <Compile Include="ViewModels\Business\LoanInterestTableViewModel.cs" />
-    <Compile Include="ViewModels\FinancialStatus\FinancialStatusViewModel.cs" />
-    <Compile Include="ViewModels\RealEstate\LoanInterestTableViewModel.cs" />
-    <Compile Include="ViewModels\RealEstate\RealEstateViewModel.cs" />
+    <Compile Include="ViewModels\AssetListViewModel.cs" />
+    <Compile Include="ViewModels\AssetViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-datepicker.css" />
@@ -416,15 +379,15 @@
     <Content Include="Content\DataTables\images\sort_desc.png" />
     <Content Include="Content\DataTables\images\sort_desc_disabled.png" />
     <Content Include="Content\DataTables\swf\flashExport.swf" />
-    <Content Include="EntityModel\CashFlowDataModel.Context.tt">
+    <Content Include="EntityModel\EntityModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>CashFlowDataModel.edmx</DependentUpon>
-      <LastGenOutput>CashFlowDataModel.Context.cs</LastGenOutput>
+      <DependentUpon>EntityModel.edmx</DependentUpon>
+      <LastGenOutput>EntityModel.Context.cs</LastGenOutput>
     </Content>
-    <Content Include="EntityModel\CashFlowDataModel.tt">
+    <Content Include="EntityModel\EntityModel.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>CashFlowDataModel.edmx</DependentUpon>
-      <LastGenOutput>CashFlowDataModel.cs</LastGenOutput>
+      <DependentUpon>EntityModel.edmx</DependentUpon>
+      <LastGenOutput>EntityModel.cs</LastGenOutput>
     </Content>
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -438,13 +401,6 @@
     <Content Include="Content\DataTables\css\semanticui.scss" />
     <Content Include="Content\DataTables\css\mixins.scss" />
     <Content Include="Content\DataTables\css\common.scss" />
-    <EntityDeploy Include="EntityModel\CashFlowDataModel.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>CashFlowDataModel.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <Content Include="EntityModel\CashFlowDataModel.edmx.diagram">
-      <DependentUpon>CashFlowDataModel.edmx</DependentUpon>
-    </Content>
     <Content Include="Content\bootstrap-datepicker3.standalone.min.css.map" />
     <Content Include="Content\bootstrap-datepicker3.standalone.css.map" />
     <Content Include="Content\bootstrap-datepicker3.min.css.map" />
@@ -453,8 +409,15 @@
     <Content Include="Content\bootstrap-datepicker.standalone.css.map" />
     <Content Include="Content\bootstrap-datepicker.min.css.map" />
     <Content Include="Content\bootstrap-datepicker.css.map" />
+    <EntityDeploy Include="EntityModel\EntityModel.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>EntityModel.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="EntityModel\EntityModel.edmx.diagram">
+      <DependentUpon>EntityModel.edmx</DependentUpon>
+    </Content>
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
-    <Content Include="Scripts\bankdeposit.js" />
+    <Content Include="Scripts\asset.js" />
     <Content Include="Scripts\DataTables\autoFill.bootstrap.js" />
     <Content Include="Scripts\DataTables\autoFill.bootstrap.min.js" />
     <Content Include="Scripts\DataTables\autoFill.bootstrap4.js" />
@@ -646,39 +609,11 @@
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
-    <Content Include="Views\Salary\Index.cshtml" />
-    <Content Include="Views\Salary\SalaryModal.cshtml" />
-    <Content Include="Views\Salary\SalaryTable.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
-    <Content Include="Views\Salary\UpdateSalaryModal.cshtml" />
-    <Content Include="Views\Business\Index.cshtml" />
-    <Content Include="Views\Business\BusinessTable.cshtml" />
-    <Content Include="Views\Business\BusinessModal.cshtml" />
-    <Content Include="Views\Business\UpdateBusinessModal.cshtml" />
-    <Content Include="Views\BankDeposit\Index.cshtml" />
-    <Content Include="Views\BankDeposit\BankDepositTable.cshtml" />
-    <Content Include="Views\BankDeposit\BankDepositModal.cshtml" />
-    <Content Include="Views\BankDeposit\UpdateBankDepositModal.cshtml" />
-    <Content Include="Views\RealEstate\Index.cshtml" />
-    <Content Include="Views\RealEstate\RealEstateModal.cshtml" />
-    <Content Include="Views\RealEstate\UpdateRealEstateModal.cshtml" />
-    <Content Include="Views\RealEstate\LoanModal.cshtml" />
-    <Content Include="Views\RealEstate\UpdateLoanModal.cshtml" />
-    <Content Include="Views\Dividend\Index.cshtml" />
-    <Content Include="Views\Dividend\StockCodeTable.cshtml" />
-    <Content Include="Views\Dividend\StockCodeModal.cshtml" />
-    <Content Include="Views\Dividend\UpdateStockCodeModal.cshtml" />
-    <Content Include="Views\Dividend\TransactionModal.cshtml" />
-    <Content Include="Views\Dividend\UpdateTransactionModal.cshtml" />
     <Content Include="Views\FinancialStatus\Index.cshtml" />
-    <Content Include="Views\RealEstate\PaymentsPerMonth.cshtml" />
-    <Content Include="Views\RealEstate\RealEstateTable.cshtml" />
-    <Content Include="Views\RealEstate\UpdateLoanWithRateModal.cshtml" />
-    <Content Include="Views\RealEstate\RealEstateSummary.cshtml" />
-    <Content Include="Views\Business\LoanModal.cshtml" />
-    <Content Include="Views\Business\UpdateLoanModal.cshtml" />
-    <Content Include="Views\Business\UpdateLoanWithRateModal.cshtml" />
-    <Content Include="Views\Business\PaymentsPerMonth.cshtml" />
+    <Content Include="Views\Asset\_AssetModal.cshtml" />
+    <Content Include="Views\Asset\AssetTable.cshtml" />
+    <Content Include="Views\Asset\_AssetUpdateModal.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

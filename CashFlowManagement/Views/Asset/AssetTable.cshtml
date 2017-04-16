@@ -39,6 +39,7 @@
                         <th>Participant bank</th>
                         <th>Note</th>
                     }
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -50,11 +51,19 @@
                         <td>@FormatUtility.DisplayThousandSeparatorsForNumber(item.Income.Value * 12)</td>
                         <td>@FormatUtility.DisplayThousandSeparatorsForNumber(item.Asset.Value)</td>
                         <td>@FormatUtility.DisplayThousandSeparatorsForNumber(item.Income.Value / item.Asset.Value)</td>
-                        @if (item.SpecificAsset is BankDeposits)
+                        @if (item.Asset.AssetType == (int)Constants.ASSET_TYPE.BANK_DEPOSIT)
                         {
-                            <td>@item.SpecificAsset.ParticipantBank</td>
-                            <td>@item.SpecificAsset.Note</td>
+                            <td>@item.Asset.ParticipantBank</td>
+                            <td>@item.Asset.Note</td>
                         }
+                        <td class="text-center">
+                            <button class="btn btn-success update-asset" data-asset-id="@item.Asset.Id">
+                                <span class="glyphicon glyphicon-pencil"></span>
+                            </button>
+                            <button class="btn btn-danger delete-asset" data-asset-id="@item.Asset.Id">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </td>
                     </tr>
                 }
             </tbody>
@@ -63,24 +72,42 @@
 </div>
 
 <div class="asset-modal">
-    @{ Html.RenderPartial("_AssetModal", new AssetViewModel { Asset = new Assets(),
-                                                              Income = new Incomes(),
-                                                              SpecificAsset = new Businesses()}); }
+    @{ Html.RenderPartial("_AssetModal", new AssetViewModel { Asset = new Assets { AssetType = (int)Constants.ASSET_TYPE.BANK_DEPOSIT },
+            Income = new Incomes()}); }
 </div>
 
-@*<div class="update-modal">
-    @{ Html.RenderPartial("UpdateRealEstateModal");  }
+<div class="update-modal">
+    
 </div>
 
-<div class="loan-modal">
+@*<div class="loan-modal">
     @{ Html.RenderPartial("LoanModal");  }
 </div>
 
 <div class="update-loan-modal-div">
     @{ Html.RenderPartial("UpdateLoanModal");  }
-</div>
+</div>*@
 
 <div class="interest-modal-div">
 
-</div>*@
+</div>
+
+
+<script type="text/javascript" src="~/Scripts/asset.js"></script>
+<script type="text/javascript">
+    var Url = new Object();
+    Url.CreateAsset = '@Url.Action("CreateAsset", "Asset")';
+    Url.LoadTable = '@Url.Action("AssetTable", "Asset")';
+    Url.LoadAsset = '@Url.Action("_AssetUpdateModal", "Asset")';
+    Url.UpdateAsset = '@Url.Action("UpdateAsset", "Asset")';
+    Url.DeleteAsset = '@Url.Action("DeleteAsset", "Asset")';
+    Url.LoanModal = '@Url.Action("LoanModal", "Asset")';
+    Url.CreateLoan = '@Url.Action("CreateLoan", "Asset")';
+    Url.LoadLoan = '@Url.Action("UpdateLoanModal", "Asset")';
+    Url.LoadLoanWithRate = '@Url.Action("UpdateLoanWithRateModal", "Asset")';
+    Url.UpdateLoan = '@Url.Action("UpdateLoan", "Asset")';
+    Url.DeleteLoan = '@Url.Action("DeleteLoan", "Asset")';
+    Url.PaymentsPerMonth = '@Url.Action("PaymentsPerMonth", "Asset")';
+    var assetType = @((int)Constants.ASSET_TYPE.BANK_DEPOSIT);
+</script>
 

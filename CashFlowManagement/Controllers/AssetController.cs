@@ -11,16 +11,10 @@ namespace CashFlowManagement.Controllers
 {
     public class AssetController : Controller
     {
-        // GET: BandDeposit
-        public ActionResult Index()
-        {
-            return View();
-        }
-
-        public PartialViewResult AssetTable(int type)
+        public ActionResult AssetTable(int type)
         {
             AssetListViewModel model = AssetQueries.GetAssetByUser("test", type);
-            return PartialView(model);
+            return View(model);
         }
 
         //public PartialViewResult UpdateBankDepositModal(int id)
@@ -29,28 +23,26 @@ namespace CashFlowManagement.Controllers
         //    return PartialView(model);
         //}
 
+        public PartialViewResult _AssetUpdateModal(int assetId)
+        {
+            AssetViewModel model = AssetQueries.GetAssetById(assetId);
+            return PartialView(model);
+        }
+
         public JsonResult CreateAsset(AssetViewModel model)
         {
-            int type = 0;
-            if(model.SpecificAsset is BankDeposits)
-            {
-                type = (int)Constants.Constants.ASSET_TYPE.BANK_DEPOSIT
-            }
-            model.Asset.Username = "test";
-            int result = AssetQueries.CreateAsset(model, type);
+            int type = model.Asset.AssetType;
+
+            int result = AssetQueries.CreateAsset(model, type, "test");
             return Json(new { result = result });
         }
 
-        //public JsonResult UpdateBankDeposit(BankDepositIncomes model)
-        //{
-        //    int result = BankDepositQueries.UpdateBankDeposit(model);
-        //    return Json(new { result = result });
-        //}
+        public JsonResult UpdateAsset(AssetViewModel model)
+        {
+            int type = model.Asset.AssetType;
 
-        //public JsonResult DeleteBankDeposit(int id)
-        //{
-        //    int result = BankDepositQueries.DeleteBankDeposit(id);
-        //    return Json(new { result = result });
-        //}
+            int result = AssetQueries.UpdateAsset(model, type, "test");
+            return Json(new { result = result });
+        }
     }
 }

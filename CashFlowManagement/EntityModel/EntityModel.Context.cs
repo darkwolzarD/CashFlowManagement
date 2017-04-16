@@ -26,13 +26,10 @@ namespace CashFlowManagement.EntityModel
         }
     
         public virtual DbSet<Assets> Assets { get; set; }
-        public virtual DbSet<AvailableMoney> AvailableMoney { get; set; }
-        public virtual DbSet<BankDeposits> BankDeposits { get; set; }
-        public virtual DbSet<Businesses> Businesses { get; set; }
+        public virtual DbSet<AssetType> AssetType { get; set; }
         public virtual DbSet<Expenses> Expenses { get; set; }
         public virtual DbSet<Incomes> Incomes { get; set; }
         public virtual DbSet<Liabilities> Liabilities { get; set; }
-        public virtual DbSet<RealEstates> RealEstates { get; set; }
         public virtual DbSet<Stocks> Stocks { get; set; }
         public virtual DbSet<Users> Users { get; set; }
     }

@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 
 namespace CashFlowManagement.Queries
 {
@@ -15,10 +16,9 @@ namespace CashFlowManagement.Queries
             current = new DateTime(current.Year, current.Month, 1);
             Entities entities = new Entities();
             IQueryable<AssetViewModel> queryResult = from asset in entities.Assets
-                                                join income in entities.Incomes on asset.Id equals income.AssetId
-                                                join bankdeposit in entities.BankDeposits on asset.Id equals bankdeposit.AssetId
-                                                where asset.Username == username && income.IncomeType == type
-                                                select new AssetViewModel { Asset = asset, Income = income, SpecificAsset = bankdeposit };
+                                                     join income in entities.Incomes on asset.Id equals income.AssetId
+                                                     where asset.Username == username && asset.AssetType == type
+                                                     select new AssetViewModel { Asset = asset, Income = income };
             AssetListViewModel result = new AssetListViewModel
             {
                 Type = type,
@@ -27,9 +27,53 @@ namespace CashFlowManagement.Queries
             return result;
         }
 
-        public static int CreateAsset(AssetViewModel data, int type)
+        public static AssetViewModel GetAssetById(int id)
         {
             Entities entities = new Entities();
+            AssetViewModel result = (from asset in entities.Assets
+                                     join income in entities.Incomes on asset.Id equals income.AssetId
+                                     where asset.Id == id && !asset.DisabledDate.HasValue && !income.DisabledDate.HasValue
+                                     select new AssetViewModel { Asset = asset, Income = income }).FirstOrDefault();
+            return result;
+        }
+
+        public static int CreateAsset(AssetViewModel model, int type, string username)
+        {
+            Entities entities = new Entities();
+            if (type == (int)Constants.Constants.ASSET_TYPE.BANK_DEPOSIT)
+            {
+                Assets asset = model.Asset;
+                asset.Username = username;
+                asset.CreatedDate = DateTime.Now;
+                asset.AssetType = type;
+
+                Incomes income = model.Income;
+                income.CreatedDate = DateTime.Now;
+                income.IncomeType = type;
+                income.Username = username;
+                asset.Incomes.Add(income);
+
+                entities.Assets.Add(asset);
+            }
+            int result = entities.SaveChanges();
+            return result;
+        }
+
+        public static int UpdateAsset(AssetViewModel model)
+        {
+            Entities entities = new Entities();
+            Assets asset = entities.Assets.Where(x => x.Id == model.Asset.Id).FirstOrDefault();
+            asset.DisabledDate = DateTime.Now;
+            asset.Incomes.Where(x => !x.DisabledDate.HasValue).FirstOrDefault().DisabledDate = DateTime.Now;
+
+            entities.Assets.Attach(asset);
+            var entry = entities.Entry(asset);
+            entry.Property(x => x.DisabledDate).IsModified = true;
+            entry.Property(x => x.Incomes.Where(m => !m.DisabledDate.HasValue).FirstOrDefault().DisabledDate).IsModified = true;
+
+            Assets updated_asset = new Assets();
+
+            entities.Assets.Add(asset);
             int result = entities.SaveChanges();
             return result;
         }

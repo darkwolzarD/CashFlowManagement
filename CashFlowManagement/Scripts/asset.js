@@ -13,7 +13,7 @@
 
     MaskInput();
 
-    $('#create-new-bank-deposit-modal').on('hidden.bs.modal', function (e) {
+    $('#create-new-asset-modal').on('hidden.bs.modal', function (e) {
         $(this)
           .find("input,textarea,select")
              .val('')
@@ -48,11 +48,12 @@
     function LoadTable() {
         $.ajax({
             url: Url.LoadTable,
-            type: "get",
+            type: "post",
+            data: { type: assetType },
             dataType: "html",
             success: function (data) {
                 if (data.length > 0) {
-                    $(".bank-deposit-table").html(data);
+                    $(".background").html($(data).find(".background").children());
                 }
                 else {
                     alert("Có lỗi xảy ra");
@@ -61,18 +62,18 @@
         })
     }
 
-    $(document).on("click", ".update-bank-deposit", function () {
-        var id = $(this).closest("tr").find(".bank-deposit-id").text();
+    $(document).on("click", ".update-asset", function () {
+        var id = $(this).data("asset-id");
 
         $.ajax({
-            url: Url.LoadBankDeposit,
+            url: Url.LoadAsset,
             type: "get",
-            data: { id: id },
+            data: { assetId : id },
             contentType: "html",
             success: function (data) {
                 if (data.length > 0) {
                     $(".update-modal").html(data);
-                    $("#update-bank-deposit-modal").modal("show");
+                    $("#update-asset-modal").modal("show");
                 }
                 else {
                     alert("Có lỗi xảy ra");
@@ -81,17 +82,17 @@
         })
     })
 
-    $(document).on("click", ".save-bank-deposit", function () {
+    $(document).on("click", ".save-asset", function () {
         RemoveMask();
-        var data = $("#update-bank-deposit-modal .form-horizontal").serialize();
+        var data = $("#update-asset-modal .form-horizontal").serialize();
 
         $.ajax({
-            url: Url.UpdateBankDeposit,
+            url: Url.UpdateAsset,
             type: "post",
             data: data,
             success: function (data) {
                 if (data.result > 0) {
-                    $("#update-bank-deposit-modal").modal("hide");
+                    $("#update-asset-modal").modal("hide");
                     LoadTable();
                 }
                 else {
