@@ -31,7 +31,7 @@ namespace CashFlowManagement.Queries
             {
                 result = entities.Liabilities.Where(x => (x.Id == liability.ParentLiabilityId || x.ParentLiabilityId == liability.ParentLiabilityId) && !x.DisabledDate.HasValue).ToList();
             }
-            
+
             return result;
         }
 
@@ -228,7 +228,7 @@ namespace CashFlowManagement.Queries
             return result;
         }
 
-        public static int UpdateLoan(Liabilities data)
+        public static int UpdateLiability(Liabilities data)
         {
             Entities entities = new Entities();
             DateTime current = DateTime.Now;
@@ -254,6 +254,7 @@ namespace CashFlowManagement.Queries
                     foreach (var item in middle)
                     {
                         item.DisabledDate = current;
+                        item.DisabledBy = Constants.Constants.USER;
                     }
                 }
 
@@ -263,6 +264,7 @@ namespace CashFlowManagement.Queries
                 updated_liability.InterestType = parentLiability.InterestType;
                 updated_liability.InterestRate = data.InterestRate;
                 updated_liability.CreatedDate = current;
+                updated_liability.CreatedBy = Constants.Constants.USER;
                 updated_liability.StartDate = data.StartDate;
                 updated_liability.EndDate = data.EndDate;
                 updated_liability.AssetId = parentLiability.AssetId;
@@ -286,6 +288,7 @@ namespace CashFlowManagement.Queries
                     end.InterestType = parentLiability.InterestType;
                     end.InterestRate = parentLiability.InterestRate;
                     end.CreatedDate = current;
+                    end.CreatedBy = Constants.Constants.USER;
                     end.StartDate = data.EndDate.AddMonths(1);
                     end.EndDate = parentLiability.EndDate;
                     end.AssetId = parentLiability.AssetId;
@@ -314,9 +317,11 @@ namespace CashFlowManagement.Queries
                 foreach (var liability in liabilities)
                 {
                     liability.DisabledDate = current;
+                    liability.DisabledBy = Constants.Constants.USER;
                     entities.Liabilities.Attach(liability);
                     entry = entities.Entry(liability);
                     entry.Property(x => x.DisabledDate).IsModified = true;
+                    entry.Property(x => x.DisabledBy).IsModified = true;
                 }
 
                 Liabilities childLiability = new Liabilities();
@@ -327,12 +332,30 @@ namespace CashFlowManagement.Queries
                 childLiability.StartDate = data.StartDate;
                 childLiability.EndDate = data.EndDate;
                 childLiability.CreatedDate = current;
+                childLiability.CreatedBy = Constants.Constants.USER;
                 childLiability.AssetId = parentLiability.AssetId;
                 childLiability.ParentLiabilityId = data.Id;
 
                 entities.Liabilities.Add(childLiability);
                 result = entities.SaveChanges();
             }
+            return result;
+        }
+
+        public static int DeleteLiability(int id)
+        {
+            Entities entities = new Entities();
+            List<Liabilities> liabilities = entities.Liabilities.Where(x => (x.Id == id || x.ParentLiabilityId == id) && !x.DisabledDate.HasValue).ToList();
+            foreach (var liability in liabilities)
+            {
+                liability.DisabledDate = DateTime.Now;
+                liability.DisabledBy = Constants.Constants.USER;
+                entities.Liabilities.Attach(liability);
+                var entry = entities.Entry(liability);
+                entry.Property(x => x.DisabledDate).IsModified = true;
+                entry.Property(x => x.DisabledBy).IsModified = true;
+            }
+            int result = entities.SaveChanges();
             return result;
         }
     }

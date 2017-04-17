@@ -18,7 +18,7 @@ namespace CashFlowManagement.Queries
             List<AssetViewModel> queryResult = (from asset in entities.Assets
                                                      join income in entities.Incomes on asset.Id equals income.AssetId
                                                      where asset.Username == username && asset.AssetType == type
-                                                     && !asset.DisabledDate.HasValue && !asset.DisabledDate.HasValue
+                                                     && !asset.DisabledDate.HasValue && !income.DisabledDate.HasValue
                                                      select new AssetViewModel { Asset = asset, Income = income }).ToList();
             AssetListViewModel result = new AssetListViewModel
             {

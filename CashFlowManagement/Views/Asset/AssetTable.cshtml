@@ -143,7 +143,7 @@
                                             @*<button class="btn btn-success update-loan" data-loan-id="@loanViewModel.Loan.Id">
                                                     <span class="glyphicon glyphicon-pencil"></span>
                                                 </button>*@
-                                            <button class="btn btn-danger delete-loan" data-loan-id="@liabilityViewModel.Liability.Id">
+                                            <button class="btn btn-danger delete-liability" data-liability-id="@liabilityViewModel.Liability.Id">
                                                 <span class="glyphicon glyphicon-remove"></span>
                                             </button>
                                             <button class="btn btn-primary" href=".detail-@count" data-toggle="collapse">
@@ -217,7 +217,7 @@
                             else
                             {
                                 <tr>
-                                    <td colspan="13" class="text-center">No loan available</td>
+                                    <td colspan="13" class="text-center">No liability available</td>
                                 </tr>
                             }
                             { rsCount++; }
@@ -227,7 +227,7 @@
                 else
                 {
                     <tr>
-                        <td colspan="8" class="text-center">No item available</td>
+                        <td colspan="14" class="text-center">No item available</td>
                     </tr>
                 }
             </tbody>
@@ -271,9 +271,9 @@
     Url.LiabilityModal = '@Url.Action("_LiabilityModal", "Liability")';
     Url.CreateLiability = '@Url.Action("CreateLiability", "Liability")';
     Url.LoadLiability = '@Url.Action("_LiabilityUpdateModal", "Liability")';
-    Url.UpdateLoan = '@Url.Action("UpdateLoan", "Asset")';
-    Url.DeleteLoan = '@Url.Action("DeleteLoan", "Asset")';
-    Url._PaymentPerMonth = '@Url.Action("_PaymentPerMonth", "Liability")';
+    Url.UpdateLiability = '@Url.Action("UpdateLiability", "Liability")';
+    Url.DeleteLiability = '@Url.Action("DeleteLiability", "Liability")';
+    Url.PaymentPerMonth = '@Url.Action("_PaymentPerMonth", "Liability")';
     var assetType = @Model.Type;
 </script>
 

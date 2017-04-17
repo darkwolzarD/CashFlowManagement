@@ -272,11 +272,31 @@
         }
     })
 
+    $(document).on("click", ".delete-liability", function () {
+        var id = $(this).data("liability-id");
+        if (confirm("Do you really want to delete this liability?") == true) {
+            $.ajax({
+                url: Url.DeleteLiability,
+                type: "POST",
+                data: { id: id },
+                success: function (data) {
+                    if (data.result > 0) {
+                        alert("Success!");
+                        LoadTable();
+                    }
+                    else {
+                        alert("Có lỗi xảy ra");
+                    }
+                }
+            })
+        }
+    })
+
     $(document).on("click", ".interest-info", function () {
         var _data = parseInt($(this).data("loan-id"));
 
         $.ajax({
-            url: Url._PaymentPerMonth,
+            url: Url.PaymentPerMonth,
             type: "get",
             data: { id: _data },
             dataType: "html",
@@ -285,6 +305,44 @@
                 $("#interest-modal").modal("show");
             }
         })
+    })
+
+    $(document).on("changeDate", ".with-rate .date-picker", function () {
+        RemoveMask();
+        var startDate = $(this).closest("#update-liability-modal").find("input[name='StartDate']").val();
+        var endDate = $(this).closest("#update-liability-modal").find("input[name='EndDate']").val();
+        if (isValidDate(startDate) && isValidDate(endDate)) {
+            var data = $("#update-liability-modal .form-horizontal").serialize();
+
+            $.ajax({
+                url: Url.PaymentPerMonth,
+                type: "post",
+                data: data,
+                success: function (data) {
+                    $(".payments-per-month-table").html($(data).find(".modal-body").html());
+                }
+            })
+        }
+        MaskInput();
+    })
+
+    $(document).on("change", ".with-rate #InterestRate", function () {
+        RemoveMask();
+        var startDate = $(this).closest("#update-liability-modal").find("input[name='StartDate']").val();
+        var endDate = $(this).closest("#update-liability-modal").find("input[name='EndDate']").val();
+        if (isValidDate(startDate) && isValidDate(endDate)) {
+            var data = $("#update-liability-modal .form-horizontal").serialize();
+
+            $.ajax({
+                url: Url.PaymentPerMonth,
+                type: "post",
+                data: data,
+                success: function (data) {
+                    $(".payments-per-month-table").html($(data).find(".modal-body").html());
+                }
+            })
+        }
+        MaskInput();
     })
 
     $(document).on("show.bs.collapse", "tr[class^='detail-']", function () {
@@ -302,4 +360,5 @@
         var collapse = $(document).find("table tbody ." + child_cls + ".collapse").length;
         $(document).find("table tbody tr." + rs_cls + ":first td:nth-child(1)").attr("rowspan", current - collapse);
     })
+
 })

@@ -13,7 +13,7 @@
                 <table class="table table-bordered table-condensed">
                     <thead>
                         <tr>
-                            <td>STT</td>
+                            <th>STT</th>
                             <th>Month</th>
                             <th>IR</th>
                             <th>Remaining loan</th>
@@ -25,7 +25,8 @@
                     <tbody>
                         @foreach (var item in Model)
                         {
-                            <tr>
+                            var color = item.Highlight ? "aqua" : string.Empty;
+                            <tr style="background-color: @color">
                                 <td>@count</td>
                                 <td>@item.CurrentMonth.ToString("dd/MM/yyyy")</td>
                                 <td>@FormatUtility.DisplayThousandSeparatorsForNumber(item.CurrentInterestRatePerYear)%</td>
