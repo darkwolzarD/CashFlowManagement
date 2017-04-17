@@ -12,9 +12,14 @@ namespace CashFlowManagement.EntityModel
     using System;
     using System.Collections.Generic;
     
-    public partial class AssetType
+    public partial class Transactions
     {
         public int Id { get; set; }
-        public string AssetType1 { get; set; }
+        public string Name { get; set; }
+        public System.DateTime TransactionDate { get; set; }
+        public double Value { get; set; }
+        public int AssetId { get; set; }
+    
+        public virtual Assets Assets { get; set; }
     }
 }

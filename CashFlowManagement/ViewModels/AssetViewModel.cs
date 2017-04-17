@@ -10,5 +10,19 @@ namespace CashFlowManagement.ViewModels
     {
         public Assets Asset { get; set; }
         public Incomes Income { get; set; }
+
+        public LiabilityListViewModel LiabilityList { get; set; }
+        public double TotalMortgageValue { get; set; }
+        public double AverageInterestRate { get; set; }
+        public double TotalOriginalPayment { get; set; }
+        public double TotalInterestPayment { get; set; }
+        public double TotalMonthlyPayment { get; set; }
+        public double TotalAnnualPayment { get; set; }
+        public double TotalRemainingValue { get; set; }
+
+        public AssetViewModel()
+        {
+            this.LiabilityList = new LiabilityListViewModel();
+        }
     }
 }

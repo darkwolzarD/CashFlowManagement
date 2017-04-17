@@ -173,11 +173,9 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AssetController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\LiabilityController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="EntityModel\Assets.cs">
-      <DependentUpon>EntityModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="EntityModel\AssetType.cs">
       <DependentUpon>EntityModel.tt</DependentUpon>
     </Compile>
     <Compile Include="EntityModel\EntityModel.Context.cs">
@@ -207,6 +205,9 @@
     <Compile Include="EntityModel\Stocks.cs">
       <DependentUpon>EntityModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="EntityModel\Transactions.cs">
+      <DependentUpon>EntityModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="EntityModel\Users.cs">
       <DependentUpon>EntityModel.tt</DependentUpon>
     </Compile>
@@ -218,10 +219,14 @@
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Queries\AssetQueries.cs" />
+    <Compile Include="Queries\LiabilityQueries.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Utilities\FormatUtility.cs" />
     <Compile Include="ViewModels\AssetListViewModel.cs" />
     <Compile Include="ViewModels\AssetViewModel.cs" />
+    <Compile Include="ViewModels\LiabilityPaymentViewModel.cs" />
+    <Compile Include="ViewModels\LiabilityListViewModel.cs" />
+    <Compile Include="ViewModels\LiabilityViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-datepicker.css" />
@@ -614,6 +619,9 @@
     <Content Include="Views\Asset\_AssetModal.cshtml" />
     <Content Include="Views\Asset\AssetTable.cshtml" />
     <Content Include="Views\Asset\_AssetUpdateModal.cshtml" />
+    <Content Include="Views\Liability\_LiabilityModal.cshtml" />
+    <Content Include="Views\Liability\_PaymentPerMonth.cshtml" />
+    <Content Include="Views\Liability\_LiabilityUpdateModal.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

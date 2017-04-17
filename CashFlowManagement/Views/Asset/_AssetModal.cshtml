@@ -11,6 +11,10 @@
                     {
                         @Html.Raw("Add new bank deposit")
                     }
+                    else if (Model.Asset.AssetType == (int)Constants.ASSET_TYPE.REAL_ESTATE)
+                    {
+                        @Html.Raw("Add new real estate")
+                    } 
                 </h4>
             </div>
             <div class="modal-body">
@@ -20,6 +24,10 @@
                             @if(Model.Asset.AssetType == (int)Constants.ASSET_TYPE.BANK_DEPOSIT)
                             {
                                 @Html.Raw("Bank deposit income:")
+                            }
+                            else if (Model.Asset.AssetType == (int)Constants.ASSET_TYPE.REAL_ESTATE)
+                            {
+                                @Html.Raw("Real estate:")
                             }
                         </label>
                         <div class="col-sm-9">
@@ -32,6 +40,10 @@
                             @if (Model.Asset.AssetType == (int)Constants.ASSET_TYPE.BANK_DEPOSIT)
                             {
                                 @Html.Raw("Capital value:")
+                            }
+                            else if (Model.Asset.AssetType == (int)Constants.ASSET_TYPE.REAL_ESTATE)
+                            {
+                                @Html.Raw("Original value:")
                             }
                         </label>
                         <div class="col-sm-9">

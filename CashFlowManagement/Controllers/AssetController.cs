@@ -41,7 +41,13 @@ namespace CashFlowManagement.Controllers
         {
             int type = model.Asset.AssetType;
 
-            int result = AssetQueries.UpdateAsset(model, type, "test");
+            int result = AssetQueries.UpdateAsset(model);
+            return Json(new { result = result });
+        }
+
+        public JsonResult DeleteAsset(int assetId)
+        {
+            int result = AssetQueries.DeleteAsset(assetId, Constants.Constants.USER);
             return Json(new { result = result });
         }
     }

@@ -8,6 +8,11 @@ namespace CashFlowManagement.ViewModels
     public class AssetListViewModel
     {
         public int Type { get; set; }
-        public IQueryable<AssetViewModel> List { get; set; }
+        public List<AssetViewModel> List { get; set; }
+
+        public AssetListViewModel()
+        {
+            List = new List<AssetViewModel>();
+        }
     }
 }

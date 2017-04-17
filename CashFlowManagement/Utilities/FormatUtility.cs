@@ -17,5 +17,10 @@ namespace CashFlowManagement.Utilities
         {
             return string.Format(new CultureInfo("vi-VN"), "{0:N2}", number) + "%";
         }
+
+        public static int CalculateTimePeriod(DateTime startDate, DateTime endDate)
+        {
+            return (endDate.Year - startDate.Year) * 12 + endDate.Month - startDate.Month;
+        }
     }
 }

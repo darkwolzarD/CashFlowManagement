@@ -18,6 +18,8 @@ namespace CashFlowManagement.EntityModel
         public double Value { get; set; }
         public System.DateTime CreatedDate { get; set; }
         public Nullable<System.DateTime> DisabledDate { get; set; }
+        public string CreatedBy { get; set; }
+        public string DisabledBy { get; set; }
         public int IncomeType { get; set; }
         public Nullable<int> AssetId { get; set; }
         public string Username { get; set; }

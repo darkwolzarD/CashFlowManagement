@@ -1,0 +1,49 @@
+﻿@model List<CashFlowManagement.ViewModels.LiabilityPaymentViewModel>
+@using CashFlowManagement.Utilities
+
+@{ var count = 1;}
+<div id="interest-modal" class="modal fade" role="dialog">
+    <div class="modal-dialog" style="width: 1000px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Current Payment</h4>
+            </div>
+            <div class="modal-body">
+                <table class="table table-bordered table-condensed">
+                    <thead>
+                        <tr>
+                            <td>STT</td>
+                            <th>Month</th>
+                            <th>IR</th>
+                            <th>Remaining loan</th>
+                            <th>Monthly payment without interest</th>
+                            <th>Monthly interest payment</th>
+                            <th>Total monthly payment</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@count</td>
+                                <td>@item.CurrentMonth.ToString("dd/MM/yyyy")</td>
+                                <td>@FormatUtility.DisplayThousandSeparatorsForNumber(item.CurrentInterestRatePerYear)%</td>
+                                <td>@FormatUtility.DisplayThousandSeparatorsForNumber(item.RemainingLoan)</td>
+                                <td>@FormatUtility.DisplayThousandSeparatorsForNumber(item.MonthlyOriginalPayment)</td>
+                                <td>@FormatUtility.DisplayThousandSeparatorsForNumber(item.MonthlyInterestPayment)</td>
+                                <td>@FormatUtility.DisplayThousandSeparatorsForNumber(item.MonthlyTotalPayment)</td>
+                                @{count++;}
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+            </div>
+            <div class="modal-footer text-center">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -20,6 +20,7 @@ namespace CashFlowManagement.EntityModel
             this.Incomes = new HashSet<Incomes>();
             this.Liabilities = new HashSet<Liabilities>();
             this.Stocks = new HashSet<Stocks>();
+            this.Transactions = new HashSet<Transactions>();
         }
     
         public int Id { get; set; }
@@ -27,10 +28,12 @@ namespace CashFlowManagement.EntityModel
         public double Value { get; set; }
         public System.DateTime CreatedDate { get; set; }
         public Nullable<System.DateTime> DisabledDate { get; set; }
-        public int AssetType { get; set; }
-        public string Username { get; set; }
+        public string CreatedBy { get; set; }
+        public string DisabledBy { get; set; }
         public string ParticipantBank { get; set; }
         public string Note { get; set; }
+        public int AssetType { get; set; }
+        public string Username { get; set; }
     
         public virtual Users Users { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -39,5 +42,7 @@ namespace CashFlowManagement.EntityModel
         public virtual ICollection<Liabilities> Liabilities { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Stocks> Stocks { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Transactions> Transactions { get; set; }
     }
 }

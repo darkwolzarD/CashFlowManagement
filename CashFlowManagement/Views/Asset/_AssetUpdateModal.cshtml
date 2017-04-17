@@ -11,6 +11,11 @@
                     {
                         @Html.Raw("Update bank deposit")
                     }
+                    else if (Model.Asset.AssetType == (int)Constants.ASSET_TYPE.REAL_ESTATE)
+                    {
+                        @Html.Raw("Update real estate")
+                    }
+                    
                 </h4>
             </div>
             <div class="modal-body">
@@ -21,6 +26,11 @@
                             {
                                 @Html.Raw("Bank deposit income:")
                             }
+                            else if (Model.Asset.AssetType == (int)Constants.ASSET_TYPE.REAL_ESTATE)
+                            {
+                                @Html.Raw("Real estate:")
+                            }
+                            
                         </label>
                         <div class="col-sm-9">
                             @Html.TextBoxFor(x => x.Asset.AssetName, new { @type = "text", @class = "form-control" })
@@ -35,6 +45,11 @@
                             {
                                 @Html.Raw("Capital value:")
                             }
+                            else if (Model.Asset.AssetType == (int)Constants.ASSET_TYPE.REAL_ESTATE)
+                            {
+                                @Html.Raw("Original Value:")
+                            }
+                            
                         </label>
                         <div class="col-sm-9">
                             @Html.TextBoxFor(x => x.Asset.Value, new { @type = "text", @class = "form-control input-mask" })
@@ -44,6 +59,7 @@
                         <label class="control-label col-sm-3">Monthly Income:</label>
                         <div class="col-sm-9">
                             @Html.TextBoxFor(x => x.Income.Value, new { @type = "text", @class = "form-control input-mask" })
+                            @Html.HiddenFor(x => x.Income.IncomeType)
                         </div>
                     </div>
                     @if (Model.Asset.AssetType == (int)Constants.ASSET_TYPE.BANK_DEPOSIT)
