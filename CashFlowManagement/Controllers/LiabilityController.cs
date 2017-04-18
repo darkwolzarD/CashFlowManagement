@@ -12,9 +12,10 @@ namespace CashFlowManagement.Controllers
     public class LiabilityController : Controller
     {
         // GET: Liability
-        public ActionResult Index()
+        public ActionResult LiabilityTable(int type)
         {
-            return View();
+            LiabilityListViewModel model = LiabilityQueries.GetLiabilityByUser("test", type);
+            return View(model);
         }
 
         public PartialViewResult _LiabilityModal(int assetId, int type)

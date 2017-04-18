@@ -11,6 +11,21 @@ namespace CashFlowManagement.Queries
 {
     public class LiabilityQueries
     {
+        public static LiabilityListViewModel GetLiabilityByUser(string username, int type)
+        {
+            Entities entities = new Entities();
+            List<LiabilityViewModel> queryResult = (from liability in entities.Liabilities
+                                                    where liability.Username.Equals(username) && liability.LiabilityType == type
+                                                    && !liability.DisabledDate.HasValue
+                                                    select new LiabilityViewModel { Liability = liability }).ToList();
+            LiabilityListViewModel result = new LiabilityListViewModel
+            {
+                List = queryResult,
+                Type = type
+            };
+            return result;
+        }
+
         public static Liabilities GetLiabilityById(int id)
         {
             Entities entities = new Entities();

@@ -36,7 +36,7 @@ namespace CashFlowManagement.Controllers
         {
             int type = model.ExpenseType;
 
-            int result = ExpenseQueries.UpdateExpense(model);
+            int result = ExpenseQueries.UpdateExpense(model, "test");
             return Json(new { result = result });
         }
 

@@ -36,6 +36,7 @@ namespace CashFlowManagement.EntityModel
         public Nullable<int> ParentLiabilityId { get; set; }
         public string Username { get; set; }
         public Nullable<int> InterestType { get; set; }
+        public string Note { get; set; }
     
         public virtual Assets Assets { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

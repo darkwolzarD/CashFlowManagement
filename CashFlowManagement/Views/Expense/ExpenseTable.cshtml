@@ -3,7 +3,7 @@
 @using CashFlowManagement.Utilities
 @using CashFlowManagement.EntityModel
 @{
-    ViewBag.Title = "IncomeTable";
+    ViewBag.Title = "ExpenseTable";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @{
@@ -13,28 +13,39 @@
     {
         title = "Chi tiêu gia đình";
     }
+    else if (Model.Type == (int)Constants.EXPENSE_TYPE.OTHERS)
+    {
+        title = "Chi tiêu khác";
+    }
 }
 
 <div class="background">
     <h3 class="text-center">@title</h3>
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#create-new-income-modal">
-        @if (Model.Type == (int)Constants.INCOME_TYPE.SALARY_INCOME)
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#create-new-expense-modal">
+        @if (Model.Type == (int)Constants.EXPENSE_TYPE.FAMILY)
         {
             @Html.Raw("Tạo mới chi tiêu gia đình")
         }
+        else if (Model.Type == (int)Constants.EXPENSE_TYPE.OTHERS)
+        {
+            @Html.Raw("Tạo mới chi tiêu khác")
+        }
     </button>
-    <div class="asset-table">
+    <div class="expense-table">
         <table class="table table-bordered table-condensed table-responsive">
             <thead>
                 <tr>
                     @if (Model.Type == (int)Constants.EXPENSE_TYPE.FAMILY)
                     {
                         <th>Chi tiêu gia đình</th>
-                        <th>Chi tiêu tháng</th>
-                        <th>Chi tiêu năm</th>
-                        <th>Ghi chú</th>
-                        <th></th>
                     }
+                    else if (Model.Type == (int)Constants.EXPENSE_TYPE.OTHERS)
+                    {
+                        <th>Chi tiêu khác</th>
+                    }
+                    <th>Chi tiêu tháng</th>
+                    <th>Chi tiêu năm</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -46,12 +57,11 @@
                             <td>@item.Name</td>
                             <td>@FormatUtility.DisplayThousandSeparatorsForNumber(item.Value)</td>
                             <td>@FormatUtility.DisplayThousandSeparatorsForNumber(item.Value * 12)</td>
-                            <td>@item.Note</td>
                             <td>
-                                <button class="btn btn-success update-income" data-income-id="@item.Id">
+                                <button class="btn btn-success update-expense" data-expense-id="@item.Id">
                                     <span class="glyphicon glyphicon-pencil"></span>
                                 </button>
-                                <button class="btn btn-danger delete-income" data-income-id="@item.Id">
+                                <button class="btn btn-danger delete-expense" data-expense-id="@item.Id">
                                     <span class="glyphicon glyphicon-remove"></span>
                                 </button>
                             </td>
@@ -69,10 +79,10 @@
     </div>
 </div>
 
-<div class="income-modal">
-    @{ Html.RenderPartial("_IncomeModal", new Incomes
+<div class="expense-modal">
+    @{ Html.RenderPartial("_ExpenseModal", new Expenses
         {
-            IncomeType = Model.Type
+            ExpenseType = Model.Type
         }); }
 </div>
 
@@ -81,13 +91,13 @@
 </div>
 
 
-<script type="text/javascript" src="~/Scripts/income.js"></script>
+<script type="text/javascript" src="~/Scripts/expense.js"></script>
 <script type="text/javascript">
     var Url = new Object();
-    Url.CreateIncome = '@Url.Action("CreateIncome", "Income")';
-    Url.LoadTable = '@Url.Action("IncomeTable", "Income")';
-    Url.LoadIncome = '@Url.Action("_IncomeUpdateModal", "Income")';
-    Url.UpdateIncome = '@Url.Action("UpdateIncome", "Income")';
-    Url.DeleteIncome = '@Url.Action("DeleteIncome", "Income")';
-    var incomeType = @Model.Type;
+    Url.CreateExpense = '@Url.Action("CreateExpense", "Expense")';
+    Url.LoadTable = '@Url.Action("ExpenseTable", "Expense")';
+    Url.LoadExpense = '@Url.Action("_ExpenseUpdateModal", "Expense")';
+    Url.UpdateExpense = '@Url.Action("UpdateExpense", "Expense")';
+    Url.DeleteExpense = '@Url.Action("DeleteExpense", "Expense")';
+    var expenseType = @Model.Type;
 </script>

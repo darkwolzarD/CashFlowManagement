@@ -1,0 +1,176 @@
+﻿@model CashFlowManagement.ViewModels.LiabilityListViewModel
+@using CashFlowManagement.Constants
+@using CashFlowManagement.Utilities
+@using CashFlowManagement.EntityModel
+@{
+    ViewBag.Title = "LiabilityTable";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    string title = string.Empty;
+    string type = string.Empty;
+    if (Model.Type == (int)Constants.LIABILITY_TYPE.CAR)
+    {
+        title = "Chi tiết các khoản vay xe hơi và tiêu sản khác";
+    }
+    else if (Model.Type == (int)Constants.LIABILITY_TYPE.CREDIT_CARD)
+    {
+        title = "Chi tiết các khoản vay thẻ tín dụng";
+    }
+    else if (Model.Type == (int)Constants.LIABILITY_TYPE.OTHERS)
+    {
+        title = "Chi tiết các khoản vay khác";
+    }
+    int count = 0;
+    int rsCount = 0;
+    int childCount = 0;
+}
+
+<div class="background">
+    <h3 class="text-center">@title</h3>
+
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#create-new-liability-modal">
+        @if (Model.Type == (int)Constants.LIABILITY_TYPE.CAR)
+            {
+            @Html.Raw("Tạo mới khoản vay xe hơi và tiêu sản khác")
+        }
+        else if (Model.Type == (int)Constants.LIABILITY_TYPE.CREDIT_CARD)
+        {
+            @Html.Raw("Tạo mới khoản vay thẻ tín dụng")
+        }
+        else if (Model.Type == (int)Constants.LIABILITY_TYPE.OTHERS)
+        {
+            @Html.Raw("Tạo mới khoản vay")
+        }
+    </button>
+
+    <div class="asset-table">
+        <table class="table table-bordered table-condensed table-responsive">
+            <thead>
+                <tr>
+                    @if (Model.Type == (int)Constants.LIABILITY_TYPE.CAR)
+                    {
+                        <th class="text-center">Nguồn vay</th>
+                        <th class="text-center">Tổng giá trị</th>
+                        <th class="text-center">Vốn vay</th>
+                        <th class="text-center">Lãi vay</th>
+                    }
+                    else if (Model.Type == (int)Constants.LIABILITY_TYPE.CREDIT_CARD)
+                    {
+                        title = "Tạo mới khoản vay thẻ tín dụng";
+                    }
+                    else if (Model.Type == (int)Constants.LIABILITY_TYPE.OTHERS)
+                    {
+                        title = "Tạo mới khoản vay";
+                    }
+                    <th class="text-center">Từ ngày</th>
+                    <th class="text-center">Đến ngày</th>
+                    <th class="text-center">Tổng số tháng phải trả</th>
+                    <th class="text-center">Trả lãi vay tháng</th>
+                    <th class="text-center">Trả vốn vay tháng</th>
+                    <th class="text-center">Tổng phải trả hàng tháng</th>
+                    <th class="text-center">Tiền vay còn phải trả</th>
+                    <th class="text-center">Ghi chú</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.List != null && Model.List.Count > 0)
+                {
+                    foreach (var liabilityViewModel in Model.List.Where(x => !x.Liability.ParentLiabilityId.HasValue))
+                    {
+                        <tr class="rs-@rsCount child-@childCount">
+                    <td><a class="update-liability" href="#" data-liability-id="@liabilityViewModel.Liability.Id" data-trigger="edit-no-rate">@liabilityViewModel.Liability.Name</a></td>
+                    <td>
+                        <a class="update-liability" href="#" data-liability-id="@liabilityViewModel.Liability.Id" data-trigger="edit-no-rate">@FormatUtility.DisplayThousandSeparatorsForNumber(liabilityViewModel.Liability.Value)</a>
+                    </td>
+                    <td>
+                        <a class="update-liability" href="#" data-liability-id="@liabilityViewModel.Liability.Id" data-trigger="edit-rate">@FormatUtility.DisplayPercentageForNumber(liabilityViewModel.CurrentInterestRate)</a>
+                    </td>
+                    <td>
+                        <a class="update-liability" href="#" data-liability-id="@liabilityViewModel.Liability.Id" data-trigger="edit-no-rate">@liabilityViewModel.Liability.StartDate.ToString("MM/yyyy")</a>
+                    </td>
+                    <td>
+                        <a class="update-liability" href="#" data-liability-id="@liabilityViewModel.Liability.Id" data-trigger="edit-no-rate">@liabilityViewModel.Liability.EndDate.ToString("MM/yyyy")</a>
+                    </td>
+                    <td>@FormatUtility.DisplayThousandSeparatorsForNumber(liabilityViewModel.TotalPaymentPeriod)</td>
+                    <td>
+                        @FormatUtility.DisplayThousandSeparatorsForNumber(liabilityViewModel.MonthlyOriginalPayment)
+                    </td>
+                    <td><a href="#" class="interest-info" data-liability-id="@liabilityViewModel.Liability.Id">@FormatUtility.DisplayThousandSeparatorsForNumber(liabilityViewModel.MonthlyInterestPayment)</a></td>
+                    <td>@FormatUtility.DisplayThousandSeparatorsForNumber(liabilityViewModel.MonthlyPayment)</td>
+                    <td>@FormatUtility.DisplayThousandSeparatorsForNumber(liabilityViewModel.AnnualPayment)</td>
+                    <td>@FormatUtility.DisplayThousandSeparatorsForNumber(liabilityViewModel.RemainedValue)</td>
+                    <td>@liabilityViewModel.Liability.Note</td>
+                    <td class="text-center" width="200" style="vertical-align: middle">
+                        @*<button class="btn btn-success update-loan" data-loan-id="@loanViewModel.Loan.Id">
+                                <span class="glyphicon glyphicon-pencil"></span>
+                            </button>*@
+                        <button class="btn btn-danger delete-liability" data-liability-id="@liabilityViewModel.Liability.Id">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </button>
+                        <button class="btn btn-primary" href=".detail-@count" data-toggle="collapse">
+                            <span class="glyphicon glyphicon-zoom-in"></span>
+                        </button>
+                    </td>
+                    </tr>
+                        {
+                            count++;
+                        }
+                    }
+                    <tr>
+                        <td class="text-center"><strong>Total value</strong></td>
+                        <td></td>
+                        <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(0)</strong></td>
+                        <td></td>
+                        <td><strong>@FormatUtility.DisplayPercentageForNumber(0)</strong></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(0)</strong></td>
+                        <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(0)</strong></td>
+                        <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(0)</strong></td>
+                        <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(0)</strong></td>
+                        <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(0)</strong></td>
+                        <td></td>
+                    </tr>
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="13" class="text-center">Không có khoản nợ</td>
+                    </tr>
+                }
+                @{ rsCount++; }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="liability-modal">
+        @{ Html.RenderPartial("_LiabilityModal", new Liabilities
+            {
+                LiabilityType = Model.Type
+            }); }
+    </div>
+
+    <div class="update-modal">
+
+    </div>
+
+    <div class="interest-modal-div">
+
+    </div>
+
+
+    <script type="text/javascript" src="~/Scripts/liability.js"></script>
+    <script type="text/javascript">
+        var Url = new Object();
+        Url.LiabilityModal = '@Url.Action("_LiabilityModal", "Liability")';
+        Url.CreateLiability = '@Url.Action("CreateLiability", "Liability")';
+        Url.LoadLiability = '@Url.Action("_LiabilityUpdateModal", "Liability")';
+        Url.UpdateLiability = '@Url.Action("UpdateLiability", "Liability")';
+        Url.DeleteLiability = '@Url.Action("DeleteLiability", "Liability")';
+        Url.PaymentPerMonth = '@Url.Action("_PaymentPerMonth", "Liability")';
+        var liabilityType = @Model.Type;
+    </script>

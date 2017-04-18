@@ -53,7 +53,7 @@
 
     $('#create-new-asset-modal').on('hidden.bs.modal', function (e) {
         $(this)
-            .find("input,textarea,select")
+            .find("input[type!='hidden'],textarea,select")
             .val('')
             .end()
             .find("input[type=checkbox], input[type=radio]")

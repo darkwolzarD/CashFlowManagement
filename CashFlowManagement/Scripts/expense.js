@@ -13,15 +13,15 @@
 
     MaskInput();
 
-    $(document).on("shown.bs.modal", "#create-new-income-modal", function () {
+    $(document).on("shown.bs.modal", "#create-new-expense-modal", function () {
         MaskInput();
     })
 
-    $(document).on("shown.bs.modal", "#update-income-modal", function () {
+    $(document).on("shown.bs.modal", "#update-expense-modal", function () {
         MaskInput();
     })
 
-    $('#create-new-income-modal').on('hidden.bs.modal', function (e) {
+    $('#create-new-expense-modal').on('hidden.bs.modal', function (e) {
         $(this)
             .find("input[type!='hidden'],textarea,select")
             .val('')
@@ -32,17 +32,17 @@
         MaskInput();
     })
 
-    $(document).on("click", ".create-income", function () {
+    $(document).on("click", ".create-expense", function () {
         RemoveMask();
-        var data = $("#create-new-income-modal .form-horizontal").serialize();
+        var data = $("#create-new-expense-modal .form-horizontal").serialize();
 
         $.ajax({
-            url: Url.CreateIncome,
+            url: Url.CreateExpense,
             type: "post",
             data: data,
             success: function (data) {
                 if (data.result > 0) {
-                    $("#create-new-income-modal").modal("hide");
+                    $("#create-new-expense-modal").modal("hide");
                     LoadTable();
                 }
                 else {
@@ -57,7 +57,7 @@
         $.ajax({
             url: Url.LoadTable,
             type: "post",
-            data: { type: incomeType },
+            data: { type: expenseType },
             dataType: "html",
             success: function (data) {
                 if (data.length > 0) {
@@ -70,18 +70,18 @@
         })
     }
 
-    $(document).on("click", ".update-income", function () {
-        var id = $(this).data("income-id");
+    $(document).on("click", ".update-expense", function () {
+        var id = $(this).data("expense-id");
 
         $.ajax({
-            url: Url.LoadIncome,
+            url: Url.LoadExpense,
             type: "get",
-            data: { incomeId: id },
+            data: { expenseId: id },
             contentType: "html",
             success: function (data) {
                 if (data.length > 0) {
                     $(".update-modal").html(data);
-                    $("#update-income-modal").modal("show");
+                    $("#update-expense-modal").modal("show");
                 }
                 else {
                     alert("Có lỗi xảy ra");
@@ -90,17 +90,17 @@
         })
     })
 
-    $(document).on("click", ".save-income", function () {
+    $(document).on("click", ".save-expense", function () {
         RemoveMask();
-        var data = $("#update-income-modal .form-horizontal").serialize();
+        var data = $("#update-expense-modal .form-horizontal").serialize();
 
         $.ajax({
-            url: Url.UpdateIncome,
+            url: Url.UpdateExpense,
             type: "post",
             data: data,
             success: function (data) {
                 if (data.result > 0) {
-                    $("#update-income-modal").modal("hide");
+                    $("#update-expense-modal").modal("hide");
                     LoadTable();
                 }
                 else {
@@ -111,13 +111,13 @@
         MaskInput();
     })
 
-    $(document).on("click", ".delete-income", function () {
-        var id = $(this).data("income-id");
-        if (confirm("Bạn có muốn xóa thu nhập này?") === true) {
+    $(document).on("click", ".delete-expense", function () {
+        var id = $(this).data("expense-id");
+        if (confirm("Bạn có muốn xóa khoản chi tiêu này?") === true) {
             $.ajax({
-                url: Url.DeleteIncome,
+                url: Url.DeleteExpense,
                 type: "POST",
-                data: { incomeId: id },
+                data: { expenseId: id },
                 success: function (data) {
                     if (data.result > 0) {
                         LoadTable();
