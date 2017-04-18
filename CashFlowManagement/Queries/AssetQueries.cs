@@ -12,8 +12,6 @@ namespace CashFlowManagement.Queries
     {
         public static AssetListViewModel GetAssetByUser(string username, int type)
         {
-            DateTime current = DateTime.Now;
-            current = new DateTime(current.Year, current.Month, 1);
             Entities entities = new Entities();
             List<AssetViewModel> queryResult = (from asset in entities.Assets
                                                      join income in entities.Incomes on asset.Id equals income.AssetId
@@ -83,40 +81,43 @@ namespace CashFlowManagement.Queries
                 updated_asset.Liabilities.Add(liability);
             }
 
-            DeleteAsset(model.Asset.Id, Constants.Constants.SYSTEM);
+            DeleteAsset(model.Asset.Id);
 
             entities.Assets.Add(updated_asset);
             int result = entities.SaveChanges();
             return result;
         }
 
-        public static int DeleteAsset(int id, string disabledBy)
+        public static int DeleteAsset(int id)
         {
             Entities entities = new Entities();
             Assets asset = entities.Assets.Where(x => x.Id == id).FirstOrDefault();
             asset.DisabledDate = DateTime.Now;
-            asset.DisabledBy = disabledBy;
+            asset.DisabledBy = Constants.Constants.USER;
 
             entities.Assets.Attach(asset);
             var entry = entities.Entry(asset);
             entry.Property(x => x.DisabledDate).IsModified = true;
+            entry.Property(x => x.DisabledBy).IsModified = true;
 
             Incomes income = entities.Incomes.Where(x => x.AssetId == id && !x.DisabledDate.HasValue).FirstOrDefault();
             income.DisabledDate = DateTime.Now;
-            income.DisabledBy = disabledBy;
+            income.DisabledBy = Constants.Constants.USER;
 
             entities.Incomes.Attach(income);
             var entry_2 = entities.Entry(income);
             entry_2.Property(x => x.DisabledDate).IsModified = true;
+            entry_2.Property(x => x.DisabledBy).IsModified = true;
 
             IQueryable<Liabilities> liabilities = entities.Liabilities.Where(x => x.AssetId == asset.Id && !x.DisabledDate.HasValue);
             foreach (var liability in liabilities)
             {
                 liability.DisabledDate = DateTime.Now;
-                liability.DisabledBy = disabledBy;
+                liability.DisabledBy = Constants.Constants.USER;
                 entities.Liabilities.Attach(liability);
                 var entry_3 = entities.Entry(liability);
-                entry.Property(x => x.DisabledDate).IsModified = true;
+                entry_3.Property(x => x.DisabledDate).IsModified = true;
+                entry_3.Property(x => x.DisabledBy).IsModified = true;
             }
 
             int result = entities.SaveChanges();

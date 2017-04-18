@@ -30,8 +30,11 @@
           <Property Name="ExpenseType" Type="int" Nullable="false" />
           <Property Name="CreatedDate" Type="datetime" Nullable="false" />
           <Property Name="DisabledDate" Type="datetime" />
+          <Property Name="CreatedBy" Type="nvarchar" MaxLength="6" Nullable="false" />
+          <Property Name="DisabledBy" Type="nvarchar" MaxLength="6" />
           <Property Name="LiabilityId" Type="int" />
           <Property Name="Username" Type="nvarchar" MaxLength="20" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="Incomes">
           <Key>
@@ -46,6 +49,8 @@
           <Property Name="IncomeType" Type="int" Nullable="false" />
           <Property Name="AssetId" Type="int" />
           <Property Name="Username" Type="nvarchar" MaxLength="20" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" />
+          <Property Name="Note" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="Liabilities">
           <Key>
@@ -348,6 +353,9 @@
           <Property Name="Username" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Liabilities" Relationship="CFMModel.FK_Expenses_Liabilities" FromRole="Expenses" ToRole="Liabilities" />
           <NavigationProperty Name="Users" Relationship="CFMModel.FK_Expenses_Users" FromRole="Expenses" ToRole="Users" />
+          <Property Name="CreatedBy" Type="String" Nullable="false" MaxLength="6" FixedLength="false" Unicode="true" />
+          <Property Name="DisabledBy" Type="String" MaxLength="6" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="Incomes">
           <Key>
@@ -364,6 +372,8 @@
           <Property Name="Username" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Assets" Relationship="CFMModel.FK_Incomes_Assets" FromRole="Incomes" ToRole="Assets" />
           <NavigationProperty Name="Users" Relationship="CFMModel.FK_Incomes_Users" FromRole="Incomes" ToRole="Users" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Note" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="Liabilities">
           <Key>
@@ -567,6 +577,9 @@
           <EntitySetMapping Name="Expenses">
             <EntityTypeMapping TypeName="CFMModel.Expenses">
               <MappingFragment StoreEntitySet="Expenses">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="DisabledBy" ColumnName="DisabledBy" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
                 <ScalarProperty Name="Username" ColumnName="Username" />
                 <ScalarProperty Name="LiabilityId" ColumnName="LiabilityId" />
                 <ScalarProperty Name="DisabledDate" ColumnName="DisabledDate" />
@@ -580,6 +593,8 @@
           <EntitySetMapping Name="Incomes">
             <EntityTypeMapping TypeName="CFMModel.Incomes">
               <MappingFragment StoreEntitySet="Incomes">
+                <ScalarProperty Name="Note" ColumnName="Note" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Username" ColumnName="Username" />
                 <ScalarProperty Name="AssetId" ColumnName="AssetId" />
                 <ScalarProperty Name="IncomeType" ColumnName="IncomeType" />

@@ -17,12 +17,6 @@ namespace CashFlowManagement.Controllers
             return View(model);
         }
 
-        //public PartialViewResult UpdateBankDepositModal(int id)
-        //{
-        //    BankDepositIncomes model = BankDepositQueries.GetBankDepositById(id);
-        //    return PartialView(model);
-        //}
-
         public PartialViewResult _AssetUpdateModal(int assetId)
         {
             AssetViewModel model = AssetQueries.GetAssetById(assetId);
@@ -47,7 +41,7 @@ namespace CashFlowManagement.Controllers
 
         public JsonResult DeleteAsset(int assetId)
         {
-            int result = AssetQueries.DeleteAsset(assetId, Constants.Constants.USER);
+            int result = AssetQueries.DeleteAsset(assetId);
             return Json(new { result = result });
         }
     }

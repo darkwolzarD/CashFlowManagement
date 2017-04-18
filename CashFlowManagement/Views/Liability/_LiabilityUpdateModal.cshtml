@@ -6,7 +6,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Update liability</h4>
+                <h4 class="modal-title">Cập nhật nợ</h4>
             </div>
             <div class="modal-body">
                 <form class="form-horizontal">
@@ -17,30 +17,30 @@
                     @if (Model.InterestRate == 0)
                     {
                         <div class="form-group">
-                            <label class="control-label col-sm-3">Source of liability:</label>
+                            <label class="control-label col-sm-3">Nguồn vay nợ:</label>
                             <div class="col-sm-9">
                                 @Html.TextBoxFor(x => x.Name, new { @type = "text", @class = "form-control" })
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-sm-3">Mortgage Value:</label>
+                            <label class="control-label col-sm-3">Giá trị nợ:</label>
                             <div class="col-sm-9">
                                 @Html.TextBoxFor(x => x.Value, new { @type = "text", @class = "form-control input-mask" })
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-sm-3">Interest type:</label>
+                            <label class="control-label col-sm-3">Loại lãi suất:</label>
                             <div class="col-sm-9">
                                 @Html.DropDownListFor(x => x.InterestType, new List<SelectListItem> {
                                                                                                    new SelectListItem
                                                                                                    {
-                                                                                                       Text = "Fixed",
+                                                                                                       Text = "Cố định",
                                                                                                        Value = "1",
                                                                                                        Selected = true
                                                                                                    },
                                                                                                    new SelectListItem
                                                                                                    {
-                                                                                                       Text = "Reducing",
+                                                                                                       Text = "Giảm dần",
                                                                                                        Value = "2",
                                                                                                        Selected = true
                                                                                                    },
@@ -51,20 +51,20 @@
                     @if (Model.InterestRate > 0)
                     {
                         <div class="form-group">
-                            <label class="control-label col-sm-3">Interest Rate (%):</label>
+                            <label class="control-label col-sm-3">Lãi vay (%):</label>
                             <div class="col-sm-9">
                                 @Html.TextBoxFor(x => x.InterestRate, new { @type = "text", @class = "form-control percentage" })
                             </div>
                         </div>
                     }
                     <div class="form-group">
-                        <label class="control-label col-sm-3">From:</label>
+                        <label class="control-label col-sm-3">Ngày bắt đầu vay:</label>
                         <div class="col-sm-9">
                             @Html.TextBoxFor(x => x.StartDate, "{0:MM/yyyy}", new { @type = "text", @class = "form-control date-picker" })
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-sm-3">To:</label>
+                        <label class="control-label col-sm-3">Ngày trả hết nợ:</label>
                         <div class="col-sm-9">
                             @Html.TextBoxFor(x => x.EndDate, "{0:MM/yyyy}", new { @type = "text", @class = "form-control date-picker" })
                         </div>
@@ -79,8 +79,8 @@
             </div>
             <div class="modal-footer text-center">
                 @{ var edit = Model.InterestRate == 0 ? "save-no-rate" : "save-rate"; }
-                <button type="button" class="btn btn-success save-liability" data-trigger="@edit">Update</button>
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-success save-liability" data-trigger="@edit">Cập nhật</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Đóng</button>
             </div>
         </div>
     </div>

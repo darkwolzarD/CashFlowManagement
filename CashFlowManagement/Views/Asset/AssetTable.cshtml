@@ -13,11 +13,15 @@
     string type = string.Empty;
     if (Model.Type == (int)Constants.ASSET_TYPE.BANK_DEPOSIT)
     {
-        title = "BANK DEPOSIT";
+        title = "Chi tiết các tài khoản tiết kiệm";
     }
     else if (Model.Type == (int)Constants.ASSET_TYPE.REAL_ESTATE)
     {
-        title = "REAL ESTATE";
+        title = "Chi tiết các bất động sản";
+    }
+    else if (Model.Type == (int)Constants.ASSET_TYPE.BUSINESS)
+    {
+        title = "Chi tiết kinh doanh";
     }
     int count = 0;
     int rsCount = 0;
@@ -30,11 +34,15 @@
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#create-new-asset-modal">
         @if (Model.Type == (int)Constants.ASSET_TYPE.BANK_DEPOSIT)
         {
-            @Html.Raw("Add bank deposit")
+            @Html.Raw("Tạo mới tài khoản tiết kiệm")
         }
         else if (Model.Type == (int)Constants.ASSET_TYPE.REAL_ESTATE)
         {
-            @Html.Raw("Add real estate")
+            @Html.Raw("Tạo mới bất động sản")
+        }
+        else if (Model.Type == (int)Constants.ASSET_TYPE.BUSINESS)
+        {
+            @Html.Raw("Tạo mới kinh doanh")
         }
     </button>
 
@@ -44,24 +52,34 @@
                 <tr>
                     @if (Model.Type == (int)Constants.ASSET_TYPE.BANK_DEPOSIT)
                     {
-                        <th>Bank deposit income</th>
-                        <th>Monthly income</th>
-                        <th>Annual income</th>
-                        <th>Capital value</th>
-                        <th>Interest Yield</th>
+                        <th>Tài khoản tiết kiệm</th>
+                        <th>Thu nhập tháng</th>
+                        <th>Thu nhập năm</th>
+                        <th>Tổng vốn</th>
+                        <th>Lãi suất tiền gửi</th>
                         <th>Participant bank</th>
-                        <th>Note</th>
+                        <th>Ghi chú</th>
                         <th></th>
                     }
                     else if (Model.Type == (int)Constants.ASSET_TYPE.REAL_ESTATE)
                     {
-                        <th class="text-center">Real estate</th>
-                        <th class="text-center">Monthly rent income</th>
-                        <th class="text-center">Annual rent income</th>
-                        <th class="text-center">Original value</th>
-                        <th class="text-center">Rent Yield</th>
+                        <th class="text-center">Bất động sản</th>
+                        <th class="text-center">Thu nhập hàng tháng cho thuê</th>
+                        <th class="text-center">Thu nhập hàng năm cho thuê</th>
+                        <th class="text-center">Trị giá tài sản</th>
+                        <th class="text-center">Tỷ suất lợi nhuận cho thuê</th>
                         <th colspan="8"></th>
-                        <th class="text-center"><strong>Today: @(DateTime.Now.ToString("MM/yyyy"))</strong></th>
+                        <th class="text-center"><strong>Hôm nay: @(DateTime.Now.ToString("MM/yyyy"))</strong></th>
+                    }
+                    else if (Model.Type == (int)Constants.ASSET_TYPE.BUSINESS)
+                    {
+                        <th class="text-center">Kinh doanh</th>
+                        <th class="text-center">Thu hàng tháng</th>
+                        <th class="text-center">Thu hàng năm</th>
+                        <th class="text-center">Giá trị góp vốn</th>
+                        <th class="text-center">Tỷ suất lợi nhuận</th>
+                        <th colspan="8"></th>
+                        <th class="text-center"><strong>Hôm nay: @(DateTime.Now.ToString("MM/yyyy"))</strong></th>
                     }
                 </tr>
             </thead>
@@ -81,7 +99,7 @@
                                 <td>@item.Asset.ParticipantBank</td>
                                 <td>@item.Asset.Note</td>
                             }
-                            <td class="text-center" colspan="@(Model.Type == (int)Constants.ASSET_TYPE.REAL_ESTATE ? 9 : 1)">
+                            <td class="text-center" colspan="@(Model.Type == (int)Constants.ASSET_TYPE.REAL_ESTATE || Model.Type == (int)Constants.ASSET_TYPE.BUSINESS ? 9 : 1)">
                                 <button class="btn btn-success update-asset" data-asset-id="@item.Asset.Id">
                                     <span class="glyphicon glyphicon-pencil"></span>
                                 </button>
@@ -90,21 +108,22 @@
                                 </button>
                             </td>
                         </tr>
-                        if (item.Asset.AssetType == (int)Constants.ASSET_TYPE.REAL_ESTATE)
+                        if (item.Asset.AssetType == (int)Constants.ASSET_TYPE.REAL_ESTATE ||
+                            item.Asset.AssetType == (int)Constants.ASSET_TYPE.BUSINESS)
                         {
                             <tr>
-                                <th class="text-center">Source of loan</th>
-                                <th class="text-center">Mortgate value</th>
-                                <th class="text-center">Interest type</th>
-                                <th class="text-center">Interest rate</th>
-                                <th class="text-center">From</th>
-                                <th class="text-center">To</th>
-                                <th class="text-center">Total payment period (month)</th>
-                                <th class="text-center">Monthly Orginary Payment</th>
-                                <th class="text-center">Monthly Interest Payment</th>
-                                <th class="text-center">Monthly payment</th>
-                                <th class="text-center">Annual payment</th>
-                                <th class="text-center">Remained value</th>
+                                <th class="text-center">Nguồn vay nợ</th>
+                                <th class="text-center">Giá trị nợ</th>
+                                <th class="text-center">Loại lãi suất</th>
+                                <th class="text-center">Lãi vay</th>
+                                <th class="text-center">Ngày bắt đầu vay</th>
+                                <th class="text-center">Ngày trả hết nợ</th>
+                                <th class="text-center">Tổng số tháng phải trả</th>
+                                <th class="text-center">Trả lãi hàng tháng</th>
+                                <th class="text-center">Trả gốc hàng tháng</th>
+                                <th class="text-center">Tổng phải trả hàng tháng</th>
+                                <th class="text-center">Tổng phải trả hàng năm</th>
+                                <th class="text-center">Nợ gốc còn phải trả</th>
                                 <th class="text-center" style="vertical-align: middle">
                                     <button type="button" class="btn btn-primary create-new-liability" data-asset-id="@item.Asset.Id" data-asset-type="@Model.Type">
                                         <span class="glyphicon glyphicon-plus"></span>
@@ -135,7 +154,7 @@
                                         <td>
                                             @FormatUtility.DisplayThousandSeparatorsForNumber(liabilityViewModel.MonthlyOriginalPayment)
                                         </td>
-                                        <td><a href="#" class="interest-info" data-loan-id="@liabilityViewModel.Liability.Id">@FormatUtility.DisplayThousandSeparatorsForNumber(liabilityViewModel.MonthlyInterestPayment)</a></td>
+                                        <td><a href="#" class="interest-info" data-liability-id="@liabilityViewModel.Liability.Id">@FormatUtility.DisplayThousandSeparatorsForNumber(liabilityViewModel.MonthlyInterestPayment)</a></td>
                                         <td>@FormatUtility.DisplayThousandSeparatorsForNumber(liabilityViewModel.MonthlyPayment)</td>
                                         <td>@FormatUtility.DisplayThousandSeparatorsForNumber(liabilityViewModel.AnnualPayment)</td>
                                         <td>@FormatUtility.DisplayThousandSeparatorsForNumber(liabilityViewModel.RemainedValue)</td>
@@ -217,7 +236,7 @@
                             else
                             {
                                 <tr>
-                                    <td colspan="13" class="text-center">No liability available</td>
+                                    <td colspan="13" class="text-center">Không có khoản nợ</td>
                                 </tr>
                             }
                             { rsCount++; }
@@ -227,7 +246,7 @@
                 else
                 {
                     <tr>
-                        <td colspan="14" class="text-center">No item available</td>
+                        <td colspan="14" class="text-center">Không có dữ liệu</td>
                     </tr>
                 }
             </tbody>

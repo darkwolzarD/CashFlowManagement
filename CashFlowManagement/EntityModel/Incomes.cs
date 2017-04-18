@@ -23,6 +23,8 @@ namespace CashFlowManagement.EntityModel
         public int IncomeType { get; set; }
         public Nullable<int> AssetId { get; set; }
         public string Username { get; set; }
+        public string Name { get; set; }
+        public string Note { get; set; }
     
         public virtual Assets Assets { get; set; }
         public virtual Users Users { get; set; }

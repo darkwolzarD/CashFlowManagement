@@ -9,12 +9,18 @@
                 <h4 class="modal-title">
                     @if (Model.Asset.AssetType == (int)Constants.ASSET_TYPE.BANK_DEPOSIT)
                     {
-                        @Html.Raw("Add new bank deposit")
+                        @Html.Raw("Tạo mới khoản tiết kiệm")
                     }
                     else if (Model.Asset.AssetType == (int)Constants.ASSET_TYPE.REAL_ESTATE)
                     {
-                        @Html.Raw("Add new real estate")
-                    } 
+                        @Html.Raw("Tạo mới bất động sản")
+                    }
+
+                    else if (Model.Asset.AssetType == (int)Constants.ASSET_TYPE.BUSINESS)
+                    {
+                        @Html.Raw("Tạo mới kinh doanh")
+                    }
+                    
                 </h4>
             </div>
             <div class="modal-body">
@@ -23,11 +29,15 @@
                         <label class="control-label col-sm-3">
                             @if(Model.Asset.AssetType == (int)Constants.ASSET_TYPE.BANK_DEPOSIT)
                             {
-                                @Html.Raw("Bank deposit income:")
+                                @Html.Raw("Tài khoản tiết kiệm:")
                             }
                             else if (Model.Asset.AssetType == (int)Constants.ASSET_TYPE.REAL_ESTATE)
                             {
-                                @Html.Raw("Real estate:")
+                                @Html.Raw("Bất động sản:")
+                            }
+                            else if (Model.Asset.AssetType == (int)Constants.ASSET_TYPE.BUSINESS)
+                            {
+                                @Html.Raw("Kinh doanh:")
                             }
                         </label>
                         <div class="col-sm-9">
@@ -43,7 +53,11 @@
                             }
                             else if (Model.Asset.AssetType == (int)Constants.ASSET_TYPE.REAL_ESTATE)
                             {
-                                @Html.Raw("Original value:")
+                                @Html.Raw("Giá trị tài sản:")
+                            }
+                            else if (Model.Asset.AssetType == (int)Constants.ASSET_TYPE.BUSINESS)
+                            {
+                                @Html.Raw("Giá trị góp vốn:")
                             }
                         </label>
                         <div class="col-sm-9">
@@ -51,7 +65,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-sm-3">Monthly Income:</label>
+                        <label class="control-label col-sm-3">Thu hàng tháng:</label>
                         <div class="col-sm-9">
                             @Html.TextBoxFor(x => x.Income.Value, new { @Value = string.Empty, @type = "text", @class = "form-control input-mask" })
                         </div>
@@ -74,8 +88,8 @@
                 </form>
             </div>
             <div class="modal-footer text-center">
-                <button type="button" class="btn btn-success create-asset">Create</button>
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-success create-asset">Tạo mới</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Đóng</button>
             </div>
         </div>
     </div>

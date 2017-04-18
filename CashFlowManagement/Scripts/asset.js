@@ -143,14 +143,13 @@
 
     $(document).on("click", ".delete-asset", function () {
         var id = $(this).data("asset-id");
-        if (confirm("Do you really want to delete this item?") === true) {
+        if (confirm("Bạn có muốn xóa tài sản này?") === true) {
             $.ajax({
                 url: Url.DeleteAsset,
                 type: "POST",
                 data: { assetId: id },
                 success: function (data) {
                     if (data.result > 0) {
-                        alert("Success!");
                         LoadTable();
                     }
                     else {
@@ -274,7 +273,7 @@
 
     $(document).on("click", ".delete-liability", function () {
         var id = $(this).data("liability-id");
-        if (confirm("Do you really want to delete this liability?") == true) {
+        if (confirm("Bạn có muốn xóa khoản nợ này?") == true) {
             $.ajax({
                 url: Url.DeleteLiability,
                 type: "POST",
@@ -293,7 +292,7 @@
     })
 
     $(document).on("click", ".interest-info", function () {
-        var _data = parseInt($(this).data("loan-id"));
+        var _data = parseInt($(this).data("liability-id"));
 
         $.ajax({
             url: Url.PaymentPerMonth,
