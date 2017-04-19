@@ -16,10 +16,10 @@
                             <th></th>
                             <th>Tháng</th>
                             <th>Lãi vay</th>
-                            <th>Nợ gốc còn phải trả</th>
                             <th>Trả gốc hàng tháng</th>
                             <th>Trả lãi hàng tháng</th>
                             <th>Tổng phải trả hàng tháng</th>
+                            <th>Nợ gốc còn phải trả</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -30,10 +30,10 @@
                                 <td>@count</td>
                                 <td>@item.CurrentMonth.ToString("dd/MM/yyyy")</td>
                                 <td>@FormatUtility.DisplayThousandSeparatorsForNumber(item.CurrentInterestRatePerYear)%</td>
-                                <td>@FormatUtility.DisplayThousandSeparatorsForNumber(item.RemainingLoan)</td>
                                 <td>@FormatUtility.DisplayThousandSeparatorsForNumber(item.MonthlyOriginalPayment)</td>
                                 <td>@FormatUtility.DisplayThousandSeparatorsForNumber(item.MonthlyInterestPayment)</td>
                                 <td>@FormatUtility.DisplayThousandSeparatorsForNumber(item.MonthlyTotalPayment)</td>
+                                <td>@FormatUtility.DisplayThousandSeparatorsForNumber(item.RemainingLoan)</td>
                                 @{count++;}
                             </tr>
                         }

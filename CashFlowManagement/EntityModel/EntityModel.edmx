@@ -71,6 +71,9 @@
           <Property Name="ParentLiabilityId" Type="int" />
           <Property Name="Username" Type="nvarchar" MaxLength="20" />
           <Property Name="InterestType" Type="int" />
+          <Property Name="Note" Type="nvarchar" MaxLength="50" />
+          <Property Name="OriginalValue" Type="float" />
+          <Property Name="Purpose" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="Stocks">
           <Key>
@@ -399,6 +402,9 @@
           <NavigationProperty Name="Liabilities1" Relationship="CFMModel.FK_Liabilities_Liabilities" FromRole="Liabilities" ToRole="Liabilities1" />
           <NavigationProperty Name="Liabilities2" Relationship="CFMModel.FK_Liabilities_Liabilities" FromRole="Liabilities1" ToRole="Liabilities" />
           <NavigationProperty Name="Users" Relationship="CFMModel.FK_Liabilities_Users" FromRole="Liabilities" ToRole="Users" />
+          <Property Name="Note" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="OriginalValue" Type="Double" />
+          <Property Name="Purpose" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="Stocks">
           <Key>
@@ -610,6 +616,9 @@
           <EntitySetMapping Name="Liabilities">
             <EntityTypeMapping TypeName="CFMModel.Liabilities">
               <MappingFragment StoreEntitySet="Liabilities">
+                <ScalarProperty Name="Purpose" ColumnName="Purpose" />
+                <ScalarProperty Name="OriginalValue" ColumnName="OriginalValue" />
+                <ScalarProperty Name="Note" ColumnName="Note" />
                 <ScalarProperty Name="InterestType" ColumnName="InterestType" />
                 <ScalarProperty Name="Username" ColumnName="Username" />
                 <ScalarProperty Name="ParentLiabilityId" ColumnName="ParentLiabilityId" />

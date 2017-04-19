@@ -1,4 +1,5 @@
 ﻿@model CashFlowManagement.EntityModel.Liabilities
+@using CashFlowManagement.Constants
 <div id="create-new-liability-modal" class="modal fade" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -8,6 +9,15 @@
             </div>
             <div class="modal-body">
                 <form class="form-horizontal">
+                    @if (Model.LiabilityType == (int)Constants.LIABILITY_TYPE.OTHERS)
+                    {
+                        <div class="form-group">
+                            <label class="control-label col-sm-3">Mục tiêu sử dụng</label>
+                            <div class="col-sm-9">
+                                @Html.TextBoxFor(x => x.Purpose, new { @type = "text", @class = "form-control" })
+                            </div>
+                        </div>
+                    }
                     <div class="form-group">
                         <label class="control-label col-sm-3">Nguồn vay nợ:</label>
                         <div class="col-sm-9">
@@ -16,16 +26,40 @@
                             @Html.TextBoxFor(x => x.Name, new { @type = "text", @class = "form-control" })
                         </div>
                     </div>
+                    @if (Model.LiabilityType == (int)Constants.LIABILITY_TYPE.CAR)
+                    {
+                        <div class="form-group">
+                            <label class="control-label col-sm-3">Tổng giá trị:</label>
+                            <div class="col-sm-9">
+                                @Html.TextBoxFor(x => x.OriginalValue, new { @type = "text", @class = "form-control input-mask" })
+                            </div>
+                        </div>
+                    }
                     <div class="form-group">
-                        <label class="control-label col-sm-3">Giá trị nợ:</label>
+                        <label class="control-label col-sm-3">
+                            @if (Model.LiabilityType == (int)Constants.LIABILITY_TYPE.REAL_ESTATE || Model.LiabilityType == (int)Constants.LIABILITY_TYPE.BUSINESS)
+                            {
+                                @Html.Raw("Giá trị nợ:");
+                            }
+                            else if (Model.LiabilityType == (int)Constants.LIABILITY_TYPE.CAR)
+                            {
+                                @Html.Raw("Vốn vay:");
+                            }
+                            else if (Model.LiabilityType == (int)Constants.LIABILITY_TYPE.OTHERS)
+                            {
+                                @Html.Raw("Số tiền vay:");
+                            }
+                        </label>
                         <div class="col-sm-9">
                             @Html.TextBoxFor(x => x.Value, new { @Value = "", @type = "text", @class = "form-control input-mask" })
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label class="control-label col-sm-3">Loại lãi suất:</label>
-                        <div class="col-sm-9">
-                            @Html.DropDownListFor(x => x.InterestType, new List<SelectListItem> {
+                    @if (Model.LiabilityType == (int)Constants.LIABILITY_TYPE.REAL_ESTATE || Model.LiabilityType == (int)Constants.LIABILITY_TYPE.BUSINESS)
+                    {
+                        <div class="form-group">
+                            <label class="control-label col-sm-3">Loại lãi suất:</label>
+                            <div class="col-sm-9">
+                                @Html.DropDownListFor(x => x.InterestType, new List<SelectListItem> {
                                                                                                    new SelectListItem
                                                                                                    {
                                                                                                        Text = "Cố định",
@@ -39,24 +73,60 @@
                                                                                                        Selected = true
                                                                                                    },
                                                                                                 }, new { @type = "text", @class = "form-control" })
+                            </div>
                         </div>
-                    </div>
+                    }
                     <div class="form-group">
-                        <label class="control-label col-sm-3">Lãi vay (%):</label>
+                        <label class="control-label col-sm-3">
+                            @if (Model.LiabilityType == (int)Constants.LIABILITY_TYPE.CREDIT_CARD)
+                            {
+                                @Html.Raw("Chi phí lãi:");
+                            }
+                            else
+                            {
+                                @Html.Raw("Lãi vay:");
+                            }
+                        </label>
                         <div class="col-sm-9">
                             @Html.TextBoxFor(x => x.InterestRate, new { @Value = "", @type = "text", @class = "form-control percentage" })
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-sm-3">Ngày bắt đầu vay:</label>
+                        <label class="control-label col-sm-3">
+                            @if (Model.LiabilityType == (int)Constants.LIABILITY_TYPE.BUSINESS ||
+                                Model.LiabilityType == (int)Constants.LIABILITY_TYPE.REAL_ESTATE)
+                            {
+                                @Html.Raw("Ngày bắt đầu vay:");
+                            }
+                            else
+                            {
+                                @Html.Raw("Từ ngày:");
+                            }
+                        </label>
                         <div class="col-sm-9">
                             @Html.TextBoxFor(x => x.StartDate, new { @Value = "", @type = "text", @class = "form-control date-picker" })
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-sm-3">Ngày trả hết nợ:</label>
+                        <label class="control-label col-sm-3">
+                            @if (Model.LiabilityType == (int)Constants.LIABILITY_TYPE.BUSINESS ||
+                                 Model.LiabilityType == (int)Constants.LIABILITY_TYPE.REAL_ESTATE)
+                            {
+                                @Html.Raw("Ngày trả hết nợ:");
+                            }
+                            else
+                            {
+                                @Html.Raw("Đến' ngày:");
+                            }
+                        </label>
                         <div class="col-sm-9">
                             @Html.TextBoxFor(x => x.EndDate, new { @Value = "", @type = "text", @class = "form-control date-picker" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-3">Ghi chú:</label>
+                        <div class="col-sm-9">
+                            @Html.TextBoxFor(x => x.Note, new { @type = "text", @class = "form-control" })
                         </div>
                     </div>
                 </form>
@@ -68,6 +138,3 @@
         </div>
     </div>
 </div>
-
-
-
