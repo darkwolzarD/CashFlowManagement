@@ -98,7 +98,7 @@
                             {
                                 <td>@liabilityViewModel.Liability.Purpose</td>
                             }
-                            <td>@FormatUtility.DisplayPercentageForNumber(liabilityViewModel.Liability.Value)</td>
+                            <td>@FormatUtility.DisplayThousandSeparatorsForNumber(liabilityViewModel.Liability.Value)</td>
                             <td>@FormatUtility.DisplayPercentageForNumber(liabilityViewModel.Liability.InterestRate)</td>
                             <td>@liabilityViewModel.Liability.StartDate.ToString("MM/yyyy")</td>
                             <td>@liabilityViewModel.Liability.EndDate.ToString("MM/yyyy")</td>
@@ -159,7 +159,7 @@
             }); }
 </div>
 
-<div class="update-modal">
+<div class="update-liability-modal-div">
 
 </div>
 

@@ -173,17 +173,7 @@ namespace CashFlowManagement.Queries
                     liabilityViewModel.RemainedValue = 0;
                 }
 
-                assetViewModel.LiabilityList.List.Add(liabilityViewModel);
-                if (!liability.ParentLiabilityId.HasValue)
-                {
-                    assetViewModel.TotalMortgageValue += liabilityViewModel.Liability.Value;
-                    assetViewModel.TotalInterestPayment += liabilityViewModel.MonthlyInterestPayment;
-                    assetViewModel.TotalOriginalPayment += liabilityViewModel.MonthlyOriginalPayment;
-                    assetViewModel.TotalMonthlyPayment += liabilityViewModel.MonthlyPayment;
-                    assetViewModel.TotalRemainingValue += liabilityViewModel.RemainedValue;
-                    assetViewModel.TotalAnnualPayment += liabilityViewModel.AnnualPayment;
-                }
-                assetViewModel.AverageInterestRate = 100 * assetViewModel.TotalAnnualPayment / assetViewModel.TotalMortgageValue;
+                result.List.Add(liabilityViewModel);
             }
             return result;
         }
@@ -308,115 +298,148 @@ namespace CashFlowManagement.Queries
             Entities entities = new Entities();
             DateTime current = DateTime.Now;
             int result = 0;
-
             Liabilities parentLiability = entities.Liabilities.Where(x => x.Id == data.Id).FirstOrDefault();
-            List<Liabilities> liabilities = entities.Liabilities.Where(x => x.ParentLiabilityId == data.Id && !x.DisabledDate.HasValue).OrderByDescending(x => x.StartDate).ToList();
 
-            if (data.InterestRate > 0)
+            if (data.LiabilityType == (int)Constants.Constants.LIABILITY_TYPE.REAL_ESTATE ||
+               data.LiabilityType == (int)Constants.Constants.LIABILITY_TYPE.BUSINESS)
             {
-                Liabilities start = liabilities.Where(x => x.StartDate < data.StartDate).OrderByDescending(x => x.StartDate).FirstOrDefault();
-                if (start != null)
-                {
-                    start.EndDate = data.StartDate.AddMonths(-1);
-                    entities.Liabilities.Attach(start);
-                    var entry = entities.Entry(start);
-                    entry.Property(x => x.EndDate).IsModified = true;
-                }
+                List<Liabilities> liabilities = entities.Liabilities.Where(x => x.ParentLiabilityId == data.Id && !x.DisabledDate.HasValue).OrderByDescending(x => x.StartDate).ToList();
 
-                List<Liabilities> middle = liabilities.Where(x => x.StartDate >= data.StartDate && x.EndDate <= data.EndDate).ToList();
-                if (middle.Any())
+                if (data.InterestRate > 0)
                 {
-                    foreach (var item in middle)
+                    Liabilities start = liabilities.Where(x => x.StartDate < data.StartDate).OrderByDescending(x => x.StartDate).FirstOrDefault();
+                    if (start != null)
                     {
-                        item.DisabledDate = current;
-                        item.DisabledBy = Constants.Constants.USER;
+                        start.EndDate = data.StartDate.AddMonths(-1);
+                        entities.Liabilities.Attach(start);
+                        var entry = entities.Entry(start);
+                        entry.Property(x => x.EndDate).IsModified = true;
                     }
+
+                    List<Liabilities> middle = liabilities.Where(x => x.StartDate >= data.StartDate && x.EndDate <= data.EndDate).ToList();
+                    if (middle.Any())
+                    {
+                        foreach (var item in middle)
+                        {
+                            item.DisabledDate = current;
+                            item.DisabledBy = Constants.Constants.USER;
+                        }
+                    }
+
+                    Liabilities updated_liability = new Liabilities();
+                    updated_liability.Name = parentLiability.Name;
+                    updated_liability.Value = parentLiability.Value;
+                    updated_liability.InterestType = parentLiability.InterestType;
+                    updated_liability.InterestRate = data.InterestRate;
+                    updated_liability.CreatedDate = current;
+                    updated_liability.CreatedBy = Constants.Constants.USER;
+                    updated_liability.StartDate = data.StartDate;
+                    updated_liability.EndDate = data.EndDate;
+                    updated_liability.AssetId = parentLiability.AssetId;
+                    updated_liability.ParentLiabilityId = parentLiability.Id;
+                    updated_liability.LiabilityType = parentLiability.LiabilityType;
+                    entities.Liabilities.Add(updated_liability);
+
+                    Liabilities end = liabilities.Where(x => x.EndDate > data.EndDate).OrderBy(x => x.EndDate).FirstOrDefault();
+                    if (end != null)
+                    {
+                        end.StartDate = data.EndDate.AddMonths(1);
+                        entities.Liabilities.Attach(end);
+                        var entry = entities.Entry(end);
+                        entry.Property(x => x.StartDate).IsModified = true;
+                        entry.Property(x => x.InterestRate).IsModified = true;
+                    }
+                    else if (data.EndDate != parentLiability.EndDate)
+                    {
+                        end = new Liabilities();
+                        end.Name = parentLiability.Name;
+                        end.Value = parentLiability.Value;
+                        end.InterestType = parentLiability.InterestType;
+                        end.InterestRate = parentLiability.InterestRate;
+                        end.CreatedDate = current;
+                        end.CreatedBy = Constants.Constants.USER;
+                        end.StartDate = data.EndDate.AddMonths(1);
+                        end.EndDate = parentLiability.EndDate;
+                        end.AssetId = parentLiability.AssetId;
+                        end.ParentLiabilityId = parentLiability.Id;
+                        end.LiabilityType = parentLiability.LiabilityType;
+                        entities.Liabilities.Add(end);
+                    }
+
+                    result = entities.SaveChanges();
                 }
-
-                Liabilities updated_liability = new Liabilities();
-                updated_liability.Name = parentLiability.Name;
-                updated_liability.Value = parentLiability.Value;
-                updated_liability.InterestType = parentLiability.InterestType;
-                updated_liability.InterestRate = data.InterestRate;
-                updated_liability.CreatedDate = current;
-                updated_liability.CreatedBy = Constants.Constants.USER;
-                updated_liability.StartDate = data.StartDate;
-                updated_liability.EndDate = data.EndDate;
-                updated_liability.AssetId = parentLiability.AssetId;
-                updated_liability.ParentLiabilityId = parentLiability.Id;
-                updated_liability.LiabilityType = parentLiability.LiabilityType;
-                entities.Liabilities.Add(updated_liability);
-
-                Liabilities end = liabilities.Where(x => x.EndDate > data.EndDate).OrderBy(x => x.EndDate).FirstOrDefault();
-                if (end != null)
+                else
                 {
-                    end.StartDate = data.EndDate.AddMonths(1);
-                    entities.Liabilities.Attach(end);
-                    var entry = entities.Entry(end);
+                    parentLiability.Name = data.Name;
+                    parentLiability.Value = data.Value;
+                    parentLiability.InterestType = data.InterestType;
+                    parentLiability.StartDate = data.StartDate;
+                    parentLiability.EndDate = data.EndDate;
+
+                    entities.Liabilities.Attach(parentLiability);
+                    var entry = entities.Entry(parentLiability);
+                    entry.Property(x => x.Name).IsModified = true;
+                    entry.Property(x => x.Value).IsModified = true;
+                    entry.Property(x => x.InterestType).IsModified = true;
                     entry.Property(x => x.StartDate).IsModified = true;
-                    entry.Property(x => x.InterestRate).IsModified = true;
-                }
-                else if (data.EndDate != parentLiability.EndDate)
-                {
-                    end = new Liabilities();
-                    end.Name = parentLiability.Name;
-                    end.Value = parentLiability.Value;
-                    end.InterestType = parentLiability.InterestType;
-                    end.InterestRate = parentLiability.InterestRate;
-                    end.CreatedDate = current;
-                    end.CreatedBy = Constants.Constants.USER;
-                    end.StartDate = data.EndDate.AddMonths(1);
-                    end.EndDate = parentLiability.EndDate;
-                    end.AssetId = parentLiability.AssetId;
-                    end.ParentLiabilityId = parentLiability.Id;
-                    end.LiabilityType = parentLiability.LiabilityType;
-                    entities.Liabilities.Add(end);
-                }
+                    entry.Property(x => x.EndDate).IsModified = true;
 
-                result = entities.SaveChanges();
+                    foreach (var liability in liabilities)
+                    {
+                        liability.DisabledDate = current;
+                        liability.DisabledBy = Constants.Constants.USER;
+                        entities.Liabilities.Attach(liability);
+                        entry = entities.Entry(liability);
+                        entry.Property(x => x.DisabledDate).IsModified = true;
+                        entry.Property(x => x.DisabledBy).IsModified = true;
+                    }
+
+                    Liabilities childLiability = new Liabilities();
+                    childLiability.Name = data.Name;
+                    childLiability.Value = data.Value;
+                    childLiability.InterestType = data.InterestType;
+                    childLiability.InterestRate = parentLiability.InterestRate;
+                    childLiability.StartDate = data.StartDate;
+                    childLiability.EndDate = data.EndDate;
+                    childLiability.CreatedDate = current;
+                    childLiability.CreatedBy = Constants.Constants.USER;
+                    childLiability.AssetId = parentLiability.AssetId;
+                    childLiability.ParentLiabilityId = data.Id;
+                    childLiability.LiabilityType = parentLiability.LiabilityType;
+
+                    entities.Liabilities.Add(childLiability);
+                    result = entities.SaveChanges();
+                }
             }
             else
             {
-                parentLiability.Name = data.Name;
-                parentLiability.Value = data.Value;
-                parentLiability.InterestType = data.InterestType;
-                parentLiability.StartDate = data.StartDate;
-                parentLiability.EndDate = data.EndDate;
+                parentLiability.DisabledDate = DateTime.Now;
+                parentLiability.DisabledBy = Constants.Constants.USER;
 
                 entities.Liabilities.Attach(parentLiability);
                 var entry = entities.Entry(parentLiability);
-                entry.Property(x => x.Name).IsModified = true;
-                entry.Property(x => x.Value).IsModified = true;
-                entry.Property(x => x.InterestType).IsModified = true;
-                entry.Property(x => x.StartDate).IsModified = true;
-                entry.Property(x => x.EndDate).IsModified = true;
+                entry.Property(x => x.DisabledBy).IsModified = true;
+                entry.Property(x => x.DisabledDate).IsModified = true;
 
-                foreach (var liability in liabilities)
-                {
-                    liability.DisabledDate = current;
-                    liability.DisabledBy = Constants.Constants.USER;
-                    entities.Liabilities.Attach(liability);
-                    entry = entities.Entry(liability);
-                    entry.Property(x => x.DisabledDate).IsModified = true;
-                    entry.Property(x => x.DisabledBy).IsModified = true;
-                }
+                Liabilities updated_liability = new Liabilities();
+                updated_liability.Name = data.Name;
+                updated_liability.Purpose = data.Purpose;
+                updated_liability.OriginalValue = data.OriginalValue;
+                updated_liability.Value = data.Value;
+                updated_liability.InterestType = data.InterestType;
+                updated_liability.InterestRate = parentLiability.InterestRate;
+                updated_liability.StartDate = data.StartDate;
+                updated_liability.EndDate = data.EndDate;
+                updated_liability.CreatedDate = current;
+                updated_liability.CreatedBy = Constants.Constants.USER;
+                updated_liability.Username = parentLiability.Username;
+                updated_liability.LiabilityType = parentLiability.LiabilityType;
+                updated_liability.Note = data.Note;
 
-                Liabilities childLiability = new Liabilities();
-                childLiability.Name = data.Name;
-                childLiability.Value = data.Value;
-                childLiability.InterestType = data.InterestType;
-                childLiability.InterestRate = parentLiability.InterestRate;
-                childLiability.StartDate = data.StartDate;
-                childLiability.EndDate = data.EndDate;
-                childLiability.CreatedDate = current;
-                childLiability.CreatedBy = Constants.Constants.USER;
-                childLiability.AssetId = parentLiability.AssetId;
-                childLiability.ParentLiabilityId = data.Id;
-                childLiability.LiabilityType = parentLiability.LiabilityType;
-
-                entities.Liabilities.Add(childLiability);
+                entities.Liabilities.Add(updated_liability);
                 result = entities.SaveChanges();
             }
+            
             return result;
         }
 

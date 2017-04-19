@@ -31,7 +31,7 @@ namespace CashFlowManagement.Controllers
         public PartialViewResult _LiabilityUpdateModal(int id, string trigger)
         {
             Liabilities liability = LiabilityQueries.GetLiabilityById(id);
-            if(trigger.Equals("edit-no-rate"))
+            if(trigger != null && trigger.Equals("edit-no-rate"))
             {
                 liability.InterestRate = 0;
             }
