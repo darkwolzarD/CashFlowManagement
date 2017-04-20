@@ -31,11 +31,11 @@
     $(document).on("click", ".minimize-sidebar", function () {
         if ($(".menu").width() > 0) {
             $(".menu").css("width", "0");
-            $(".content").css("cssText", "padding-left: 60px !important");
+            $(".content").css("cssText", "padding-left: 20px !important");
         }
         else {
             $(".menu").css("width", "180px");
-            $(".content").css("cssText", "padding-left: 240px !important");
+            $(".content").css("cssText", "padding-left: 200px !important");
         }
     })
 })

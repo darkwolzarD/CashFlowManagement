@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using CashFlowManagement.Constants
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -38,12 +39,12 @@
                         <img src="~/images/Generic_Avatar.png" class="img-circle" width="80">
                     </div>
                     <span class="username">ROBERT RAZER</span>
-                    <span class="income-this-month">$1,000,000</span>
+                    <span class="income-this-month">100.000.000 vnd</span>
                 </div>
                 <ul class="navigation-bar">
                     <li><a href="#">Báo cáo tài chính</a></li>
                     <li>
-                        <a href="@Url.Action("Index", "Salary")">
+                        <a href="@Url.Action("IncomeTable", "Income", new { type = (int)Constants.INCOME_TYPE.SALARY_INCOME })">
                             <span class="nav-label">Thu nhập lương</span>
                         </a>
                         
@@ -54,10 +55,12 @@
                             <span class="fa fa-angle-left"></span>
                         </a>
                         <ul class="second-navbar">
-                            <li><a href="@Url.Action("Index", "RealEstate")">Bất động sản</a></li>
-                            <li><a href="@Url.Action("Index", "Business")">Kinh doanh</a></li>
-                            <li><a href="@Url.Action("Index", "BankDeposit")">Tài khoản tiết kiệm</a></li>
-                            <li><a href="@Url.Action("Index", "Dividend")">Chứng khoán</a></li>
+                            <li><a href="@Url.Action("AssetTable", "Asset", new { type = (int)Constants.ASSET_TYPE.REAL_ESTATE })">Bất động sản</a></li>
+                            <li><a href="@Url.Action("AssetTable", "Asset", new { type = (int)Constants.ASSET_TYPE.BUSINESS })">Kinh doanh</a></li>
+                            <li><a href="@Url.Action("AssetTable", "Asset", new { type = (int)Constants.ASSET_TYPE.BANK_DEPOSIT })">Tài khoản tiết kiệm</a></li>
+                            <li><a href="@Url.Action("AssetTable", "Asset", new { type = (int)Constants.ASSET_TYPE.STOCK })">Chứng khoán</a></li>
+                            <li><a href="@Url.Action("AssetTable", "Asset", new { type = (int)Constants.ASSET_TYPE.INSURANCE })">Bảo hiểm nhân thọ</a></li>
+                            <li><a href="@Url.Action("AssetTable", "Asset", new { type = (int)Constants.ASSET_TYPE.OTHERS })">Tài sản khác</a></li>
                         </ul>
                     </li>
                     <li>
@@ -66,8 +69,8 @@
                             <span class="fa fa-angle-left"></span>
                         </a>
                         <ul class="second-navbar">
-                            <li><a href="#">Chi tiêu gia đình</a></li>
-                            <li><a href="#">Chi tiêu khác</a></li>
+                            <li><a href="@Url.Action("ExpenseTable", "Expense", new { type = (int)Constants.EXPENSE_TYPE.FAMILY })">Chi tiêu gia đình</a></li>
+                            <li><a href="@Url.Action("ExpenseTable", "Expense", new { type = (int)Constants.EXPENSE_TYPE.OTHERS })">Chi tiêu khác</a></li>
                         </ul>
                     </li>
                     <li>
@@ -76,9 +79,9 @@
                             <span class="fa fa-angle-left"></span>
                         </a>
                         <ul class="second-navbar">
-                            <li><a href="#">Xe hơi và tiêu sản</a></li>
-                            <li><a href="#">Credit cards</a></li>
-                            <li><a href="#">Nợ khác</a></li>
+                            <li><a href="@Url.Action("LiabilityTable", "Liability", new { type = (int)Constants.LIABILITY_TYPE.CAR })">Xe hơi và tiêu sản</a></li>
+                            <li><a href="@Url.Action("LiabilityTable", "Liability", new { type = (int)Constants.LIABILITY_TYPE.CREDIT_CARD })">Thẻ tín dụng</a></li>
+                            <li><a href="@Url.Action("LiabilityTable", "Liability", new { type = (int)Constants.LIABILITY_TYPE.OTHERS })">Nợ khác</a></li>
                         </ul>
                     </li>
                     <li><a href="#">Log</a></li>

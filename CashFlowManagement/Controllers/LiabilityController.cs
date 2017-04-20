@@ -23,7 +23,8 @@ namespace CashFlowManagement.Controllers
             Liabilities model = new Liabilities
             {
                 AssetId = assetId,
-                LiabilityType = type == (int)Constants.Constants.ASSET_TYPE.REAL_ESTATE ? (int)Constants.Constants.LIABILITY_TYPE.REAL_ESTATE : 0
+                LiabilityType = type == (int)Constants.Constants.ASSET_TYPE.REAL_ESTATE ? (int)Constants.Constants.LIABILITY_TYPE.REAL_ESTATE : 
+                type == (int)Constants.Constants.ASSET_TYPE.BUSINESS ? (int)Constants.Constants.LIABILITY_TYPE.BUSINESS : 0
             };
             return PartialView(model);
         }

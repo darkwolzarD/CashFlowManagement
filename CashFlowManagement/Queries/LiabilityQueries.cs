@@ -94,7 +94,8 @@ namespace CashFlowManagement.Queries
             DateTime current = DateTime.Now;
             current = new DateTime(current.Year, current.Month, 1);
             Entities entities = new Entities();
-            double interestRate = entities.Liabilities.Where(x => x.ParentLiabilityId.HasValue && x.ParentLiabilityId == parentLoanId && !x.DisabledDate.HasValue && x.StartDate <= current && x.EndDate > current).FirstOrDefault().InterestRate;
+            var queryResult = entities.Liabilities.Where(x => x.ParentLiabilityId.HasValue && x.ParentLiabilityId == parentLoanId && !x.DisabledDate.HasValue && x.StartDate <= current && x.EndDate > current);
+            double interestRate = queryResult.Any() ? queryResult.FirstOrDefault().InterestRate : 0;
             return interestRate;
         }
 
@@ -106,6 +107,13 @@ namespace CashFlowManagement.Queries
             foreach (var assetViewModel in assetListViewModel.List)
             {
                 assetViewModel.LiabilityList = GetLiabilityViewModelByAssetViewModel(assetViewModel);
+                assetViewModel.TotalMortgageValue = assetViewModel.LiabilityList.List.Where(x => !x.Liability.ParentLiabilityId.HasValue).Sum(x => x.Liability.Value);
+                assetViewModel.TotalInterestPayment = assetViewModel.LiabilityList.List.Where(x => !x.Liability.ParentLiabilityId.HasValue).Sum(x => x.MonthlyInterestPayment);
+                assetViewModel.TotalOriginalPayment = assetViewModel.LiabilityList.List.Where(x => !x.Liability.ParentLiabilityId.HasValue).Sum(x => x.MonthlyOriginalPayment);
+                assetViewModel.TotalMonthlyPayment = assetViewModel.LiabilityList.List.Where(x => !x.Liability.ParentLiabilityId.HasValue).Sum(x => x.MonthlyPayment);
+                assetViewModel.TotalAnnualPayment = assetViewModel.LiabilityList.List.Where(x => !x.Liability.ParentLiabilityId.HasValue).Sum(x => x.AnnualPayment);
+                assetViewModel.TotalRemainingValue = assetViewModel.LiabilityList.List.Where(x => !x.Liability.ParentLiabilityId.HasValue).Sum(x => x.RemainedValue);
+                assetViewModel.AverageInterestRate = assetViewModel.TotalAnnualPayment / assetViewModel.TotalMortgageValue * 100;
                 result.List.Add(assetViewModel);
             }
             return result;
