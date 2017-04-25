@@ -2,7 +2,7 @@
 @using CashFlowManagement.EntityModel
 @model CashFlowManagement.ViewModels.AssetViewModel
 <div id="buy-new-asset-modal" class="modal fade" role="dialog">
-    <div class="modal-dialog">
+    <div class="modal-dialog" style="width: 900px">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -79,13 +79,50 @@
                         </div>
                     }
                 </form>
+                <table id="liability-table" class="table table-bordered table-condensed table-responsive">
+                    <thead>
+                        <tr>
+                            <th>Nguồn vay nợ</th>
+                            <th>Giá trị nợ</th>
+                            <th>Loại lãi suất</th>
+                            <th>Lãi vay</th>
+                            <th>Ngày bắt đầu vay</th>
+                            <th>Ngày trả hết nợ</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <input type="text" class="form-control input-sm" name="Name"/>
+                            </td>
+                            <td>
+                                <input type="text" class="form-control input-sm input-mask" name="Value"/>
+                            </td>
+                            <td width="120">
+                                <select class="form-control input-sm" name="InterestType">
+                                    <option value="1">Cố định</option>
+                                    <option value="2">Giảm dần</option>
+                                </select>
+                            </td>
+                            <td>
+                                <input type="text" class="form-control input-sm percentage" name="InterestRate"/>
+                            </td>
+                            <td>
+                                <input type="text" class="form-control input-sm date-picker" name="StartDate"/>
+                            </td>
+                            <td>
+                                <input type="text" class="form-control input-sm date-picker" name="EndDate"/>
+                            </td>
+                            <td>
+                                <button class="btn btn-primary create-buy-liability">Vay nợ</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
             <div class="modal-footer text-center">
-                <button type="button" class="btn btn-primary create-new-liability" data-asset-id="0" data-asset-type="@((int)Constants.ASSET_TYPE.REAL_ESTATE)">
-                    <span class="glyphicon glyphicon-plus"></span>
-                    Vay nợ
-                </button>
-                <button type="button" class="btn btn-success create-asset">Tạo mới</button>
+                <button type="button" class="btn btn-success buy-asset">Mua mới</button>
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Đóng</button>
             </div>
         </div>

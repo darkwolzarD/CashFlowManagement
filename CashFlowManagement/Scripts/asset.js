@@ -185,21 +185,45 @@
         RemoveMask();
         var data = $("#create-new-liability-modal .form-horizontal").serialize();
 
-        $.ajax({
-            url: Url.CreateLiability,
-            type: "post",
-            data: data,
-            success: function (data) {
-                if (data.result > 0) {
-                    $("#create-new-liability-modal").modal("hide");
-                    LoadTable();
+        if ($("#create-new-liability-modal .form-horizontal #AssetId").val() > 0) {
+            $.ajax({
+                url: Url.CreateLiability,
+                type: "post",
+                data: data,
+                success: function (data) {
+                    if (data.result > 0) {
+                        $("#create-new-liability-modal").modal("hide");
+                        LoadTable();
+                    }
+                    else {
+                        alert("Có lỗi xảy ra");
+                    }
                 }
-                else {
-                    alert("Có lỗi xảy ra");
-                }
-            }
-        })
-        MaskInput();
+            })
+            MaskInput();
+        }
+        else {
+            $("#create-new-asset-modal .form-horizontal .liability-table")
+        }
+    })
+
+    $(document).on("click", ".create-buy-liability", function () {
+        var name = $("#liability-table input[name='Name']").val();
+        var value = $("#liability-table input[name='Value']").val();
+        var interestType = $("#liability-table select[name='InterestType']").val();
+        var interestRate = $("#liability-table input[name='InterestRate']").val();
+        var startDate = $("#liability-table input[name='StartDate']").val();
+        var endDate = $("#liability-table input[name='EndDate']").val();
+        var newRow = "<tr>"; 
+        newRow += "<td>" + name + "</td>";
+        newRow += "<td>" + value + "</td>";
+        newRow += "<td>" + interestType + "</td>";
+        newRow += "<td>" + interestRate + "</td>";
+        newRow += "<td>" + startDate + "</td>";
+        newRow += "<td>" + endDate + "</td>";
+        newRow += "<td></td>";
+        newRow += "</tr>";
+        $("#liability-table tbody").append(newRow);
     })
 
     $(document).on("click", ".update-liability", function () {
