@@ -22,6 +22,8 @@
         <AssociationConnector Association="CFMModel.FK_Incomes_Users" />
         <AssociationConnector Association="CFMModel.FK_Liabilities_Liabilities" />
         <AssociationConnector Association="CFMModel.FK_Liabilities_Users" />
+        <EntityTypeShape EntityType="CFMModel.Log" Width="1.5" PointX="3" PointY="12.25" />
+        <AssociationConnector Association="CFMModel.FK_Log_Users" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

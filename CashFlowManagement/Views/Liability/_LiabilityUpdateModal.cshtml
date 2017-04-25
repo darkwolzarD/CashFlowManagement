@@ -15,7 +15,8 @@
                     @Html.TextBoxFor(x => x.Id, new { @type = "text", @class = "hidden", @readonly = true })
                     @Html.TextBoxFor(x => x.LiabilityType, new { @type = "text", @class = "hidden", @readonly = true })
                     @Html.TextBoxFor(x => x.Username, new { @type = "text", @class = "hidden", @readonly = true })
-                    @if (Model.InterestRate == 0)
+                    @if (Model.InterestRate == 0 || (Model.InterestRate > 0 && (Model.LiabilityType == (int)Constants.LIABILITY_TYPE.CAR ||
+                Model.LiabilityType == (int)Constants.LIABILITY_TYPE.CREDIT_CARD || Model.LiabilityType == (int)Constants.LIABILITY_TYPE.OTHERS)))
                     {
                         if (Model.LiabilityType == (int)Constants.LIABILITY_TYPE.OTHERS)
                         {
@@ -55,15 +56,22 @@
                                 {
                                     @Html.Raw("Số tiền vay:");
                                 }
+                                else if (Model.LiabilityType == (int)Constants.LIABILITY_TYPE.CREDIT_CARD)
+                                {
+                                    @Html.Raw("Giá trị đã dùng:");
+                                }
                             </label>
                             <div class="col-sm-9">
                                 @Html.TextBoxFor(x => x.Value, new { @type = "text", @class = "form-control input-mask" })
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label class="control-label col-sm-3">Loại lãi suất:</label>
-                            <div class="col-sm-9">
-                                @Html.DropDownListFor(x => x.InterestType, new List<SelectListItem> {
+                        if (Model.InterestRate == 0 && (Model.LiabilityType == (int)Constants.LIABILITY_TYPE.REAL_ESTATE ||
+                    Model.LiabilityType == (int)Constants.LIABILITY_TYPE.BUSINESS))
+                        {
+                            <div class="form-group">
+                                <label class="control-label col-sm-3">Loại lãi suất:</label>
+                                <div class="col-sm-9">
+                                    @Html.DropDownListFor(x => x.InterestType, new List<SelectListItem> {
                                                                                                    new SelectListItem
                                                                                                    {
                                                                                                        Text = "Cố định",
@@ -77,8 +85,9 @@
                                                                                                        Selected = true
                                                                                                    },
                                                                                                 }, new { @type = "text", @class = "form-control" })
+                                </div>
                             </div>
-                        </div>
+                        }
                     }
                     @if (Model.InterestRate > 0)
                     {

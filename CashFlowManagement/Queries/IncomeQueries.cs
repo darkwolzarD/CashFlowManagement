@@ -16,7 +16,8 @@ namespace CashFlowManagement.Queries
             IncomeListViewModel result = new IncomeListViewModel
             {
                 List = queryResult,
-                Type = type
+                Type = type,
+                TotalMonthlyIncome = queryResult.Sum(x => x.Value)
             };
             return result;
         }
@@ -37,6 +38,10 @@ namespace CashFlowManagement.Queries
             income.CreatedBy = Constants.Constants.USER;
 
             entities.Incomes.Add(income);
+
+            Log log = LogQueries.CreateLog((int)Constants.Constants.LOG_TYPE.ADD, "thu nhập \"" + income.Name + "\"", username, income.Value);
+            entities.Log.Add(log);
+
             int result = entities.SaveChanges();
             return result;
         }
@@ -63,6 +68,10 @@ namespace CashFlowManagement.Queries
             updated_income.Username = username;
 
             entities.Incomes.Add(updated_income);
+
+            Log log = LogQueries.CreateLog((int)Constants.Constants.LOG_TYPE.UPDATE, "thu nhập \"" + income.Name + "\"", username, income.Value);
+            entities.Log.Add(log);
+
             int result = entities.SaveChanges();
             return result;
         }
@@ -79,6 +88,9 @@ namespace CashFlowManagement.Queries
             var entry = entities.Entry(income);
             entry.Property(x => x.DisabledDate).IsModified = true;
             entry.Property(x => x.DisabledBy).IsModified = true;
+
+            Log log = LogQueries.CreateLog((int)Constants.Constants.LOG_TYPE.DELETE, "thu nhập \"" + income.Name + "\"", income.Username, income.Value);
+            entities.Log.Add(log);
 
             int result = entities.SaveChanges();
             return result;

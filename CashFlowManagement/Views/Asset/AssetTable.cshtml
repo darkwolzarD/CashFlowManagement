@@ -23,29 +23,33 @@
     {
         title = "Chi tiết kinh doanh";
     }
+    else if (Model.Type == (int)Constants.ASSET_TYPE.OTHERS)
+    {
+        title = "Chi tiết các tài sản khác";
+    }
     int count = 0;
     int rsCount = 0;
     int childCount = 0;
 }
 
+
+<ol class="breadcrumb">
+    <li class="active">Tài sản</li>
+    <li class="active">@title</li>
+</ol>
+
 <div class="background">
-    <h3 class="text-center">@title</h3>
-
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#create-new-asset-modal">
-        @if (Model.Type == (int)Constants.ASSET_TYPE.BANK_DEPOSIT)
-        {
-            @Html.Raw("Tạo mới tài khoản tiết kiệm")
-        }
-        else if (Model.Type == (int)Constants.ASSET_TYPE.REAL_ESTATE)
-        {
-            @Html.Raw("Tạo mới bất động sản")
-        }
-        else if (Model.Type == (int)Constants.ASSET_TYPE.BUSINESS)
-        {
-            @Html.Raw("Tạo mới kinh doanh")
-        }
+        <span class="glyphicon glyphicon-plus"></span>
+        Tạo mới
     </button>
-
+    @if (Model.Type == (int)Constants.ASSET_TYPE.REAL_ESTATE)
+    {
+        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#buy-new-asset-modal">
+            <span class="glyphicon glyphicon-home"></span>
+            Mua mới
+        </button>
+    }
     <div class="asset-table">
         <table class="table table-bordered table-condensed table-responsive">
             <thead>
@@ -54,32 +58,41 @@
                     {
                         <th>Tài khoản tiết kiệm</th>
                         <th>Thu nhập tháng</th>
-                        <th>Thu nhập năm</th>
-                        <th>Tổng vốn</th>
-                        <th>Lãi suất tiền gửi</th>
-                        <th>Participant bank</th>
-                        <th>Ghi chú</th>
-                        <th></th>
+                                    <th>Thu nhập năm</th>
+                                    <th>Tổng vốn</th>
+                                    <th>Lãi suất tiền gửi</th>
+                                    <th>Participant bank</th>
+                                    <th>Ghi chú</th>
+                                    <th></th>
                     }
                     else if (Model.Type == (int)Constants.ASSET_TYPE.REAL_ESTATE)
                     {
                         <th class="text-center">Bất động sản</th>
                         <th class="text-center" colspan="2">Thu nhập hàng tháng cho thuê</th>
-                        <th class="text-center" colspan="2">Thu nhập hàng năm cho thuê</th>
-                        <th class="text-center" colspan="2">Trị giá tài sản</th>
-                        <th class="text-center" colspan="2">Tỷ suất lợi nhuận cho thuê</th>
-                        <th colspan="4"></th>
-                        <th class="text-center"><strong>Hôm nay: @(DateTime.Now.ToString("MM/yyyy"))</strong></th>
+                                    <th class="text-center" colspan="2">Thu nhập hàng năm cho thuê</th>
+                                    <th class="text-center" colspan="2">Trị giá tài sản</th>
+                                    <th class="text-center" colspan="2">Tỷ suất lợi nhuận cho thuê</th>
+                                    <th class="text-center" colspan="4">Chỉnh sửa</th>
+                                    <th class="text-center"><strong>Hôm nay: @(DateTime.Now.ToString("MM/yyyy"))</strong></th>
                     }
                     else if (Model.Type == (int)Constants.ASSET_TYPE.BUSINESS)
                     {
                         <th class="text-center">Kinh doanh</th>
-                        <th class="text-center">Thu hàng tháng</th>
-                        <th class="text-center">Thu hàng năm</th>
-                        <th class="text-center">Giá trị góp vốn</th>
-                        <th class="text-center">Tỷ suất lợi nhuận</th>
-                        <th colspan="4"></th>
-                        <th class="text-center"><strong>Hôm nay: @(DateTime.Now.ToString("MM/yyyy"))</strong></th>
+                        <th class="text-center" colspan="2">Thu hàng tháng</th>
+                                    <th class="text-center" colspan="2">Thu hàng năm</th>
+                                    <th class="text-center" colspan="2">Giá trị góp vốn</th>
+                                    <th class="text-center" colspan="2">Tỷ suất lợi nhuận</th>
+                                    <th class="text-center" colspan="4">Chỉnh sửa</th>
+                                    <th class="text-center"><strong>Hôm nay: @(DateTime.Now.ToString("MM/yyyy"))</strong></th>
+                    }
+                    else if (Model.Type == (int)Constants.ASSET_TYPE.OTHERS)
+                    {
+                        <th class="text-center">Tài sản khác</th>
+                        <th class="text-center">Thu nhập hàng tháng</th>
+                                    <th class="text-center">Thu nhập hàng năm</th>
+                                    <th class="text-center">Tổng giá trị</th>
+                                    <th class="text-center">Tỷ suất sinh lời</th>
+                                    <th class="text-center" colspan="4">Chỉnh sửa</th>
                     }
                 </tr>
             </thead>
@@ -89,7 +102,7 @@
                     foreach (var item in Model.List)
                     {
                         <tr class="rs-@rsCount">
-                            <td class="text-center" style="vertical-align: middle" rowspan="@(Model.Type == (int)Constants.ASSET_TYPE.REAL_ESTATE ? item.LiabilityList != null && item.LiabilityList.List.Count > 3 ? item.LiabilityList.List.Count : 3 : 3)"  width="150">@item.Asset.AssetName</td>
+                            <td class="@(Model.Type == (int)Constants.ASSET_TYPE.REAL_ESTATE || Model.Type == (int)Constants.ASSET_TYPE.BUSINESS ? "text-center" : string.Empty)" style="vertical-align: middle" rowspan="@(Model.Type == (int)Constants.ASSET_TYPE.REAL_ESTATE || Model.Type == (int)Constants.ASSET_TYPE.BUSINESS ? item.LiabilityList != null && item.LiabilityList.List.Where(x => !x.Liability.ParentLiabilityId.HasValue).Count() > 0 ? item.LiabilityList.List.Where(x => !x.Liability.ParentLiabilityId.HasValue).Count() + 2 : 3 : 1)" width="120">@item.Asset.AssetName</td>
                             <td colspan="@(Model.Type == (int)Constants.ASSET_TYPE.REAL_ESTATE || Model.Type == (int)Constants.ASSET_TYPE.BUSINESS ? 2 : 1)">@FormatUtility.DisplayThousandSeparatorsForNumber(item.Income.Value)</td>
                             <td colspan="@(Model.Type == (int)Constants.ASSET_TYPE.REAL_ESTATE || Model.Type == (int)Constants.ASSET_TYPE.BUSINESS ? 2 : 1)">@FormatUtility.DisplayThousandSeparatorsForNumber(item.Income.Value * 12)</td>
                             <td colspan="@(Model.Type == (int)Constants.ASSET_TYPE.REAL_ESTATE || Model.Type == (int)Constants.ASSET_TYPE.BUSINESS ? 2 : 1)">@FormatUtility.DisplayThousandSeparatorsForNumber(item.Asset.Value)</td>
@@ -99,14 +112,21 @@
                                 <td>@item.Asset.ParticipantBank</td>
                                 <td>@item.Asset.Note</td>
                             }
-                            <td class="text-center" colspan="@(Model.Type == (int)Constants.ASSET_TYPE.REAL_ESTATE || Model.Type == (int)Constants.ASSET_TYPE.BUSINESS ? 5 : 1)">
+                            <td class="text-center" colspan="@(Model.Type == (int)Constants.ASSET_TYPE.REAL_ESTATE || Model.Type == (int)Constants.ASSET_TYPE.BUSINESS ? 4 : 1)"  width="160px">
                                 <button class="btn btn-success update-asset" data-asset-id="@item.Asset.Id">
                                     <span class="glyphicon glyphicon-pencil"></span>
+                                    Cập nhật
                                 </button>
                                 <button class="btn btn-danger delete-asset" data-asset-id="@item.Asset.Id">
                                     <span class="glyphicon glyphicon-remove"></span>
+                                    Xóa
                                 </button>
                             </td>
+                            @if (item.Asset.AssetType == (int)Constants.ASSET_TYPE.REAL_ESTATE ||
+                    item.Asset.AssetType == (int)Constants.ASSET_TYPE.BUSINESS)
+                            {
+                                <td></td>
+                            }
                         </tr>
                         if (item.Asset.AssetType == (int)Constants.ASSET_TYPE.REAL_ESTATE ||
                             item.Asset.AssetType == (int)Constants.ASSET_TYPE.BUSINESS)
@@ -119,14 +139,15 @@
                                 <th class="text-center">Ngày bắt đầu vay</th>
                                 <th class="text-center">Ngày trả hết nợ</th>
                                 <th class="text-center">Tổng số tháng phải trả</th>
-                                <th class="text-center">Trả lãi hàng tháng</th>
                                 <th class="text-center">Trả gốc hàng tháng</th>
+                                <th class="text-center">Trả lãi hàng tháng</th>
                                 <th class="text-center">Tổng phải trả hàng tháng</th>
                                 <th class="text-center">Tổng phải trả hàng năm</th>
                                 <th class="text-center">Nợ gốc còn phải trả</th>
                                 <th class="text-center" style="vertical-align: middle">
                                     <button type="button" class="btn btn-primary create-new-liability" data-asset-id="@item.Asset.Id" data-asset-type="@Model.Type">
                                         <span class="glyphicon glyphicon-plus"></span>
+                                        Vay
                                     </button>
                                 </th>
                             </tr>
@@ -140,7 +161,16 @@
                                             <a class="update-liability" href="#" data-liability-id="@liabilityViewModel.Liability.Id" data-trigger="edit-no-rate">@FormatUtility.DisplayThousandSeparatorsForNumber(liabilityViewModel.Liability.Value)</a>
                                         </td>
                                         <td>
-                                            <a class="update-liability" href="#" data-liability-id="@liabilityViewModel.Liability.Id" data-trigger="edit-no-rate">@liabilityViewModel.Liability.InterestType</a>
+                                            <a class="update-liability" href="#" data-liability-id="@liabilityViewModel.Liability.Id" data-trigger="edit-no-rate">
+                                                @if (liabilityViewModel.Liability.InterestType == 1)
+                                                {
+                                                    @Html.Raw("Cố định")
+                                                }
+                                                else if (liabilityViewModel.Liability.InterestType == 2)
+                                                {
+                                                    @Html.Raw("Giảm dần")
+                                                }
+                                            </a>
                                         </td>
                                         <td>
                                             <a class="update-liability" href="#" data-liability-id="@liabilityViewModel.Liability.Id" data-trigger="edit-rate">@FormatUtility.DisplayPercentageForNumber(liabilityViewModel.CurrentInterestRate)</a>
@@ -159,15 +189,17 @@
                                         <td>@FormatUtility.DisplayThousandSeparatorsForNumber(liabilityViewModel.MonthlyPayment)</td>
                                         <td>@FormatUtility.DisplayThousandSeparatorsForNumber(liabilityViewModel.AnnualPayment)</td>
                                         <td>@FormatUtility.DisplayThousandSeparatorsForNumber(liabilityViewModel.RemainedValue)</td>
-                                        <td class="text-center" width="100" style="vertical-align: middle">
+                                        <td class="text-center" width="150" style="vertical-align: middle">
                                             @*<button class="btn btn-success update-loan" data-loan-id="@loanViewModel.Loan.Id">
                                                     <span class="glyphicon glyphicon-pencil"></span>
                                                 </button>*@
                                             <button class="btn btn-danger delete-liability" data-liability-id="@liabilityViewModel.Liability.Id">
                                                 <span class="glyphicon glyphicon-remove"></span>
+                                                Xóa
                                             </button>
-                                            <button class="btn btn-primary" href=".detail-@count" data-toggle="collapse">
+                                            <button class="btn btn-warning" href=".detail-@count" data-toggle="collapse">
                                                 <span class="glyphicon glyphicon-zoom-in"></span>
+                                                Chi tiết
                                             </button>
                                         </td>
                                     </tr>
@@ -175,20 +207,20 @@
                                     {
                                         if (childLiabilityViewModel.MonthlyOriginalPayment > 0)
                                         {
-                                            <tr class="detail-@count rs-@rsCount child-@childCount collapse">
-                                                <td style="background-color: aquamarine"></td>
-                                                <td style="background-color: aquamarine"></td>
-                                                <td style="background-color: aquamarine"></td>
-                                                <td style="background-color: aquamarine">@FormatUtility.DisplayPercentageForNumber(childLiabilityViewModel.CurrentInterestRate)</td>
-                                                <td style="background-color: aquamarine">@childLiabilityViewModel.Liability.StartDate.ToString("MM/yyyy")</td>
-                                                <td style="background-color: aquamarine">@childLiabilityViewModel.Liability.EndDate.ToString("MM/yyyy")</td>
-                                                <td style="background-color: aquamarine">@FormatUtility.DisplayThousandSeparatorsForNumber(childLiabilityViewModel.TotalPaymentPeriod)</td>
-                                                <td style="background-color: aquamarine">@FormatUtility.DisplayThousandSeparatorsForNumber(liabilityViewModel.MonthlyOriginalPayment)</td>
-                                                <td style="background-color: aquamarine"><a href="#" class="interest-info" data-loan-id="@childLiabilityViewModel.Liability.Id">@FormatUtility.DisplayThousandSeparatorsForNumber(childLiabilityViewModel.MonthlyInterestPayment)</a></td>
-                                                <td style="background-color: aquamarine">@FormatUtility.DisplayThousandSeparatorsForNumber(childLiabilityViewModel.MonthlyPayment)</td>
-                                                <td style="background-color: aquamarine">@FormatUtility.DisplayThousandSeparatorsForNumber(childLiabilityViewModel.AnnualPayment)</td>
-                                                <td style="background-color: aquamarine">@FormatUtility.DisplayThousandSeparatorsForNumber(childLiabilityViewModel.RemainedValue)</td>
-                                                <td class="text-center" width="100" style="vertical-align: middle; background-color: aquamarine;"></td>
+                                            <tr class="detail-@count rs-@rsCount child-@childCount collapse success">
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td>@FormatUtility.DisplayPercentageForNumber(childLiabilityViewModel.CurrentInterestRate)</td>
+                                                <td>@childLiabilityViewModel.Liability.StartDate.ToString("MM/yyyy")</td>
+                                                <td>@childLiabilityViewModel.Liability.EndDate.ToString("MM/yyyy")</td>
+                                                <td>@FormatUtility.DisplayThousandSeparatorsForNumber(childLiabilityViewModel.TotalPaymentPeriod)</td>
+                                                <td>@FormatUtility.DisplayThousandSeparatorsForNumber(liabilityViewModel.MonthlyOriginalPayment)</td>
+                                                <td><a href="#" class="interest-info" data-loan-id="@childLiabilityViewModel.Liability.Id">@FormatUtility.DisplayThousandSeparatorsForNumber(childLiabilityViewModel.MonthlyInterestPayment)</a></td>
+                                                <td>@FormatUtility.DisplayThousandSeparatorsForNumber(childLiabilityViewModel.MonthlyPayment)</td>
+                                                <td>@FormatUtility.DisplayThousandSeparatorsForNumber(childLiabilityViewModel.AnnualPayment)</td>
+                                                <td>@FormatUtility.DisplayThousandSeparatorsForNumber(childLiabilityViewModel.RemainedValue)</td>
+                                                <td class="text-center" width="100" style="vertical-align: middle;"></td>
                                             </tr>
                                         }
                                         else
@@ -240,7 +272,9 @@
                                     <td colspan="13" class="text-center">Không có khoản nợ</td>
                                 </tr>
                             }
-                            { rsCount++; }
+                            {
+                                rsCount++;
+                            }
                         }
                     }
                 }
@@ -279,6 +313,16 @@
 
 </div>
 
+@if (Model.Type == (int)Constants.ASSET_TYPE.REAL_ESTATE)
+{
+    <div class="buy-asset-modal">
+        @{ Html.RenderPartial("_BuyAssetModal", new AssetViewModel
+            {
+                Asset = new Assets { AssetType = Model.Type },
+                Income = new Incomes()
+            }); }
+    </div>
+}
 
 <script type="text/javascript" src="~/Scripts/asset.js"></script>
 <script type="text/javascript">

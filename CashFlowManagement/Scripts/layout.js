@@ -34,8 +34,8 @@
             $(".content").css("cssText", "padding-left: 20px !important");
         }
         else {
-            $(".menu").css("width", "180px");
-            $(".content").css("cssText", "padding-left: 200px !important");
+            $(".menu").css("width", "160px");
+            $(".content").css("cssText", "padding-left: 180px !important");
         }
     })
 })

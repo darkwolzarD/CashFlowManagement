@@ -19,17 +19,15 @@
     }
 }
 
+<ol class="breadcrumb">
+    <li class="active">Chi tiêu</li>
+    <li class="active">@title</li>
+</ol>
+
 <div class="background">
-    <h3 class="text-center">@title</h3>
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#create-new-expense-modal">
-        @if (Model.Type == (int)Constants.EXPENSE_TYPE.FAMILY)
-        {
-            @Html.Raw("Tạo mới chi tiêu gia đình")
-        }
-        else if (Model.Type == (int)Constants.EXPENSE_TYPE.OTHERS)
-        {
-            @Html.Raw("Tạo mới chi tiêu khác")
-        }
+        <span class="glyphicon glyphicon-plus"></span>
+        Tạo mới
     </button>
     <div class="expense-table">
         <table class="table table-bordered table-condensed table-responsive">
@@ -37,15 +35,15 @@
                 <tr>
                     @if (Model.Type == (int)Constants.EXPENSE_TYPE.FAMILY)
                     {
-                        <th>Chi tiêu gia đình</th>
+                        <th class="text-center">Chi tiêu gia đình</th>
                     }
                     else if (Model.Type == (int)Constants.EXPENSE_TYPE.OTHERS)
                     {
-                        <th>Chi tiêu khác</th>
+                        <th class="text-center">Chi tiêu khác</th>
                     }
-                    <th>Chi tiêu tháng</th>
-                    <th>Chi tiêu năm</th>
-                    <th></th>
+                    <th class="text-center">Chi tiêu tháng</th>
+                    <th class="text-center">Chi tiêu năm</th>
+                    <th class="text-center">Chỉnh sửa</th>
                 </tr>
             </thead>
             <tbody>
@@ -57,12 +55,14 @@
                             <td>@item.Name</td>
                             <td>@FormatUtility.DisplayThousandSeparatorsForNumber(item.Value)</td>
                             <td>@FormatUtility.DisplayThousandSeparatorsForNumber(item.Value * 12)</td>
-                            <td>
+                            <td class="text-center" width="160px">
                                 <button class="btn btn-success update-expense" data-expense-id="@item.Id">
                                     <span class="glyphicon glyphicon-pencil"></span>
+                                    Cập nhật
                                 </button>
                                 <button class="btn btn-danger delete-expense" data-expense-id="@item.Id">
                                     <span class="glyphicon glyphicon-remove"></span>
+                                    Xóa
                                 </button>
                             </td>
                         </tr>

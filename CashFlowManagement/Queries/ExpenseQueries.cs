@@ -37,6 +37,10 @@ namespace CashFlowManagement.Queries
             expense.CreatedBy = Constants.Constants.USER;
 
             entities.Expenses.Add(expense);
+
+            Log log = LogQueries.CreateLog((int)Constants.Constants.LOG_TYPE.ADD, "chi tiêu \"" + expense.Name + "\"", username, expense.Value);
+            entities.Log.Add(log);
+
             int result = entities.SaveChanges();
             return result;
         }
@@ -62,6 +66,10 @@ namespace CashFlowManagement.Queries
             updated_expense.Username = username;
 
             entities.Expenses.Add(updated_expense);
+
+            Log log = LogQueries.CreateLog((int)Constants.Constants.LOG_TYPE.UPDATE, "chi tiêu \"" + expense.Name + "\"", username, expense.Value);
+            entities.Log.Add(log);
+
             int result = entities.SaveChanges();
             return result;
         }
@@ -78,6 +86,9 @@ namespace CashFlowManagement.Queries
             var entry = entities.Entry(expense);
             entry.Property(x => x.DisabledDate).IsModified = true;
             entry.Property(x => x.DisabledBy).IsModified = true;
+
+            Log log = LogQueries.CreateLog((int)Constants.Constants.LOG_TYPE.DELETE, "chi tiêu \"" + expense.Name + "\"", expense.Username, expense.Value);
+            entities.Log.Add(log);
 
             int result = entities.SaveChanges();
             return result;

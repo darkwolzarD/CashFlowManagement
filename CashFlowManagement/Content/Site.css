@@ -2,7 +2,7 @@
 
 body {
     font-family: 'Open Sans', sans-serif;
-    font-size: 12px;
+    font-size: 11px;
     color: #6a6c6f;
     height: 100%;
     overflow: hidden;
@@ -19,9 +19,9 @@ body {
     border-bottom-right-radius: 0px;
 }
 
-input, textarea, span, button {
+input, textarea, span, button, select {
     border-radius: 0 !important;
-    font-size: 12px !important;
+    font-size: 11px !important;
 } 
 
 table {
@@ -41,11 +41,11 @@ table {
 }
 
 .navbar-brand {
-    width: 180px;
+    width: 160px;
     text-align: center;
     border-right: 1px solid #e4e5e7;
     line-height: 30px;
-    font-size: 13px;
+    font-size: 12px;
     font-weight: bold;
 }
 
@@ -64,7 +64,7 @@ table {
 
 .menu {
     position: fixed;
-    width: 180px;
+    width: 160px;
     height: 100%;
     border-right: 1px solid #e4e5e7;
     background: #f7f9fa;
@@ -73,7 +73,7 @@ table {
 }
 
 .sidebar {
-    width: 197px;
+    width: 177px;
     height: 100%;
     overflow: auto;
 }
@@ -102,7 +102,7 @@ table {
     padding: 0;
     list-style: none;
     height: 100%;
-    width: 200px;
+    width: 180px;
     background: #f7f9fa;
 }
 
@@ -146,7 +146,7 @@ table {
     text-transform: none;
     font-weight: normal;
     font-weight: 600;
-    font-size: 12px;
+    font-size: 11px;
     border: 0;
     border-top: 1px solid #e4e5e7;
     background: #ffffff;
@@ -176,6 +176,7 @@ table {
     background: white;
     padding: 10px;
     border: 1px solid #e4e5e7;
+    height: 100%;
 }
 
 .background h3 {
@@ -183,16 +184,23 @@ table {
 }
 
 .content {
-    min-height: 1000px;
-    padding-left: 200px !important;
     padding-right: 20px !important;
+    padding-left: 180px !important;
     height: 100%;
     width: 100%;
+    min-height: 1000px;
     background: #f1f3f6;
     padding: 20px;
     transition: all 0.4s ease;
 }
 
+table th, table td {
+    vertical-align: middle !important;
+}
+
+#create-new-liability-modal {
+    z-index: 2000;
+}
 
 
 

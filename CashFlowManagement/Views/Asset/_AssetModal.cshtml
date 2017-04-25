@@ -15,12 +15,14 @@
                     {
                         @Html.Raw("Tạo mới bất động sản")
                     }
-
                     else if (Model.Asset.AssetType == (int)Constants.ASSET_TYPE.BUSINESS)
                     {
                         @Html.Raw("Tạo mới kinh doanh")
                     }
-                    
+                    else if (Model.Asset.AssetType == (int)Constants.ASSET_TYPE.OTHERS)
+                    {
+                        @Html.Raw("Tạo mới tài sản khác")
+                    }
                 </h4>
             </div>
             <div class="modal-body">
@@ -39,6 +41,10 @@
                             {
                                 @Html.Raw("Kinh doanh:")
                             }
+                            else if (Model.Asset.AssetType == (int)Constants.ASSET_TYPE.OTHERS)
+                            {
+                                @Html.Raw("Tài sản khác")
+                            }
                         </label>
                         <div class="col-sm-9">
                             @Html.TextBoxFor(x => x.Asset.AssetName, new { @type = "text", @class = "form-control" })
@@ -49,7 +55,7 @@
                         <label class="control-label col-sm-3">
                             @if (Model.Asset.AssetType == (int)Constants.ASSET_TYPE.BANK_DEPOSIT)
                             {
-                                @Html.Raw("Capital value:")
+                                @Html.Raw("Tổng vốn:")
                             }
                             else if (Model.Asset.AssetType == (int)Constants.ASSET_TYPE.REAL_ESTATE)
                             {
@@ -58,6 +64,10 @@
                             else if (Model.Asset.AssetType == (int)Constants.ASSET_TYPE.BUSINESS)
                             {
                                 @Html.Raw("Giá trị góp vốn:")
+                            }
+                            else if (Model.Asset.AssetType == (int)Constants.ASSET_TYPE.OTHERS)
+                            {
+                                @Html.Raw("Tổng giá trị")
                             }
                         </label>
                         <div class="col-sm-9">
@@ -79,7 +89,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-sm-3">Note:</label>
+                            <label class="control-label col-sm-3">Ghi chú:</label>
                             <div class="col-sm-9">
                                 @Html.TextBoxFor(x => x.Asset.Note, new { @type = "text", @class = "form-control" })
                             </div>

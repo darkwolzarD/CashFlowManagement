@@ -32,5 +32,6 @@ namespace CashFlowManagement.EntityModel
         public virtual DbSet<Stocks> Stocks { get; set; }
         public virtual DbSet<Transactions> Transactions { get; set; }
         public virtual DbSet<Users> Users { get; set; }
+        public virtual DbSet<Log> Log { get; set; }
     }
 }

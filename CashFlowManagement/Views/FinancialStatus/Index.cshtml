@@ -1,46 +1,47 @@
 ﻿@using CashFlowManagement.Utilities;
-@model CashFlowManagement.ViewModels.FinancialStatus.FinancialStatusViewModel
+@model CashFlowManagement.ViewModels.FinancialStatusViewModel
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="row text-center">
-    <h2>FINANCIAL STATUS</h2>
-</div>
-
-<div class="row">
-    <h4>Monthly Cashflow: @FormatUtility.DisplayThousandSeparatorsForNumber(Model.MonthlyCashflow)</h4>
-    <h4>Passive Income: @FormatUtility.DisplayThousandSeparatorsForNumber(Model.PassiveIncome)</h4>
-    <h4>Financial Freedom: @FormatUtility.DisplayPercentageForNumber(Model.FinancialFreedom)</h4>
+<div class="background text-left">
+    <h3 class="text-center">Báo cáo tài chính</h3>
+    <div class="col-md-12">
+        <p>
+            Dòng tiền tự do: @FormatUtility.DisplayThousandSeparatorsForNumber(Model.MonthlyCashflow)<br />
+            Thu nhập thụ động: @FormatUtility.DisplayThousandSeparatorsForNumber(Model.PassiveIncome)<br />
+            Tự do tài chính (mức độ cơ bản): @FormatUtility.DisplayPercentageForNumber(Model.FinancialFreedom)<br />
+        </p>
+    </div>
 
     <div class="col-md-6">
         <table class="table table-bordered table-condensed table-striped">
             <thead>
                 <tr>
-                    <th><strong>Income (monthly)</strong></th>
+                    <th><strong>Thu nhập hàng tháng</strong></th>
                     <th><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.TotalIncomes)</strong></th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td>Salary</td>
+                    <td>Thu nhập từ lương</td>
                     <td>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.SalaryIncome)</td>
                 </tr>
                 <tr>
-                    <td>Real estate</td>
+                    <td>Thu nhập từ bất động sản</td>
                     <td>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.RealEstateIncome)</td>
                 </tr>
                 <tr>
-                    <td>Businesses</td>
+                    <td>Thu nhập từ kinh doanh</td>
                     <td>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.BusinessIncome)</td>
                 </tr>
                 <tr>
-                    <td>Interest</td>
+                    <td>Thu nhập từ tiền gửi tiết kiệm</td>
                     <td>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.InterestIncome)</td>
                 </tr>
                 <tr>
-                    <td>Dividends</td>
+                    <td>Thu nhập từ cổ tức</td>
                     <td>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.DividendIncome)</td>
                 </tr>
             </tbody>
@@ -51,30 +52,34 @@
         <table class="table table-bordered table-condensed table-striped">
             <thead>
                 <tr>
-                    <th><strong>Assets</strong></th>
+                    <th><strong>Tài sản</strong></th>
                     <th><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.TotalAssets)</strong></th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td>Available money (cash)</td>
+                    <td>Tiền mặt có sẵn</td>
                     <td>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.AvailableMoney)</td>
                 </tr>
                 <tr>
-                    <td>Total value of real estate</td>
+                    <td>Tổng giá trị các bất động sản</td>
                     <td>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.RealEstateValue)</td>
                 </tr>
                 <tr>
-                    <td>Total value of businesses</td>
+                    <td>Tổng giá trị các hoạt động kinh doanh</td>
                     <td>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.BusinessValue)</td>
                 </tr>
                 <tr>
-                    <td>Total value of bank deposit</td>
+                    <td>Tổng giá trị các khoản gửi tiết kiệm</td>
                     <td>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.BankDepositValue)</td>
                 </tr>
                 <tr>
-                    <td>Totoal value of stocks</td>
+                    <td>Tổng giá trị cổ phiếu</td>
                     <td>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.StockValue)</td>
+                </tr>
+                <tr>
+                    <td>Bảo hiểm nhân thọ và tài sản khác</td>
+                    <td>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.InsuranceValue)</td>
                 </tr>
             </tbody>
         </table>
@@ -84,33 +89,41 @@
         <table class="table table-bordered table-condensed table-striped">
             <thead>
                 <tr>
-                    <th><strong>Expenses (monthly)</strong></th>
+                    <th><strong>Chi tiêu hàng tháng</strong></th>
                     <th><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.TotalExpenses)</strong></th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td>Home morgate</td>
+                    <td>Chi tiêu cho các bất động sản</td>
                     <td>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.HomeMortgage)</td>
                 </tr>
                 <tr>
-                    <td>Car payment</td>
+                    <td>Chi tiêu cho xe hơi và các tiêu sản khác</td>
                     <td>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.CarPayment)</td>
                 </tr>
                 <tr>
-                    <td>Credit card</td>
+                    <td>Chi tiêu cho thẻ tín dụng</td>
                     <td>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.CreditCard)</td>
                 </tr>
                 <tr>
-                    <td>Bank loan</td>
-                    <td>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.BankLoanExpenses)</td>
+                    <td>Chi cho các khoản vay kinh doanh</td>
+                    <td>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.BusinessLoanExpenses)</td>
                 </tr>
                 <tr>
-                    <td>Family expenses</td>
+                    <td>Chi cho các khoản vay chứng khoán</td>
+                    <td>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.StockExpenses)</td>
+                </tr>
+                <tr>
+                    <td>Chi cho các khoản vay khác</td>
+                    <td>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.OtherLoanExpenses)</td>
+                </tr>
+                <tr>
+                    <td>Chi tiêu trong gia đình (và cả bảo hiểm nhân thọ)</td>
                     <td>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.FamilyExpenses)</td>
                 </tr>
                 <tr>
-                    <td>Other expenses</td>
+                    <td>Chi tiêu khác</td>
                     <td>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.OtherExpenses)</td>
                 </tr>
             </tbody>
@@ -121,33 +134,55 @@
         <table class="table table-bordered table-condensed table-striped">
             <thead>
                 <tr>
-                    <th><strong>Liabilities</strong></th>
+                    <th><strong>Nợ</strong></th>
                     <th><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.TotalLiabilities)</strong></th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td>Home morgate</td>
+                    <td>Nợ bất động sản</td>
                     <td>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.HomeMortgageLiability)</td>
                 </tr>
                 <tr>
-                    <td>Car loan</td>
+                    <td>Nợ xe hơi và tiêu sản khác</td>
                     <td>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.CarLoan)</td>
                 </tr>
                 <tr>
-                    <td>Credit card</td>
+                    <td>Nợ tín dụng</td>
                     <td>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.CreditCard)</td>
                 </tr>
                 <tr>
-                    <td>Bank loans</td>
-                    <td>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.BankLoan)</td>
+                    <td>Nợ vay cho kinh doanh</td>
+                    <td>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.BusinessLoan)</td>
                 </tr>
                 <tr>
-                    <td>Others loans</td>
+                    <td>Vay mua chứng khoán</td>
+                    <td>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.StockLoan)</td>
+                </tr>
+                <tr>
+                    <td>Vay nợ cho các mục đích khác</td>
                     <td>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.OtherLoans)</td>
                 </tr>
             </tbody>
         </table>
     </div>
+    <div class="col-md-6 col-md-offset-6">
+        <table class="table table-bordered table-condensed table-striped">
+            <thead>
+                <tr>
+                    <th><strong>Vốn chủ sở hữu</strong></th>
+                    <th><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.Equipty)</strong></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Vốn chủ sở hữu</td>
+                    <td>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.Equipty)</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
+
+
 

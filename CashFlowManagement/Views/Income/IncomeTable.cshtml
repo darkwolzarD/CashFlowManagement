@@ -15,12 +15,16 @@
     }
 }
 
+<ol class="breadcrumb">
+    <li class="active">@title</li>
+</ol>
+
 <div class="background">
-    <h3 class="text-center">@title</h3>
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#create-new-income-modal">
+        <span class="glyphicon glyphicon-plus"></span>
         @if (Model.Type == (int)Constants.INCOME_TYPE.SALARY_INCOME)
         {
-            @Html.Raw("Tạo mới thu nhập từ lương")
+            @Html.Raw("Tạo mới")
         }
     </button>
     <div class="asset-table">
@@ -29,15 +33,22 @@
                 <tr>
                     @if (Model.Type == (int)Constants.INCOME_TYPE.SALARY_INCOME)
                     {
-                        <th>Thu nhập từ lương</th>
-                        <th>Thu nhập tháng</th>
-                        <th>Thu nhập năm</th>
-                        <th>Ghi chú</th>
-                        <th></th>
+                        <th class="text-center">Thu nhập từ lương</th>
+                        <th class="text-center">Thu nhập tháng</th>
+                        <th class="text-center">Thu nhập năm</th>
+                        <th class="text-center">Ghi chú</th>
+                        <th class="text-center">Chỉnh sửa</th>
                     }
                 </tr>
             </thead>
             <tbody>
+                <tr>
+                    <td><strong>Tổng</strong></td>
+                    <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.TotalMonthlyIncome)</strong></td>
+                    <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.TotalMonthlyIncome * 12)</strong></td>
+                    <td></td>
+                    <td></td>
+                </tr>
                 @if (Model.List.Any())
                 {
                     foreach (var item in Model.List)
@@ -47,12 +58,14 @@
                             <td>@FormatUtility.DisplayThousandSeparatorsForNumber(item.Value)</td>
                             <td>@FormatUtility.DisplayThousandSeparatorsForNumber(item.Value * 12)</td>
                             <td>@item.Note</td>
-                            <td>
+                            <td class="text-center" width="160px">
                                 <button class="btn btn-success update-income" data-income-id="@item.Id">
                                     <span class="glyphicon glyphicon-pencil"></span>
+                                    Cập nhật
                                 </button>
                                 <button class="btn btn-danger delete-income" data-income-id="@item.Id">
                                     <span class="glyphicon glyphicon-remove"></span>
+                                    Xóa
                                 </button>
                             </td>
                         </tr>

@@ -56,6 +56,12 @@ namespace CashFlowManagement.Queries
             asset.Incomes.Add(income);
 
             entities.Assets.Add(asset);
+
+            string sType = string.Empty;
+            
+            Log log = LogQueries.CreateLog((int)Constants.Constants.LOG_TYPE.ADD, "tài sản \"" + model.Asset.AssetName + "\"", username, model.Asset.Value);
+
+            entities.Log.Add(log);
             int result = entities.SaveChanges();
             return result;
         }
@@ -84,6 +90,10 @@ namespace CashFlowManagement.Queries
             DeleteAsset(model.Asset.Id);
 
             entities.Assets.Add(updated_asset);
+
+            Log log = LogQueries.CreateLog((int)Constants.Constants.LOG_TYPE.UPDATE, "tài sản \"" + model.Asset.AssetName + "\"", model.Asset.Username, model.Asset.Value);
+            entities.Log.Add(log);
+
             int result = entities.SaveChanges();
             return result;
         }
@@ -119,6 +129,9 @@ namespace CashFlowManagement.Queries
                 entry_3.Property(x => x.DisabledDate).IsModified = true;
                 entry_3.Property(x => x.DisabledBy).IsModified = true;
             }
+
+            Log log = LogQueries.CreateLog((int)Constants.Constants.LOG_TYPE.DELETE, "tài sản \"" + asset.AssetName + "\"", asset.Username, asset.Value);
+            entities.Log.Add(log);
 
             int result = entities.SaveChanges();
             return result;

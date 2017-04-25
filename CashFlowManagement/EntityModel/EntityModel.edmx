@@ -75,6 +75,20 @@
           <Property Name="OriginalValue" Type="float" />
           <Property Name="Purpose" Type="nvarchar" MaxLength="50" />
         </EntityType>
+        <EntityType Name="Log">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Date" Type="date" Nullable="false" />
+          <Property Name="LogType" Type="int" Nullable="false" />
+          <Property Name="LogContent" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Value" Type="float" Nullable="false" />
+          <Property Name="AvailableMoney" Type="float" Nullable="false" />
+          <Property Name="CreatedDate" Type="datetime" Nullable="false" />
+          <Property Name="CreatedBy" Type="nvarchar" MaxLength="6" Nullable="false" />
+          <Property Name="Username" Type="nvarchar" MaxLength="20" Nullable="false" />
+        </EntityType>
         <EntityType Name="Stocks">
           <Key>
             <PropertyRef Name="Id" />
@@ -196,6 +210,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Log_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="Log" Type="Self.Log" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="Username" />
+            </Principal>
+            <Dependent Role="Log">
+              <PropertyRef Name="Username" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Stock_Assets">
           <End Role="Assets" Type="Self.Assets" Multiplicity="1" />
           <End Role="Stocks" Type="Self.Stocks" Multiplicity="*" />
@@ -225,6 +251,7 @@
           <EntitySet Name="Expenses" EntityType="Self.Expenses" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Incomes" EntityType="Self.Incomes" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Liabilities" EntityType="Self.Liabilities" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Log" EntityType="Self.Log" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Stocks" EntityType="Self.Stocks" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Transactions" EntityType="Self.Transactions" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
@@ -259,6 +286,10 @@
           <AssociationSet Name="FK_Liabilities_Users" Association="Self.FK_Liabilities_Users">
             <End Role="Users" EntitySet="Users" />
             <End Role="Liabilities" EntitySet="Liabilities" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Log_Users" Association="Self.FK_Log_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Log" EntitySet="Log" />
           </AssociationSet>
           <AssociationSet Name="FK_Stock_Assets" Association="Self.FK_Stock_Assets">
             <End Role="Assets" EntitySet="Assets" />
@@ -320,6 +351,11 @@
           <AssociationSet Name="FK_Liabilities_Users" Association="CFMModel.FK_Liabilities_Users">
             <End Role="Users" EntitySet="Users" />
             <End Role="Liabilities" EntitySet="Liabilities" />
+          </AssociationSet>
+          <EntitySet Name="Log" EntityType="CFMModel.Log" />
+          <AssociationSet Name="FK_Log_Users" Association="CFMModel.FK_Log_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Log" EntitySet="Log" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="Assets">
@@ -436,6 +472,7 @@
           <NavigationProperty Name="Expenses" Relationship="CFMModel.FK_Expenses_Users" FromRole="Users" ToRole="Expenses" />
           <NavigationProperty Name="Incomes" Relationship="CFMModel.FK_Incomes_Users" FromRole="Users" ToRole="Incomes" />
           <NavigationProperty Name="Liabilities" Relationship="CFMModel.FK_Liabilities_Users" FromRole="Users" ToRole="Liabilities" />
+          <NavigationProperty Name="Log" Relationship="CFMModel.FK_Log_Users" FromRole="Users" ToRole="Log" />
         </EntityType>
         <Association Name="FK_Assets_Users">
           <End Type="CFMModel.Users" Role="Users" Multiplicity="1" />
@@ -557,6 +594,33 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="Log">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="LogType" Type="Int32" Nullable="false" />
+          <Property Name="LogContent" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Value" Type="Double" Nullable="false" />
+          <Property Name="AvailableMoney" Type="Double" Nullable="false" />
+          <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreatedBy" Type="String" Nullable="false" MaxLength="6" FixedLength="false" Unicode="true" />
+          <Property Name="Username" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Users" Relationship="CFMModel.FK_Log_Users" FromRole="Log" ToRole="Users" />
+        </EntityType>
+        <Association Name="FK_Log_Users">
+          <End Type="CFMModel.Users" Role="Users" Multiplicity="1" />
+          <End Type="CFMModel.Log" Role="Log" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="Username" />
+            </Principal>
+            <Dependent Role="Log">
+              <PropertyRef Name="Username" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -662,6 +726,21 @@
               <MappingFragment StoreEntitySet="Users">
                 <ScalarProperty Name="Password" ColumnName="Password" />
                 <ScalarProperty Name="Username" ColumnName="Username" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Log">
+            <EntityTypeMapping TypeName="CFMModel.Log">
+              <MappingFragment StoreEntitySet="Log">
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="AvailableMoney" ColumnName="AvailableMoney" />
+                <ScalarProperty Name="Value" ColumnName="Value" />
+                <ScalarProperty Name="LogContent" ColumnName="LogContent" />
+                <ScalarProperty Name="LogType" ColumnName="LogType" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

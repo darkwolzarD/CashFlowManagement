@@ -42,7 +42,7 @@
                     <span class="income-this-month">100.000.000 vnd</span>
                 </div>
                 <ul class="navigation-bar">
-                    <li><a href="#">Báo cáo tài chính</a></li>
+                    <li><a href="@Url.Action("Index", "FinancialStatus")">Báo cáo tài chính</a></li>
                     <li>
                         <a href="@Url.Action("IncomeTable", "Income", new { type = (int)Constants.INCOME_TYPE.SALARY_INCOME })">
                             <span class="nav-label">Thu nhập lương</span>
@@ -84,12 +84,14 @@
                             <li><a href="@Url.Action("LiabilityTable", "Liability", new { type = (int)Constants.LIABILITY_TYPE.OTHERS })">Nợ khác</a></li>
                         </ul>
                     </li>
-                    <li><a href="#">Log</a></li>
+                    <li><a href="@Url.Action("Index", "Log")">Nhật ký</a></li>
                 </ul>
             </div>
         </div>
         <div class="content">
-            @RenderBody()
+            <div class="scrollable-content">
+                @RenderBody()
+            </div>
         </div>
     </div>
 
