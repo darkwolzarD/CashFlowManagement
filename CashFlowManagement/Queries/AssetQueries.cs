@@ -66,6 +66,33 @@ namespace CashFlowManagement.Queries
             return result;
         }
 
+        public static int BuyAsset(AssetViewModel model, string username)
+        {
+            Entities entities = new Entities();
+            Assets asset = model.Asset;
+            asset.Username = username;
+            asset.CreatedDate = DateTime.Now;
+            asset.AssetType = (int)Constants.Constants.ASSET_TYPE.REAL_ESTATE;
+            asset.CreatedBy = Constants.Constants.USER;
+
+            Incomes income = model.Income;
+            income.CreatedDate = DateTime.Now;
+            income.IncomeType = (int)Constants.Constants.ASSET_TYPE.REAL_ESTATE;
+            income.Username = username;
+            income.CreatedBy = Constants.Constants.USER;
+            asset.Incomes.Add(income);
+
+            entities.Assets.Add(asset);
+
+            string sType = string.Empty;
+
+            Log log = LogQueries.CreateLog((int)Constants.Constants.LOG_TYPE.BUY, "tài sản \"" + model.Asset.AssetName + "\"", username, model.Asset.Value);
+
+            entities.Log.Add(log);
+            int result = entities.SaveChanges();
+            return result;
+        }
+
         public static int UpdateAsset(AssetViewModel model)
         {
             Entities entities = new Entities();

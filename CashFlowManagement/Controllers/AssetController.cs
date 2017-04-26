@@ -31,6 +31,12 @@ namespace CashFlowManagement.Controllers
             return Json(new { result = result });
         }
 
+        public JsonResult BuyAsset(AssetViewModel model)
+        {
+            int result = AssetQueries.BuyAsset(model, "test");
+            return Json(new { result = result });
+        }
+
         public JsonResult UpdateAsset(AssetViewModel model)
         {
             int type = model.Asset.AssetType;

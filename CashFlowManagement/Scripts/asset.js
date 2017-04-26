@@ -1,4 +1,6 @@
 ﻿$(document).ready(function () {
+    var liabilityCount = 0;
+
     function MaskInput() {
         $(".input-mask").mask("000,000,000,000,000", { reverse: true });
         $(".percentage").mask("##0,00%", { reverse: true });
@@ -51,6 +53,12 @@
         InitiateDatePicker();
     })
 
+    $(document).on("shown.bs.modal", "#buy-new-asset-modal", function () {
+        MaskInput();
+        InitiateDatePicker();
+        liabilityCount = 0;
+    })
+
     $('#create-new-asset-modal').on('hidden.bs.modal', function (e) {
         $(this)
             .find("input[type!='hidden'],textarea,select")
@@ -60,6 +68,18 @@
             .prop("checked", "")
             .end();
         MaskInput();
+    })
+
+    $('#buy-new-asset-modal').on('hidden.bs.modal', function (e) {
+        $(this)
+            .find("input[type!='hidden'],textarea")
+            .val('')
+            .end()
+            .find("input[type=checkbox], input[type=radio]")
+            .prop("checked", "")
+            .end();
+        MaskInput();
+        $(this).find("#liability-table tbody tr:not(':first')").remove();
     })
 
     $(document).on("click", ".create-asset", function () {
@@ -73,6 +93,27 @@
             success: function (data) {
                 if (data.result > 0) {
                     $("#create-new-asset-modal").modal("hide");
+                    LoadTable();
+                }
+                else {
+                    alert("Có lỗi xảy ra");
+                }
+            }
+        })
+        MaskInput();
+    })
+
+    $(document).on("click", ".buy-asset", function () {
+        RemoveMask();
+        var data = $("#buy-new-asset-modal .form-horizontal").serialize();
+
+        $.ajax({
+            url: Url.BuyAsset,
+            type: "post",
+            data: data,
+            success: function (data) {
+                if (data.result > 0) {
+                    $("#buy-new-asset-modal").modal("hide");
                     LoadTable();
                 }
                 else {
@@ -215,15 +256,27 @@
         var startDate = $("#liability-table input[name='StartDate']").val();
         var endDate = $("#liability-table input[name='EndDate']").val();
         var newRow = "<tr>"; 
-        newRow += "<td>" + name + "</td>";
-        newRow += "<td>" + value + "</td>";
-        newRow += "<td>" + interestType + "</td>";
-        newRow += "<td>" + interestRate + "</td>";
-        newRow += "<td>" + startDate + "</td>";
-        newRow += "<td>" + endDate + "</td>";
+        newRow += "<td name='Asset.Liabilities[" + liabilityCount + "].Name'>" + name + "</td>";
+        newRow += "<td name='Asset.Liabilities[" + liabilityCount + "].Value'>" + value + "</td>";
+        newRow += "<td name='Asset.Liabilities[" + liabilityCount + "].InterestType'>" + interestType + "</td>";
+        newRow += "<td name='Asset.Liabilities[" + liabilityCount + "].InterestRate'>" + interestRate + "</td>";
+        newRow += "<td name='Asset.Liabilities[" + liabilityCount + "].StartDate'>" + startDate + "</td>";
+        newRow += "<td name='Asset.Liabilities[" + liabilityCount + "].EndDate'>" + endDate + "</td>";
         newRow += "<td></td>";
         newRow += "</tr>";
+
+        var dataRow = "<tr class='hidden'>";
+        dataRow += "<td><input name='Asset.Liabilities[" + liabilityCount + "].Name' />" + name + "</td>";
+        dataRow += "<td><input name='Asset.Liabilities[" + liabilityCount + "].Value' />" + value + "</td>";
+        dataRow += "<td><input name='Asset.Liabilities[" + liabilityCount + "].InterestType'/>" + interestType + "</td>";
+        dataRow += "<td><input name='Asset.Liabilities[" + liabilityCount + "].InterestRate'/>" + interestRate + "</td>";
+        dataRow += "<td><input name='Asset.Liabilities[" + liabilityCount + "].StartDate'/>" + startDate + "</td>";
+        dataRow += "<td><input name='Asset.Liabilities[" + liabilityCount + "].EndDate'/>" + endDate + "</td>";
+        dataRow += "<td></td>";
+        dataRow += "</tr>";
         $("#liability-table tbody").append(newRow);
+        $("#liability-table tbody").append(dataRow);
+        liabilityCount++;
     })
 
     $(document).on("click", ".update-liability", function () {
