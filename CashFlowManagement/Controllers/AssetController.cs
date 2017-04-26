@@ -50,5 +50,11 @@ namespace CashFlowManagement.Controllers
             int result = AssetQueries.DeleteAsset(assetId);
             return Json(new { result = result });
         }
+
+        public JsonResult CheckAvailableMoney()
+        {
+            double result = AssetQueries.CheckAvailableMoney("test");
+            return Json(new { result = result }, JsonRequestBehavior.AllowGet);
+        }
     }
 }

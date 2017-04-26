@@ -57,8 +57,7 @@ namespace CashFlowManagement.Queries
         public static Log CreateLog(int type, string logContent, string username, double value)
         {
             Entities entities = new Entities();
-            double currentAvailableMoney = entities.Assets.Where(x => x.AssetType == (int)Constants.Constants.ASSET_TYPE.AVAILABLE_MONEY
-                                                                && !x.DisabledDate.HasValue).Select(x => x.Value).DefaultIfEmpty(0).Sum();
+            double currentAvailableMoney = AssetQueries.CheckAvailableMoney(username);
 
             string content = string.Empty;
             if (type == (int)Constants.Constants.LOG_TYPE.ADD)

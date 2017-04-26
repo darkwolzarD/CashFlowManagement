@@ -104,24 +104,67 @@
     })
 
     $(document).on("click", ".buy-asset", function () {
-        RemoveMask();
-        var data = $("#buy-new-asset-modal .form-horizontal").serialize();
-
         $.ajax({
-            url: Url.BuyAsset,
-            type: "post",
-            data: data,
+            url: Url.CheckAvailableMoney,
+            type: "get",
             success: function (data) {
                 if (data.result > 0) {
-                    $("#buy-new-asset-modal").modal("hide");
-                    LoadTable();
+                    var currentMoney = data.result;
+                    var currentAmount = $("#buy-new-asset-modal input[name='Asset.Value']").val();
+                    if (currentAmount == "") {
+                        currentAmount == 0;
+                    }
+                    var currentLiabilities = 0;
+                    $("#liability-table tbody tr:hidden").each(function (index, element) {
+                        var liability = $(element).find("td input").val();
+                        if (liability == "") {
+                            liability == 0;
+                        }
+                        currentLiabilities += liability;
+                    });
+                    if (currentAmount == "" || currentAmount == 0) {
+                        alert("Vui lòng nhập số tiền mua nhà!");
+                    }
+                    else if (currentMoney < currentAmount) {
+                        if (currentLiabilities == 0) {
+                            alert("Không đủ tiền mặt để mua bất động sản này!");
+                        }
+                        else if (currentLiabilities > 0 && (currentAmount + currentLiabilities < currentMoney)) {
+                            alert("Bạn chưa vay đủ tiền mặt để mua bất động sản này!");
+                        }
+                        else if (currentLiabilities > 0 && (currentAmount + currentLiabilities > currentMoney)) {
+                            alert("Bạn đã vay dư tiền mặt để mua bất động sản này!");
+                        }
+                    }
+                    else if (currentMoney > currentAmount) {
+                        alert("Bạn đã dùng dư tiền mặt để mua bất động sản này!");
+                    }
+                    else {
+                        RemoveMask();
+                        var data = $("#buy-new-asset-modal .form-horizontal").serialize();
+
+                        $.ajax({
+                            url: Url.BuyAsset,
+                            type: "post",
+                            data: data,
+                            success: function (data) {
+                                if (data.result > 0) {
+                                    $("#buy-new-asset-modal").modal("hide");
+                                    LoadTable();
+                                }
+                                else {
+                                    alert("Có lỗi xảy ra");
+                                }
+                            }
+                        })
+                        MaskInput();
+                    }
                 }
                 else {
                     alert("Có lỗi xảy ra");
                 }
             }
         })
-        MaskInput();
     })
 
     function LoadTable() {
@@ -264,16 +307,21 @@
         newRow += "<td name='Asset.Liabilities[" + liabilityCount + "].EndDate'>" + endDate + "</td>";
         newRow += "<td></td>";
         newRow += "</tr>";
-
+        RemoveMask();
+        name = $("#liability-table input[name='Name']").val();
+        value = $("#liability-table input[name='Value']").val();
+        interestType = $("#liability-table select[name='InterestType']").val();
+        interestRate = $("#liability-table input[name='InterestRate']").val();
         var dataRow = "<tr class='hidden'>";
-        dataRow += "<td><input name='Asset.Liabilities[" + liabilityCount + "].Name' />" + name + "</td>";
-        dataRow += "<td><input name='Asset.Liabilities[" + liabilityCount + "].Value' />" + value + "</td>";
-        dataRow += "<td><input name='Asset.Liabilities[" + liabilityCount + "].InterestType'/>" + interestType + "</td>";
-        dataRow += "<td><input name='Asset.Liabilities[" + liabilityCount + "].InterestRate'/>" + interestRate + "</td>";
-        dataRow += "<td><input name='Asset.Liabilities[" + liabilityCount + "].StartDate'/>" + startDate + "</td>";
-        dataRow += "<td><input name='Asset.Liabilities[" + liabilityCount + "].EndDate'/>" + endDate + "</td>";
+        dataRow += "<td><input name='Asset.Liabilities[" + liabilityCount + "].Name' value='" + name + "'/></td>";
+        dataRow += "<td><input name='Asset.Liabilities[" + liabilityCount + "].Value' value='" + value + "'/></td>";
+        dataRow += "<td><input name='Asset.Liabilities[" + liabilityCount + "].InterestType' value='" + interestType + "'/></td>";
+        dataRow += "<td><input name='Asset.Liabilities[" + liabilityCount + "].InterestRate' value='" + interestRate + "'/></td>";
+        dataRow += "<td><input name='Asset.Liabilities[" + liabilityCount + "].StartDate' value='" + startDate + "'/></td>";
+        dataRow += "<td><input name='Asset.Liabilities[" + liabilityCount + "].EndDate' value='" + endDate + "'/></td>";
         dataRow += "<td></td>";
         dataRow += "</tr>";
+        MaskInput();
         $("#liability-table tbody").append(newRow);
         $("#liability-table tbody").append(dataRow);
         liabilityCount++;
