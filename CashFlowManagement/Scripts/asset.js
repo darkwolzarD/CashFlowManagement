@@ -43,12 +43,7 @@
         return true;
     }
 
-    $(document).on("shown.bs.modal", "#create-new-asset-modal, #create-new-liability-modal", function () {
-        MaskInput();
-        InitiateDatePicker();
-    })
-
-    $(document).on("shown.bs.modal", "#update-asset-modal, #update-liability-modal", function () {
+    $(document).on("shown.bs.modal", "#create-new-asset-modal, #create-new-liability-modal, update-asset-modal, #update-liability-modal, #sell-asset-modal", function () {
         MaskInput();
         InitiateDatePicker();
     })
@@ -242,6 +237,47 @@
                 }
             })
         }
+    })
+
+    $(document).on("click", ".sell-asset-toggle", function () {
+        var id = $(this).data("asset-id");
+
+        $.ajax({
+            url: Url.SellAssetModal,
+            type: "get",
+            data: { assetId: id },
+            contentType: "html",
+            success: function (data) {
+                if (data.length > 0) {
+                    $(".sell-asset-modal").html(data);
+                    $("#sell-asset-modal").modal("show");
+                }
+                else {
+                    alert("Có lỗi xảy ra");
+                }
+            }
+        })
+    })
+
+    $(document).on("click", ".sell-asset", function () {
+        RemoveMask();
+        var data = $("#sell-asset-modal .form-horizontal").serialize();
+
+        $.ajax({
+            url: Url.SellAsset,
+            type: "post",
+            data: data,
+            success: function (data) {
+                if (data.result > 0) {
+                    $("#sell-asset-modal").modal("hide");
+                    LoadTable();
+                }
+                else {
+                    alert("Có lỗi xảy ra");
+                }
+            }
+        })
+        MaskInput();
     })
 
     $(document).on("click", ".create-new-liability", function () {

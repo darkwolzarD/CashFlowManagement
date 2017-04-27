@@ -11,6 +11,7 @@ namespace CashFlowManagement.ViewModels
         public Assets Asset { get; set; }
         public Incomes Income { get; set; }
         public double BuyAmount { get; set; }
+        public double SellAmount { get; set; }
 
         public LiabilityListViewModel LiabilityList { get; set; }
         public double TotalMortgageValue { get; set; }

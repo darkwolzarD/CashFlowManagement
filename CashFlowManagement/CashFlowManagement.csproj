@@ -212,6 +212,9 @@
     <Compile Include="EntityModel\Stocks.cs">
       <DependentUpon>EntityModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="EntityModel\sysdiagrams.cs">
+      <DependentUpon>EntityModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="EntityModel\Transactions.cs">
       <DependentUpon>EntityModel.tt</DependentUpon>
     </Compile>
@@ -649,6 +652,7 @@
     <Content Include="Views\Liability\LiabilityTable.cshtml" />
     <Content Include="Views\Log\Index.cshtml" />
     <Content Include="Views\Asset\_BuyAssetModal.cshtml" />
+    <Content Include="Views\Asset\_SellAssetModal.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

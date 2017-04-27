@@ -121,6 +121,10 @@
                                     <span class="glyphicon glyphicon-remove"></span>
                                     Xóa
                                 </button>
+                                <button class="btn btn-warning sell-asset-toggle" data-asset-id="@item.Asset.Id">
+                                    <span class="glyphicon glyphicon-usd"></span>
+                                    Bán
+                                </button>
                             </td>
                             @if (item.Asset.AssetType == (int)Constants.ASSET_TYPE.REAL_ESTATE ||
                     item.Asset.AssetType == (int)Constants.ASSET_TYPE.BUSINESS)
@@ -313,6 +317,10 @@
 
 </div>
 
+<div class="sell-asset-modal">
+    
+</div>
+
 @if (Model.Type == (int)Constants.ASSET_TYPE.REAL_ESTATE)
 {
     <div class="buy-asset-modal">
@@ -332,6 +340,8 @@
     Url.LoadAsset = '@Url.Action("_AssetUpdateModal", "Asset")';
     Url.UpdateAsset = '@Url.Action("UpdateAsset", "Asset")';
     Url.BuyAsset = '@Url.Action("BuyAsset", "Asset")';
+    Url.SellAsset = '@Url.Action("SellAsset", "Asset")';
+    Url.SellAssetModal = '@Url.Action("_SellAssetModal", "Asset")';
     Url.DeleteAsset = '@Url.Action("DeleteAsset", "Asset")';
     Url.CheckAvailableMoney = '@Url.Action("CheckAvailableMoney", "Asset")';
     Url.LiabilityModal = '@Url.Action("_LiabilityModal", "Liability")';

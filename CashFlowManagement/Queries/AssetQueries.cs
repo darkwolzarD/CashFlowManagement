@@ -47,6 +47,10 @@ namespace CashFlowManagement.Queries
             asset.CreatedDate = DateTime.Now;
             asset.AssetType = type;
             asset.CreatedBy = Constants.Constants.USER;
+            if(type == (int)Constants.Constants.ASSET_TYPE.REAL_ESTATE)
+            {
+                asset.ObtainedBy = (int)Constants.Constants.OBTAIN_BY.CREATE;
+            }
 
             Incomes income = model.Income;
             income.CreatedDate = DateTime.Now;
@@ -103,6 +107,7 @@ namespace CashFlowManagement.Queries
             asset.CreatedDate = DateTime.Now;
             asset.AssetType = (int)Constants.Constants.ASSET_TYPE.REAL_ESTATE;
             asset.CreatedBy = Constants.Constants.USER;
+            asset.ObtainedBy = (int)Constants.Constants.OBTAIN_BY.BUY;
 
             Incomes income = model.Income;
             income.CreatedDate = DateTime.Now;
@@ -201,6 +206,56 @@ namespace CashFlowManagement.Queries
             int result = entities.SaveChanges();
             return result;
         }
+
+        public static int SellAsset(int id, double sellAmount)
+        {
+            Entities entities = new Entities();
+            Assets asset = entities.Assets.Where(x => x.Id == id).FirstOrDefault();
+            asset.DisabledDate = DateTime.Now;
+            asset.DisabledBy = Constants.Constants.USER;
+
+            entities.Assets.Attach(asset);
+            var entry = entities.Entry(asset);
+            entry.Property(x => x.DisabledDate).IsModified = true;
+            entry.Property(x => x.DisabledBy).IsModified = true;
+
+            Incomes income = entities.Incomes.Where(x => x.AssetId == id && !x.DisabledDate.HasValue).FirstOrDefault();
+            income.DisabledDate = DateTime.Now;
+            income.DisabledBy = Constants.Constants.USER;
+
+            entities.Incomes.Attach(income);
+            var entry_2 = entities.Entry(income);
+            entry_2.Property(x => x.DisabledDate).IsModified = true;
+            entry_2.Property(x => x.DisabledBy).IsModified = true;
+
+            IQueryable<Liabilities> liabilities = entities.Liabilities.Where(x => x.AssetId == asset.Id && !x.DisabledDate.HasValue);
+            foreach (var liability in liabilities)
+            {
+                liability.DisabledDate = DateTime.Now;
+                liability.DisabledBy = Constants.Constants.USER;
+                entities.Liabilities.Attach(liability);
+                var entry_3 = entities.Entry(liability);
+                entry_3.Property(x => x.DisabledDate).IsModified = true;
+                entry_3.Property(x => x.DisabledBy).IsModified = true;
+            }
+
+            Assets available_money = new Assets();
+            available_money.AssetName = "Tiền bán " + asset.AssetName;
+            available_money.AssetType = (int)Constants.Constants.ASSET_TYPE.AVAILABLE_MONEY;
+            available_money.CreatedBy = Constants.Constants.USER;
+            available_money.CreatedDate = DateTime.Now;
+            available_money.Value = sellAmount;
+            available_money.Username = asset.Username;
+
+            entities.Assets.Add(available_money);
+
+            Log log = LogQueries.CreateLog((int)Constants.Constants.LOG_TYPE.SELL, "tài sản \"" + asset.AssetName + "\"", asset.Username, sellAmount);
+            entities.Log.Add(log);
+
+            int result = entities.SaveChanges();
+            return result;
+        }
+
 
         public static double CheckAvailableMoney(string username)
         {
