@@ -202,6 +202,15 @@ table th, table td {
     z-index: 2000;
 }
 
+table thead th {
+    background: #ff6a00;
+    color: white;
+}
+
+table tbody th {
+    background: #e4e5e7;
+}
+
 
 
 

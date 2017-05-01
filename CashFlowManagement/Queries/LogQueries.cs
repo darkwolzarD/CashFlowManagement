@@ -8,13 +8,17 @@ namespace CashFlowManagement.Queries
 {
     public class LogQueries
     {
-        public static List<Log> GetLogByUser(string username, string createdBy)
+        public static List<Log> GetLogByUser(string username, int type)
         {
             Entities entities = new Entities();
             var result = entities.Log.Where(x => x.Username.Equals(username));
-            if (!string.IsNullOrEmpty(createdBy))
+            if (type == (int)Constants.Constants.LOG_FILTER_TYPE.INCOME_EXPENSE)
             {
-                result = result.Where(x => x.CreatedBy.Equals(createdBy));
+                result = result.Where(x => x.LogType == (int)Constants.Constants.LOG_TYPE.INCOME || x.LogType == (int)Constants.Constants.LOG_TYPE.EXPENSE);
+            }
+            else if (type == (int)Constants.Constants.LOG_FILTER_TYPE.OTHERS)
+            {
+                result = result.Where(x => x.LogType != (int)Constants.Constants.LOG_TYPE.INCOME && x.LogType != (int)Constants.Constants.LOG_TYPE.EXPENSE);
             }
             return result.OrderBy(x => x.Date).ToList();
         }

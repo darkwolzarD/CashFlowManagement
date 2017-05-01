@@ -41,33 +41,15 @@
 
     InitiateDatePicker();
 
-    function LoadTable() {
+    function LoadTable(filter) {
         $.ajax({
             url: Url.LoadTable,
             type: "get",
+            data: { type: filter },
             dataType: "html",
             success: function (data) {
                 if (data.length > 0) {
-                    $(".background").html($(data).find(".background").children());
-                }
-                else {
-                    alert("Có lỗi xảy ra");
-                }
-            }
-        })
-    }
-
-    $(document).on("click", ".create-log", function () {
-        RemoveMask();
-        var data = $("#log-form").serialize();
-
-        $.ajax({
-            url: Url.CreateLog,
-            type: "post",
-            data: data,
-            success: function (data) {
-                if (data.result > 0) {
-                    LoadTable();
+                    $("#log-form").html($(data).find("#log-form").children());
                 }
                 else {
                     alert("Có lỗi xảy ra");
@@ -75,5 +57,32 @@
             }
         })
         MaskInput();
+        InitiateDatePicker();
+    }
+
+    $(document).on("click", ".create-log", function () {
+        RemoveMask();
+        var data = $("#log-form").serialize();
+        var filter = $(".filter").val();
+        MaskInput();
+
+        $.ajax({
+            url: Url.CreateLog,
+            type: "post",
+            data: data,
+            success: function (data) {
+                if (data.result > 0) {
+                    LoadTable(filter);
+                }
+                else {
+                    alert("Có lỗi xảy ra");
+                }
+            }
+        })
+    })
+
+    $(document).on("change", ".filter", function () {
+        var filter = $(this).val();
+        LoadTable(filter);
     })
 })

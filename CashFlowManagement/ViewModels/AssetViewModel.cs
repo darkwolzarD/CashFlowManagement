@@ -12,7 +12,7 @@ namespace CashFlowManagement.ViewModels
         public Incomes Income { get; set; }
         public double BuyAmount { get; set; }
         public double SellAmount { get; set; }
-
+        public double CurrentAvailableMoney { get; set; }
         public LiabilityListViewModel LiabilityList { get; set; }
         public double TotalMortgageValue { get; set; }
         public double AverageInterestRate { get; set; }

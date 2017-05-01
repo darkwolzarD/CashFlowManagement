@@ -10,6 +10,12 @@
 </ol>
 
 <div class="background">
+    <div>
+        <select class="form-control input-sm filter">
+            <option value="@((int)Constants.LOG_FILTER_TYPE.INCOME_EXPENSE)">Thu chi</option>
+            <option value="@((int)Constants.LOG_FILTER_TYPE.OTHERS)">Khác</option>
+        </select>
+    </div>
     <form id="log-form">
         <table class="table table-bordered table-condensed table-responsive">
             <thead>

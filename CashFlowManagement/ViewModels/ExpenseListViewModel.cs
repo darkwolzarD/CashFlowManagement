@@ -10,7 +10,7 @@ namespace CashFlowManagement.ViewModels
     {
         public List<Expenses> List { get; set; }
         public int Type { get; set; }
-
+        public double TotalMonthlyExpense { get; set; }
         public ExpenseListViewModel()
         {
             List = new List<Expenses>();

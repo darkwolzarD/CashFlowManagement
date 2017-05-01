@@ -104,6 +104,7 @@
             type: "get",
             success: function (data) {
                 if (data.result > 0) {
+                    RemoveMask();
                     var currentMoney = data.result;
                     var currentAmount = $("#buy-new-asset-modal input[name='Asset.Value']").val();
                     if (currentAmount == "") {
@@ -117,6 +118,7 @@
                         }
                         currentLiabilities += liability;
                     });
+                    MaskInput();
                     if (currentAmount == "" || currentAmount == 0) {
                         alert("Vui lòng nhập số tiền mua nhà!");
                     }
@@ -521,4 +523,41 @@
         $(document).find("table tbody tr." + rs_cls + ":first td:nth-child(1)").attr("rowspan", current - collapse);
     })
 
+    $(document).on("click", ".btn-detail-view", function () {
+        var type = $(this).data("asset-type");
+
+        $.ajax({
+            url: Url.LoadTable,
+            type: "post",
+            data: { type: assetType },
+            dataType: "html",
+            success: function (data) {
+                if (data.length > 0) {
+                    $(".background").html($(data).find(".background").children());
+                }
+                else {
+                    alert("Có lỗi xảy ra");
+                }
+            }
+        })
+    })
+
+    $(document).on("click", ".btn-compact-view", function () {
+        var type = $(this).data("asset-type");
+
+        $.ajax({
+            url: Url.LoadCompactTable,
+            type: "post",
+            data: { type: assetType },
+            dataType: "html",
+            success: function (data) {
+                if (data.length > 0) {
+                    $(".background").html($(data).find(".background").children());
+                }
+                else {
+                    alert("Có lỗi xảy ra");
+                }
+            }
+        })
+    })
 })

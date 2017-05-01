@@ -49,6 +49,12 @@
             <tbody>
                 @if (Model.List.Any())
                 {
+                    <tr>
+                        <td><strong>Tổng</strong></td>
+                        <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.TotalMonthlyExpense)</strong></td>
+                        <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.TotalMonthlyExpense * 12)</strong></td>
+                        <td></td>
+                    </tr>
                     foreach (var item in Model.List)
                     {
                         <tr>

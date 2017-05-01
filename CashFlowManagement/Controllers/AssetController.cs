@@ -17,6 +17,12 @@ namespace CashFlowManagement.Controllers
             return View(model);
         }
 
+        public ActionResult Report(int type)
+        {
+            AssetListViewModel model = AssetQueries.GetAssetByUser("test", type);
+            return View(model);
+        }
+
         public PartialViewResult _AssetUpdateModal(int assetId)
         {
             AssetViewModel model = AssetQueries.GetAssetById(assetId);

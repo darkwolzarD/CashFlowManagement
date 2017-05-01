@@ -11,9 +11,9 @@ namespace CashFlowManagement.Controllers
     public class LogController : Controller
     {
         // GET: Log
-        public ActionResult Index()
+        public ActionResult Index(int type)
         {
-            List<Log> model = LogQueries.GetLogByUser("test", string.Empty);
+            List<Log> model = LogQueries.GetLogByUser("test", type);
             return View(model);
         }
 

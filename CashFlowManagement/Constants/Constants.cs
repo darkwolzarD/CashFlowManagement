@@ -12,6 +12,7 @@ namespace CashFlowManagement.Constants
         public enum LIABILITY_TYPE { REAL_ESTATE = 1, CAR = 2, CREDIT_CARD = 3, BUSINESS = 4, STOCK = 5, OTHERS = 6 }
         public enum EXPENSE_TYPE { REAL_ESTATE = 1, CAR = 2, CREDIT_CARD = 3, BUSINESS = 4, STOCK = 5, LIABILITY = 6, FAMILY = 7, OTHERS = 8 }
         public enum LOG_TYPE { EXPENSE = 1, INCOME = 2, SELL = 3, BUY = 4, ADD = 5, UPDATE = 6, DELETE = 7 }
+        public enum LOG_FILTER_TYPE { INCOME_EXPENSE = 1, OTHERS = 2}
         public enum OBTAIN_BY { CREATE = 1, BUY = 2}
         public static string USER = "user";
         public static string SYSTEM = "system";

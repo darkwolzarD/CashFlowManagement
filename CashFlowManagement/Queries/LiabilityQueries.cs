@@ -29,8 +29,15 @@ namespace CashFlowManagement.Queries
             LiabilityListViewModel result = new LiabilityListViewModel
             {
                 List = list,
-                Type = type
+                Type = type,
+                TotalOriginalValue = list.Select(x => x.Liability.OriginalValue.HasValue ? x.Liability.OriginalValue.Value : 0).Sum(),
+                TotalLiabilityValue = list.Select(x => x.Liability.Value).DefaultIfEmpty(0).Sum(),
+                TotalMonthlyInterestPayment = list.Select(x => x.MonthlyInterestPayment).DefaultIfEmpty(0).Sum(),
+                TotalMonthlyOriginalPayment = list.Select(x => x.MonthlyOriginalPayment).DefaultIfEmpty(0).Sum(),
+                TotalMonthlyPayment = list.Select(x => x.MonthlyPayment).DefaultIfEmpty(0).Sum(),
+                RemainedValue = list.Select(x => x.RemainedValue).DefaultIfEmpty(0).Sum()
             };
+            result.AvarageInterestRate = result.TotalMonthlyPayment / result.TotalLiabilityValue * 1200;
             return result;
         }
 
@@ -141,6 +148,8 @@ namespace CashFlowManagement.Queries
                 assetViewModel.AverageInterestRate = assetViewModel.TotalAnnualPayment / assetViewModel.TotalMortgageValue * 100;
                 result.List.Add(assetViewModel);
             }
+            result.TotalMonthlyIncome = result.List.Select(x => x.Income.Value).DefaultIfEmpty(0).Sum();
+            result.TotalValue = result.List.Select(x => x.Asset.Value).DefaultIfEmpty(0).Sum();
             return result;
         }
 

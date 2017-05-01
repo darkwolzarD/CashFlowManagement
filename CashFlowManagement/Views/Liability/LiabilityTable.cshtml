@@ -79,6 +79,28 @@
             <tbody>
                 @if (Model.List != null && Model.List.Count > 0)
                 {
+                    <tr>
+                        <td class="text-center"><strong>Tổng</strong></td>
+                        @if (Model.Type == (int)Constants.LIABILITY_TYPE.CAR)
+                        {
+                            <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.TotalOriginalValue)</strong></td>
+                        }
+                        else if (Model.Type == (int)Constants.LIABILITY_TYPE.OTHERS)
+                        {
+                            <td></td>
+                        }
+                        <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.TotalLiabilityValue)</strong></td>
+                        <td>@*<strong>@FormatUtility.DisplayPercentageForNumber(Model.AvarageInterestRate)</strong>*@</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.TotalMonthlyInterestPayment)</strong></td>
+                        <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.TotalMonthlyOriginalPayment)</strong></td>
+                        <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.TotalMonthlyPayment)</strong></td>
+                        <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.RemainedValue)</strong></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
                     foreach (var liabilityViewModel in Model.List.Where(x => !x.Liability.ParentLiabilityId.HasValue))
                     {
                         <tr class="rs-@rsCount child-@childCount">
@@ -116,22 +138,6 @@
                             count++;
                         }
                     }
-                    @*<tr>
-                            <td class="text-center"><strong>Total value</strong></td>
-                            <td></td>
-                            <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(0)</strong></td>
-                            <td></td>
-                            <td><strong>@FormatUtility.DisplayPercentageForNumber(0)</strong></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(0)</strong></td>
-                            <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(0)</strong></td>
-                            <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(0)</strong></td>
-                            <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(0)</strong></td>
-                            <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(0)</strong></td>
-                            <td></td>
-                        </tr>*@
                 }
                 else
                 {

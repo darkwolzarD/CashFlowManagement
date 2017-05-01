@@ -16,7 +16,8 @@ namespace CashFlowManagement.Queries
             ExpenseListViewModel result = new ExpenseListViewModel
             {
                 List = queryResult,
-                Type = type
+                Type = type,
+                TotalMonthlyExpense = queryResult.Select(x => x.Value).DefaultIfEmpty(0).Sum()
             };
             return result;
         }
