@@ -653,6 +653,7 @@
     <Content Include="Views\Log\Index.cshtml" />
     <Content Include="Views\Asset\_BuyAssetModal.cshtml" />
     <Content Include="Views\Asset\_SellAssetModal.cshtml" />
+    <Content Include="Views\Asset\Report.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

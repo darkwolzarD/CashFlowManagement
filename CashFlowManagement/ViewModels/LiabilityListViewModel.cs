@@ -8,7 +8,7 @@ namespace CashFlowManagement.ViewModels
         public int Type { get; set; }
         public double TotalOriginalValue { get; set; }
         public double TotalLiabilityValue { get; set; }
-        public double AvarageInterestRate { get; set; }
+        public double AverageInterestRate { get; set; }
         public double TotalMonthlyOriginalPayment { get; set; }
         public double TotalMonthlyInterestPayment { get; set; }
         public double TotalMonthlyPayment { get; set; }

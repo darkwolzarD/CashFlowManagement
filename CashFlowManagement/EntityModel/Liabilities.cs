@@ -25,8 +25,8 @@ namespace CashFlowManagement.EntityModel
         public string Name { get; set; }
         public double Value { get; set; }
         public double InterestRate { get; set; }
-        public System.DateTime StartDate { get; set; }
-        public System.DateTime EndDate { get; set; }
+        public Nullable<System.DateTime> StartDate { get; set; }
+        public Nullable<System.DateTime> EndDate { get; set; }
         public int LiabilityType { get; set; }
         public System.DateTime CreatedDate { get; set; }
         public Nullable<System.DateTime> DisabledDate { get; set; }

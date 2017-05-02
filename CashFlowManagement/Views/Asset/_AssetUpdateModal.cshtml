@@ -16,8 +16,12 @@
                         @Html.Raw("Cập nhật bất động sản")
                     }
                     else if (Model.Asset.AssetType == (int)Constants.ASSET_TYPE.BUSINESS)
-                    {
+                    {       
                         @Html.Raw("Cập nhật kinh doanh")
+                    }
+                    else if (Model.Asset.AssetType == (int)Constants.ASSET_TYPE.INSURANCE)
+                    {
+                        @Html.Raw("Cập nhật bảo hiểm nhân thọ")
                     }
                     else if (Model.Asset.AssetType == (int)Constants.ASSET_TYPE.OTHERS)
                     {
@@ -40,6 +44,10 @@
                             else if (Model.Asset.AssetType == (int)Constants.ASSET_TYPE.BUSINESS)
                             {
                                 @Html.Raw("Kinh doanh:")
+                            }
+                            else if (Model.Asset.AssetType == (int)Constants.ASSET_TYPE.INSURANCE)
+                            {
+                                @Html.Raw("Bảo hiểm nhân thọ")
                             }
                             else if (Model.Asset.AssetType == (int)Constants.ASSET_TYPE.OTHERS)
                             {
@@ -67,6 +75,10 @@
                             {
                                 @Html.Raw("Giá trị góp vốn:")
                             }
+                            else if (Model.Asset.AssetType == (int)Constants.ASSET_TYPE.INSURANCE)
+                            {
+                                @Html.Raw("Giá trị thụ hưởng:")
+                            }
                             else if (Model.Asset.AssetType == (int)Constants.ASSET_TYPE.OTHERS)
                             {
                                 @Html.Raw("Tổng giá trị")
@@ -76,13 +88,42 @@
                             @Html.TextBoxFor(x => x.Asset.Value, new { @type = "text", @class = "form-control input-mask" })
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label class="control-label col-sm-3">Thu hàng tháng:</label>
-                        <div class="col-sm-9">
-                            @Html.TextBoxFor(x => x.Income.Value, new { @type = "text", @class = "form-control input-mask" })
-                            @Html.HiddenFor(x => x.Income.IncomeType)
+                    @if (Model.Asset.AssetType != (int)Constants.ASSET_TYPE.INSURANCE)
+                    {
+                        <div class="form-group">
+                            <label class="control-label col-sm-3">Thu hàng tháng:</label>
+                            <div class="col-sm-9">
+                                @Html.TextBoxFor(x => x.Income.Value, new { @type = "text", @class = "form-control input-mask" })
+                            </div>
                         </div>
-                    </div>
+                    }
+                    @if (Model.Asset.AssetType == (int)Constants.ASSET_TYPE.INSURANCE)
+                    {
+                        <div class="form-group">
+                            <label class="control-label col-sm-3">Từ ngày:</label>
+                            <div class="col-sm-9">
+                                @Html.TextBoxFor(x => x.Liability.StartDate, "{0:MM/yyyy}", new { @type = "text", @class = "form-control date-picker" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-3">Đến ngày:</label>
+                            <div class="col-sm-9">
+                                @Html.TextBoxFor(x => x.Liability.EndDate, "{0:MM/yyyy}", new { @type = "text", @class = "form-control date-picker" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-3">Đóng hàng tháng:</label>
+                            <div class="col-sm-9">
+                                @Html.TextBoxFor(x => x.Liability.Value, new { @type = "text", @class = "form-control input-mask" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-3">Ghi chú:</label>
+                            <div class="col-sm-9">
+                                @Html.TextBoxFor(x => x.Asset.Note, new { @type = "text", @class = "form-control" })
+                            </div>
+                        </div>
+                    }
                     @if (Model.Asset.AssetType == (int)Constants.ASSET_TYPE.BANK_DEPOSIT)
                     {
                         <div class="form-group">

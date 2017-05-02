@@ -37,7 +37,7 @@ namespace CashFlowManagement.Queries
                 TotalMonthlyPayment = list.Select(x => x.MonthlyPayment).DefaultIfEmpty(0).Sum(),
                 RemainedValue = list.Select(x => x.RemainedValue).DefaultIfEmpty(0).Sum()
             };
-            result.AvarageInterestRate = result.TotalMonthlyPayment / result.TotalLiabilityValue * 1200;
+            result.AverageInterestRate = result.TotalMonthlyInterestPayment / result.TotalLiabilityValue * 1200;
             return result;
         }
 
@@ -120,8 +120,8 @@ namespace CashFlowManagement.Queries
 
             double remainedValue = parentLiability.Value;
             double monthlyInterestPayment = 0;
-            int currentPeriod = FormatUtility.CalculateTimePeriod(parentLiability.StartDate, current) + 1;
-            double monthlyOriginalPayment = parentLiability.Value / FormatUtility.CalculateTimePeriod(parentLiability.StartDate, parentLiability.EndDate);
+            int currentPeriod = FormatUtility.CalculateTimePeriod(parentLiability.StartDate.Value, current) + 1;
+            double monthlyOriginalPayment = parentLiability.Value / FormatUtility.CalculateTimePeriod(parentLiability.StartDate.Value, parentLiability.EndDate.Value);
 
             for (int i = 0; i < currentPeriod; i++)
             {
@@ -145,10 +145,10 @@ namespace CashFlowManagement.Queries
                 assetViewModel.TotalMonthlyPayment = assetViewModel.LiabilityList.List.Where(x => !x.Liability.ParentLiabilityId.HasValue).Sum(x => x.MonthlyPayment);
                 assetViewModel.TotalAnnualPayment = assetViewModel.LiabilityList.List.Where(x => !x.Liability.ParentLiabilityId.HasValue).Sum(x => x.AnnualPayment);
                 assetViewModel.TotalRemainingValue = assetViewModel.LiabilityList.List.Where(x => !x.Liability.ParentLiabilityId.HasValue).Sum(x => x.RemainedValue);
-                assetViewModel.AverageInterestRate = assetViewModel.TotalAnnualPayment / assetViewModel.TotalMortgageValue * 100;
+                assetViewModel.AverageInterestRate = assetViewModel.TotalMortgageValue > 0 ? assetViewModel.TotalAnnualPayment / assetViewModel.TotalMortgageValue * 100 : 0;
                 result.List.Add(assetViewModel);
             }
-            result.TotalMonthlyIncome = result.List.Select(x => x.Income.Value).DefaultIfEmpty(0).Sum();
+            result.TotalMonthlyIncome = result.Type != (int)Constants.Constants.ASSET_TYPE.INSURANCE ? result.List.Select(x => x.Income.Value).DefaultIfEmpty(0).Sum() : 0;
             result.TotalValue = result.List.Select(x => x.Asset.Value).DefaultIfEmpty(0).Sum();
             return result;
         }
@@ -179,7 +179,7 @@ namespace CashFlowManagement.Queries
                 Liabilities parentLiability = list.Where(x => !x.ParentLiabilityId.HasValue).FirstOrDefault();
 
                 liabilityViewModel.Liability = liability;
-                liabilityViewModel.TotalPaymentPeriod = FormatUtility.CalculateTimePeriod(liability.StartDate, liability.EndDate);
+                liabilityViewModel.TotalPaymentPeriod = FormatUtility.CalculateTimePeriod(liability.StartDate.Value, liability.EndDate.Value);
                 if (liability.ParentLiabilityId.HasValue)
                 {
                     liabilityViewModel.CurrentInterestRate = liability.InterestRate;
@@ -190,14 +190,22 @@ namespace CashFlowManagement.Queries
                 }
                 if (liability.StartDate <= current && current < liability.EndDate)
                 {
-                    liabilityViewModel.MonthlyOriginalPayment = liability.Value / FormatUtility.CalculateTimePeriod(parentLiability.StartDate, parentLiability.EndDate);
+                    liabilityViewModel.MonthlyOriginalPayment = liability.Value / FormatUtility.CalculateTimePeriod(parentLiability.StartDate.Value, parentLiability.EndDate.Value);
 
-                    int currentPeriod = FormatUtility.CalculateTimePeriod(parentLiability.StartDate, DateTime.Now);
+                    int currentPeriod = FormatUtility.CalculateTimePeriod(parentLiability.StartDate.Value, DateTime.Now);
 
                     if (currentPeriod > 0)
                     {
-                        liabilityViewModel.RemainedValue = liability.Value - currentPeriod * liabilityViewModel.MonthlyOriginalPayment;
-                        liabilityViewModel.MonthlyInterestPayment = liabilityViewModel.RemainedValue * liabilityViewModel.CurrentInterestRate / 1200;
+                        if (liability.LiabilityType != (int)Constants.Constants.LIABILITY_TYPE.INSURANCE)
+                        {
+                            liabilityViewModel.RemainedValue = liability.Value - currentPeriod * liabilityViewModel.MonthlyOriginalPayment;
+                            liabilityViewModel.MonthlyInterestPayment = liabilityViewModel.RemainedValue * liabilityViewModel.CurrentInterestRate / 1200;
+                        }
+                        else
+                        {
+                            int totalPeriod = FormatUtility.CalculateTimePeriod(parentLiability.StartDate.Value, parentLiability.EndDate.Value);
+                            liabilityViewModel.RemainedValue = liability.Value * (totalPeriod - currentPeriod);
+                        }
                     }
                     else
                     {
@@ -226,17 +234,25 @@ namespace CashFlowManagement.Queries
         {
             LiabilityViewModel result = new LiabilityViewModel();
             result.Liability = liability;
-            int totalPeriod = FormatUtility.CalculateTimePeriod(liability.StartDate, liability.EndDate);
-            DateTime current = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
-            int currentPeriod = FormatUtility.CalculateTimePeriod(liability.StartDate, current) + 1;
+            if (liability.LiabilityType == (int)Constants.Constants.LIABILITY_TYPE.CREDIT_CARD)
+            {
+                double interestPerMonth = liability.InterestRate / 1200;
+                result.MonthlyInterestPayment = liability.Value * interestPerMonth;
+                result.CurrentInterestRate = liability.InterestRate;            }
+            else
+            {
+                int totalPeriod = FormatUtility.CalculateTimePeriod(liability.StartDate.Value, liability.EndDate.Value);
+                DateTime current = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+                int currentPeriod = FormatUtility.CalculateTimePeriod(liability.StartDate.Value, current) + 1;
 
-            double interestPerMonth = liability.InterestRate / 1200;
-            result.TotalPaymentPeriod = totalPeriod;
-            result.MonthlyOriginalPayment = liability.Value / totalPeriod;
-            result.MonthlyInterestPayment = liability.Value * interestPerMonth;
-            result.MonthlyPayment = result.MonthlyInterestPayment + result.MonthlyOriginalPayment;
-            result.CurrentInterestRate = liability.InterestRate;
-            result.RemainedValue = liability.Value - currentPeriod * result.MonthlyOriginalPayment;
+                double interestPerMonth = liability.InterestRate / 1200;
+                result.TotalPaymentPeriod = totalPeriod;
+                result.MonthlyOriginalPayment = liability.Value / totalPeriod;
+                result.MonthlyInterestPayment = liability.Value * interestPerMonth;
+                result.MonthlyPayment = result.MonthlyInterestPayment + result.MonthlyOriginalPayment;
+                result.CurrentInterestRate = liability.InterestRate;
+                result.RemainedValue = liability.Value - currentPeriod * result.MonthlyOriginalPayment;
+            }
 
             return result;
         }
@@ -252,9 +268,9 @@ namespace CashFlowManagement.Queries
 
                 Liabilities parentLiability = list.Where(x => !x.ParentLiabilityId.HasValue).FirstOrDefault();
                 double remainLoan = parentLiability.Value;
-                double numberOfOriginalMonths = (parentLiability.EndDate.Year - parentLiability.StartDate.Year) * 12 + parentLiability.EndDate.Month - parentLiability.StartDate.Month;
+                double numberOfOriginalMonths = (parentLiability.EndDate.Value.Year - parentLiability.StartDate.Value.Year) * 12 + parentLiability.EndDate.Value.Month - parentLiability.StartDate.Value.Month;
                 double monthlyOriginalPayment = parentLiability.Value / numberOfOriginalMonths;
-                DateTime startDate = list.Where(x => x.ParentLiabilityId.HasValue).OrderBy(x => x.StartDate).FirstOrDefault().StartDate;
+                DateTime startDate = list.Where(x => x.ParentLiabilityId.HasValue).OrderBy(x => x.StartDate.Value).FirstOrDefault().StartDate.Value;
                 double monthlyTotalOriginalPayment = 0;
 
                 foreach (var item in list)
@@ -263,7 +279,7 @@ namespace CashFlowManagement.Queries
                     {
                         double interestPerMonth = item.InterestRate / 1200;
 
-                        double numberOfRealMonths = (item.EndDate.Year - item.StartDate.Year) * 12 + item.EndDate.Month - item.StartDate.Month + 1;
+                        double numberOfRealMonths = (item.EndDate.Value.Year - item.StartDate.Value.Year) * 12 + item.EndDate.Value.Month - item.StartDate.Value.Month + 1;
                         if (list.IndexOf(item) == (list.Count - 1)) numberOfRealMonths = numberOfRealMonths - 1;
                         for (int j = 1; j <= numberOfRealMonths; j++)
                         {
@@ -318,8 +334,8 @@ namespace CashFlowManagement.Queries
             }
             else
             {
-                int totalPeriod = FormatUtility.CalculateTimePeriod(liability.StartDate, liability.EndDate);
-                DateTime currentMonth = liability.StartDate;
+                int totalPeriod = FormatUtility.CalculateTimePeriod(liability.StartDate.Value, liability.EndDate.Value);
+                DateTime currentMonth = liability.StartDate.Value;
                 for (int i = 0; i < totalPeriod; i++)
                 {
                     LiabilityPaymentViewModel model = new LiabilityPaymentViewModel
@@ -359,7 +375,7 @@ namespace CashFlowManagement.Queries
                     Liabilities start = liabilities.Where(x => x.StartDate < data.StartDate).OrderByDescending(x => x.StartDate).FirstOrDefault();
                     if (start != null)
                     {
-                        start.EndDate = data.StartDate.AddMonths(-1);
+                        start.EndDate = data.StartDate.Value.AddMonths(-1);
                         entities.Liabilities.Attach(start);
                         var entry = entities.Entry(start);
                         entry.Property(x => x.EndDate).IsModified = true;
@@ -392,7 +408,7 @@ namespace CashFlowManagement.Queries
                     Liabilities end = liabilities.Where(x => x.EndDate > data.EndDate).OrderBy(x => x.EndDate).FirstOrDefault();
                     if (end != null)
                     {
-                        end.StartDate = data.EndDate.AddMonths(1);
+                        end.StartDate = data.EndDate.Value.AddMonths(1);
                         entities.Liabilities.Attach(end);
                         var entry = entities.Entry(end);
                         entry.Property(x => x.StartDate).IsModified = true;
@@ -407,7 +423,7 @@ namespace CashFlowManagement.Queries
                         end.InterestRate = parentLiability.InterestRate;
                         end.CreatedDate = current;
                         end.CreatedBy = Constants.Constants.USER;
-                        end.StartDate = data.EndDate.AddMonths(1);
+                        end.StartDate = data.EndDate.Value.AddMonths(1);
                         end.EndDate = parentLiability.EndDate;
                         end.AssetId = parentLiability.AssetId;
                         end.ParentLiabilityId = parentLiability.Id;

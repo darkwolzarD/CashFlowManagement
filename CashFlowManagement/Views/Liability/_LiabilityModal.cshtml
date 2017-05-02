@@ -95,38 +95,41 @@
                             @Html.TextBoxFor(x => x.InterestRate, new { @Value = "", @type = "text", @class = "form-control percentage" })
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label class="control-label col-sm-3">
-                            @if (Model.LiabilityType == (int)Constants.LIABILITY_TYPE.BUSINESS ||
+                    @if (Model.LiabilityType != (int)Constants.LIABILITY_TYPE.CREDIT_CARD)
+                    {
+                        <div class="form-group">
+                            <label class="control-label col-sm-3">
+                                @if (Model.LiabilityType == (int)Constants.LIABILITY_TYPE.BUSINESS ||
                                 Model.LiabilityType == (int)Constants.LIABILITY_TYPE.REAL_ESTATE)
-                            {
-                                @Html.Raw("Ngày bắt đầu vay:");
-                            }
-                            else
-                            {
-                                @Html.Raw("Từ ngày:");
-                            }
-                        </label>
-                        <div class="col-sm-9">
-                            @Html.TextBoxFor(x => x.StartDate, new { @Value = "", @type = "text", @class = "form-control date-picker" })
+                                {
+                                    @Html.Raw("Ngày bắt đầu vay:");
+                                }
+                                else
+                                {
+                                    @Html.Raw("Từ ngày:");
+                                }
+                            </label>
+                            <div class="col-sm-9">
+                                @Html.TextBoxFor(x => x.StartDate, new { @Value = "", @type = "text", @class = "form-control date-picker" })
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-sm-3">
-                            @if (Model.LiabilityType == (int)Constants.LIABILITY_TYPE.BUSINESS ||
+                        <div class="form-group">
+                            <label class="control-label col-sm-3">
+                                @if (Model.LiabilityType == (int)Constants.LIABILITY_TYPE.BUSINESS ||
                                  Model.LiabilityType == (int)Constants.LIABILITY_TYPE.REAL_ESTATE)
-                            {
-                                @Html.Raw("Ngày trả hết nợ:");
-                            }
-                            else
-                            {
-                                @Html.Raw("Đến' ngày:");
-                            }
-                        </label>
-                        <div class="col-sm-9">
-                            @Html.TextBoxFor(x => x.EndDate, new { @Value = "", @type = "text", @class = "form-control date-picker" })
+                                {
+                                    @Html.Raw("Ngày trả hết nợ:");
+                                }
+                                else
+                                {
+                                    @Html.Raw("Đến ngày:");
+                                }
+                            </label>
+                            <div class="col-sm-9">
+                                @Html.TextBoxFor(x => x.EndDate, new { @Value = "", @type = "text", @class = "form-control date-picker" })
+                            </div>
                         </div>
-                    </div>
+                    }
                     @if (Model.LiabilityType != (int)Constants.LIABILITY_TYPE.BUSINESS &&
                         Model.LiabilityType != (int)Constants.LIABILITY_TYPE.REAL_ESTATE)
                     {

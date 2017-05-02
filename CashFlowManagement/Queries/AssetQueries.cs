@@ -13,7 +13,14 @@ namespace CashFlowManagement.Queries
         public static AssetListViewModel GetAssetByUser(string username, int type)
         {
             Entities entities = new Entities();
-            List<AssetViewModel> queryResult = (from asset in entities.Assets
+            List<AssetViewModel> queryResult = type == (int)Constants.Constants.ASSET_TYPE.INSURANCE ?
+                                                    (from asset in entities.Assets
+                                                     join liability in entities.Liabilities on asset.Id equals liability.AssetId
+                                                     where asset.Username == username && asset.AssetType == type
+                                                     && !asset.DisabledDate.HasValue && !liability.DisabledDate.HasValue
+                                                     select new AssetViewModel { Asset = asset, Liability = liability }).ToList()
+                                                    :
+                                                    (from asset in entities.Assets
                                                      join income in entities.Incomes on asset.Id equals income.AssetId
                                                      where asset.Username == username && asset.AssetType == type
                                                      && !asset.DisabledDate.HasValue && !income.DisabledDate.HasValue
@@ -32,10 +39,17 @@ namespace CashFlowManagement.Queries
         public static AssetViewModel GetAssetById(int id)
         {
             Entities entities = new Entities();
-            AssetViewModel result = (from asset in entities.Assets
-                                     join income in entities.Incomes on asset.Id equals income.AssetId
-                                     where asset.Id == id && !asset.DisabledDate.HasValue && !income.DisabledDate.HasValue
-                                     select new AssetViewModel { Asset = asset, Income = income }).FirstOrDefault();
+            var type = entities.Assets.Where(x => x.Id == id).FirstOrDefault().AssetType;
+            AssetViewModel result = type == (int)Constants.Constants.ASSET_TYPE.INSURANCE ?
+                                                    (from asset in entities.Assets
+                                                     join liability in entities.Liabilities on asset.Id equals liability.AssetId
+                                                     where asset.Id == id && !asset.DisabledDate.HasValue && !liability.DisabledDate.HasValue
+                                                     select new AssetViewModel { Asset = asset, Liability = liability }).FirstOrDefault()
+                                                    :
+                                                    (from asset in entities.Assets
+                                                     join income in entities.Incomes on asset.Id equals income.AssetId
+                                                     where asset.Id == id && !asset.DisabledDate.HasValue && !income.DisabledDate.HasValue
+                                                     select new AssetViewModel { Asset = asset, Income = income }).FirstOrDefault();
             return result;
         }
 
@@ -47,22 +61,41 @@ namespace CashFlowManagement.Queries
             asset.CreatedDate = DateTime.Now;
             asset.AssetType = type;
             asset.CreatedBy = Constants.Constants.USER;
-            if(type == (int)Constants.Constants.ASSET_TYPE.REAL_ESTATE)
+            if (type == (int)Constants.Constants.ASSET_TYPE.REAL_ESTATE)
             {
                 asset.ObtainedBy = (int)Constants.Constants.OBTAIN_BY.CREATE;
             }
 
-            Incomes income = model.Income;
-            income.CreatedDate = DateTime.Now;
-            income.IncomeType = type;
-            income.Username = username;
-            income.CreatedBy = Constants.Constants.USER;
-            asset.Incomes.Add(income);
+            if (type == (int)Constants.Constants.ASSET_TYPE.INSURANCE)
+            {
+                Liabilities liability = new Liabilities
+                {
+                    Name = "Nợ bảo hiểm " + model.Asset.AssetName,
+                    Value = model.Liability.Value,
+                    InterestRate = 0,
+                    StartDate = model.Liability.StartDate,
+                    EndDate = model.Liability.EndDate,
+                    LiabilityType = (int)Constants.Constants.LIABILITY_TYPE.INSURANCE,
+                    CreatedDate = DateTime.Now,
+                    CreatedBy = Constants.Constants.USER,
+                    Username = username
+                };
+                asset.Liabilities.Add(liability);
+            }
+            else
+            {
+                Incomes income = model.Income;
+                income.CreatedDate = DateTime.Now;
+                income.IncomeType = type;
+                income.Username = username;
+                income.CreatedBy = Constants.Constants.USER;
+                asset.Incomes.Add(income);
+            }
 
             entities.Assets.Add(asset);
 
             string sType = string.Empty;
-            
+
             Log log = LogQueries.CreateLog((int)Constants.Constants.LOG_TYPE.ADD, "tài sản \"" + model.Asset.AssetName + "\"", username, model.Asset.Value);
 
             entities.Log.Add(log);
@@ -144,17 +177,37 @@ namespace CashFlowManagement.Queries
             updated_asset.CreatedDate = DateTime.Now;
             updated_asset.CreatedBy = Constants.Constants.USER;
 
-            Incomes updated_income = model.Income;
-            updated_income.CreatedDate = DateTime.Now;
-            updated_income.CreatedBy = Constants.Constants.USER;
-            updated_income.Username = model.Asset.Username;
-            updated_asset.Incomes.Add(updated_income);
-
-            IQueryable<Liabilities> liabilities = entities.Liabilities.Where(x => x.AssetId == model.Asset.Id && !x.DisabledDate.HasValue);
-            foreach (var liability in liabilities)
+            if (model.Asset.AssetType == (int)Constants.Constants.ASSET_TYPE.INSURANCE)
             {
-                liability.AssetId = 0;
+                Liabilities liability = new Liabilities
+                {
+                    Name = "Nợ bảo hiểm " + model.Asset.AssetName,
+                    Value = model.Liability.Value,
+                    InterestRate = 0,
+                    StartDate = model.Liability.StartDate,
+                    EndDate = model.Liability.EndDate,
+                    LiabilityType = (int)Constants.Constants.LIABILITY_TYPE.INSURANCE,
+                    CreatedDate = DateTime.Now,
+                    CreatedBy = Constants.Constants.USER,
+                    Username = model.Asset.Username
+                };
                 updated_asset.Liabilities.Add(liability);
+            }
+            else
+            {
+                Incomes updated_income = model.Income;
+                updated_income.CreatedDate = DateTime.Now;
+                updated_income.CreatedBy = Constants.Constants.USER;
+                updated_income.Username = model.Asset.Username;
+                updated_asset.Incomes.Add(updated_income);
+
+                IQueryable<Liabilities> liabilities = entities.Liabilities.Where(x => x.AssetId == model.Asset.Id && !x.DisabledDate.HasValue);
+
+                foreach (var liability in liabilities)
+                {
+                    liability.AssetId = 0;
+                    updated_asset.Liabilities.Add(liability);
+                }
             }
 
             DeleteAsset(model.Asset.Id);
@@ -180,14 +233,17 @@ namespace CashFlowManagement.Queries
             entry.Property(x => x.DisabledDate).IsModified = true;
             entry.Property(x => x.DisabledBy).IsModified = true;
 
-            Incomes income = entities.Incomes.Where(x => x.AssetId == id && !x.DisabledDate.HasValue).FirstOrDefault();
-            income.DisabledDate = DateTime.Now;
-            income.DisabledBy = Constants.Constants.USER;
+            if (asset.AssetType != (int)Constants.Constants.ASSET_TYPE.INSURANCE)
+            {
+                Incomes income = entities.Incomes.Where(x => x.AssetId == id && !x.DisabledDate.HasValue).FirstOrDefault();
+                income.DisabledDate = DateTime.Now;
+                income.DisabledBy = Constants.Constants.USER;
 
-            entities.Incomes.Attach(income);
-            var entry_2 = entities.Entry(income);
-            entry_2.Property(x => x.DisabledDate).IsModified = true;
-            entry_2.Property(x => x.DisabledBy).IsModified = true;
+                entities.Incomes.Attach(income);
+                var entry_2 = entities.Entry(income);
+                entry_2.Property(x => x.DisabledDate).IsModified = true;
+                entry_2.Property(x => x.DisabledBy).IsModified = true;
+            }
 
             IQueryable<Liabilities> liabilities = entities.Liabilities.Where(x => x.AssetId == asset.Id && !x.DisabledDate.HasValue);
             foreach (var liability in liabilities)

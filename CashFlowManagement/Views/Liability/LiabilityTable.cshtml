@@ -38,7 +38,7 @@
         Tạo mới
     </button>
 
-    <div class="asset-table">
+    <div class="liability-table">
         <table class="table table-bordered table-condensed table-responsive">
             <thead>
                 <tr>
@@ -65,13 +65,21 @@
                     {
                         <th class="text-center">Lãi vay</th>
                     }
-                    <th class="text-center">Từ ngày</th>
-                    <th class="text-center">Đến ngày</th>
-                    <th class="text-center">Tổng số tháng phải trả</th>
-                    <th class="text-center">Trả lãi vay tháng</th>
-                    <th class="text-center">Trả vốn vay tháng</th>
-                    <th class="text-center">Tổng phải trả hàng tháng</th>
-                    <th class="text-center">Tiền vay còn phải trả</th>
+                    @if (Model.Type == (int)Constants.LIABILITY_TYPE.CAR || Model.Type == (int)Constants.LIABILITY_TYPE.OTHERS)
+                    {
+                        <th class="text-center">Từ ngày</th>
+                        <th class="text-center">Đến ngày</th>
+                        <th class="text-center">Tổng số tháng phải trả</th>
+                        <th class="text-center">Trả lãi vay tháng</th>
+                        <th class="text-center">Trả vốn vay tháng</th>
+                        <th class="text-center">Tổng phải trả hàng tháng</th>
+                        <th class="text-center">Tiền vay còn phải trả</th>
+                    }
+                    else if (Model.Type == (int)Constants.LIABILITY_TYPE.CREDIT_CARD)
+                    {
+                        <th class="text-center">Phải trả hàng tháng</th>
+                        <th class="text-center">Phải trả hàng năm</th>
+                    }
                     <th class="text-center">Ghi chú</th>
                     <th class="text-center">Chỉnh sửa</th>
                 </tr>
@@ -89,15 +97,25 @@
                         {
                             <td></td>
                         }
-                        <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.TotalLiabilityValue)</strong></td>
-                        <td>@*<strong>@FormatUtility.DisplayPercentageForNumber(Model.AvarageInterestRate)</strong>*@</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.TotalMonthlyInterestPayment)</strong></td>
-                        <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.TotalMonthlyOriginalPayment)</strong></td>
-                        <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.TotalMonthlyPayment)</strong></td>
-                        <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.RemainedValue)</strong></td>
+                        @if (Model.Type == (int)Constants.LIABILITY_TYPE.CAR || Model.Type == (int)Constants.LIABILITY_TYPE.OTHERS)
+                        {
+                            <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.TotalLiabilityValue)</strong></td>
+                            <td><strong>@FormatUtility.DisplayPercentageForNumber(Model.AverageInterestRate)</strong></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.TotalMonthlyInterestPayment)</strong></td>
+                            <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.TotalMonthlyOriginalPayment)</strong></td>
+                            <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.TotalMonthlyPayment)</strong></td>
+                            <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.RemainedValue)</strong></td>
+                        }
+                        else
+                        {
+                            <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.TotalLiabilityValue)</strong></td>
+                            <td><strong>@FormatUtility.DisplayPercentageForNumber(Model.AverageInterestRate)</strong></td>
+                            <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.TotalMonthlyPayment)</strong></td>
+                            <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.TotalMonthlyPayment * 12)</strong></td>
+                        }
                         <td></td>
                         <td></td>
                     </tr>
@@ -115,13 +133,21 @@
                             }
                             <td>@FormatUtility.DisplayThousandSeparatorsForNumber(liabilityViewModel.Liability.Value)</td>
                             <td>@FormatUtility.DisplayPercentageForNumber(liabilityViewModel.Liability.InterestRate)</td>
-                            <td>@liabilityViewModel.Liability.StartDate.ToString("MM/yyyy")</td>
-                            <td>@liabilityViewModel.Liability.EndDate.ToString("MM/yyyy")</td>
-                            <td>@FormatUtility.DisplayThousandSeparatorsForNumber(liabilityViewModel.TotalPaymentPeriod)</td>
-                            <td><a href="#" class="interest-info" data-liability-id="@liabilityViewModel.Liability.Id">@FormatUtility.DisplayThousandSeparatorsForNumber(liabilityViewModel.MonthlyInterestPayment)</a></td>
-                            <td>@FormatUtility.DisplayThousandSeparatorsForNumber(liabilityViewModel.MonthlyOriginalPayment)</td>
-                            <td>@FormatUtility.DisplayThousandSeparatorsForNumber(liabilityViewModel.MonthlyPayment)</td>
-                            <td>@FormatUtility.DisplayThousandSeparatorsForNumber(liabilityViewModel.RemainedValue)</td>
+                            @if (Model.Type == (int)Constants.LIABILITY_TYPE.CAR || Model.Type == (int)Constants.LIABILITY_TYPE.OTHERS)
+                            {
+                                <td>@liabilityViewModel.Liability.StartDate.Value.ToString("MM/yyyy")</td>
+                                <td>@liabilityViewModel.Liability.EndDate.Value.ToString("MM/yyyy")</td>
+                                <td>@FormatUtility.DisplayThousandSeparatorsForNumber(liabilityViewModel.TotalPaymentPeriod)</td>
+                                <td><a href="#" class="interest-info" data-liability-id="@liabilityViewModel.Liability.Id">@FormatUtility.DisplayThousandSeparatorsForNumber(liabilityViewModel.MonthlyInterestPayment)</a></td>
+                                <td>@FormatUtility.DisplayThousandSeparatorsForNumber(liabilityViewModel.MonthlyOriginalPayment)</td>
+                                <td>@FormatUtility.DisplayThousandSeparatorsForNumber(liabilityViewModel.MonthlyPayment)</td>
+                                <td>@FormatUtility.DisplayThousandSeparatorsForNumber(liabilityViewModel.RemainedValue)</td>
+                            }
+                            else if (Model.Type == (int)Constants.LIABILITY_TYPE.CREDIT_CARD)
+                            {
+                                <td>@FormatUtility.DisplayThousandSeparatorsForNumber(liabilityViewModel.MonthlyPayment)</td>
+                                <td>@FormatUtility.DisplayThousandSeparatorsForNumber(liabilityViewModel.MonthlyPayment * 12)</td>
+                            }
                             <td>@liabilityViewModel.Liability.Note</td>
                             <td class="text-center" width="160" style="vertical-align: middle">
                                 <button class="btn btn-success update-liability" data-liability-id="@liabilityViewModel.Liability.Id">
@@ -168,12 +194,12 @@
 
 <script type="text/javascript" src="~/Scripts/liability.js"></script>
 <script type="text/javascript">
-        var Url = new Object();
-        Url.LiabilityModal = '@Url.Action("_LiabilityModal", "Liability")';
-        Url.CreateLiability = '@Url.Action("CreateLiability", "Liability")';
-        Url.LoadLiability = '@Url.Action("_LiabilityUpdateModal", "Liability")';
-        Url.UpdateLiability = '@Url.Action("UpdateLiability", "Liability")';
-        Url.DeleteLiability = '@Url.Action("DeleteLiability", "Liability")';
-        Url.PaymentPerMonth = '@Url.Action("_PaymentPerMonth", "Liability")';
-        var liabilityType = @Model.Type;
+    var Url = new Object();
+    Url.LiabilityModal = '@Url.Action("_LiabilityModal", "Liability")';
+    Url.CreateLiability = '@Url.Action("CreateLiability", "Liability")';
+    Url.LoadLiability = '@Url.Action("_LiabilityUpdateModal", "Liability")';
+    Url.UpdateLiability = '@Url.Action("UpdateLiability", "Liability")';
+    Url.DeleteLiability = '@Url.Action("DeleteLiability", "Liability")';
+    Url.PaymentPerMonth = '@Url.Action("_PaymentPerMonth", "Liability")';
+    var liabilityType = @Model.Type;
 </script>

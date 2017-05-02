@@ -85,7 +85,6 @@
                         <td style="color: red;"><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.List.Select(x => x.TotalMonthlyPayment).DefaultIfEmpty(0).Sum())</strong></td>
                         <td style="color: red;"><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.List.Select(x => x.TotalAnnualPayment).DefaultIfEmpty(0).Sum())</strong></td>
                         <td style="color: red;"><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.List.Select(x => x.TotalRemainingValue).DefaultIfEmpty(0).Sum())</strong></td>
-                        <td></td>
                     </tr>
                     foreach (var item in Model.List)
                     {

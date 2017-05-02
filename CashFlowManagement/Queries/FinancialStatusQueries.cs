@@ -64,7 +64,7 @@ namespace CashFlowManagement.Queries
                                                          && !x.DisabledDate.HasValue);
             foreach (var carLiability in carLiabilities)
             {
-                result.CarPayment += carLiability.Value / FormatUtility.CalculateTimePeriod(carLiability.StartDate, carLiability.EndDate) + carLiability.Value * carLiability.InterestRate / 1200;
+                result.CarPayment += carLiability.Value / FormatUtility.CalculateTimePeriod(carLiability.StartDate.Value, carLiability.EndDate.Value) + carLiability.Value * carLiability.InterestRate / 1200;
             }
 
             var creditCardLiabilities = entities.Liabilities.Where(x => x.Username.Equals(username)
@@ -72,7 +72,7 @@ namespace CashFlowManagement.Queries
                                                          && !x.DisabledDate.HasValue);
             foreach (var creditCarLiability in creditCardLiabilities)
             {
-                result.CreditCard += creditCarLiability.Value / FormatUtility.CalculateTimePeriod(creditCarLiability.StartDate, creditCarLiability.EndDate) + creditCarLiability.Value * creditCarLiability.InterestRate / 1200;
+                result.CreditCard += creditCarLiability.Value / FormatUtility.CalculateTimePeriod(creditCarLiability.StartDate.Value, creditCarLiability.EndDate.Value) + creditCarLiability.Value * creditCarLiability.InterestRate / 1200;
             }
 
             var homeLiabilities = entities.Liabilities.Where(x => x.Username.Equals(username)
@@ -96,7 +96,7 @@ namespace CashFlowManagement.Queries
                                                          && !x.DisabledDate.HasValue && !x.ParentLiabilityId.HasValue);
             foreach (var otherLiability in otherLiabilities)
             {
-                result.OtherLoanExpenses += otherLiability.Value / FormatUtility.CalculateTimePeriod(otherLiability.StartDate, otherLiability.EndDate) + otherLiability.Value * otherLiability.InterestRate / 1200;
+                result.OtherLoanExpenses += otherLiability.Value / FormatUtility.CalculateTimePeriod(otherLiability.StartDate.Value, otherLiability.EndDate.Value) + otherLiability.Value * otherLiability.InterestRate / 1200;
             }
 
             result.CreditCardLiability = entities.Liabilities.Where(x => x.Username.Equals(username)

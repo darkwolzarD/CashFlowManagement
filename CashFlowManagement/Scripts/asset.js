@@ -43,7 +43,7 @@
         return true;
     }
 
-    $(document).on("shown.bs.modal", "#create-new-asset-modal, #create-new-liability-modal, update-asset-modal, #update-liability-modal, #sell-asset-modal", function () {
+    $(document).on("shown.bs.modal", "#create-new-asset-modal, #create-new-liability-modal, #update-asset-modal, #update-liability-modal, #sell-asset-modal", function () {
         MaskInput();
         InitiateDatePicker();
     })
