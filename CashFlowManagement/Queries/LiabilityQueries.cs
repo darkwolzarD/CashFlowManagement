@@ -71,6 +71,10 @@ namespace CashFlowManagement.Queries
             liability.CreatedDate = DateTime.Now;
             liability.CreatedBy = Constants.Constants.USER;
             liability.Username = username;
+            if (liability.LiabilityType != (int)Constants.Constants.LIABILITY_TYPE.STOCK)
+            {
+                liability.TransactionId = null;
+            }
             entities.Liabilities.Add(liability);
 
             if (liability.LiabilityType == (int)Constants.Constants.LIABILITY_TYPE.REAL_ESTATE ||
@@ -90,7 +94,7 @@ namespace CashFlowManagement.Queries
                 childLiability.Liabilities1.Add(liability);
                 childLiability.Username = username;
                 childLiability.InterestType = liability.InterestType;
-                if(liability.LiabilityType == (int)Constants.Constants.LIABILITY_TYPE.STOCK)
+                if (liability.LiabilityType == (int)Constants.Constants.LIABILITY_TYPE.STOCK)
                 {
                     childLiability.TransactionId = liability.TransactionId;
                 }
@@ -150,7 +154,16 @@ namespace CashFlowManagement.Queries
                 assetViewModel.TotalMonthlyPayment = assetViewModel.LiabilityList.List.Where(x => !x.Liability.ParentLiabilityId.HasValue).Sum(x => x.MonthlyPayment);
                 assetViewModel.TotalAnnualPayment = assetViewModel.LiabilityList.List.Where(x => !x.Liability.ParentLiabilityId.HasValue).Sum(x => x.AnnualPayment);
                 assetViewModel.TotalRemainingValue = assetViewModel.LiabilityList.List.Where(x => !x.Liability.ParentLiabilityId.HasValue).Sum(x => x.RemainedValue);
-                assetViewModel.AverageInterestRate = assetViewModel.TotalMortgageValue > 0 ? assetViewModel.TotalAnnualPayment / assetViewModel.TotalMortgageValue * 100 : 0;
+                if (assetListViewModel.Type == (int)Constants.Constants.ASSET_TYPE.REAL_ESTATE || assetListViewModel.Type == (int)Constants.Constants.ASSET_TYPE.BUSINESS ||
+                    assetListViewModel.Type == (int)Constants.Constants.ASSET_TYPE.STOCK)
+                {
+                    double currentTotalMortgageValue = assetViewModel.LiabilityList.List.Where(x => !x.Liability.ParentLiabilityId.HasValue && x.CurrentInterestRate != 0).Sum(x => x.Liability.Value);
+                    assetViewModel.AverageInterestRate = assetViewModel.TotalOriginalPayment / currentTotalMortgageValue * 100;
+                }
+                else
+                {
+                    assetViewModel.AverageInterestRate = assetViewModel.TotalMortgageValue > 0 ? assetViewModel.TotalAnnualPayment / assetViewModel.TotalMortgageValue * 100 : 0;
+                }
                 result.List.Add(assetViewModel);
             }
             result.TotalMonthlyIncome = result.Type != (int)Constants.Constants.ASSET_TYPE.INSURANCE && result.Type != (int)Constants.Constants.ASSET_TYPE.STOCK ? result.List.Select(x => x.Income.Value).DefaultIfEmpty(0).Sum() : 0;
@@ -167,7 +180,7 @@ namespace CashFlowManagement.Queries
             foreach (var liability in liabilities)
             {
                 IQueryable<Liabilities> list;
-                
+
                 if (liability.ParentLiabilityId.HasValue)
                 {
                     list = liabilities.Where(x => x.Id == liability.ParentLiabilityId || x.ParentLiabilityId == liability.ParentLiabilityId);
@@ -244,7 +257,8 @@ namespace CashFlowManagement.Queries
             {
                 double interestPerMonth = liability.InterestRate / 1200;
                 result.MonthlyInterestPayment = liability.Value * interestPerMonth;
-                result.CurrentInterestRate = liability.InterestRate;            }
+                result.CurrentInterestRate = liability.InterestRate;
+            }
             else
             {
                 int totalPeriod = FormatUtility.CalculateTimePeriod(liability.StartDate.Value, liability.EndDate.Value);

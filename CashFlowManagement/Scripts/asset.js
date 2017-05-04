@@ -50,7 +50,7 @@
         return true;
     }
 
-    $(document).on("shown.bs.modal", "#create-new-asset-modal, #create-new-liability-modal, #update-asset-modal, #update-liability-modal, #sell-asset-modal", function () {
+    $(document).on("shown.bs.modal", "#create-new-asset-modal, #update-asset-modal" , function () {
         MaskInput();
         if (assetType == 5) {
             InitiateDatePicker2();
@@ -58,6 +58,11 @@
         else {
             InitiateDatePicker();
         }
+    })
+
+    $(document).on("shown.bs.modal", "#create-new-liability-modal, #update-liability-modal, #sell-asset-modal", function () {
+        MaskInput();
+        InitiateDatePicker();
     })
 
     $(document).on("shown.bs.modal", "#buy-new-asset-modal", function () {
@@ -198,11 +203,15 @@
 
     $(document).on("click", ".update-asset", function () {
         var id = $(this).data("asset-id");
+        var transaction_id = $(this).data("transaction-id");
+        if (typeof transaction_id == 'undefined') {
+            transaction_id = 0;
+        }
 
         $.ajax({
             url: Url.LoadAsset,
             type: "get",
-            data: { assetId: id },
+            data: { assetId: id, transactionId: transaction_id },
             contentType: "html",
             success: function (data) {
                 if (data.length > 0) {
@@ -225,6 +234,9 @@
             type: "post",
             data: data,
             success: function (data) {
+                if (data.result == -1) {
+                    alert("Tên tài sản đã tồn tại, vui lòng nhập tên khác");
+                }
                 if (data.result > 0) {
                     $("#update-asset-modal").modal("hide");
                     LoadTable();

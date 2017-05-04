@@ -63,7 +63,8 @@
                             @Html.TextBoxFor(x => x.Value, new { @Value = "", @type = "text", @class = "form-control input-mask" })
                         </div>
                     </div>
-                    @if (Model.LiabilityType == (int)Constants.LIABILITY_TYPE.REAL_ESTATE || Model.LiabilityType == (int)Constants.LIABILITY_TYPE.BUSINESS)
+                    @if (Model.LiabilityType == (int)Constants.LIABILITY_TYPE.REAL_ESTATE || Model.LiabilityType == (int)Constants.LIABILITY_TYPE.BUSINESS
+                        || Model.LiabilityType == (int)Constants.LIABILITY_TYPE.STOCK)
                     {
                         <div class="form-group">
                             <label class="control-label col-sm-3">Loại lãi suất:</label>
@@ -78,28 +79,6 @@
                                                                                                    new SelectListItem
                                                                                                    {
                                                                                                        Text = "Giảm dần",
-                                                                                                       Value = "2",
-                                                                                                       Selected = true
-                                                                                                   },
-                                                                                                }, new { @type = "text", @class = "form-control" })
-                            </div>
-                        </div>
-                    }
-                    @if (Model.LiabilityType == (int)Constants.LIABILITY_TYPE.STOCK)
-                    {
-                        <div class="form-group">
-                            <label class="control-label col-sm-3">Kiểu trả lãi và gốc:</label>
-                            <div class="col-sm-9">
-                                @Html.DropDownListFor(x => x.InterestType, new List<SelectListItem> {
-                                                                                                   new SelectListItem
-                                                                                                   {
-                                                                                                       Text = "Trả cuối kì",
-                                                                                                       Value = "1",
-                                                                                                       Selected = true
-                                                                                                   },
-                                                                                                   new SelectListItem
-                                                                                                   {
-                                                                                                       Text = "Trả hàng tháng",
                                                                                                        Value = "2",
                                                                                                        Selected = true
                                                                                                    },

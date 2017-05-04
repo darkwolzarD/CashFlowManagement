@@ -23,9 +23,9 @@ namespace CashFlowManagement.Controllers
             return View(model);
         }
 
-        public PartialViewResult _AssetUpdateModal(int assetId)
+        public PartialViewResult _AssetUpdateModal(int assetId, int transactionId)
         {
-            AssetViewModel model = AssetQueries.GetAssetById(assetId);
+            AssetViewModel model = AssetQueries.GetAssetById(assetId, transactionId);
             return PartialView(model);
         }
 
