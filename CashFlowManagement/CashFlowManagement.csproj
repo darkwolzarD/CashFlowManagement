@@ -209,13 +209,7 @@
     <Compile Include="EntityModel\Log.cs">
       <DependentUpon>EntityModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="EntityModel\Stocks.cs">
-      <DependentUpon>EntityModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="EntityModel\sysdiagrams.cs">
-      <DependentUpon>EntityModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="EntityModel\Transactions.cs">
+    <Compile Include="EntityModel\StockTransactions.cs">
       <DependentUpon>EntityModel.tt</DependentUpon>
     </Compile>
     <Compile Include="EntityModel\Users.cs">

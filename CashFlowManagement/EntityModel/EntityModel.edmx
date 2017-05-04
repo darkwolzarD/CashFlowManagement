@@ -20,6 +20,7 @@
           <Property Name="Note" Type="nvarchar" MaxLength="50" />
           <Property Name="AssetType" Type="int" Nullable="false" />
           <Property Name="Username" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="ObtainedBy" Type="int" />
         </EntityType>
         <EntityType Name="Expenses">
           <Key>
@@ -60,8 +61,8 @@
           <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Value" Type="float" Nullable="false" />
           <Property Name="InterestRate" Type="float" Nullable="false" />
-          <Property Name="StartDate" Type="date" Nullable="false" />
-          <Property Name="EndDate" Type="date" Nullable="false" />
+          <Property Name="StartDate" Type="date" />
+          <Property Name="EndDate" Type="date" />
           <Property Name="LiabilityType" Type="int" Nullable="false" />
           <Property Name="CreatedDate" Type="datetime" Nullable="false" />
           <Property Name="DisabledDate" Type="datetime" />
@@ -74,6 +75,8 @@
           <Property Name="Note" Type="nvarchar" MaxLength="50" />
           <Property Name="OriginalValue" Type="float" />
           <Property Name="Purpose" Type="nvarchar" MaxLength="50" />
+          <Property Name="TransactionId" Type="int" />
+          <Property Name="PaymentMethod" Type="int" />
         </EntityType>
         <EntityType Name="Log">
           <Key>
@@ -89,22 +92,24 @@
           <Property Name="CreatedBy" Type="nvarchar" MaxLength="6" Nullable="false" />
           <Property Name="Username" Type="nvarchar" MaxLength="20" Nullable="false" />
         </EntityType>
-        <EntityType Name="Stocks">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="TradeDate" Type="date" Nullable="false" />
-          <Property Name="AssetId" Type="int" Nullable="false" />
-        </EntityType>
-        <EntityType Name="Transactions">
+        <EntityType Name="StockTransactions">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
           <Property Name="TransactionDate" Type="datetime" Nullable="false" />
+          <Property Name="TransactionType" Type="int" Nullable="false" />
+          <Property Name="NumberOfShares" Type="int" Nullable="false" />
+          <Property Name="SpotPrice" Type="float" Nullable="false" />
+          <Property Name="AveragePrice" Type="float" Nullable="false" />
+          <Property Name="BrokerFee" Type="float" Nullable="false" />
           <Property Name="Value" Type="float" Nullable="false" />
+          <Property Name="ExpectedDividend" Type="float" Nullable="false" />
+          <Property Name="CreatedDate" Type="datetime" Nullable="false" />
+          <Property Name="CreatedBy" Type="nvarchar" MaxLength="6" Nullable="false" />
+          <Property Name="Username" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Note" Type="nvarchar" MaxLength="50" />
           <Property Name="AssetId" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Users">
@@ -198,6 +203,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Liabilities_StockTransactions">
+          <End Role="StockTransactions" Type="Self.StockTransactions" Multiplicity="0..1" />
+          <End Role="Liabilities" Type="Self.Liabilities" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="StockTransactions">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Liabilities">
+              <PropertyRef Name="TransactionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Liabilities_Users">
           <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
           <End Role="Liabilities" Type="Self.Liabilities" Multiplicity="*" />
@@ -222,26 +239,14 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Stock_Assets">
-          <End Role="Assets" Type="Self.Assets" Multiplicity="1" />
-          <End Role="Stocks" Type="Self.Stocks" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Assets">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Stocks">
-              <PropertyRef Name="AssetId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Transactions_Assets">
           <End Role="Assets" Type="Self.Assets" Multiplicity="1" />
-          <End Role="Transactions" Type="Self.Transactions" Multiplicity="*" />
+          <End Role="StockTransactions" Type="Self.StockTransactions" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Assets">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="Transactions">
+            <Dependent Role="StockTransactions">
               <PropertyRef Name="AssetId" />
             </Dependent>
           </ReferentialConstraint>
@@ -252,8 +257,7 @@
           <EntitySet Name="Incomes" EntityType="Self.Incomes" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Liabilities" EntityType="Self.Liabilities" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Log" EntityType="Self.Log" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Stocks" EntityType="Self.Stocks" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Transactions" EntityType="Self.Transactions" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="StockTransactions" EntityType="Self.StockTransactions" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_Assets_Users" Association="Self.FK_Assets_Users">
             <End Role="Users" EntitySet="Users" />
@@ -283,6 +287,10 @@
             <End Role="Liabilities" EntitySet="Liabilities" />
             <End Role="Liabilities1" EntitySet="Liabilities" />
           </AssociationSet>
+          <AssociationSet Name="FK_Liabilities_StockTransactions" Association="Self.FK_Liabilities_StockTransactions">
+            <End Role="StockTransactions" EntitySet="StockTransactions" />
+            <End Role="Liabilities" EntitySet="Liabilities" />
+          </AssociationSet>
           <AssociationSet Name="FK_Liabilities_Users" Association="Self.FK_Liabilities_Users">
             <End Role="Users" EntitySet="Users" />
             <End Role="Liabilities" EntitySet="Liabilities" />
@@ -291,13 +299,9 @@
             <End Role="Users" EntitySet="Users" />
             <End Role="Log" EntitySet="Log" />
           </AssociationSet>
-          <AssociationSet Name="FK_Stock_Assets" Association="Self.FK_Stock_Assets">
-            <End Role="Assets" EntitySet="Assets" />
-            <End Role="Stocks" EntitySet="Stocks" />
-          </AssociationSet>
           <AssociationSet Name="FK_Transactions_Assets" Association="Self.FK_Transactions_Assets">
             <End Role="Assets" EntitySet="Assets" />
-            <End Role="Transactions" EntitySet="Transactions" />
+            <End Role="StockTransactions" EntitySet="StockTransactions" />
           </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -309,8 +313,8 @@
           <EntitySet Name="Expenses" EntityType="CFMModel.Expenses" />
           <EntitySet Name="Incomes" EntityType="CFMModel.Incomes" />
           <EntitySet Name="Liabilities" EntityType="CFMModel.Liabilities" />
-          <EntitySet Name="Stocks" EntityType="CFMModel.Stocks" />
-          <EntitySet Name="Transactions" EntityType="CFMModel.Transactions" />
+          <EntitySet Name="Log" EntityType="CFMModel.Log" />
+          <EntitySet Name="StockTransactions" EntityType="CFMModel.StockTransactions" />
           <EntitySet Name="Users" EntityType="CFMModel.Users" />
           <AssociationSet Name="FK_Assets_Users" Association="CFMModel.FK_Assets_Users">
             <End Role="Users" EntitySet="Users" />
@@ -324,13 +328,9 @@
             <End Role="Assets" EntitySet="Assets" />
             <End Role="Liabilities" EntitySet="Liabilities" />
           </AssociationSet>
-          <AssociationSet Name="FK_Stock_Assets" Association="CFMModel.FK_Stock_Assets">
-            <End Role="Assets" EntitySet="Assets" />
-            <End Role="Stocks" EntitySet="Stocks" />
-          </AssociationSet>
           <AssociationSet Name="FK_Transactions_Assets" Association="CFMModel.FK_Transactions_Assets">
             <End Role="Assets" EntitySet="Assets" />
-            <End Role="Transactions" EntitySet="Transactions" />
+            <End Role="StockTransactions" EntitySet="StockTransactions" />
           </AssociationSet>
           <AssociationSet Name="FK_Expenses_Liabilities" Association="CFMModel.FK_Expenses_Liabilities">
             <End Role="Liabilities" EntitySet="Liabilities" />
@@ -348,11 +348,14 @@
             <End Role="Liabilities" EntitySet="Liabilities" />
             <End Role="Liabilities1" EntitySet="Liabilities" />
           </AssociationSet>
+          <AssociationSet Name="FK_Liabilities_StockTransactions" Association="CFMModel.FK_Liabilities_StockTransactions">
+            <End Role="StockTransactions" EntitySet="StockTransactions" />
+            <End Role="Liabilities" EntitySet="Liabilities" />
+          </AssociationSet>
           <AssociationSet Name="FK_Liabilities_Users" Association="CFMModel.FK_Liabilities_Users">
             <End Role="Users" EntitySet="Users" />
             <End Role="Liabilities" EntitySet="Liabilities" />
           </AssociationSet>
-          <EntitySet Name="Log" EntityType="CFMModel.Log" />
           <AssociationSet Name="FK_Log_Users" Association="CFMModel.FK_Log_Users">
             <End Role="Users" EntitySet="Users" />
             <End Role="Log" EntitySet="Log" />
@@ -373,11 +376,11 @@
           <Property Name="Note" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="AssetType" Type="Int32" Nullable="false" />
           <Property Name="Username" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="ObtainedBy" Type="Int32" />
           <NavigationProperty Name="Users" Relationship="CFMModel.FK_Assets_Users" FromRole="Assets" ToRole="Users" />
           <NavigationProperty Name="Incomes" Relationship="CFMModel.FK_Incomes_Assets" FromRole="Assets" ToRole="Incomes" />
           <NavigationProperty Name="Liabilities" Relationship="CFMModel.FK_Liabilities_Assets" FromRole="Assets" ToRole="Liabilities" />
-          <NavigationProperty Name="Stocks" Relationship="CFMModel.FK_Stock_Assets" FromRole="Assets" ToRole="Stocks" />
-          <NavigationProperty Name="Transactions" Relationship="CFMModel.FK_Transactions_Assets" FromRole="Assets" ToRole="Transactions" />
+          <NavigationProperty Name="StockTransactions" Relationship="CFMModel.FK_Transactions_Assets" FromRole="Assets" ToRole="StockTransactions" />
         </EntityType>
         <EntityType Name="Expenses">
           <Key>
@@ -388,13 +391,13 @@
           <Property Name="ExpenseType" Type="Int32" Nullable="false" />
           <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="DisabledDate" Type="DateTime" Precision="3" />
-          <Property Name="LiabilityId" Type="Int32" />
-          <Property Name="Username" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Liabilities" Relationship="CFMModel.FK_Expenses_Liabilities" FromRole="Expenses" ToRole="Liabilities" />
-          <NavigationProperty Name="Users" Relationship="CFMModel.FK_Expenses_Users" FromRole="Expenses" ToRole="Users" />
           <Property Name="CreatedBy" Type="String" Nullable="false" MaxLength="6" FixedLength="false" Unicode="true" />
           <Property Name="DisabledBy" Type="String" MaxLength="6" FixedLength="false" Unicode="true" />
+          <Property Name="LiabilityId" Type="Int32" />
+          <Property Name="Username" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Liabilities" Relationship="CFMModel.FK_Expenses_Liabilities" FromRole="Expenses" ToRole="Liabilities" />
+          <NavigationProperty Name="Users" Relationship="CFMModel.FK_Expenses_Users" FromRole="Expenses" ToRole="Users" />
         </EntityType>
         <EntityType Name="Incomes">
           <Key>
@@ -409,10 +412,10 @@
           <Property Name="IncomeType" Type="Int32" Nullable="false" />
           <Property Name="AssetId" Type="Int32" />
           <Property Name="Username" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Assets" Relationship="CFMModel.FK_Incomes_Assets" FromRole="Incomes" ToRole="Assets" />
-          <NavigationProperty Name="Users" Relationship="CFMModel.FK_Incomes_Users" FromRole="Incomes" ToRole="Users" />
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Note" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Assets" Relationship="CFMModel.FK_Incomes_Assets" FromRole="Incomes" ToRole="Assets" />
+          <NavigationProperty Name="Users" Relationship="CFMModel.FK_Incomes_Users" FromRole="Incomes" ToRole="Users" />
         </EntityType>
         <EntityType Name="Liabilities">
           <Key>
@@ -422,8 +425,8 @@
           <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Value" Type="Double" Nullable="false" />
           <Property Name="InterestRate" Type="Double" Nullable="false" />
-          <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="EndDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="StartDate" Type="DateTime" Precision="0" />
+          <Property Name="EndDate" Type="DateTime" Precision="0" />
           <Property Name="LiabilityType" Type="Int32" Nullable="false" />
           <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="DisabledDate" Type="DateTime" Precision="3" />
@@ -433,34 +436,54 @@
           <Property Name="ParentLiabilityId" Type="Int32" />
           <Property Name="Username" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="InterestType" Type="Int32" />
+          <Property Name="Note" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="OriginalValue" Type="Double" />
+          <Property Name="Purpose" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TransactionId" Type="Int32" />
           <NavigationProperty Name="Assets" Relationship="CFMModel.FK_Liabilities_Assets" FromRole="Liabilities" ToRole="Assets" />
           <NavigationProperty Name="Expenses" Relationship="CFMModel.FK_Expenses_Liabilities" FromRole="Liabilities" ToRole="Expenses" />
           <NavigationProperty Name="Liabilities1" Relationship="CFMModel.FK_Liabilities_Liabilities" FromRole="Liabilities" ToRole="Liabilities1" />
           <NavigationProperty Name="Liabilities2" Relationship="CFMModel.FK_Liabilities_Liabilities" FromRole="Liabilities1" ToRole="Liabilities" />
+          <NavigationProperty Name="StockTransactions" Relationship="CFMModel.FK_Liabilities_StockTransactions" FromRole="Liabilities" ToRole="StockTransactions" />
           <NavigationProperty Name="Users" Relationship="CFMModel.FK_Liabilities_Users" FromRole="Liabilities" ToRole="Users" />
-          <Property Name="Note" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="OriginalValue" Type="Double" />
-          <Property Name="Purpose" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PaymentMethod" Type="Int32" />
         </EntityType>
-        <EntityType Name="Stocks">
+        <EntityType Name="Log">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="TradeDate" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="AssetId" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Assets" Relationship="CFMModel.FK_Stock_Assets" FromRole="Stocks" ToRole="Assets" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="LogType" Type="Int32" Nullable="false" />
+          <Property Name="LogContent" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Value" Type="Double" Nullable="false" />
+          <Property Name="AvailableMoney" Type="Double" Nullable="false" />
+          <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreatedBy" Type="String" Nullable="false" MaxLength="6" FixedLength="false" Unicode="true" />
+          <Property Name="Username" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Users" Relationship="CFMModel.FK_Log_Users" FromRole="Log" ToRole="Users" />
         </EntityType>
-        <EntityType Name="Transactions">
+        <EntityType Name="StockTransactions">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="TransactionDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="TransactionType" Type="Int32" Nullable="false" />
+          <Property Name="NumberOfShares" Type="Int32" Nullable="false" />
+          <Property Name="SpotPrice" Type="Double" Nullable="false" />
+          <Property Name="AveragePrice" Type="Double" Nullable="false" />
+          <Property Name="BrokerFee" Type="Double" Nullable="false" />
           <Property Name="Value" Type="Double" Nullable="false" />
+          <Property Name="ExpectedDividend" Type="Double" Nullable="false" />
           <Property Name="AssetId" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Assets" Relationship="CFMModel.FK_Transactions_Assets" FromRole="Transactions" ToRole="Assets" />
+          <NavigationProperty Name="Assets" Relationship="CFMModel.FK_Transactions_Assets" FromRole="StockTransactions" ToRole="Assets" />
+          <NavigationProperty Name="Liabilities" Relationship="CFMModel.FK_Liabilities_StockTransactions" FromRole="StockTransactions" ToRole="Liabilities" />
+          <Property Name="Note" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreatedBy" Type="String" Nullable="false" MaxLength="6" FixedLength="false" Unicode="true" />
+          <Property Name="Username" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="Users">
           <Key>
@@ -510,26 +533,14 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Stock_Assets">
-          <End Type="CFMModel.Assets" Role="Assets" Multiplicity="1" />
-          <End Type="CFMModel.Stocks" Role="Stocks" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Assets">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Stocks">
-              <PropertyRef Name="AssetId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Transactions_Assets">
           <End Type="CFMModel.Assets" Role="Assets" Multiplicity="1" />
-          <End Type="CFMModel.Transactions" Role="Transactions" Multiplicity="*" />
+          <End Type="CFMModel.StockTransactions" Role="StockTransactions" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Assets">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="Transactions">
+            <Dependent Role="StockTransactions">
               <PropertyRef Name="AssetId" />
             </Dependent>
           </ReferentialConstraint>
@@ -582,6 +593,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Liabilities_StockTransactions">
+          <End Type="CFMModel.StockTransactions" Role="StockTransactions" Multiplicity="0..1" />
+          <End Type="CFMModel.Liabilities" Role="Liabilities" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="StockTransactions">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Liabilities">
+              <PropertyRef Name="TransactionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Liabilities_Users">
           <End Type="CFMModel.Users" Role="Users" Multiplicity="0..1" />
           <End Type="CFMModel.Liabilities" Role="Liabilities" Multiplicity="*" />
@@ -594,21 +617,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="Log">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Date" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="LogType" Type="Int32" Nullable="false" />
-          <Property Name="LogContent" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Value" Type="Double" Nullable="false" />
-          <Property Name="AvailableMoney" Type="Double" Nullable="false" />
-          <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="CreatedBy" Type="String" Nullable="false" MaxLength="6" FixedLength="false" Unicode="true" />
-          <Property Name="Username" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Users" Relationship="CFMModel.FK_Log_Users" FromRole="Log" ToRole="Users" />
-        </EntityType>
         <Association Name="FK_Log_Users">
           <End Type="CFMModel.Users" Role="Users" Multiplicity="1" />
           <End Type="CFMModel.Log" Role="Log" Multiplicity="*" />
@@ -630,6 +638,7 @@
           <EntitySetMapping Name="Assets">
             <EntityTypeMapping TypeName="CFMModel.Assets">
               <MappingFragment StoreEntitySet="Assets">
+                <ScalarProperty Name="ObtainedBy" ColumnName="ObtainedBy" />
                 <ScalarProperty Name="Username" ColumnName="Username" />
                 <ScalarProperty Name="AssetType" ColumnName="AssetType" />
                 <ScalarProperty Name="Note" ColumnName="Note" />
@@ -648,10 +657,10 @@
             <EntityTypeMapping TypeName="CFMModel.Expenses">
               <MappingFragment StoreEntitySet="Expenses">
                 <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="DisabledBy" ColumnName="DisabledBy" />
-                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
                 <ScalarProperty Name="Username" ColumnName="Username" />
                 <ScalarProperty Name="LiabilityId" ColumnName="LiabilityId" />
+                <ScalarProperty Name="DisabledBy" ColumnName="DisabledBy" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
                 <ScalarProperty Name="DisabledDate" ColumnName="DisabledDate" />
                 <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
                 <ScalarProperty Name="ExpenseType" ColumnName="ExpenseType" />
@@ -680,6 +689,8 @@
           <EntitySetMapping Name="Liabilities">
             <EntityTypeMapping TypeName="CFMModel.Liabilities">
               <MappingFragment StoreEntitySet="Liabilities">
+                <ScalarProperty Name="PaymentMethod" ColumnName="PaymentMethod" />
+                <ScalarProperty Name="TransactionId" ColumnName="TransactionId" />
                 <ScalarProperty Name="Purpose" ColumnName="Purpose" />
                 <ScalarProperty Name="OriginalValue" ColumnName="OriginalValue" />
                 <ScalarProperty Name="Note" ColumnName="Note" />
@@ -701,34 +712,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Stocks">
-            <EntityTypeMapping TypeName="CFMModel.Stocks">
-              <MappingFragment StoreEntitySet="Stocks">
-                <ScalarProperty Name="AssetId" ColumnName="AssetId" />
-                <ScalarProperty Name="TradeDate" ColumnName="TradeDate" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Transactions">
-            <EntityTypeMapping TypeName="CFMModel.Transactions">
-              <MappingFragment StoreEntitySet="Transactions">
-                <ScalarProperty Name="AssetId" ColumnName="AssetId" />
-                <ScalarProperty Name="Value" ColumnName="Value" />
-                <ScalarProperty Name="TransactionDate" ColumnName="TransactionDate" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Users">
-            <EntityTypeMapping TypeName="CFMModel.Users">
-              <MappingFragment StoreEntitySet="Users">
-                <ScalarProperty Name="Password" ColumnName="Password" />
-                <ScalarProperty Name="Username" ColumnName="Username" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Log">
             <EntityTypeMapping TypeName="CFMModel.Log">
               <MappingFragment StoreEntitySet="Log">
@@ -741,6 +724,35 @@
                 <ScalarProperty Name="LogType" ColumnName="LogType" />
                 <ScalarProperty Name="Date" ColumnName="Date" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="StockTransactions">
+            <EntityTypeMapping TypeName="CFMModel.StockTransactions">
+              <MappingFragment StoreEntitySet="StockTransactions">
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="Note" ColumnName="Note" />
+                <ScalarProperty Name="AssetId" ColumnName="AssetId" />
+                <ScalarProperty Name="ExpectedDividend" ColumnName="ExpectedDividend" />
+                <ScalarProperty Name="Value" ColumnName="Value" />
+                <ScalarProperty Name="BrokerFee" ColumnName="BrokerFee" />
+                <ScalarProperty Name="AveragePrice" ColumnName="AveragePrice" />
+                <ScalarProperty Name="SpotPrice" ColumnName="SpotPrice" />
+                <ScalarProperty Name="NumberOfShares" ColumnName="NumberOfShares" />
+                <ScalarProperty Name="TransactionType" ColumnName="TransactionType" />
+                <ScalarProperty Name="TransactionDate" ColumnName="TransactionDate" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="CFMModel.Users">
+              <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -28,6 +28,10 @@
     {
         title = "Chi tiết bảo hiểm nhân thọ";
     }
+    else if (Model.Type == (int)Constants.ASSET_TYPE.STOCK)
+    {
+        title = "Chi tiết chứng khoán";
+    }
     else if (Model.Type == (int)Constants.ASSET_TYPE.OTHERS)
     {
         title = "Chi tiết các tài sản khác";
@@ -112,6 +116,20 @@
                         <th class="text-center">Ghi chú</th>
                         <th class="text-center">Chỉnh sửa</th>
                     }
+                    else if (Model.Type == (int)Constants.ASSET_TYPE.STOCK)
+                    {
+                        <th class="text-center">Mã cổ phiếu</th>
+                        <th class="text-center">Ngày giao dịch</th>
+                        <th class="text-center">Loại giao dịch</th>
+                        <th class="text-center">Số lượng cổ phiếu</th>
+                        <th class="text-center">Giá lúc mua bán</th>
+                        <th class="text-center">Trung bình giá giao dịch</th>
+                        <th class="text-center">Phí môi giới</th>
+                        <th class="text-center">Tổng giá trị vốn</th>
+                        <th class="text-center">Cổ tức mong đợi</th>
+                        <th class="text-center" colspan="5">Chỉnh sửa</th>
+                        <th class="text-center"><strong>Hôm nay: @(DateTime.Now.ToString("MM/yyyy"))</strong></th>
+                    }
                     else if (Model.Type == (int)Constants.ASSET_TYPE.OTHERS)
                     {
                         <th class="text-center">Tài sản khác</th>
@@ -136,8 +154,8 @@
                             <td><strong style="color: red;"></strong></td>
                             <td><strong style="color: red;"></strong></td>
                             <td><strong style="color: red;"></strong></td>
-                            <td><strong style="color: red;">@FormatUtility.DisplayThousandSeparatorsForNumber(Model.List.Select(x => x.Liability.StartDate <= DateTime.Now ? x.Liability.Value : 0).DefaultIfEmpty(0).Sum())</strong></td>
-                            <td><strong style="color: red;">@FormatUtility.DisplayThousandSeparatorsForNumber(Model.List.Select(x => x.Liability.StartDate <= DateTime.Now ? x.Liability.Value * 12 : 0).DefaultIfEmpty(0).Sum())</strong></td>
+                            <td><strong style="color: red;">@FormatUtility.DisplayThousandSeparatorsForNumber(Model.List.Select(x => x.LiabilityList.List.FirstOrDefault().MonthlyPayment).DefaultIfEmpty(0).Sum())</strong></td>
+                            <td><strong style="color: red;">@FormatUtility.DisplayThousandSeparatorsForNumber(Model.List.Select(x => x.LiabilityList.List.FirstOrDefault().AnnualPayment).DefaultIfEmpty(0).Sum())</strong></td>
                             <td><strong style="color: red;">@FormatUtility.DisplayThousandSeparatorsForNumber(Model.List.Select(x => x.LiabilityList.List.FirstOrDefault().RemainedValue).DefaultIfEmpty(0).Sum())</strong></td>
                             <td><strong style="color: red;"></strong></td>
                             <td></td>
@@ -151,8 +169,8 @@
                                 <td>@item.Liability.StartDate.Value.ToString("MM/yyyy")</td>
                                 <td>@item.Liability.EndDate.Value.ToString("MM/yyyy")</td>
                                 <td>@FormatUtility.DisplayThousandSeparatorsForNumber(item.LiabilityList.List.FirstOrDefault().TotalPaymentPeriod)</td>
-                                <td>@FormatUtility.DisplayThousandSeparatorsForNumber(item.Liability.StartDate <= DateTime.Now ? item.Liability.Value : 0)</td>
-                                <td>@FormatUtility.DisplayThousandSeparatorsForNumber(item.Liability.StartDate <= DateTime.Now ? item.Liability.Value * 12 : 0)</td>
+                                <td>@FormatUtility.DisplayThousandSeparatorsForNumber(item.LiabilityList.List.FirstOrDefault().MonthlyPayment)</td>
+                                <td>@FormatUtility.DisplayThousandSeparatorsForNumber(item.LiabilityList.List.FirstOrDefault().AnnualPayment)</td>
                                 <td>@FormatUtility.DisplayThousandSeparatorsForNumber(item.LiabilityList.List.FirstOrDefault().RemainedValue)</td>
                                 <td>@item.Asset.Note</td>
                                 <td class="text-center" width="160px">
@@ -168,6 +186,188 @@
                             </tr>
                         }
                     }
+                    else if (Model.Type == (int)Constants.ASSET_TYPE.STOCK)
+                    {
+                        <tr>
+                            <td class="text-center"><strong style="color: red;">Tổng</strong></td>
+                            <td><strong style="color: red;"></strong></td>
+                            <td><strong style="color: red;"></strong></td>
+                            <td><strong style="color: red;">@FormatUtility.DisplayThousandSeparatorsForNumber(Model.List.Sum(x => x.Asset.StockTransactions.Sum(y => y.NumberOfShares)))</strong></td>
+                            <td><strong style="color: red;">@FormatUtility.DisplayThousandSeparatorsForNumber(Model.List.Sum(x => x.Asset.StockTransactions.Sum(y => y.SpotPrice)))</strong></td>
+                            <td><strong style="color: red;">@FormatUtility.DisplayThousandSeparatorsForNumber(Model.List.Sum(x => x.Asset.StockTransactions.Sum(y => y.AveragePrice)))</strong></td>
+                            <td><strong style="color: red;">@FormatUtility.DisplayThousandSeparatorsForNumber(Model.List.Sum(x => x.Asset.StockTransactions.Sum(y => y.BrokerFee)))</strong></td>
+                            <td colspan="7"><strong style="color: red;">@FormatUtility.DisplayThousandSeparatorsForNumber(Model.List.Sum(x => x.Asset.StockTransactions.Sum(y => y.Value)))</strong></td>
+                            <td></td>
+                        </tr>
+                        foreach (var item in Model.List)
+                        {
+                            <tr class="rs-@rsCount">
+                                <td class="text-center" rowspan="@(item.LiabilityList.List.Count() + item.Asset.StockTransactions.Count() + 3)" width="120">@item.Asset.AssetName</td>
+                            </tr>
+                            foreach (var transaction in item.Asset.StockTransactions)
+                            {
+                                <tr>
+                                    <th class="text-center">Ngày giao dịch</th>
+                                    <th class="text-center">Loại giao dịch</th>
+                                    <th class="text-center">Số lượng cổ phiếu</th>
+                                    <th class="text-center">Giá lúc mua bán</th>
+                                    <th class="text-center">Trung bình giá giao dịch</th>
+                                    <th class="text-center">Phí môi giới</th>
+                                    <th class="text-center">Tổng giá trị vốn</th>
+                                    <th class="text-center">Cổ tức mong đợi</th>
+                                    <th class="text-center" colspan="5">Chỉnh sửa</th>
+                                    <th class="text-center"><strong></strong></th>
+                                </tr>
+                                <tr>
+                                    <td>@transaction.TransactionDate.ToString("dd/MM/yyyy")</td>
+                                    <td>@transaction.TransactionType</td>
+                                    <td>@FormatUtility.DisplayThousandSeparatorsForNumber(transaction.NumberOfShares)</td>
+                                    <td>@FormatUtility.DisplayThousandSeparatorsForNumber(transaction.SpotPrice)</td>
+                                    <td>@FormatUtility.DisplayThousandSeparatorsForNumber(transaction.AveragePrice)</td>
+                                    <td>@FormatUtility.DisplayThousandSeparatorsForNumber(transaction.BrokerFee)</td>
+                                    <td>@FormatUtility.DisplayThousandSeparatorsForNumber(transaction.Value)</td>
+                                    <td>@FormatUtility.DisplayPercentageForNumber(transaction.ExpectedDividend)</td>
+                                    <td class="text-center" colspan="5">
+                                        <button class="btn btn-success update-asset" data-asset-id="@item.Asset.Id">
+                                            <span class="glyphicon glyphicon-pencil"></span>
+                                            Cập nhật
+                                        </button>
+                                        <button class="btn btn-danger delete-asset" data-asset-id="@item.Asset.Id">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                            Xóa
+                                        </button>
+                                        <button type="button" class="btn btn-primary create-new-liability" data-asset-id="@item.Asset.Id" data-transaction-id="@transaction.Id" data-asset-type="@Model.Type">
+                                            <span class="glyphicon glyphicon-plus"></span>
+                                            Vay
+                                        </button>
+                                    </td>
+                                    <td></td>
+                                </tr>
+
+                                if (item.LiabilityList.List.Where(x => !x.Liability.ParentLiabilityId.HasValue && x.Liability.TransactionId == transaction.Id).Any())
+                                {
+                                    <tr>
+                                        <td></td>
+                                        <th class="text-center">Nguồn vay nợ</th>
+                                        <th class="text-center">Giá trị nợ</th>
+                                        <th class="text-center">Loại lãi suất</th>
+                                        <th class="text-center">Lãi vay</th>
+                                        <th class="text-center">Ngày bắt đầu vay</th>
+                                        <th class="text-center">Ngày trả hết nợ</th>
+                                        <th class="text-center">Tổng số tháng phải trả</th>
+                                        <th class="text-center">Trả gốc hàng tháng</th>
+                                        <th class="text-center">Trả lãi hàng tháng</th>
+                                        <th class="text-center">Tổng phải trả hàng tháng</th>
+                                        <th class="text-center">Tổng phải trả hàng năm</th>
+                                        <th class="text-center">Nợ gốc còn phải trả</th>
+                                        <th class="text-center" style="vertical-align: middle"></th>
+                                    </tr>
+
+                                    foreach (var liabilityViewModel in item.LiabilityList.List.Where(x => !x.Liability.ParentLiabilityId.HasValue && x.Liability.TransactionId == transaction.Id))
+                                    {
+                                        <tr class="child-@childCount">
+                                            <td></td>
+                                            <td><a class="update-liability" href="#" data-liability-id="@liabilityViewModel.Liability.Id" data-trigger="edit-no-rate">@liabilityViewModel.Liability.Name</a></td>
+                                            <td>
+                                                <a class="update-liability" href="#" data-liability-id="@liabilityViewModel.Liability.Id" data-trigger="edit-no-rate">@FormatUtility.DisplayThousandSeparatorsForNumber(liabilityViewModel.Liability.Value)</a>
+                                            </td>
+                                            <td>
+                                                <a class="update-liability" href="#" data-liability-id="@liabilityViewModel.Liability.Id" data-trigger="edit-no-rate">
+                                                    @if (liabilityViewModel.Liability.InterestType == 1)
+                                                    {
+                                                        @Html.Raw("Cố định")
+                                                    }
+                                                    else if (liabilityViewModel.Liability.InterestType == 2)
+                                                    {
+                                                        @Html.Raw("Giảm dần")
+                                                    }
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <a class="update-liability" href="#" data-liability-id="@liabilityViewModel.Liability.Id" data-trigger="edit-rate">@FormatUtility.DisplayPercentageForNumber(liabilityViewModel.CurrentInterestRate)</a>
+                                            </td>
+                                            <td>
+                                                <a class="update-liability" href="#" data-liability-id="@liabilityViewModel.Liability.Id" data-trigger="edit-no-rate">@liabilityViewModel.Liability.StartDate.Value.ToString("MM/yyyy")</a>
+                                            </td>
+                                            <td>
+                                                <a class="update-liability" href="#" data-liability-id="@liabilityViewModel.Liability.Id" data-trigger="edit-no-rate">@liabilityViewModel.Liability.EndDate.Value.ToString("MM/yyyy")</a>
+                                            </td>
+                                            <td>@FormatUtility.DisplayThousandSeparatorsForNumber(liabilityViewModel.TotalPaymentPeriod)</td>
+                                            <td>
+                                                @FormatUtility.DisplayThousandSeparatorsForNumber(liabilityViewModel.MonthlyOriginalPayment)
+                                            </td>
+                                            <td><a href="#" class="interest-info" data-liability-id="@liabilityViewModel.Liability.Id">@FormatUtility.DisplayThousandSeparatorsForNumber(liabilityViewModel.MonthlyInterestPayment)</a></td>
+                                            <td>@FormatUtility.DisplayThousandSeparatorsForNumber(liabilityViewModel.MonthlyPayment)</td>
+                                            <td>@FormatUtility.DisplayThousandSeparatorsForNumber(liabilityViewModel.AnnualPayment)</td>
+                                            <td>@FormatUtility.DisplayThousandSeparatorsForNumber(liabilityViewModel.RemainedValue)</td>
+                                            <td class="text-center" width="150" style="vertical-align: middle">
+                                                @*<button class="btn btn-success update-loan" data-loan-id="@loanViewModel.Loan.Id">
+                                                        <span class="glyphicon glyphicon-pencil"></span>
+                                                    </button>*@
+                                                <button class="btn btn-danger delete-liability" data-liability-id="@liabilityViewModel.Liability.Id">
+                                                    <span class="glyphicon glyphicon-remove"></span>
+                                                    Xóa
+                                                </button>
+                                                <button class="btn btn-warning" href=".detail-@count" data-toggle="collapse">
+                                                    <span class="glyphicon glyphicon-zoom-in"></span>
+                                                    Chi tiết
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        foreach (var childLiabilityViewModel in item.LiabilityList.List.Where(x => x.Liability.ParentLiabilityId == liabilityViewModel.Liability.Id && x.Liability.TransactionId == transaction.Id).OrderBy(x => x.Liability.StartDate.Value))
+                                        {
+                                            if (childLiabilityViewModel.MonthlyOriginalPayment > 0)
+                                            {
+                                                <tr class="detail-@count rs-@rsCount child-@childCount collapse success">
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td>@FormatUtility.DisplayPercentageForNumber(childLiabilityViewModel.CurrentInterestRate)</td>
+                                                    <td>@childLiabilityViewModel.Liability.StartDate.Value.ToString("MM/yyyy")</td>
+                                                    <td>@childLiabilityViewModel.Liability.EndDate.Value.ToString("MM/yyyy")</td>
+                                                    <td>@FormatUtility.DisplayThousandSeparatorsForNumber(childLiabilityViewModel.TotalPaymentPeriod)</td>
+                                                    <td>@FormatUtility.DisplayThousandSeparatorsForNumber(liabilityViewModel.MonthlyOriginalPayment)</td>
+                                                    <td><a href="#" class="interest-info" data-liability-id="@childLiabilityViewModel.Liability.Id">@FormatUtility.DisplayThousandSeparatorsForNumber(childLiabilityViewModel.MonthlyInterestPayment)</a></td>
+                                                    <td>@FormatUtility.DisplayThousandSeparatorsForNumber(childLiabilityViewModel.MonthlyPayment)</td>
+                                                    <td>@FormatUtility.DisplayThousandSeparatorsForNumber(childLiabilityViewModel.AnnualPayment)</td>
+                                                    <td>@FormatUtility.DisplayThousandSeparatorsForNumber(childLiabilityViewModel.RemainedValue)</td>
+                                                    <td class="text-center" width="100" style="vertical-align: middle;"></td>
+                                                    <td></td>
+                                                </tr>
+                                            }
+                                            else
+                                            {
+                                                <tr class="detail-@count rs-@rsCount child-@childCount collapse">
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td>@FormatUtility.DisplayPercentageForNumber(childLiabilityViewModel.CurrentInterestRate)</td>
+                                                    <td>@childLiabilityViewModel.Liability.StartDate.Value.ToString("MM/yyyy")</td>
+                                                    <td>@childLiabilityViewModel.Liability.EndDate.Value.ToString("MM/yyyy")</td>
+                                                    <td>@FormatUtility.DisplayThousandSeparatorsForNumber(childLiabilityViewModel.TotalPaymentPeriod)</td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                </tr>
+                                            }
+                                            {
+                                                childCount++;
+                                            }
+                                        }
+                                        {
+                                            count++;
+                                        }
+                                    }
+                                }
+                            }
+
+                        }
+                    }
                     else
                     {
                         <tr>
@@ -178,20 +378,21 @@
                             <td style="color: red;" colspan="@(Model.Type == (int)Constants.ASSET_TYPE.REAL_ESTATE || Model.Type == (int)Constants.ASSET_TYPE.BUSINESS ? 2 : 1)"><strong>@FormatUtility.DisplayPercentageForNumber(Model.TotalMonthlyIncome / Model.TotalValue * 1200)</strong></td>
                             <td style="color: red;" colspan="@(Model.Type == (int)Constants.ASSET_TYPE.REAL_ESTATE || Model.Type == (int)Constants.ASSET_TYPE.BUSINESS ? 4 : 1)"></td>
                             @if (Model.Type == (int)Constants.ASSET_TYPE.BANK_DEPOSIT)
-                                        {
+                            {
                                 <td></td>
                                 <td></td>
                             }
                             else if (Model.Type != (int)Constants.ASSET_TYPE.OTHERS)
-                                    {
+                            {
                                 <td></td>
                             }
                         </tr>
-            
+
+
                         foreach (var item in Model.List)
-                                    {
-                                        if (Model.Type == (int)Constants.ASSET_TYPE.REAL_ESTATE)
-                                        {
+                        {
+                            if (Model.Type == (int)Constants.ASSET_TYPE.REAL_ESTATE)
+                            {
                                 <tr>
                                     <th class="text-center">Bất động sản</th>
                                     <th class="text-center" colspan="2">Thu nhập hàng tháng cho thuê</th>
@@ -219,16 +420,16 @@
                                 <td class="@(Model.Type == (int)Constants.ASSET_TYPE.REAL_ESTATE || Model.Type == (int)Constants.ASSET_TYPE.BUSINESS ? "text-center" : string.Empty)" style="vertical-align: middle" rowspan="@(Model.Type == (int)Constants.ASSET_TYPE.REAL_ESTATE || Model.Type == (int)Constants.ASSET_TYPE.BUSINESS ? item.LiabilityList != null && item.LiabilityList.List.Where(x => !x.Liability.ParentLiabilityId.HasValue).Count() > 0 ? item.LiabilityList.List.Where(x => !x.Liability.ParentLiabilityId.HasValue).Count() + 2 : 1 : 1)" width="120">
                                     @item.Asset.AssetName
                                     @if (item.Asset.ObtainedBy.HasValue)
-                {
-                    if (item.Asset.ObtainedBy == (int)Constants.OBTAIN_BY.CREATE)
-                    {
+                                    {
+                                        if (item.Asset.ObtainedBy == (int)Constants.OBTAIN_BY.CREATE)
+                                        {
                                             <p style="color: red;">Tài sản khai báo</p>
                                         }
-                    else if (item.Asset.ObtainedBy == (int)Constants.OBTAIN_BY.BUY)
-                    {
+                                        else if (item.Asset.ObtainedBy == (int)Constants.OBTAIN_BY.BUY)
+                                        {
                                             <p style="color: red;">Tài sản mua</p>
                                         }
-                }
+                                    }
                                 </td>
                                 <td colspan="@(Model.Type == (int)Constants.ASSET_TYPE.REAL_ESTATE || Model.Type == (int)Constants.ASSET_TYPE.BUSINESS ? 2 : 1)">@FormatUtility.DisplayThousandSeparatorsForNumber(item.Income.Value)</td>
                                 <td colspan="@(Model.Type == (int)Constants.ASSET_TYPE.REAL_ESTATE || Model.Type == (int)Constants.ASSET_TYPE.BUSINESS ? 2 : 1)">@FormatUtility.DisplayThousandSeparatorsForNumber(item.Income.Value * 12)</td>
@@ -251,7 +452,7 @@
                                             Xóa
                                         </button>
                                     }
-                                    else if (item.Asset.AssetType == (int)Constants.ASSET_TYPE.REAL_ESTATE || item.Asset.AssetType == (int)Constants.ASSET_TYPE.BUSINESS)
+                                    @if (item.Asset.AssetType == (int)Constants.ASSET_TYPE.REAL_ESTATE || item.Asset.AssetType == (int)Constants.ASSET_TYPE.BUSINESS)
                                     {
                                         <button type="button" class="btn btn-primary create-new-liability" data-asset-id="@item.Asset.Id" data-asset-type="@Model.Type">
                                             <span class="glyphicon glyphicon-plus"></span>
@@ -263,14 +464,12 @@
                                         </button>
                                     }
                                 </td>
-                                @if (item.Asset.AssetType == (int)Constants.ASSET_TYPE.REAL_ESTATE ||
-item.Asset.AssetType == (int)Constants.ASSET_TYPE.BUSINESS)
+                                @if (item.Asset.AssetType == (int)Constants.ASSET_TYPE.REAL_ESTATE || item.Asset.AssetType == (int)Constants.ASSET_TYPE.BUSINESS)
                                 {
                                     <td></td>
                                 }
                             </tr>
-                            if (item.Asset.AssetType == (int)Constants.ASSET_TYPE.REAL_ESTATE ||
-                                item.Asset.AssetType == (int)Constants.ASSET_TYPE.BUSINESS)
+                            if (item.Asset.AssetType == (int)Constants.ASSET_TYPE.REAL_ESTATE || item.Asset.AssetType == (int)Constants.ASSET_TYPE.BUSINESS)
                             {
                                 if (item.LiabilityList != null && item.LiabilityList.List.Count > 0)
                                 {
@@ -299,8 +498,8 @@ item.Asset.AssetType == (int)Constants.ASSET_TYPE.BUSINESS)
                                             <td>
                                                 <a class="update-liability" href="#" data-liability-id="@liabilityViewModel.Liability.Id" data-trigger="edit-no-rate">
                                                     @if (liabilityViewModel.Liability.InterestType == 1)
-                {
-                    @Html.Raw("Cố định")
+                                                    {
+                                                        @Html.Raw("Cố định")
                                                     }
                                                     else if (liabilityViewModel.Liability.InterestType == 2)
                                                     {

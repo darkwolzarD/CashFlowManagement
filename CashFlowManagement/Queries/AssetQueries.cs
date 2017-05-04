@@ -19,6 +19,12 @@ namespace CashFlowManagement.Queries
                                                      where asset.Username == username && asset.AssetType == type
                                                      && !asset.DisabledDate.HasValue && !liability.DisabledDate.HasValue
                                                      select new AssetViewModel { Asset = asset, Liability = liability }).ToList()
+                                                     :
+                                                     type == (int)Constants.Constants.ASSET_TYPE.STOCK ?
+                                                    (from asset in entities.Assets
+                                                     where asset.Username == username && asset.AssetType == type
+                                                     && !asset.DisabledDate.HasValue
+                                                     select new AssetViewModel { Asset = asset }).ToList()
                                                     :
                                                     (from asset in entities.Assets
                                                      join income in entities.Incomes on asset.Id equals income.AssetId
@@ -56,51 +62,75 @@ namespace CashFlowManagement.Queries
         public static int CreateAsset(AssetViewModel model, int type, string username)
         {
             Entities entities = new Entities();
-            Assets asset = model.Asset;
-            asset.Username = username;
-            asset.CreatedDate = DateTime.Now;
-            asset.AssetType = type;
-            asset.CreatedBy = Constants.Constants.USER;
-            if (type == (int)Constants.Constants.ASSET_TYPE.REAL_ESTATE)
-            {
-                asset.ObtainedBy = (int)Constants.Constants.OBTAIN_BY.CREATE;
-            }
-
-            if (type == (int)Constants.Constants.ASSET_TYPE.INSURANCE)
-            {
-                Liabilities liability = new Liabilities
+            if(!CheckExistAssetName(username, type)) {
+                Assets asset = model.Asset;
+                asset.Username = username;
+                asset.CreatedDate = DateTime.Now;
+                asset.AssetType = type;
+                asset.CreatedBy = Constants.Constants.USER;
+                if (type == (int)Constants.Constants.ASSET_TYPE.REAL_ESTATE)
                 {
-                    Name = "Nợ bảo hiểm " + model.Asset.AssetName,
-                    Value = model.Liability.Value,
-                    InterestRate = 0,
-                    StartDate = model.Liability.StartDate,
-                    EndDate = model.Liability.EndDate,
-                    LiabilityType = (int)Constants.Constants.LIABILITY_TYPE.INSURANCE,
-                    CreatedDate = DateTime.Now,
-                    CreatedBy = Constants.Constants.USER,
-                    Username = username
-                };
-                asset.Liabilities.Add(liability);
+                    asset.ObtainedBy = (int)Constants.Constants.OBTAIN_BY.CREATE;
+                }
+                else if (type == (int)Constants.Constants.ASSET_TYPE.INSURANCE)
+                {
+                    Liabilities liability = new Liabilities
+                    {
+                        Name = "Nợ bảo hiểm " + model.Asset.AssetName,
+                        Value = model.Liability.Value,
+                        InterestRate = 0,
+                        StartDate = model.Liability.StartDate,
+                        EndDate = model.Liability.EndDate,
+                        LiabilityType = (int)Constants.Constants.LIABILITY_TYPE.INSURANCE,
+                        CreatedDate = DateTime.Now,
+                        CreatedBy = Constants.Constants.USER,
+                        Username = username
+                    };
+                    asset.Liabilities.Add(liability);
+                }
+                else if (type == (int)Constants.Constants.ASSET_TYPE.STOCK)
+                {
+                    StockTransactions transaction = new StockTransactions
+                    {
+                        Name = "Tạo cổ phiếu " + model.Asset.AssetName,
+                        Value = model.Transaction.Value,
+                        TransactionDate = model.Transaction.TransactionDate,
+                        TransactionType = (int)Constants.Constants.TRANSACTION_TYPE.CREATE,
+                        NumberOfShares = model.Transaction.NumberOfShares,
+                        SpotPrice = model.Transaction.SpotPrice,
+                        BrokerFee = model.Transaction.BrokerFee,
+                        ExpectedDividend = model.Transaction.ExpectedDividend,
+                        Note = model.Transaction.Note,
+                        CreatedDate = DateTime.Now,
+                        CreatedBy = Constants.Constants.USER,
+                        Username = username
+                    };
+                    asset.StockTransactions.Add(transaction);
+                }
+                else
+                {
+                    Incomes income = model.Income;
+                    income.CreatedDate = DateTime.Now;
+                    income.IncomeType = type;
+                    income.Username = username;
+                    income.CreatedBy = Constants.Constants.USER;
+                    asset.Incomes.Add(income);
+                }
+
+                entities.Assets.Add(asset);
+
+                string sType = string.Empty;
+
+                Log log = LogQueries.CreateLog((int)Constants.Constants.LOG_TYPE.ADD, "tài sản \"" + model.Asset.AssetName + "\"", username, model.Asset.Value);
+
+                entities.Log.Add(log);
+                int result = entities.SaveChanges();
+                return result;
             }
             else
             {
-                Incomes income = model.Income;
-                income.CreatedDate = DateTime.Now;
-                income.IncomeType = type;
-                income.Username = username;
-                income.CreatedBy = Constants.Constants.USER;
-                asset.Incomes.Add(income);
+                return -1;
             }
-
-            entities.Assets.Add(asset);
-
-            string sType = string.Empty;
-
-            Log log = LogQueries.CreateLog((int)Constants.Constants.LOG_TYPE.ADD, "tài sản \"" + model.Asset.AssetName + "\"", username, model.Asset.Value);
-
-            entities.Log.Add(log);
-            int result = entities.SaveChanges();
-            return result;
         }
 
         public static int BuyAsset(AssetViewModel model, string username)
@@ -319,6 +349,12 @@ namespace CashFlowManagement.Queries
             return entities.Assets.Where(x => x.Username.Equals(username)
                                                          && x.AssetType == (int)Constants.Constants.ASSET_TYPE.AVAILABLE_MONEY
                                                          && !x.DisabledDate.HasValue).Select(x => x.Value).DefaultIfEmpty(0).Sum();
+        }
+
+        public static bool CheckExistAssetName(string assetName, int type)
+        {
+            Entities entities = new Entities();
+            return entities.Assets.Where(x => x.AssetName.Equals(assetName) && x.AssetType == type).Any();
         }
     }
 }

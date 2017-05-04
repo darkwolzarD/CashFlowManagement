@@ -23,6 +23,13 @@
         });
     }
 
+    function InitiateDatePicker2() {
+        $(".date-picker").datepicker({
+            format: "dd/mm/yyyy",
+            language: "vi-VN"
+        });
+    }
+
     function isValidDate(dateString) {
         // First check for the pattern
         var regex_date = /^\d{2}\/\d{4}$/;
@@ -45,7 +52,12 @@
 
     $(document).on("shown.bs.modal", "#create-new-asset-modal, #create-new-liability-modal, #update-asset-modal, #update-liability-modal, #sell-asset-modal", function () {
         MaskInput();
-        InitiateDatePicker();
+        if (assetType == 5) {
+            InitiateDatePicker2();
+        }
+        else {
+            InitiateDatePicker();
+        }
     })
 
     $(document).on("shown.bs.modal", "#buy-new-asset-modal", function () {
@@ -86,7 +98,10 @@
             type: "post",
             data: data,
             success: function (data) {
-                if (data.result > 0) {
+                if (data.result == -1) {
+                    alert("Tên tài sản đã tồn tại, vui lòng nhập tên khác");
+                }
+                else if (data.result > 0) {
                     $("#create-new-asset-modal").modal("hide");
                     LoadTable();
                 }
@@ -284,12 +299,16 @@
 
     $(document).on("click", ".create-new-liability", function () {
         var id = $(this).data("asset-id");
+        var transaction_id = $(this).data("transaction-id");
+        if (typeof transaction_id == 'undefined') {
+            transaction_id = 0;
+        }
         var type = $(this).data("asset-type");
 
         $.ajax({
             url: Url.LiabilityModal,
             type: "get",
-            data: { assetId: id, type: type },
+            data: { assetId: id, type: type, transactionId: transaction_id },
             contentType: "html",
             success: function (data) {
                 if (data.length > 0) {
@@ -512,7 +531,12 @@
         var child_cls = $(this).closest("tr").attr("class").split(' ')[2];
         var current = $(document).find("table tbody ." + rs_cls + ":not(.collapse)").length + 1;
         var collapse = $(document).find("table tbody ." + child_cls + ".collapse").length;
-        $(document).find("table tbody tr." + rs_cls + ":first td:nth-child(1)").attr("rowspan", current + collapse);
+        if (assetType == 5) {
+            $(document).find("table tbody tr." + rs_cls + ":first td:nth-child(1)").attr("rowspan", current + collapse + 9);
+        }
+        else {
+            $(document).find("table tbody tr." + rs_cls + ":first td:nth-child(1)").attr("rowspan", current + collapse);
+        }
     })
 
     $(document).on("hidden.bs.collapse", "tr[class^='detail-']", function () {
@@ -520,7 +544,12 @@
         var child_cls = $(this).closest("tr").attr("class").split(' ')[2];
         var current = $(document).find("table tbody ." + rs_cls + ":not(.collapse)").length;
         var collapse = $(document).find("table tbody ." + child_cls + ".collapse").length;
-        $(document).find("table tbody tr." + rs_cls + ":first td:nth-child(1)").attr("rowspan", current - collapse);
+        if (assetType == 5) {
+            $(document).find("table tbody tr." + rs_cls + ":first td:nth-child(1)").attr("rowspan", current - collapse + 9);
+        }
+        else {
+            $(document).find("table tbody tr." + rs_cls + ":first td:nth-child(1)").attr("rowspan", current - collapse);
+        }
     })
 
     $(document).on("click", ".btn-detail-view", function () {

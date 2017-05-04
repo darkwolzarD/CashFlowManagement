@@ -39,6 +39,8 @@ namespace CashFlowManagement.EntityModel
         public string Note { get; set; }
         public Nullable<double> OriginalValue { get; set; }
         public string Purpose { get; set; }
+        public Nullable<int> TransactionId { get; set; }
+        public Nullable<int> PaymentMethod { get; set; }
     
         public virtual Assets Assets { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -46,6 +48,7 @@ namespace CashFlowManagement.EntityModel
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Liabilities> Liabilities1 { get; set; }
         public virtual Liabilities Liabilities2 { get; set; }
+        public virtual StockTransactions StockTransactions { get; set; }
         public virtual Users Users { get; set; }
     }
 }

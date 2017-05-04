@@ -74,7 +74,8 @@ namespace CashFlowManagement.Queries
             entities.Liabilities.Add(liability);
 
             if (liability.LiabilityType == (int)Constants.Constants.LIABILITY_TYPE.REAL_ESTATE ||
-               liability.LiabilityType == (int)Constants.Constants.LIABILITY_TYPE.BUSINESS)
+               liability.LiabilityType == (int)Constants.Constants.LIABILITY_TYPE.BUSINESS ||
+               liability.LiabilityType == (int)Constants.Constants.LIABILITY_TYPE.STOCK)
             {
                 Liabilities childLiability = new Liabilities();
                 childLiability.Name = liability.Name;
@@ -89,6 +90,10 @@ namespace CashFlowManagement.Queries
                 childLiability.Liabilities1.Add(liability);
                 childLiability.Username = username;
                 childLiability.InterestType = liability.InterestType;
+                if(liability.LiabilityType == (int)Constants.Constants.LIABILITY_TYPE.STOCK)
+                {
+                    childLiability.TransactionId = liability.TransactionId;
+                }
                 entities.Liabilities.Add(childLiability);
             }
 
@@ -148,7 +153,7 @@ namespace CashFlowManagement.Queries
                 assetViewModel.AverageInterestRate = assetViewModel.TotalMortgageValue > 0 ? assetViewModel.TotalAnnualPayment / assetViewModel.TotalMortgageValue * 100 : 0;
                 result.List.Add(assetViewModel);
             }
-            result.TotalMonthlyIncome = result.Type != (int)Constants.Constants.ASSET_TYPE.INSURANCE ? result.List.Select(x => x.Income.Value).DefaultIfEmpty(0).Sum() : 0;
+            result.TotalMonthlyIncome = result.Type != (int)Constants.Constants.ASSET_TYPE.INSURANCE && result.Type != (int)Constants.Constants.ASSET_TYPE.STOCK ? result.List.Select(x => x.Income.Value).DefaultIfEmpty(0).Sum() : 0;
             result.TotalValue = result.List.Select(x => x.Asset.Value).DefaultIfEmpty(0).Sum();
             return result;
         }
@@ -205,6 +210,7 @@ namespace CashFlowManagement.Queries
                         {
                             int totalPeriod = FormatUtility.CalculateTimePeriod(parentLiability.StartDate.Value, parentLiability.EndDate.Value);
                             liabilityViewModel.RemainedValue = liability.Value * (totalPeriod - currentPeriod);
+                            liabilityViewModel.MonthlyOriginalPayment = liability.Value;
                         }
                     }
                     else
@@ -214,7 +220,7 @@ namespace CashFlowManagement.Queries
                     }
 
                     liabilityViewModel.MonthlyPayment = liabilityViewModel.MonthlyInterestPayment + liabilityViewModel.MonthlyOriginalPayment;
-                    liabilityViewModel.AnnualPayment = liability.Value * liabilityViewModel.CurrentInterestRate / 100;           //chua xu ly// 
+                    liabilityViewModel.AnnualPayment = liabilityViewModel.MonthlyPayment * 12;        //chua xu ly// 
                 }
                 else
                 {

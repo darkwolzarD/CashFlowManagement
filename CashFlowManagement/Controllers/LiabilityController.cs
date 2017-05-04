@@ -18,13 +18,15 @@ namespace CashFlowManagement.Controllers
             return View(model);
         }
 
-        public PartialViewResult _LiabilityModal(int assetId, int type)
+        public PartialViewResult _LiabilityModal(int assetId, int type, int transactionId)
         {
             Liabilities model = new Liabilities
             {
                 AssetId = assetId,
                 LiabilityType = type == (int)Constants.Constants.ASSET_TYPE.REAL_ESTATE ? (int)Constants.Constants.LIABILITY_TYPE.REAL_ESTATE : 
-                type == (int)Constants.Constants.ASSET_TYPE.BUSINESS ? (int)Constants.Constants.LIABILITY_TYPE.BUSINESS : 0
+                type == (int)Constants.Constants.ASSET_TYPE.BUSINESS ? (int)Constants.Constants.LIABILITY_TYPE.BUSINESS : 
+                type == (int)Constants.Constants.ASSET_TYPE.STOCK ? (int)Constants.Constants.LIABILITY_TYPE.STOCK : 0,
+                TransactionId = transactionId
             };
             return PartialView(model);
         }
