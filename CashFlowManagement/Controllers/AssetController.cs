@@ -57,17 +57,21 @@ namespace CashFlowManagement.Controllers
             return Json(new { result = result });
         }
 
-        public PartialViewResult _SellAssetModal(int assetId)
+        public PartialViewResult _SellAssetModal(int assetId, int assetType)
         {
             AssetViewModel model = new AssetViewModel();
             model.Asset = new Assets();
-            model.Asset.Id = assetId;
+            model.Asset.AssetType = assetType;
+            if (assetType == (int)Constants.Constants.ASSET_TYPE.REAL_ESTATE)
+            {
+                model.Asset.Id = assetId;
+            }
             return PartialView(model);
         }
 
         public JsonResult SellAsset(AssetViewModel model)
         {
-            int result = AssetQueries.SellAsset(model.Asset.Id, model.SellAmount);
+            int result = AssetQueries.SellAsset(model);
             return Json(new { result = result });
         }
 

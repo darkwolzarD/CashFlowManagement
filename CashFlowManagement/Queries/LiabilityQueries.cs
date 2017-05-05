@@ -158,7 +158,7 @@ namespace CashFlowManagement.Queries
                     assetListViewModel.Type == (int)Constants.Constants.ASSET_TYPE.STOCK)
                 {
                     double currentTotalMortgageValue = assetViewModel.LiabilityList.List.Where(x => !x.Liability.ParentLiabilityId.HasValue && x.CurrentInterestRate != 0).Sum(x => x.Liability.Value);
-                    assetViewModel.AverageInterestRate = assetViewModel.TotalOriginalPayment / currentTotalMortgageValue * 100;
+                    assetViewModel.AverageInterestRate = assetViewModel.TotalInterestPayment / currentTotalMortgageValue * 1200;
                 }
                 else
                 {
@@ -282,7 +282,8 @@ namespace CashFlowManagement.Queries
             List<LiabilityPaymentViewModel> result = new List<LiabilityPaymentViewModel>();
 
             if (liability.LiabilityType == (int)Constants.Constants.LIABILITY_TYPE.REAL_ESTATE ||
-                liability.LiabilityType == (int)Constants.Constants.LIABILITY_TYPE.BUSINESS)
+                liability.LiabilityType == (int)Constants.Constants.LIABILITY_TYPE.BUSINESS || 
+                liability.LiabilityType == (int)Constants.Constants.LIABILITY_TYPE.STOCK)
             {
                 list = list.OrderBy(x => x.StartDate).ToList();
 

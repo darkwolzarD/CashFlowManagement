@@ -52,11 +52,15 @@
         <span class="glyphicon glyphicon-plus"></span>
         Tạo mới
     </button>
-    @if (Model.Type == (int)Constants.ASSET_TYPE.REAL_ESTATE)
+    @if (Model.Type == (int)Constants.ASSET_TYPE.REAL_ESTATE || Model.Type == (int)Constants.ASSET_TYPE.STOCK)
     {
         <button type="button" class="btn btn-success" data-toggle="modal" data-target="#buy-new-asset-modal">
             <span class="glyphicon glyphicon-home"></span>
             Mua mới
+        </button>
+        <button type="button" class="btn btn-warning sell-asset-toggle">
+            <span class="glyphicon glyphicon-usd"></span>
+            Bán cổ phiếu
         </button>
     }
     <div class="text-right">
@@ -203,7 +207,7 @@
                         foreach (var item in Model.List)
                         {
                             <tr class="rs-@rsCount">
-                                <td class="text-center" rowspan="@(item.LiabilityList.List.Count() + item.Asset.StockTransactions.Count() + 3)" width="120">@item.Asset.AssetName</td>
+                                <td class="text-center" rowspan="@(item.LiabilityList.List.Count() + item.Asset.StockTransactions.Count() + 5)" width="120">@item.Asset.AssetName</td>
                             </tr>
                             foreach (var transaction in item.Asset.StockTransactions)
                             {
@@ -664,7 +668,7 @@
 
 </div>
 
-@if (Model.Type == (int)Constants.ASSET_TYPE.REAL_ESTATE)
+@if (Model.Type == (int)Constants.ASSET_TYPE.REAL_ESTATE || Model.Type == (int)Constants.ASSET_TYPE.STOCK)
 {
     <div class="buy-asset-modal">
         @{ Html.RenderPartial("_BuyAssetModal", new AssetViewModel

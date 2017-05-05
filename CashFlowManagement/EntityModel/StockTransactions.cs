@@ -30,11 +30,11 @@ namespace CashFlowManagement.EntityModel
         public double BrokerFee { get; set; }
         public double Value { get; set; }
         public double ExpectedDividend { get; set; }
-        public int AssetId { get; set; }
-        public string Note { get; set; }
         public System.DateTime CreatedDate { get; set; }
         public string CreatedBy { get; set; }
         public string Username { get; set; }
+        public string Note { get; set; }
+        public int AssetId { get; set; }
     
         public virtual Assets Assets { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

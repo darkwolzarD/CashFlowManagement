@@ -143,65 +143,142 @@ namespace CashFlowManagement.Queries
         public static int BuyAsset(AssetViewModel model, string username)
         {
             Entities entities = new Entities();
-
-            List<Liabilities> childLiabilities = new List<Liabilities>();
-            foreach (var liability in model.Asset.Liabilities)
+            if (model.Asset.AssetType == (int)Constants.Constants.ASSET_TYPE.REAL_ESTATE)
             {
-                liability.Username = username;
-                liability.CreatedDate = DateTime.Now;
-                liability.CreatedBy = Constants.Constants.USER;
-                liability.LiabilityType = (int)Constants.Constants.LIABILITY_TYPE.REAL_ESTATE;
-                Liabilities childLiability = new Liabilities();
-                childLiability.Name = liability.Name;
-                childLiability.Value = liability.Value;
-                childLiability.InterestRate = liability.InterestRate;
-                childLiability.StartDate = liability.StartDate;
-                childLiability.EndDate = liability.EndDate;
-                childLiability.LiabilityType = liability.LiabilityType;
-                childLiability.CreatedDate = liability.CreatedDate;
-                childLiability.CreatedBy = Constants.Constants.USER;
-                childLiability.AssetId = liability.AssetId;
-                childLiability.Liabilities1.Add(liability);
-                childLiability.Username = username;
-                childLiability.InterestType = liability.InterestType;
-                childLiabilities.Add(childLiability);
-            }
+                List<Liabilities> childLiabilities = new List<Liabilities>();
+                foreach (var liability in model.Asset.Liabilities)
+                {
+                    liability.Username = username;
+                    liability.CreatedDate = DateTime.Now;
+                    liability.CreatedBy = Constants.Constants.USER;
+                    liability.LiabilityType = (int)Constants.Constants.LIABILITY_TYPE.REAL_ESTATE;
+                    Liabilities childLiability = new Liabilities();
+                    childLiability.Name = liability.Name;
+                    childLiability.Value = liability.Value;
+                    childLiability.InterestRate = liability.InterestRate;
+                    childLiability.StartDate = liability.StartDate;
+                    childLiability.EndDate = liability.EndDate;
+                    childLiability.LiabilityType = liability.LiabilityType;
+                    childLiability.CreatedDate = liability.CreatedDate;
+                    childLiability.CreatedBy = Constants.Constants.USER;
+                    childLiability.AssetId = liability.AssetId;
+                    childLiability.Liabilities1.Add(liability);
+                    childLiability.Username = username;
+                    childLiability.InterestType = liability.InterestType;
+                    childLiabilities.Add(childLiability);
+                }
 
-            foreach (var liability in childLiabilities)
+                foreach (var liability in childLiabilities)
+                {
+                    model.Asset.Liabilities.Add(liability);
+                }
+
+                Assets asset = model.Asset;
+                asset.Username = username;
+                asset.CreatedDate = DateTime.Now;
+                asset.AssetType = model.Asset.AssetType;
+                asset.CreatedBy = Constants.Constants.USER;
+                asset.ObtainedBy = (int)Constants.Constants.OBTAIN_BY.BUY;
+
+                Incomes income = model.Income;
+                income.CreatedDate = DateTime.Now;
+                income.IncomeType = (int)Constants.Constants.ASSET_TYPE.REAL_ESTATE;
+                income.Username = username;
+                income.CreatedBy = Constants.Constants.USER;
+                asset.Incomes.Add(income);
+
+                Assets available_money = new Assets();
+                available_money.AssetName = "Tiền mua " + model.Asset.AssetName;
+                available_money.AssetType = (int)Constants.Constants.ASSET_TYPE.AVAILABLE_MONEY;
+                available_money.CreatedBy = Constants.Constants.USER;
+                available_money.CreatedDate = DateTime.Now;
+                available_money.Value = model.BuyAmount * (-1);
+                available_money.Username = username;
+
+                entities.Assets.Add(asset);
+                entities.Assets.Add(available_money);
+
+                string sType = string.Empty;
+
+                Log log = LogQueries.CreateLog((int)Constants.Constants.LOG_TYPE.BUY, "tài sản \"" + model.Asset.AssetName + "\"", username, model.Asset.Value);
+
+                entities.Log.Add(log);
+            }
+            else if (model.Asset.AssetType == (int)Constants.Constants.ASSET_TYPE.STOCK)
             {
-                model.Asset.Liabilities.Add(liability);
+                Assets asset = entities.Assets.Where(x => x.AssetName.Equals(model.Asset.AssetName) && x.AssetType == (int)Constants.Constants.ASSET_TYPE.STOCK
+                && !x.DisabledDate.HasValue).FirstOrDefault();
+                if (asset == null)
+                {
+                    asset = new Assets
+                    {
+                        AssetName = model.Asset.AssetName,
+                        AssetType = model.Asset.AssetType,
+                        Value = 0,
+                        CreatedDate = DateTime.Now,
+                        CreatedBy = Constants.Constants.USER,
+                        Username = username
+                    };
+                    entities.Assets.Add(asset);
+                }
+                StockTransactions transaction = new StockTransactions
+                {
+                    Name = "Mua cổ phiếu " + model.Asset.AssetName,
+                    TransactionDate = model.Transaction.TransactionDate,
+                    TransactionType = (int)Constants.Constants.TRANSACTION_TYPE.BUY,
+                    NumberOfShares = model.Transaction.NumberOfShares,
+                    SpotPrice = model.Transaction.SpotPrice,
+                    ExpectedDividend = model.Transaction.ExpectedDividend,
+                    Note = model.Transaction.Note,
+                    CreatedDate = DateTime.Now,
+                    CreatedBy = Constants.Constants.USER,
+                    Username = username,
+                };
+                transaction.BrokerFee = transaction.SpotPrice * transaction.NumberOfShares * 0.15;
+                transaction.Value = transaction.SpotPrice * transaction.NumberOfShares * (1 + 0.15);
+                foreach (var liability in model.Asset.Liabilities)
+                {
+                    liability.Username = username;
+                    liability.CreatedDate = DateTime.Now;
+                    liability.CreatedBy = Constants.Constants.USER;
+                    liability.LiabilityType = (int)Constants.Constants.LIABILITY_TYPE.STOCK;
+                    liability.AssetId = asset.Id;
+                    Liabilities childLiability = new Liabilities();
+                    childLiability.Name = liability.Name;
+                    childLiability.Value = liability.Value;
+                    childLiability.InterestRate = liability.InterestRate;
+                    childLiability.StartDate = liability.StartDate;
+                    childLiability.EndDate = liability.EndDate;
+                    childLiability.LiabilityType = liability.LiabilityType;
+                    childLiability.CreatedDate = liability.CreatedDate;
+                    childLiability.CreatedBy = Constants.Constants.USER;
+                    childLiability.AssetId = liability.AssetId;
+                    childLiability.Liabilities1.Add(liability);
+                    childLiability.Username = username;
+                    childLiability.InterestType = liability.InterestType;
+                    childLiability.AssetId = asset.Id;
+                    transaction.Liabilities.Add(liability);
+                    transaction.Liabilities.Add(childLiability);
+                }
+
+                asset.StockTransactions.Add(transaction);
+
+                Assets available_money = new Assets();
+                available_money.AssetName = "Tiền mua cổ phiếu" + asset.AssetName;
+                available_money.AssetType = (int)Constants.Constants.ASSET_TYPE.AVAILABLE_MONEY;
+                available_money.CreatedBy = Constants.Constants.USER;
+                available_money.CreatedDate = DateTime.Now;
+                available_money.Value = model.BuyAmount * (-1);
+                available_money.Username = username;
+
+                entities.Assets.Add(available_money);
+
+                string sType = string.Empty;
+
+                Log log = LogQueries.CreateLog((int)Constants.Constants.LOG_TYPE.BUY, "tài sản \"" + model.Asset.AssetName + "\"", username, transaction.Value);
+
+                entities.Log.Add(log);
             }
-
-            Assets asset = model.Asset;
-            asset.Username = username;
-            asset.CreatedDate = DateTime.Now;
-            asset.AssetType = (int)Constants.Constants.ASSET_TYPE.REAL_ESTATE;
-            asset.CreatedBy = Constants.Constants.USER;
-            asset.ObtainedBy = (int)Constants.Constants.OBTAIN_BY.BUY;
-
-            Incomes income = model.Income;
-            income.CreatedDate = DateTime.Now;
-            income.IncomeType = (int)Constants.Constants.ASSET_TYPE.REAL_ESTATE;
-            income.Username = username;
-            income.CreatedBy = Constants.Constants.USER;
-            asset.Incomes.Add(income);
-
-            Assets available_money = new Assets();
-            available_money.AssetName = "Tiền mua " + model.Asset.AssetName;
-            available_money.AssetType = (int)Constants.Constants.ASSET_TYPE.AVAILABLE_MONEY;
-            available_money.CreatedBy = Constants.Constants.USER;
-            available_money.CreatedDate = DateTime.Now;
-            available_money.Value = model.BuyAmount * (-1);
-            available_money.Username = username;
-
-            entities.Assets.Add(asset);
-            entities.Assets.Add(available_money);
-
-            string sType = string.Empty;
-
-            Log log = LogQueries.CreateLog((int)Constants.Constants.LOG_TYPE.BUY, "tài sản \"" + model.Asset.AssetName + "\"", username, model.Asset.Value);
-
-            entities.Log.Add(log);
             int result = entities.SaveChanges();
             return result;
         }
@@ -279,7 +356,7 @@ namespace CashFlowManagement.Queries
             }
             else
             {
-                return -1; 
+                return -1;
             }
         }
 
@@ -325,51 +402,102 @@ namespace CashFlowManagement.Queries
             return result;
         }
 
-        public static int SellAsset(int id, double sellAmount)
+        public static int SellAsset(AssetViewModel model)
         {
             Entities entities = new Entities();
-            Assets asset = entities.Assets.Where(x => x.Id == id).FirstOrDefault();
-            asset.DisabledDate = DateTime.Now;
-            asset.DisabledBy = Constants.Constants.USER;
-
-            entities.Assets.Attach(asset);
-            var entry = entities.Entry(asset);
-            entry.Property(x => x.DisabledDate).IsModified = true;
-            entry.Property(x => x.DisabledBy).IsModified = true;
-
-            Incomes income = entities.Incomes.Where(x => x.AssetId == id && !x.DisabledDate.HasValue).FirstOrDefault();
-            income.DisabledDate = DateTime.Now;
-            income.DisabledBy = Constants.Constants.USER;
-
-            entities.Incomes.Attach(income);
-            var entry_2 = entities.Entry(income);
-            entry_2.Property(x => x.DisabledDate).IsModified = true;
-            entry_2.Property(x => x.DisabledBy).IsModified = true;
-
-            IQueryable<Liabilities> liabilities = entities.Liabilities.Where(x => x.AssetId == asset.Id && !x.DisabledDate.HasValue);
-            foreach (var liability in liabilities)
+            if (model.Asset.AssetType == (int)Constants.Constants.ASSET_TYPE.REAL_ESTATE)
             {
-                liability.DisabledDate = DateTime.Now;
-                liability.DisabledBy = Constants.Constants.USER;
-                entities.Liabilities.Attach(liability);
-                var entry_3 = entities.Entry(liability);
-                entry_3.Property(x => x.DisabledDate).IsModified = true;
-                entry_3.Property(x => x.DisabledBy).IsModified = true;
+                Assets asset = entities.Assets.Where(x => x.Id == model.Asset.Id).FirstOrDefault();
+                asset.DisabledDate = DateTime.Now;
+                asset.DisabledBy = Constants.Constants.USER;
+
+                entities.Assets.Attach(asset);
+                var entry = entities.Entry(asset);
+                entry.Property(x => x.DisabledDate).IsModified = true;
+                entry.Property(x => x.DisabledBy).IsModified = true;
+
+                Incomes income = entities.Incomes.Where(x => x.AssetId == model.Asset.Id && !x.DisabledDate.HasValue).FirstOrDefault();
+                income.DisabledDate = DateTime.Now;
+                income.DisabledBy = Constants.Constants.USER;
+
+                entities.Incomes.Attach(income);
+                var entry_2 = entities.Entry(income);
+                entry_2.Property(x => x.DisabledDate).IsModified = true;
+                entry_2.Property(x => x.DisabledBy).IsModified = true;
+
+                IQueryable<Liabilities> liabilities = entities.Liabilities.Where(x => x.AssetId == asset.Id && !x.DisabledDate.HasValue);
+                foreach (var liability in liabilities)
+                {
+                    liability.DisabledDate = DateTime.Now;
+                    liability.DisabledBy = Constants.Constants.USER;
+                    entities.Liabilities.Attach(liability);
+                    var entry_3 = entities.Entry(liability);
+                    entry_3.Property(x => x.DisabledDate).IsModified = true;
+                    entry_3.Property(x => x.DisabledBy).IsModified = true;
+                }
+
+                Assets available_money = new Assets();
+                available_money.AssetName = "Tiền bán " + asset.AssetName;
+                available_money.AssetType = (int)Constants.Constants.ASSET_TYPE.AVAILABLE_MONEY;
+                available_money.CreatedBy = Constants.Constants.USER;
+                available_money.CreatedDate = DateTime.Now;
+                available_money.Value = model.SellAmount;
+                available_money.Username = asset.Username;
+
+                entities.Assets.Add(available_money);
+
+                Log log = LogQueries.CreateLog((int)Constants.Constants.LOG_TYPE.SELL, "tài sản \"" + asset.AssetName + "\"", asset.Username, model.SellAmount);
+                entities.Log.Add(log);
             }
+            else if (model.Asset.AssetType == (int)Constants.Constants.ASSET_TYPE.STOCK)
+            {
+                Assets asset = entities.Assets.Where(x => x.AssetName.Equals(model.Asset.AssetName) && x.AssetType == (int)Constants.Constants.ASSET_TYPE.STOCK
+                && !x.DisabledDate.HasValue).FirstOrDefault();
+                if (asset != null)
+                {
+                    int currentNumberOfShare = entities.StockTransactions.Where(x => x.AssetId == asset.Id).Sum(x => x.TransactionType == (int)Constants.Constants.TRANSACTION_TYPE.SELL ? x.NumberOfShares * -1 : x.NumberOfShares);
+                    if(currentNumberOfShare >= model.Transaction.NumberOfShares) {
+                        StockTransactions transaction = new StockTransactions
+                        {
+                            Name = "Bán cổ phiếu " + model.Asset.AssetName,
+                            Value = model.Transaction.NumberOfShares * model.Transaction.SpotPrice * (1 + 0.1),
+                            TransactionDate = DateTime.Now,
+                            TransactionType = (int)Constants.Constants.TRANSACTION_TYPE.SELL,
+                            NumberOfShares = model.Transaction.NumberOfShares,
+                            SpotPrice = model.Transaction.SpotPrice,
+                            BrokerFee = model.Transaction.NumberOfShares * model.Transaction.SpotPrice * 0.1,
+                            ExpectedDividend = model.Transaction.ExpectedDividend,
+                            Note = model.Transaction.Note,
+                            CreatedDate = DateTime.Now,
+                            CreatedBy = Constants.Constants.USER,
+                            Username = asset.Username
+                        };
 
-            Assets available_money = new Assets();
-            available_money.AssetName = "Tiền bán " + asset.AssetName;
-            available_money.AssetType = (int)Constants.Constants.ASSET_TYPE.AVAILABLE_MONEY;
-            available_money.CreatedBy = Constants.Constants.USER;
-            available_money.CreatedDate = DateTime.Now;
-            available_money.Value = sellAmount;
-            available_money.Username = asset.Username;
+                        asset.StockTransactions.Add(transaction);
 
-            entities.Assets.Add(available_money);
+                        Assets available_money = new Assets();
+                        available_money.AssetName = "Tiền bán cổ phiếu " + asset.AssetName;
+                        available_money.AssetType = (int)Constants.Constants.ASSET_TYPE.AVAILABLE_MONEY;
+                        available_money.CreatedBy = Constants.Constants.USER;
+                        available_money.CreatedDate = DateTime.Now;
+                        available_money.Value = model.Transaction.NumberOfShares * model.Transaction.SpotPrice * (1 + 0.1);
+                        available_money.Username = asset.Username;
 
-            Log log = LogQueries.CreateLog((int)Constants.Constants.LOG_TYPE.SELL, "tài sản \"" + asset.AssetName + "\"", asset.Username, sellAmount);
-            entities.Log.Add(log);
+                        entities.Assets.Add(available_money);
 
+                        Log log = LogQueries.CreateLog((int)Constants.Constants.LOG_TYPE.SELL, "tài sản \"" + asset.AssetName + "\"", asset.Username, transaction.Value);
+                        entities.Log.Add(log);
+                    }
+                    else
+                    {
+                        return -2;
+                    }
+                }
+                else
+                {
+                    return -1;
+                }
+            }
             int result = entities.SaveChanges();
             return result;
         }
