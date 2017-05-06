@@ -234,8 +234,8 @@ namespace CashFlowManagement.Queries
                     CreatedBy = Constants.Constants.USER,
                     Username = username,
                 };
-                transaction.BrokerFee = transaction.SpotPrice * transaction.NumberOfShares * 0.15;
-                transaction.Value = transaction.SpotPrice * transaction.NumberOfShares * (1 + 0.15);
+                transaction.BrokerFee = transaction.SpotPrice * transaction.NumberOfShares * 0.0015;
+                transaction.Value = transaction.SpotPrice * transaction.NumberOfShares * (1 + 0.0015);
                 foreach (var liability in model.Asset.Liabilities)
                 {
                     liability.Username = username;
@@ -460,12 +460,12 @@ namespace CashFlowManagement.Queries
                         StockTransactions transaction = new StockTransactions
                         {
                             Name = "Bán cổ phiếu " + model.Asset.AssetName,
-                            Value = model.Transaction.NumberOfShares * model.Transaction.SpotPrice * (1 + 0.1),
+                            Value = model.Transaction.NumberOfShares * model.Transaction.SpotPrice * (1 + 0.0025),
                             TransactionDate = DateTime.Now,
                             TransactionType = (int)Constants.Constants.TRANSACTION_TYPE.SELL,
                             NumberOfShares = model.Transaction.NumberOfShares,
                             SpotPrice = model.Transaction.SpotPrice,
-                            BrokerFee = model.Transaction.NumberOfShares * model.Transaction.SpotPrice * 0.1,
+                            BrokerFee = model.Transaction.NumberOfShares * model.Transaction.SpotPrice * 0.0025,
                             ExpectedDividend = model.Transaction.ExpectedDividend,
                             Note = model.Transaction.Note,
                             CreatedDate = DateTime.Now,
@@ -480,7 +480,7 @@ namespace CashFlowManagement.Queries
                         available_money.AssetType = (int)Constants.Constants.ASSET_TYPE.AVAILABLE_MONEY;
                         available_money.CreatedBy = Constants.Constants.USER;
                         available_money.CreatedDate = DateTime.Now;
-                        available_money.Value = model.Transaction.NumberOfShares * model.Transaction.SpotPrice * (1 + 0.1);
+                        available_money.Value = model.Transaction.NumberOfShares * model.Transaction.SpotPrice * (1 + 0.0025);
                         available_money.Username = asset.Username;
 
                         entities.Assets.Add(available_money);

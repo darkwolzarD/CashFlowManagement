@@ -131,6 +131,7 @@
                         <th class="text-center">Phí môi giới</th>
                         <th class="text-center">Tổng giá trị vốn</th>
                         <th class="text-center">Cổ tức mong đợi</th>
+                        <th class="text-center">Loại giao dịch</th>
                         <th class="text-center">Ghi chú</th>
                         <th class="text-center" colspan="5">Chỉnh sửa</th>
                         <th class="text-center"><strong>Hôm nay: @(DateTime.Now.ToString("MM/yyyy"))</strong></th>
@@ -207,7 +208,7 @@
                         foreach (var item in Model.List)
                         {
                             <tr class="rs-@rsCount">
-                                <td class="text-center" rowspan="@(item.LiabilityList.List.Count() + item.Asset.StockTransactions.Count() + 5)" width="120">@item.Asset.AssetName</td>
+                                <td class="text-center" rowspan="@(item.LiabilityList.List.Count() + item.Asset.StockTransactions.Count() * 3 + 1)" width="120">@item.Asset.AssetName</td>
                             </tr>
                             foreach (var transaction in item.Asset.StockTransactions)
                             {
@@ -220,6 +221,7 @@
                                     <th class="text-center">Phí môi giới</th>
                                     <th class="text-center">Tổng giá trị vốn</th>
                                     <th class="text-center">Cổ tức mong đợi</th>
+                                    <th class="text-center">Loại giao dịch</th>
                                     <th class="text-center">Ghi chú</th>
                                     <th class="text-center" colspan="5">Chỉnh sửa</th>
                                     <th class="text-center"><strong></strong></th>
@@ -233,6 +235,20 @@
                                     <td>@FormatUtility.DisplayThousandSeparatorsForNumber(transaction.BrokerFee)</td>
                                     <td>@FormatUtility.DisplayThousandSeparatorsForNumber(transaction.Value)</td>
                                     <td>@FormatUtility.DisplayPercentageForNumber(transaction.ExpectedDividend)</td>
+                                    <td>
+                                        @if(transaction.TransactionType == (int)Constants.TRANSACTION_TYPE.CREATE)
+                                        {
+                                            @Html.Raw("Khai báo")
+                                        }
+                                        else if (transaction.TransactionType == (int)Constants.TRANSACTION_TYPE.BUY)
+                                        {
+                                            @Html.Raw("Giao dịch mua")
+                                        }
+                                        else if(transaction.TransactionType == (int)Constants.TRANSACTION_TYPE.SELL)
+                                        {
+                                        @Html.Raw("Giao dịch bán")
+                                        }
+                                    </td>
                                     <td>@transaction.Note</td>
                                     <td class="text-center" colspan="6">
                                         <button class="btn btn-success update-asset" data-asset-id="@item.Asset.Id" data-transaction-id="@transaction.Id">

@@ -136,7 +136,7 @@
                         assetValue = $("#buy-new-asset-modal input[name='Asset.Value']").val();
                     }
                     else {
-                        assetValue = $("#buy-new-asset-modal input[name='Transaction.NumberOfShares']").val() * $("#buy-new-asset-modal input[name='Transaction.SpotPrice']").val();
+                        assetValue = $("#buy-new-asset-modal input[name='Transaction.NumberOfShares']").val() * $("#buy-new-asset-modal input[name='Transaction.SpotPrice']").val() * 1.0015;
                     }
                     var currentAmount = parseFloat($("#buy-new-asset-modal input[name='BuyAmount']").val());
                     if (currentAmount == "") {
@@ -626,5 +626,19 @@
                 }
             }
         })
+    })
+
+    $(document).on("keyup", "#Transaction_NumberOfShares, #Transaction_SpotPrice", function () {
+        RemoveMask();
+        var numberOfShares = $("#buy-new-asset-modal #Transaction_NumberOfShares").val();
+        if (numberOfShares == "") {
+            numberOfShares = 0;
+        }
+        var spotPrice = $("#buy-new-asset-modal #Transaction_SpotPrice").val();
+        if (spotPrice == "") {
+            spotPrice = 0;
+        }
+        $("#buy-new-asset-modal #BuyValue").val(numberOfShares * spotPrice * 1.0015);
+        MaskInput();
     })
 })

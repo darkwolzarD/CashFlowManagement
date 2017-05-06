@@ -116,6 +116,12 @@
                             </div>
                         </div>
                         <div class="form-group">
+                            <label class="control-label col-sm-3">Thành tiền:</label>
+                            <div class="col-sm-9">
+                                <input class="form-control input-mask" id="BuyValue" readonly/>
+                            </div>
+                        </div>
+                        <div class="form-group">
                             <label class="control-label col-sm-3">Cổ tức mong đợi:</label>
                             <div class="col-sm-9">
                                 @Html.TextBoxFor(x => x.Transaction.ExpectedDividend, new { @Value = string.Empty, @type = "text", @class = "form-control percentage" })

@@ -158,7 +158,7 @@ namespace CashFlowManagement.Queries
                     assetListViewModel.Type == (int)Constants.Constants.ASSET_TYPE.STOCK)
                 {
                     double currentTotalMortgageValue = assetViewModel.LiabilityList.List.Where(x => !x.Liability.ParentLiabilityId.HasValue && x.CurrentInterestRate != 0).Sum(x => x.Liability.Value);
-                    assetViewModel.AverageInterestRate = assetViewModel.TotalInterestPayment / currentTotalMortgageValue * 1200;
+                    assetViewModel.AverageInterestRate = assetViewModel.TotalInterestPayment / assetViewModel.TotalRemainingValue * 1200;
                 }
                 else
                 {
