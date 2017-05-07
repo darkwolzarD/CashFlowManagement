@@ -80,5 +80,11 @@ namespace CashFlowManagement.Controllers
             double result = AssetQueries.CheckAvailableMoney("test");
             return Json(new { result = result }, JsonRequestBehavior.AllowGet);
         }
+
+        public JsonResult CheckRemainedStock(string stock)
+        {
+            double result = AssetQueries.CheckRemainedStock(stock);
+            return Json(new { result = result }, JsonRequestBehavior.AllowGet);
+        }
     }
 }

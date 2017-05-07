@@ -502,7 +502,6 @@ namespace CashFlowManagement.Queries
             return result;
         }
 
-
         public static double CheckAvailableMoney(string username)
         {
             Entities entities = new Entities();
@@ -515,6 +514,23 @@ namespace CashFlowManagement.Queries
         {
             Entities entities = new Entities();
             return entities.Assets.Where(x => x.AssetName.Equals(assetName) && x.AssetType == type).Any();
+        }
+
+        public static double CheckRemainedStock(string stock)
+        {
+            Entities entities = new Entities();
+            Assets asset = entities.Assets.Where(x => x.AssetName.Equals(stock)
+                                                         && x.AssetType == (int)Constants.Constants.ASSET_TYPE.STOCK
+                                                         && !x.DisabledDate.HasValue).FirstOrDefault();
+            if (asset != null)
+            {
+                return entities.StockTransactions.Where(x => x.AssetId.Equals(asset.Id))
+                    .Select(x => x.TransactionType == (int)Constants.Constants.TRANSACTION_TYPE.SELL ? x.NumberOfShares * -1 : x.NumberOfShares).DefaultIfEmpty(0).Sum();
+            }
+            else
+            {
+                return -1;
+            }
         }
     }
 }

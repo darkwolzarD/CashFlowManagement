@@ -14,6 +14,7 @@ namespace CashFlowManagement.ViewModels
         public StockTransactions Transaction { get; set; }
         public double BuyAmount { get; set; }
         public double SellAmount { get; set; }
+        public int RemainedStock { get; set; }
         public double CurrentAvailableMoney { get; set; }
         public LiabilityListViewModel LiabilityList { get; set; }
         public double TotalMortgageValue { get; set; }

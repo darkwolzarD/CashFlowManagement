@@ -131,7 +131,6 @@
                         <th class="text-center">Phí môi giới</th>
                         <th class="text-center">Tổng giá trị vốn</th>
                         <th class="text-center">Cổ tức mong đợi</th>
-                        <th class="text-center">Loại giao dịch</th>
                         <th class="text-center">Ghi chú</th>
                         <th class="text-center" colspan="5">Chỉnh sửa</th>
                         <th class="text-center"><strong>Hôm nay: @(DateTime.Now.ToString("MM/yyyy"))</strong></th>
@@ -198,9 +197,9 @@
                             <td class="text-center"><strong style="color: red;">Tổng</strong></td>
                             <td><strong style="color: red;"></strong></td>
                             <td><strong style="color: red;"></strong></td>
-                            <td><strong style="color: red;">@FormatUtility.DisplayThousandSeparatorsForNumber(Model.List.Sum(x => x.Asset.StockTransactions.Sum(y => y.NumberOfShares)))</strong></td>
-                            <td><strong style="color: red;">@FormatUtility.DisplayThousandSeparatorsForNumber(Model.List.Sum(x => x.Asset.StockTransactions.Sum(y => y.SpotPrice)))</strong></td>
-                            <td><strong style="color: red;">@FormatUtility.DisplayThousandSeparatorsForNumber(Model.List.Sum(x => x.Asset.StockTransactions.Sum(y => y.AveragePrice)))</strong></td>
+                            <td><strong style="color: red;"></strong></td>
+                            <td><strong style="color: red;"></strong></td>
+                            <td><strong style="color: red;"></strong></td>
                             <td><strong style="color: red;">@FormatUtility.DisplayThousandSeparatorsForNumber(Model.List.Sum(x => x.Asset.StockTransactions.Sum(y => y.BrokerFee)))</strong></td>
                             <td colspan="3"><strong style="color: red;">@FormatUtility.DisplayThousandSeparatorsForNumber(Model.List.Sum(x => x.Asset.StockTransactions.Sum(y => y.Value)))</strong></td>
                             <td colspan="6"></td>
@@ -208,7 +207,7 @@
                         foreach (var item in Model.List)
                         {
                             <tr class="rs-@rsCount">
-                                <td class="text-center" rowspan="@(item.LiabilityList.List.Count() + item.Asset.StockTransactions.Count() * 3 + 1)" width="120">@item.Asset.AssetName</td>
+                                <td class="text-center" rowspan="@(item.LiabilityList.List.Count() / 2 + 3 + item.Asset.StockTransactions.Count() * 2)" width="120">@item.Asset.AssetName</td>
                             </tr>
                             foreach (var transaction in item.Asset.StockTransactions)
                             {
@@ -221,34 +220,32 @@
                                     <th class="text-center">Phí môi giới</th>
                                     <th class="text-center">Tổng giá trị vốn</th>
                                     <th class="text-center">Cổ tức mong đợi</th>
-                                    <th class="text-center">Loại giao dịch</th>
                                     <th class="text-center">Ghi chú</th>
                                     <th class="text-center" colspan="5">Chỉnh sửa</th>
                                     <th class="text-center"><strong></strong></th>
                                 </tr>
                                 <tr>
                                     <td>@transaction.TransactionDate.ToString("dd/MM/yyyy")</td>
-                                    <td>@transaction.TransactionType</td>
+                                    <td style="color: red;">
+                                        @if (transaction.TransactionType == (int)Constants.TRANSACTION_TYPE.CREATE)
+                                        {
+                                            @Html.Raw("Khai báo")
+                                        }
+                                        else if (transaction.TransactionType == (int)Constants.TRANSACTION_TYPE.BUY)
+                                        {
+                                            @Html.Raw("Mua")
+                                        }
+                                        else if (transaction.TransactionType == (int)Constants.TRANSACTION_TYPE.SELL)
+                                        {
+                                            @Html.Raw("Bán")
+                                        }
+                                    </td>
                                     <td>@FormatUtility.DisplayThousandSeparatorsForNumber(transaction.NumberOfShares)</td>
                                     <td>@FormatUtility.DisplayThousandSeparatorsForNumber(transaction.SpotPrice)</td>
                                     <td>@FormatUtility.DisplayThousandSeparatorsForNumber(transaction.AveragePrice)</td>
                                     <td>@FormatUtility.DisplayThousandSeparatorsForNumber(transaction.BrokerFee)</td>
                                     <td>@FormatUtility.DisplayThousandSeparatorsForNumber(transaction.Value)</td>
                                     <td>@FormatUtility.DisplayPercentageForNumber(transaction.ExpectedDividend)</td>
-                                    <td>
-                                        @if(transaction.TransactionType == (int)Constants.TRANSACTION_TYPE.CREATE)
-                                        {
-                                            @Html.Raw("Khai báo")
-                                        }
-                                        else if (transaction.TransactionType == (int)Constants.TRANSACTION_TYPE.BUY)
-                                        {
-                                            @Html.Raw("Giao dịch mua")
-                                        }
-                                        else if(transaction.TransactionType == (int)Constants.TRANSACTION_TYPE.SELL)
-                                        {
-                                        @Html.Raw("Giao dịch bán")
-                                        }
-                                    </td>
                                     <td>@transaction.Note</td>
                                     <td class="text-center" colspan="6">
                                         <button class="btn btn-success update-asset" data-asset-id="@item.Asset.Id" data-transaction-id="@transaction.Id">
@@ -386,22 +383,6 @@
                                         }
                                     }
                                 }
-                                <tr>
-                                    <td></td>
-                                    <td class="text-center"><strong>Tổng</strong></td>
-                                    <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(item.TotalMortgageValue)</strong></td>
-                                    <td></td>
-                                    <td><strong>@FormatUtility.DisplayPercentageForNumber(item.AverageInterestRate)</strong></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(item.TotalOriginalPayment)</strong></td>
-                                    <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(item.TotalInterestPayment)</strong></td>
-                                    <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(item.TotalMonthlyPayment)</strong></td>
-                                    <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(item.TotalAnnualPayment)</strong></td>
-                                    <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(item.TotalRemainingValue)</strong></td>
-                                    <td colspan="2"></td>
-                                </tr>
                             }
                         }
                     }
@@ -707,6 +688,7 @@
     Url.BuyAsset = '@Url.Action("BuyAsset", "Asset")';
     Url.SellAsset = '@Url.Action("SellAsset", "Asset")';
     Url.SellAssetModal = '@Url.Action("_SellAssetModal", "Asset")';
+    Url.CheckRemainedStock = '@Url.Action("CheckRemainedStock", "Asset")';
     Url.DeleteAsset = '@Url.Action("DeleteAsset", "Asset")';
     Url.CheckAvailableMoney = '@Url.Action("CheckAvailableMoney", "Asset")';
     Url.LiabilityModal = '@Url.Action("_LiabilityModal", "Liability")';

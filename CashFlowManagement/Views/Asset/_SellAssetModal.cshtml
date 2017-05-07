@@ -37,14 +37,30 @@
                             <label class="control-label col-sm-3">Số lượng: </label>
                             <div class="col-sm-9">
                                 @Html.TextBoxFor(x => x.Transaction.NumberOfShares, new { @type = "text", @class = "form-control input-mask" })
-                                @Html.HiddenFor(x => x.Asset.Id)
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="control-label col-sm-3">Giá bán: </label>
                             <div class="col-sm-9">
                                 @Html.TextBoxFor(x => x.Transaction.SpotPrice, new { @type = "text", @class = "form-control input-mask" })
-                                @Html.HiddenFor(x => x.Asset.Id)
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-3">Thành tiền: </label>
+                            <div class="col-sm-9">
+                                <input class="form-control input-mask-2" id="SellValue" readonly/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-3">Số lượng cổ phiếu còn lại: </label>
+                            <div class="col-sm-9">
+                                <input class="form-control input-mask-2" id="RemainedStock" readonly />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-3">Ghi chú: </label>
+                            <div class="col-sm-9">
+                                @Html.TextBoxFor(x => x.Transaction.Note, new { @type = "text", @class = "form-control" })
                             </div>
                         </div>
                     }
