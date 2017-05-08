@@ -63,7 +63,14 @@
                             }
                         </label>
                         <div class="col-sm-9">
-                            @Html.TextBoxFor(x => x.Asset.AssetName, new { @type = "text", @class = "form-control" })
+                            @if (Model.Asset.AssetType == (int)Constants.ASSET_TYPE.STOCK)
+                            {
+                                @Html.TextBoxFor(x => x.Asset.AssetName, new { @type = "text", @class = "form-control", @readonly = "true" })
+                            }
+                            else
+                            {
+                                @Html.TextBoxFor(x => x.Asset.AssetName, new { @type = "text", @class = "form-control" })
+                            }
                             @Html.HiddenFor(x => x.Asset.AssetType)
                             @Html.HiddenFor(x => x.Asset.Id)
                             @Html.HiddenFor(x => x.Asset.Username)
@@ -141,6 +148,7 @@
                             <label class="control-label col-sm-3">Ngày giao dịch:</label>
                             <div class="col-sm-9">
                                 @Html.TextBoxFor(x => x.Transaction.TransactionDate, "{0:dd/MM/yyyy}", new { @type = "text", @class = "form-control date-picker" })
+                                @Html.HiddenFor(x => x.Transaction.Id)
                             </div>
                         </div>
                         <div class="form-group">

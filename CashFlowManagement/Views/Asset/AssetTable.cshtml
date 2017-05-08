@@ -200,18 +200,18 @@
                             <td><strong style="color: red;"></strong></td>
                             <td><strong style="color: red;"></strong></td>
                             <td><strong style="color: red;"></strong></td>
-                            <td><strong style="color: red;">@FormatUtility.DisplayThousandSeparatorsForNumber(Model.List.Sum(x => x.Asset.StockTransactions.Sum(y => y.BrokerFee)))</strong></td>
-                            <td colspan="3"><strong style="color: red;">@FormatUtility.DisplayThousandSeparatorsForNumber(Model.List.Sum(x => x.Asset.StockTransactions.Sum(y => y.Value)))</strong></td>
+                            <td><strong style="color: red;">@FormatUtility.DisplayThousandSeparatorsForNumber(Model.List.Sum(x => x.Asset.StockTransactions.Where(y => !y.DisabledDate.HasValue).Sum(y => y.BrokerFee)))</strong></td>
+                            <td colspan="3"><strong style="color: red;">@FormatUtility.DisplayThousandSeparatorsForNumber(Model.List.Sum(x => x.Asset.StockTransactions.Where(y => !y.DisabledDate.HasValue).Sum(y => y.Value)))</strong></td>
                             <td colspan="6"></td>
                         </tr>
                         foreach (var item in Model.List)
                         {
                             <tr class="rs-@rsCount">
-                                <td class="text-center" rowspan="@(item.LiabilityList.List.Count() / 2 + 3 + item.Asset.StockTransactions.Count() * 2)" width="120">@item.Asset.AssetName</td>
+                                <td class="text-center" rowspan="@(item.LiabilityList.List.Count() / 2 + item.Asset.StockTransactions.Count() * 2 + 2)" width="120">@item.Asset.AssetName</td>
                             </tr>
-                            foreach (var transaction in item.Asset.StockTransactions)
+                            foreach (var transaction in item.Asset.StockTransactions.Where(x => !x.DisabledDate.HasValue))
                             {
-                                <tr>
+                                @*<tr>
                                     <th class="text-center">Ngày giao dịch</th>
                                     <th class="text-center">Loại giao dịch</th>
                                     <th class="text-center">Số lượng cổ phiếu</th>
@@ -223,7 +223,7 @@
                                     <th class="text-center">Ghi chú</th>
                                     <th class="text-center" colspan="5">Chỉnh sửa</th>
                                     <th class="text-center"><strong></strong></th>
-                                </tr>
+                                </tr>*@
                                 <tr>
                                     <td>@transaction.TransactionDate.ToString("dd/MM/yyyy")</td>
                                     <td style="color: red;">

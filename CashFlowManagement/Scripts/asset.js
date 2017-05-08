@@ -3,7 +3,6 @@
 
     function MaskInput() {
         $(".input-mask").mask("000.000.000.000.000", { reverse: true });
-        $('.input-mask-2').mask('000.000.000.000.000,00', { reverse: true });
         $(".percentage").mask("##0,00%", { reverse: true });
         $('.date').mask('00/00/0000');
     }
@@ -137,7 +136,7 @@
                         assetValue = $("#buy-new-asset-modal input[name='Asset.Value']").val();
                     }
                     else {
-                        assetValue = $("#buy-new-asset-modal input[name='Transaction.NumberOfShares']").val() * $("#buy-new-asset-modal input[name='Transaction.SpotPrice']").val() * 1.0015;
+                        assetValue = parseInt($("#buy-new-asset-modal input[name='Transaction.NumberOfShares']").val() * $("#buy-new-asset-modal input[name='Transaction.SpotPrice']").val() * 1.0015);
                     }
                     var currentAmount = parseFloat($("#buy-new-asset-modal input[name='BuyAmount']").val());
                     if (currentAmount == "") {
@@ -650,7 +649,7 @@
         })
     })
 
-    $(document).on("keyup", "#buy-new-asset-modal #Transaction_NumberOfShares, #buy-new-asset-modal #Transaction_SpotPrice", function () {
+    $(document).on("change", "#buy-new-asset-modal #Transaction_NumberOfShares, #buy-new-asset-modal #Transaction_SpotPrice", function () {
         RemoveMask();
         var numberOfShares = $("#buy-new-asset-modal #Transaction_NumberOfShares").val();
         if (numberOfShares == "") {
@@ -660,8 +659,79 @@
         if (spotPrice == "") {
             spotPrice = 0;
         }
+
+        var value = parseInt(numberOfShares * spotPrice * 1.0015);
+        $("#buy-new-asset-modal #BuyValue").val(value);
+
+        $("#buy-new-asset-modal input[name='BuyAmount']").val(value);
+        var currentAmount = $("#buy-new-asset-modal input[name='BuyAmount']").val();
+        if (currentAmount == "" || currentAmount == 0) {
+            currentAmount = 0;
+        }
+        else {
+            currentAmount = parseInt(currentAmount);
+        }
+
+        var currentLiabilities = 0;
+        $("#liability-table tbody tr:hidden").each(function (index, element) {
+            var liability = parseFloat($(element).find("td:nth-child(2) input").val());
+            if (liability == "") {
+                liability == 0;
+            }
+            currentLiabilities += liability;
+        });
+
+        var availalbleMoney = $("#buy-new-asset-modal #CurrentAvailableMoney").val();
+
+        if (availalbleMoney < currentAmount + currentLiabilities) {
+            $("#liability-table tbody tr:first td:nth-child(2) input").val(currentAmount + currentLiabilities - availalbleMoney);
+        }
+        else {
+            $("#liability-table tbody tr:first td:nth-child(2) input").val(0);
+        }
+
         MaskInput();
-        $("#buy-new-asset-modal #BuyValue").val((numberOfShares * spotPrice * 1.0015).toFixed(2));
+    })
+
+    $(document).on("change", "#buy-new-asset-modal #BuyAmount", function () {
+        RemoveMask();
+        var numberOfShares = $("#buy-new-asset-modal #Transaction_NumberOfShares").val();
+        if (numberOfShares == "") {
+            numberOfShares = 0;
+        }
+        var spotPrice = $("#buy-new-asset-modal #Transaction_SpotPrice").val();
+        if (spotPrice == "") {
+            spotPrice = 0;
+        }
+
+        var value = parseInt(numberOfShares * spotPrice * 1.0015);
+        $("#buy-new-asset-modal #BuyValue").val(value);
+
+        var currentAmount = $("#buy-new-asset-modal input[name='BuyAmount']").val();
+        if (currentAmount == "") {
+            currentAmount = 0;
+        }
+        else {
+            currentAmount = parseInt(currentAmount);
+        }
+
+        var currentLiabilities = 0;
+        $("#liability-table tbody tr:hidden").each(function (index, element) {
+            var liability = parseFloat($(element).find("td:nth-child(2) input").val());
+            if (liability == "") {
+                liability == 0;
+            }
+            currentLiabilities += liability;
+        });
+
+        if (value >= currentAmount + currentLiabilities) {
+            $("#liability-table tbody tr:first td:nth-child(2) input").val(value - currentAmount - currentLiabilities);
+        }
+        else {
+            $("#liability-table tbody tr:first td:nth-child(2) input").val(0);
+        }
+
+        MaskInput();
     })
 
     $(document).on("keyup", "#sell-asset-modal #Transaction_NumberOfShares, #sell-asset-modal #Transaction_SpotPrice", function () {
@@ -674,7 +744,10 @@
         if (spotPrice == "") {
             spotPrice = 0;
         }
+
+        var value = parseInt(numberOfShares * spotPrice * 1.0025);
+        $("#sell-asset-modal #SellValue").val(value);
+
         MaskInput();
-        $("#sell-asset-modal #SellValue").val((numberOfShares * spotPrice * 1.0025).toFixed(2));
     })
 })
