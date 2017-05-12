@@ -101,7 +101,7 @@ namespace CashFlowManagement.Queries
                 entities.Liabilities.Add(childLiability);
             }
 
-            Log log = LogQueries.CreateLog((int)Constants.Constants.LOG_TYPE.ADD, "khoản nợ \"" + liability.Name + "\"", username, liability.Value);
+            Log log = LogQueries.CreateLog((int)Constants.Constants.LOG_TYPE.ADD, "khoản nợ \"" + liability.Name + "\"", username, liability.Value, DateTime.Now);
             entities.Log.Add(log);
 
             int result = entities.SaveChanges();
@@ -383,9 +383,6 @@ namespace CashFlowManagement.Queries
             int result = 0;
             Liabilities parentLiability = entities.Liabilities.Where(x => x.Id == data.Id).FirstOrDefault();
 
-            Log log = LogQueries.CreateLog((int)Constants.Constants.LOG_TYPE.UPDATE, "khoản nợ \"" + parentLiability.Name + "\"", parentLiability.Username, parentLiability.Value);
-            entities.Log.Add(log);
-
             if (data.LiabilityType == (int)Constants.Constants.LIABILITY_TYPE.REAL_ESTATE ||
                data.LiabilityType == (int)Constants.Constants.LIABILITY_TYPE.BUSINESS)
             {
@@ -451,8 +448,6 @@ namespace CashFlowManagement.Queries
                         end.LiabilityType = parentLiability.LiabilityType;
                         entities.Liabilities.Add(end);
                     }
-
-                    result = entities.SaveChanges();
                 }
                 else
                 {
@@ -494,7 +489,6 @@ namespace CashFlowManagement.Queries
                     childLiability.LiabilityType = parentLiability.LiabilityType;
 
                     entities.Liabilities.Add(childLiability);
-                    result = entities.SaveChanges();
                 }
             }
             else
@@ -523,9 +517,11 @@ namespace CashFlowManagement.Queries
                 updated_liability.Note = data.Note;
 
                 entities.Liabilities.Add(updated_liability);
-                result = entities.SaveChanges();
             }
 
+            Log log = LogQueries.CreateLog((int)Constants.Constants.LOG_TYPE.UPDATE, "khoản nợ \"" + parentLiability.Name + "\"", parentLiability.Username, parentLiability.Value, DateTime.Now);
+            entities.Log.Add(log);
+            result = entities.SaveChanges();
             return result;
         }
 
@@ -544,7 +540,7 @@ namespace CashFlowManagement.Queries
                 entry.Property(x => x.DisabledBy).IsModified = true;
             }
 
-            Log log = LogQueries.CreateLog((int)Constants.Constants.LOG_TYPE.DELETE, "khoản nợ \"" + parentLiability.Name + "\"", parentLiability.Username, parentLiability.Value);
+            Log log = LogQueries.CreateLog((int)Constants.Constants.LOG_TYPE.DELETE, "khoản nợ \"" + parentLiability.Name + "\"", parentLiability.Username, parentLiability.Value, DateTime.Now);
             entities.Log.Add(log);
 
             int result = entities.SaveChanges();

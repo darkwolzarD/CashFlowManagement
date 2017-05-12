@@ -39,7 +39,7 @@ namespace CashFlowManagement.Queries
 
             entities.Expenses.Add(expense);
 
-            Log log = LogQueries.CreateLog((int)Constants.Constants.LOG_TYPE.ADD, "chi tiêu \"" + expense.Name + "\"", username, expense.Value);
+            Log log = LogQueries.CreateLog((int)Constants.Constants.LOG_TYPE.ADD, "chi tiêu \"" + expense.Name + "\"", username, expense.Value, DateTime.Now);
             entities.Log.Add(log);
 
             int result = entities.SaveChanges();
@@ -61,6 +61,7 @@ namespace CashFlowManagement.Queries
             Expenses updated_expense = new Expenses();
             updated_expense.Value = model.Value;
             updated_expense.Name = model.Name;
+            updated_expense.ExpenseDay = model.ExpenseDay;
             updated_expense.ExpenseType = model.ExpenseType;
             updated_expense.CreatedDate = DateTime.Now;
             updated_expense.CreatedBy = Constants.Constants.USER;
@@ -68,7 +69,7 @@ namespace CashFlowManagement.Queries
 
             entities.Expenses.Add(updated_expense);
 
-            Log log = LogQueries.CreateLog((int)Constants.Constants.LOG_TYPE.UPDATE, "chi tiêu \"" + expense.Name + "\"", username, expense.Value);
+            Log log = LogQueries.CreateLog((int)Constants.Constants.LOG_TYPE.UPDATE, "chi tiêu \"" + expense.Name + "\"", username, expense.Value, DateTime.Now);
             entities.Log.Add(log);
 
             int result = entities.SaveChanges();
@@ -88,7 +89,7 @@ namespace CashFlowManagement.Queries
             entry.Property(x => x.DisabledDate).IsModified = true;
             entry.Property(x => x.DisabledBy).IsModified = true;
 
-            Log log = LogQueries.CreateLog((int)Constants.Constants.LOG_TYPE.DELETE, "chi tiêu \"" + expense.Name + "\"", expense.Username, expense.Value);
+            Log log = LogQueries.CreateLog((int)Constants.Constants.LOG_TYPE.DELETE, "chi tiêu \"" + expense.Name + "\"", expense.Username, expense.Value, DateTime.Now);
             entities.Log.Add(log);
 
             int result = entities.SaveChanges();

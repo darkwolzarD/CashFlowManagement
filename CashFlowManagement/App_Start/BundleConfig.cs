@@ -30,6 +30,7 @@ namespace CashFlowManagement
 
             bundles.Add(new StyleBundle("~/bundles/layout").Include(
                       "~/Scripts/layout.js",
+                      "~/Scripts/moment.js",
                       "~/Scripts/bootstrap-datepicker.min.js",
                       "~/Scripts/locales/bootstrap-datepicker.vi.min.js"));
         }

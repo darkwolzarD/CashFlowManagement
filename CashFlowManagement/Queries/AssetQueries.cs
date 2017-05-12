@@ -1,7 +1,10 @@
 ﻿using CashFlowManagement.EntityModel;
+using CashFlowManagement.Utilities;
 using CashFlowManagement.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
+using System.Data.Entity.Core.Objects;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -111,6 +114,7 @@ namespace CashFlowManagement.Queries
                     Username = username
                 };
 
+
                 if (!CheckExistAssetName(model.Asset.AssetName, model.Asset.AssetType))
                 {
                     asset.StockTransactions.Add(transaction);
@@ -143,7 +147,7 @@ namespace CashFlowManagement.Queries
 
             string sType = string.Empty;
 
-            Log log = LogQueries.CreateLog((int)Constants.Constants.LOG_TYPE.ADD, "tài sản \"" + model.Asset.AssetName + "\"", username, model.Asset.Value);
+            Log log = LogQueries.CreateLog((int)Constants.Constants.LOG_TYPE.ADD, "tài sản \"" + model.Asset.AssetName + "\"", username, model.Asset.Value, DateTime.Now);
 
             entities.Log.Add(log);
             int result = entities.SaveChanges();
@@ -210,9 +214,11 @@ namespace CashFlowManagement.Queries
 
                 string sType = string.Empty;
 
-                Log log = LogQueries.CreateLog((int)Constants.Constants.LOG_TYPE.BUY, "tài sản \"" + model.Asset.AssetName + "\"", username, model.Asset.Value);
+                Log log = LogQueries.CreateLog((int)Constants.Constants.LOG_TYPE.BUY, "bất động sản " + model.Asset.AssetName , username, model.BuyAmount, DateTime.Now);
+                Log log_2 = LogQueries.CreateLog((int)Constants.Constants.LOG_TYPE.EXPENSE, "tiền mua bất động sản " + model.Asset.AssetName, username, model.BuyAmount, DateTime.Now);
 
                 entities.Log.Add(log);
+                entities.Log.Add(log_2);
             }
             else if (model.Asset.AssetType == (int)Constants.Constants.ASSET_TYPE.STOCK)
             {
@@ -287,9 +293,11 @@ namespace CashFlowManagement.Queries
 
                 string sType = string.Empty;
 
-                Log log = LogQueries.CreateLog((int)Constants.Constants.LOG_TYPE.BUY, "tài sản \"" + model.Asset.AssetName + "\"", username, transaction.Value);
+                Log log = LogQueries.CreateLog((int)Constants.Constants.LOG_TYPE.BUY, "cổ phiếu " + model.Asset.AssetName, username, model.BuyAmount, DateTime.Now);
+                Log log_2 = LogQueries.CreateLog((int)Constants.Constants.LOG_TYPE.EXPENSE, "tiền mua cổ phiếu " + model.Asset.AssetName, username, model.BuyAmount, DateTime.Now);
 
                 entities.Log.Add(log);
+                entities.Log.Add(log_2);
             }
             int result = entities.SaveChanges();
             return result;
@@ -378,7 +386,7 @@ namespace CashFlowManagement.Queries
                     Name = "Cập nhật cổ phiếu " + model.Asset.AssetName,
                     Value = model.Transaction.Value,
                     TransactionDate = model.Transaction.TransactionDate,
-                    TransactionType = (int)Constants.Constants.TRANSACTION_TYPE.CREATE,
+                    TransactionType = transaction.TransactionType,
                     NumberOfShares = model.Transaction.NumberOfShares,
                     SpotPrice = model.Transaction.SpotPrice,
                     BrokerFee = model.Transaction.BrokerFee,
@@ -393,9 +401,40 @@ namespace CashFlowManagement.Queries
                 {
                     updated_transaction.Liabilities.Add(liability);
                 }
-                asset.StockTransactions.Add(updated_transaction);
+                asset.StockTransactions.Add(updated_transaction); 
+
+                if(transaction.TransactionType == (int)Constants.Constants.TRANSACTION_TYPE.BUY || transaction.TransactionType == (int)Constants.Constants.TRANSACTION_TYPE.SELL)
+                {
+                    double changedAmount = transaction.Value - updated_transaction.Value;
+
+                    Assets available_money = new Assets();
+                    available_money.AssetName = "Tiền thay đổi cập nhật cổ phiếu " + asset.AssetName;
+                    available_money.AssetType = (int)Constants.Constants.ASSET_TYPE.AVAILABLE_MONEY;
+                    available_money.CreatedBy = Constants.Constants.USER;
+                    available_money.CreatedDate = DateTime.Now;
+                    if (transaction.TransactionType == (int)Constants.Constants.TRANSACTION_TYPE.BUY)
+                    {
+                        available_money.Value = changedAmount;
+                    }
+                    else if (transaction.TransactionType == (int)Constants.Constants.TRANSACTION_TYPE.SELL)
+                    {
+                        available_money.Value = 0 - changedAmount;
+                    }
+                    available_money.Username = asset.Username;
+
+                    entities.Assets.Add(available_money);
+
+                    var logs = entities.Log.Where(x => DbFunctions.TruncateTime(x.Date) >= updated_transaction.TransactionDate && x.Username.Equals(asset.Username));
+                    foreach (var item in logs)
+                    {
+                        item.AvailableMoney += available_money.Value;
+                        entities.Log.Attach(item);
+                        entities.Entry(item).State = EntityState.Modified;
+
+                    }
+                }
             }
-            Log log = LogQueries.CreateLog((int)Constants.Constants.LOG_TYPE.UPDATE, "tài sản \"" + model.Asset.AssetName + "\"", model.Asset.Username, model.Asset.Value);
+            Log log = LogQueries.CreateLog((int)Constants.Constants.LOG_TYPE.UPDATE, "tài sản \"" + model.Asset.AssetName + "\"", model.Asset.Username, model.Asset.Value, DateTime.Now);
             entities.Log.Add(log);
 
             int result = entities.SaveChanges();
@@ -437,7 +476,7 @@ namespace CashFlowManagement.Queries
                 entry_3.Property(x => x.DisabledBy).IsModified = true;
             }
 
-            Log log = LogQueries.CreateLog((int)Constants.Constants.LOG_TYPE.DELETE, "tài sản \"" + asset.AssetName + "\"", asset.Username, asset.Value);
+            Log log = LogQueries.CreateLog((int)Constants.Constants.LOG_TYPE.DELETE, "tài sản \"" + asset.AssetName + "\"", asset.Username, asset.Value, DateTime.Now);
             entities.Log.Add(log);
 
             int result = entities.SaveChanges();
@@ -488,8 +527,10 @@ namespace CashFlowManagement.Queries
 
                 entities.Assets.Add(available_money);
 
-                Log log = LogQueries.CreateLog((int)Constants.Constants.LOG_TYPE.SELL, "tài sản \"" + asset.AssetName + "\"", asset.Username, model.SellAmount);
+                Log log = LogQueries.CreateLog((int)Constants.Constants.LOG_TYPE.SELL, "bất động sản " + asset.AssetName, asset.Username, model.SellAmount, DateTime.Now);
+                Log log_2 = LogQueries.CreateLog((int)Constants.Constants.LOG_TYPE.INCOME, "tiền bán bất động sản " + asset.AssetName, asset.Username, model.SellAmount, DateTime.Now);
                 entities.Log.Add(log);
+                entities.Log.Add(log_2);
             }
             else if (model.Asset.AssetType == (int)Constants.Constants.ASSET_TYPE.STOCK)
             {
@@ -528,8 +569,10 @@ namespace CashFlowManagement.Queries
 
                         entities.Assets.Add(available_money);
 
-                        Log log = LogQueries.CreateLog((int)Constants.Constants.LOG_TYPE.SELL, "tài sản \"" + asset.AssetName + "\"", asset.Username, transaction.Value);
+                        Log log = LogQueries.CreateLog((int)Constants.Constants.LOG_TYPE.SELL, "cổ phiếu " + asset.AssetName , asset.Username, transaction.Value, DateTime.Now);
+                        Log log_2 = LogQueries.CreateLog((int)Constants.Constants.LOG_TYPE.INCOME, "tiền bán cổ phiếu " + asset.AssetName, asset.Username, transaction.Value, DateTime.Now);
                         entities.Log.Add(log);
+                        entities.Log.Add(log_2);
                     }
                     else
                     {
@@ -545,12 +588,13 @@ namespace CashFlowManagement.Queries
             return result;
         }
 
-        public static double CheckAvailableMoney(string username)
+        public static double CheckAvailableMoney(string username, DateTime date)
         {
             Entities entities = new Entities();
+            var dataDate = date.Date;
             return entities.Assets.Where(x => x.Username.Equals(username)
                                                          && x.AssetType == (int)Constants.Constants.ASSET_TYPE.AVAILABLE_MONEY
-                                                         && !x.DisabledDate.HasValue).Select(x => x.Value).DefaultIfEmpty(0).Sum();
+                                                         && !x.DisabledDate.HasValue && DbFunctions.TruncateTime(x.CreatedDate) <= dataDate).Select(x => x.Value).DefaultIfEmpty(0).Sum();
         }
 
         public static bool CheckExistAssetName(string assetName, int type)
@@ -573,6 +617,111 @@ namespace CashFlowManagement.Queries
             else
             {
                 return -1;
+            }
+        }
+
+        public static void CreateCashFlowPerMonth()
+        {
+            Entities entities = new Entities();
+            var users = entities.Users;
+            foreach (var user in users)
+            {
+                double salaryIncome = entities.Incomes.Where(x => x.Username.Equals(user.Username)
+                                                         && x.IncomeType == (int)Constants.Constants.INCOME_TYPE.SALARY_INCOME
+                                                         && !x.DisabledDate.HasValue).Select(x => x.Value).DefaultIfEmpty(0).Sum();
+
+                double realEstateIncome = entities.Incomes.Where(x => x.Username.Equals(user.Username)
+                                                             && x.IncomeType == (int)Constants.Constants.INCOME_TYPE.REAL_ESTATE_INCOME
+                                                             && !x.DisabledDate.HasValue).Select(x => x.Value).DefaultIfEmpty(0).Sum();
+
+                double businessIncome = entities.Incomes.Where(x => x.Username.Equals(user.Username)
+                                                             && x.IncomeType == (int)Constants.Constants.INCOME_TYPE.BUSINESS_INCOME
+                                                             && !x.DisabledDate.HasValue).Select(x => x.Value).DefaultIfEmpty(0).Sum();
+
+                double interestIncome = entities.Incomes.Where(x => x.Username.Equals(user.Username)
+                                                             && x.IncomeType == (int)Constants.Constants.INCOME_TYPE.BANK_DEPOSIT_INCOME
+                                                             && !x.DisabledDate.HasValue).Select(x => x.Value).DefaultIfEmpty(0).Sum();
+
+                double stockIncome = 0;
+
+                double familyExpenses = entities.Expenses.Where(x => x.Username.Equals(user.Username)
+                                                             && x.ExpenseType == (int)Constants.Constants.EXPENSE_TYPE.FAMILY
+                                                             && !x.DisabledDate.HasValue).Select(x => x.Value).DefaultIfEmpty(0).Sum();
+
+                double otherExpenses = entities.Expenses.Where(x => x.Username.Equals(user.Username)
+                                                             && x.ExpenseType == (int)Constants.Constants.EXPENSE_TYPE.OTHERS
+                                                             && !x.DisabledDate.HasValue).Select(x => x.Value).DefaultIfEmpty(0).Sum();
+
+                double carExpenses = 0, creditCardExpenses = 0, homeMortgage = 0, businessLoanExpenses = 0, otherLoanExpenses = 0, stockExpenses = 0;
+
+                var carLiabilities = entities.Liabilities.Where(x => x.Username.Equals(user.Username)
+                                                         && x.LiabilityType == (int)Constants.Constants.LIABILITY_TYPE.CAR
+                                                         && !x.DisabledDate.HasValue);
+                foreach (var carLiability in carLiabilities)
+                {
+                    carExpenses += carLiability.Value / FormatUtility.CalculateTimePeriod(carLiability.StartDate.Value, carLiability.EndDate.Value) + carLiability.Value * carLiability.InterestRate / 1200;
+                }
+
+                var creditCardLiabilities = entities.Liabilities.Where(x => x.Username.Equals(user.Username)
+                                                             && x.LiabilityType == (int)Constants.Constants.LIABILITY_TYPE.CREDIT_CARD
+                                                             && !x.DisabledDate.HasValue);
+                foreach (var creditCarLiability in creditCardLiabilities)
+                {
+                    creditCardExpenses += creditCarLiability.Value / 12 + creditCarLiability.Value * creditCarLiability.InterestRate / 1200;
+                }
+
+                var homeLiabilities = entities.Liabilities.Where(x => x.Username.Equals(user.Username)
+                                                         && x.LiabilityType == (int)Constants.Constants.LIABILITY_TYPE.REAL_ESTATE
+                                                         && !x.DisabledDate.HasValue && !x.ParentLiabilityId.HasValue);
+
+                foreach (var homeLiability in homeLiabilities)
+                {
+                    homeMortgage += LiabilityQueries.GetCurrentMonthlyPayment(homeLiability.Id);
+                }
+
+                var businessLiabilities = entities.Liabilities.Where(x => x.Username.Equals(user.Username)
+                                                             && x.LiabilityType == (int)Constants.Constants.LIABILITY_TYPE.BUSINESS
+                                                             && !x.DisabledDate.HasValue && !x.ParentLiabilityId.HasValue);
+                foreach (var businessLiability in businessLiabilities)
+                {
+                    businessLoanExpenses += LiabilityQueries.GetCurrentMonthlyPayment(businessLiability.Id);
+                }
+
+                var otherLiabilities = entities.Liabilities.Where(x => x.Username.Equals(user.Username)
+                                                             && x.LiabilityType == (int)Constants.Constants.LIABILITY_TYPE.OTHERS
+                                                             && !x.DisabledDate.HasValue && !x.ParentLiabilityId.HasValue);
+                foreach (var otherLiability in otherLiabilities)
+                {
+                    otherLoanExpenses  += otherLiability.Value / FormatUtility.CalculateTimePeriod(otherLiability.StartDate.Value, otherLiability.EndDate.Value) + otherLiability.Value * otherLiability.InterestRate / 1200;
+                }
+
+                var insuranceExpenses = entities.Assets.Where(x => x.Username.Equals(user.Username)
+                                                         && x.AssetType == (int)Constants.Constants.ASSET_TYPE.INSURANCE
+                                                         && !x.DisabledDate.HasValue).Sum(x => x.Liabilities.Sum(y => y.Value));
+
+                double totalIncomes = salaryIncome + realEstateIncome + businessIncome + interestIncome + stockIncome;
+                double totalExpenses = homeMortgage + carExpenses + creditCardExpenses + businessLoanExpenses + stockExpenses + otherExpenses + familyExpenses + insuranceExpenses + otherExpenses;
+                double monthlyCashflow = totalIncomes - totalExpenses;
+
+                var cf = entities.Assets.Where(x => x.Username.Equals(user.Username) && x.AssetType == (int)Constants.Constants.ASSET_TYPE.AVAILABLE_MONEY
+                                                    && x.AssetName.Equals("CashFlow:" + DateTime.Now.ToString("MM/yyyy")));
+                if(!cf.Any())
+                {
+                    Assets cashflow = new Assets();
+                    cashflow.AssetName = "CashFlow:" + DateTime.Now.ToString("MM/yyyy");
+                    cashflow.AssetType = (int)Constants.Constants.ASSET_TYPE.AVAILABLE_MONEY;
+                    cashflow.CreatedDate = DateTime.Now;
+                    cashflow.CreatedBy = Constants.Constants.USER;
+                    cashflow.Username = user.Username;
+                    cashflow.Value = monthlyCashflow;
+
+                    entities.Assets.Add(cashflow);
+
+                    Log log = LogQueries.CreateLog((int)Constants.Constants.LOG_TYPE.INCOME, cashflow.AssetName, user.Username, cashflow.Value, DateTime.Now);
+
+                    entities.Log.Add(log);
+                    int result = entities.SaveChanges();
+                }
             }
         }
     }

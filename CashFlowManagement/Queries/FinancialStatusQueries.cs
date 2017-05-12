@@ -59,21 +59,21 @@ namespace CashFlowManagement.Queries
                                                          && x.LiabilityType == (int)Constants.Constants.LIABILITY_TYPE.REAL_ESTATE
                                                          && !x.ParentLiabilityId.HasValue && !x.DisabledDate.HasValue).Select(x => x.Value).DefaultIfEmpty(0).Sum();
 
-            var carLiabilities = entities.Liabilities.Where(x => x.Username.Equals(username)
-                                                         && x.LiabilityType == (int)Constants.Constants.LIABILITY_TYPE.CAR
-                                                         && !x.DisabledDate.HasValue);
-            foreach (var carLiability in carLiabilities)
-            {
-                result.CarPayment += carLiability.Value / FormatUtility.CalculateTimePeriod(carLiability.StartDate.Value, carLiability.EndDate.Value) + carLiability.Value * carLiability.InterestRate / 1200;
-            }
+                var carLiabilities = entities.Liabilities.Where(x => x.Username.Equals(username)
+                                                             && x.LiabilityType == (int)Constants.Constants.LIABILITY_TYPE.CAR
+                                                             && !x.DisabledDate.HasValue);
+                foreach (var carLiability in carLiabilities)
+                {
+                    result.CarPayment += carLiability.Value / FormatUtility.CalculateTimePeriod(carLiability.StartDate.Value, carLiability.EndDate.Value) + carLiability.Value * carLiability.InterestRate / 1200;
+                }
 
-            var creditCardLiabilities = entities.Liabilities.Where(x => x.Username.Equals(username)
-                                                         && x.LiabilityType == (int)Constants.Constants.LIABILITY_TYPE.CREDIT_CARD
-                                                         && !x.DisabledDate.HasValue);
-            foreach (var creditCarLiability in creditCardLiabilities)
-            {
-                result.CreditCard += creditCarLiability.Value / FormatUtility.CalculateTimePeriod(creditCarLiability.StartDate.Value, creditCarLiability.EndDate.Value) + creditCarLiability.Value * creditCarLiability.InterestRate / 1200;
-            }
+                var creditCardLiabilities = entities.Liabilities.Where(x => x.Username.Equals(username)
+                                                             && x.LiabilityType == (int)Constants.Constants.LIABILITY_TYPE.CREDIT_CARD
+                                                             && !x.DisabledDate.HasValue);
+                foreach (var creditCarLiability in creditCardLiabilities)
+                {
+                    result.CreditCard += creditCarLiability.Value / 12 + creditCarLiability.Value * creditCarLiability.InterestRate / 1200;
+                }
 
             var homeLiabilities = entities.Liabilities.Where(x => x.Username.Equals(username)
                                                          && x.LiabilityType == (int)Constants.Constants.LIABILITY_TYPE.REAL_ESTATE
@@ -123,7 +123,7 @@ namespace CashFlowManagement.Queries
 
             result.MonthlyCashflow = result.TotalIncomes - result.TotalExpenses;
             result.PassiveIncome = result.BusinessIncome + result.RealEstateIncome + result.InterestIncome + result.DividendIncome;
-            result.FinancialFreedom = result.PassiveIncome / result.TotalExpenses * 100;
+            result.FinancialFreedom = result.TotalExpenses > 0 ? result.PassiveIncome / result.TotalExpenses * 100 : 0;
 
             return result;
         }

@@ -25,6 +25,7 @@ namespace CashFlowManagement.EntityModel
         public string Username { get; set; }
         public string Name { get; set; }
         public string Note { get; set; }
+        public Nullable<int> IncomeDay { get; set; }
     
         public virtual Assets Assets { get; set; }
         public virtual Users Users { get; set; }

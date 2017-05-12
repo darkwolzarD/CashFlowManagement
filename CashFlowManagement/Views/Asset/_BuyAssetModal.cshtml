@@ -99,7 +99,7 @@
                         <div class="form-group">
                             <label class="control-label col-sm-3">Ngày giao dịch:</label>
                             <div class="col-sm-9">
-                                @Html.TextBoxFor(x => x.Transaction.TransactionDate, new { @Value = string.Empty, @type = "text", @class = "form-control date-picker" })
+                                @Html.TextBoxFor(x => x.Transaction.TransactionDate, new { @Value = DateTime.Now.ToString("dd/MM/yyyy") , @type = "text", @class = "form-control date-picker" })
                                 @Html.HiddenFor(x => x.Asset.AssetType)
                             </div>
                         </div>

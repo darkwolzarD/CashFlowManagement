@@ -76,6 +76,25 @@
         liabilityCount = 0;
     })
 
+    $(document).on("change", "#buy-new-asset-modal #Transaction_TransactionDate", function () {
+        var date = $(this).val();
+        if (moment(date, "dd/MM/yyyy").isValid()) {
+            $.ajax({
+                url: Url.CheckAvailableMoney,
+                type: "post",
+                data: { date: date },
+                success: function (data) {
+                    $("#buy-new-asset-modal #CurrentAvailableMoney").val(data.result);
+                    $("#buy-new-asset-modal #CurrentAvailableMoney").unmask();
+                }
+            });
+        }
+        else {
+            $("#buy-new-asset-modal #CurrentAvailableMoney").val(0);
+            $("#buy-new-asset-modal #CurrentAvailableMoney").unmask();
+        }
+    })
+
     $('#create-new-asset-modal').on('hidden.bs.modal', function (e) {
         $(this)
             .find("input[type!='hidden'],textarea,select")
@@ -89,7 +108,7 @@
 
     $('#buy-new-asset-modal').on('hidden.bs.modal', function (e) {
         $(this)
-            .find("input[type!='hidden'],textarea")
+            .find("input[type!='hidden']input[name!='Transaction.TransactionDate']input[name!='CurrentAvailableMoney'],textarea")
             .val('')
             .end()
             .find("input[type=checkbox], input[type=radio]")
@@ -124,81 +143,70 @@
     })
 
     $(document).on("click", ".buy-asset", function () {
-        $.ajax({
-            url: Url.CheckAvailableMoney,
-            type: "get",
-            success: function (data) {
-                if (data.result > 0) {
-                    RemoveMask();
-                    var currentMoney = data.result;
-                    var assetValue = 0;
-                    if (assetType == 4) {
-                        assetValue = $("#buy-new-asset-modal input[name='Asset.Value']").val();
-                    }
-                    else {
-                        assetValue = parseInt($("#buy-new-asset-modal input[name='Transaction.NumberOfShares']").val() * $("#buy-new-asset-modal input[name='Transaction.SpotPrice']").val() * 1.0015);
-                    }
-                    var currentAmount = parseFloat($("#buy-new-asset-modal input[name='BuyAmount']").val());
-                    if (currentAmount == "") {
-                        currentAmount == 0;
-                    }
-                    var currentLiabilities = 0;
-                    $("#liability-table tbody tr:hidden").each(function (index, element) {
-                        var liability = parseFloat($(element).find("td:nth-child(2) input").val());
-                        if (liability == "") {
-                            liability == 0;
-                        }
-                        currentLiabilities += liability;
-                    });
-                    MaskInput();
-                    if (currentAmount == "" || currentAmount == 0) {
-                        alert("Vui lòng nhập số tiền mua tài sản!");
-                    }
-                    else if (currentAmount + currentLiabilities == assetValue) {
-                        if (currentMoney < currentAmount) {
-                            if (currentLiabilities == 0) {
-                                alert("Không đủ tiền mặt để mua tài sản này!");
-                            }
-                            else if (currentLiabilities > 0 && (currentAmount + currentLiabilities < currentMoney)) {
-                                alert("Bạn chưa vay đủ tiền mặt để mua tài sản này!");
-                            }
-                            else if (currentLiabilities > 0 && (currentAmount + currentLiabilities > currentMoney)) {
-                                alert("Bạn đã vay dư tiền mặt để mua bất động sản này!");
-                            }
-                        }
-                        else {
-                            RemoveMask();
-                            var data = $("#buy-new-asset-modal .form-horizontal").serialize();
-
-                            $.ajax({
-                                url: Url.BuyAsset,
-                                type: "post",
-                                data: data,
-                                success: function (data) {
-                                    if (data.result > 0) {
-                                        $("#buy-new-asset-modal").modal("hide");
-                                        LoadTable();
-                                    }
-                                    else {
-                                        alert("Có lỗi xảy ra");
-                                    }
-                                }
-                            })
-                            MaskInput();
-                        }
-                    }
-                    else if (currentAmount + currentLiabilities < assetValue) {
-                        alert("Bạn chưa vay đủ tiền mặt để mua tài sản này!");
-                    }
-                    else if (currentAmount + currentLiabilities > assetValue) {
-                        alert("Bạn đã vay dư tiền mặt để mua bất động sản này!");
-                    }
+        RemoveMask();
+        var currentMoney = $("#buy-new-asset-modal #CurrentAvailableMoney").val();
+        var assetValue = 0;
+        if (assetType == 4) {
+            assetValue = $("#buy-new-asset-modal input[name='Asset.Value']").val();
+        }
+        else {
+            assetValue = parseInt($("#buy-new-asset-modal input[name='Transaction.NumberOfShares']").val() * $("#buy-new-asset-modal input[name='Transaction.SpotPrice']").val() * 1.0015);
+        }
+        var currentAmount = parseFloat($("#buy-new-asset-modal input[name='BuyAmount']").val());
+        if (currentAmount == "") {
+            currentAmount == 0;
+        }
+        var currentLiabilities = 0;
+        $("#liability-table tbody tr:hidden").each(function (index, element) {
+            var liability = parseFloat($(element).find("td:nth-child(2) input").val());
+            if (liability == "") {
+                liability == 0;
+            }
+            currentLiabilities += liability;
+        });
+        MaskInput();
+        if (currentAmount == "" || currentAmount == 0) {
+            alert("Vui lòng nhập số tiền mua tài sản!");
+        }
+        else if (currentAmount + currentLiabilities == assetValue) {
+            if (currentMoney < currentAmount) {
+                if (currentLiabilities == 0) {
+                    alert("Không đủ tiền mặt để mua tài sản này!");
                 }
-                else {
-                    alert("Có lỗi xảy ra");
+                else if (currentLiabilities > 0 && (currentAmount + currentLiabilities < currentMoney)) {
+                    alert("Bạn chưa vay đủ tiền mặt để mua tài sản này!");
+                }
+                else if (currentLiabilities > 0 && (currentAmount + currentLiabilities > currentMoney)) {
+                    alert("Bạn đã vay dư tiền mặt để mua bất động sản này!");
                 }
             }
-        })
+            else {
+                RemoveMask();
+                var data = $("#buy-new-asset-modal .form-horizontal").serialize();
+
+                $.ajax({
+                    url: Url.BuyAsset,
+                    type: "post",
+                    data: data,
+                    success: function (data) {
+                        if (data.result > 0) {
+                            $("#buy-new-asset-modal").modal("hide");
+                            LoadTable();
+                        }
+                        else {
+                            alert("Có lỗi xảy ra");
+                        }
+                    }
+                })
+                MaskInput();
+            }
+        }
+        else if (currentAmount + currentLiabilities < assetValue) {
+            alert("Bạn chưa vay đủ tiền mặt để mua tài sản này!");
+        }
+        else if (currentAmount + currentLiabilities > assetValue) {
+            alert("Bạn đã vay dư tiền mặt để mua bất động sản này!");
+        }
     })
 
     function LoadTable() {

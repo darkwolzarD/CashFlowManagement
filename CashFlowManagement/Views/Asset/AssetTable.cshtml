@@ -207,7 +207,7 @@
                         foreach (var item in Model.List)
                         {
                             <tr class="rs-@rsCount">
-                                <td class="text-center" rowspan="@(item.LiabilityList.List.Count() / 2 + item.Asset.StockTransactions.Count() * 2 + 2)" width="120">@item.Asset.AssetName</td>
+                                <td class="text-center" rowspan="@(item.LiabilityList.List.Count() / 2 + item.Asset.StockTransactions.Count() + item.Asset.StockTransactions.Where(x => x.Liabilities.Count > 0).Count() + 1)" width="120">@item.Asset.AssetName</td>
                             </tr>
                             foreach (var transaction in item.Asset.StockTransactions.Where(x => !x.DisabledDate.HasValue))
                             {
@@ -672,7 +672,7 @@
             {
                 Asset = new Assets { AssetType = Model.Type },
                 Income = new Incomes(),
-                CurrentAvailableMoney = AssetQueries.CheckAvailableMoney("test")
+                CurrentAvailableMoney = AssetQueries.CheckAvailableMoney("test", DateTime.Now)
             }); }
     </div>
             }

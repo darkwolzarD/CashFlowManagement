@@ -41,6 +41,7 @@
                     {
                         <th class="text-center">Chi tiêu khác</th>
                     }
+                    <th class="text-center">Ngày chi tiêu hàng tháng</th>
                     <th class="text-center">Chi tiêu tháng</th>
                     <th class="text-center">Chi tiêu năm</th>
                     <th class="text-center">Chỉnh sửa</th>
@@ -59,6 +60,7 @@
                     {
                         <tr>
                             <td>@item.Name</td>
+                            <td>@FormatUtility.DisplayThousandSeparatorsForNumber(item.ExpenseDay)</td>
                             <td>@FormatUtility.DisplayThousandSeparatorsForNumber(item.Value)</td>
                             <td>@FormatUtility.DisplayThousandSeparatorsForNumber(item.Value * 12)</td>
                             <td class="text-center" width="160px">

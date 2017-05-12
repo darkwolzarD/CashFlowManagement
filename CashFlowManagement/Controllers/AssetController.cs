@@ -75,9 +75,9 @@ namespace CashFlowManagement.Controllers
             return Json(new { result = result });
         }
 
-        public JsonResult CheckAvailableMoney()
+        public JsonResult CheckAvailableMoney(DateTime? date)
         {
-            double result = AssetQueries.CheckAvailableMoney("test");
+            double result = AssetQueries.CheckAvailableMoney("test", date == null ? DateTime.Now : date.Value);
             return Json(new { result = result }, JsonRequestBehavior.AllowGet);
         }
 

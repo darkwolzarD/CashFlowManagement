@@ -58,10 +58,10 @@ namespace CashFlowManagement.Queries
             return result;
         }
 
-        public static Log CreateLog(int type, string logContent, string username, double value)
+        public static Log CreateLog(int type, string logContent, string username, double value, DateTime date)
         {
             Entities entities = new Entities();
-            double currentAvailableMoney = AssetQueries.CheckAvailableMoney(username);
+            double currentAvailableMoney = AssetQueries.CheckAvailableMoney(username, date);
 
             string content = string.Empty;
             if (type == (int)Constants.Constants.LOG_TYPE.ADD)
@@ -96,10 +96,11 @@ namespace CashFlowManagement.Queries
             content += logContent;
             Log log = new Log
             {
-                AvailableMoney = currentAvailableMoney,
+                AvailableMoney = type == (int)Constants.Constants.LOG_TYPE.INCOME || type == (int)Constants.Constants.LOG_TYPE.SELL ? currentAvailableMoney + value :
+                                 type == (int)Constants.Constants.LOG_TYPE.EXPENSE || type == (int)Constants.Constants.LOG_TYPE.BUY ? currentAvailableMoney - value : currentAvailableMoney,
                 CreatedBy = Constants.Constants.SYSTEM,
                 CreatedDate = DateTime.Now,
-                Date = DateTime.Now,
+                Date = date,
                 LogContent = content,
                 LogType = type,
                 Username = username,

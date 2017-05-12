@@ -39,7 +39,7 @@ namespace CashFlowManagement.Queries
 
             entities.Incomes.Add(income);
 
-            Log log = LogQueries.CreateLog((int)Constants.Constants.LOG_TYPE.ADD, "thu nhập \"" + income.Name + "\"", username, income.Value);
+            Log log = LogQueries.CreateLog((int)Constants.Constants.LOG_TYPE.ADD, "thu nhập \"" + income.Name + "\"", username, income.Value, DateTime.Now);
             entities.Log.Add(log);
 
             int result = entities.SaveChanges();
@@ -61,6 +61,7 @@ namespace CashFlowManagement.Queries
             Incomes updated_income = new Incomes();
             updated_income.Value = model.Value;
             updated_income.Name = model.Name;
+            updated_income.IncomeDay = model.IncomeDay;
             updated_income.IncomeType = model.IncomeType;
             updated_income.Note = model.Note;
             updated_income.CreatedDate = DateTime.Now;
@@ -69,7 +70,7 @@ namespace CashFlowManagement.Queries
 
             entities.Incomes.Add(updated_income);
 
-            Log log = LogQueries.CreateLog((int)Constants.Constants.LOG_TYPE.UPDATE, "thu nhập \"" + income.Name + "\"", username, income.Value);
+            Log log = LogQueries.CreateLog((int)Constants.Constants.LOG_TYPE.UPDATE, "thu nhập \"" + income.Name + "\"", username, income.Value, DateTime.Now);
             entities.Log.Add(log);
 
             int result = entities.SaveChanges();
@@ -89,7 +90,7 @@ namespace CashFlowManagement.Queries
             entry.Property(x => x.DisabledDate).IsModified = true;
             entry.Property(x => x.DisabledBy).IsModified = true;
 
-            Log log = LogQueries.CreateLog((int)Constants.Constants.LOG_TYPE.DELETE, "thu nhập \"" + income.Name + "\"", income.Username, income.Value);
+            Log log = LogQueries.CreateLog((int)Constants.Constants.LOG_TYPE.DELETE, "thu nhập \"" + income.Name + "\"", income.Username, income.Value, DateTime.Now);
             entities.Log.Add(log);
 
             int result = entities.SaveChanges();

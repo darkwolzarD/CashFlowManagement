@@ -24,6 +24,7 @@ namespace CashFlowManagement.EntityModel
         public Nullable<int> LiabilityId { get; set; }
         public string Username { get; set; }
         public string Name { get; set; }
+        public int ExpenseDay { get; set; }
     
         public virtual Liabilities Liabilities { get; set; }
         public virtual Users Users { get; set; }

@@ -34,6 +34,7 @@
                     @if (Model.Type == (int)Constants.INCOME_TYPE.SALARY_INCOME)
                     {
                         <th class="text-center">Thu nhập từ lương</th>
+                        <th class="text-center">Ngày nhận lương hàng tháng</th>
                         <th class="text-center">Thu nhập tháng</th>
                         <th class="text-center">Thu nhập năm</th>
                         <th class="text-center">Ghi chú</th>
@@ -44,6 +45,7 @@
             <tbody>
                 <tr>
                     <td><strong>Tổng</strong></td>
+                    <td></td>
                     <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.TotalMonthlyIncome)</strong></td>
                     <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.TotalMonthlyIncome * 12)</strong></td>
                     <td></td>
@@ -55,6 +57,7 @@
                     {
                         <tr>
                             <td>@item.Name</td>
+                            <td>@FormatUtility.DisplayThousandSeparatorsForNumber(item.IncomeDay.Value)</td>
                             <td>@FormatUtility.DisplayThousandSeparatorsForNumber(item.Value)</td>
                             <td>@FormatUtility.DisplayThousandSeparatorsForNumber(item.Value * 12)</td>
                             <td>@item.Note</td>
@@ -74,7 +77,7 @@
                 else
                 {
                     <tr>
-                        <td colspan="5" class="text-center">Không có dữ liệu</td>
+                        <td colspan="6" class="text-center">Không có dữ liệu</td>
                     </tr>
                 }
             </tbody>
