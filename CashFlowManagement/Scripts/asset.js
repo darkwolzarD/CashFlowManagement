@@ -54,6 +54,26 @@
         MaskInput();
         if (assetType == 5) {
             InitiateDatePicker2();
+            var stock = $("#update-asset-modal #Asset_AssetName").val();
+            if (stock != null) {
+                $.ajax({
+                    url: Url.CheckRemainedStock,
+                    type: "post",
+                    data: { stock: stock },
+                    success: function (data) {
+                        if (data.result > 0) {
+                            $("#update-asset-modal #RemainedStock").val(data.result);
+                        }
+                        else if (data.result === -1) {
+                            $("#update-asset-modal #RemainedStock").val(0);
+                        }
+                        else {
+                            alert("Có lỗi xảy ra");
+                        }
+                        $("#update-asset-modal #RemainedStock").unmask();
+                    }
+                })
+            }
         }
         else {
             InitiateDatePicker();
@@ -672,6 +692,7 @@
         $("#buy-new-asset-modal #BuyValue").val(value);
 
         $("#buy-new-asset-modal input[name='BuyAmount']").val(value);
+        $("#buy-new-asset-modal #AfterMoney").val($("#buy-new-asset-modal #CurrentAvailableMoney").val() - $("#buy-new-asset-modal #BuyAmount").val());
         var currentAmount = $("#buy-new-asset-modal input[name='BuyAmount']").val();
         if (currentAmount == "" || currentAmount == 0) {
             currentAmount = 0;
@@ -714,8 +735,9 @@
 
         var value = parseInt(numberOfShares * spotPrice * 1.0015);
         $("#buy-new-asset-modal #BuyValue").val(value);
-
         var currentAmount = $("#buy-new-asset-modal input[name='BuyAmount']").val();
+        $("#buy-new-asset-modal #AfterMoney").val($("#buy-new-asset-modal #CurrentAvailableMoney").val() - $("#buy-new-asset-modal #BuyAmount").val());
+
         if (currentAmount == "") {
             currentAmount = 0;
         }
@@ -755,6 +777,30 @@
 
         var value = parseInt(numberOfShares * spotPrice * 1.0025);
         $("#sell-asset-modal #SellValue").val(value);
+
+        MaskInput();
+    })
+
+    $(document).on("keyup", "#update-asset-modal #Transaction_NumberOfShares, #update-asset-modal #Transaction_SpotPrice", function () {
+        RemoveMask();
+        var transactionType = $("#update-asset-modal #Transaction_TransactionType").val();
+        
+        var numberOfShares = $("#update-asset-modal #Transaction_NumberOfShares").val();
+        if (numberOfShares == "") {
+            numberOfShares = 0;
+        }
+        var spotPrice = $("#update-asset-modal #Transaction_SpotPrice").val();
+        if (spotPrice == "") {
+            spotPrice = 0;
+        }
+
+        if (transactionType == 2) {
+
+        }
+        else if (transactionType == 3) {
+            var value = parseInt(numberOfShares * spotPrice * 1.0025);
+            $("#update-asset-modal #Transaction_Value").val(value); 
+        } 
 
         MaskInput();
     })

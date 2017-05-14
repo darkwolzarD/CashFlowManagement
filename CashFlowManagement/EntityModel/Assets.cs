@@ -34,6 +34,7 @@ namespace CashFlowManagement.EntityModel
         public int AssetType { get; set; }
         public string Username { get; set; }
         public Nullable<int> ObtainedBy { get; set; }
+        public Nullable<System.DateTime> StartDate { get; set; }
     
         public virtual Users Users { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

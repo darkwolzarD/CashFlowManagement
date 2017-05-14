@@ -14,7 +14,7 @@ namespace CashFlowManagement.Constants
         public enum LOG_TYPE { EXPENSE = 1, INCOME = 2, SELL = 3, BUY = 4, ADD = 5, UPDATE = 6, DELETE = 7 }
         public enum LOG_FILTER_TYPE { INCOME_EXPENSE = 1, OTHERS = 2}
         public enum TRANSACTION_TYPE {CREATE = 1, BUY = 2, SELL = 3, DIVIDEND = 4 }
-        public enum OBTAIN_BY { CREATE = 1, BUY = 2}
+        public enum OBTAIN_BY { CREATE = 1, BUY = 2, INCOME = 3, EXPENSE = 4}
         public static string USER = "user";
         public static string SYSTEM = "system";
     }

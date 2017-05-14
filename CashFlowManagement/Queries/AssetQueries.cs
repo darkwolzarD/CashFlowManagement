@@ -72,6 +72,13 @@ namespace CashFlowManagement.Queries
         {
             Entities entities = new Entities();
             Assets asset = model.Asset;
+            if(type == (int)Constants.Constants.ASSET_TYPE.AVAILABLE_MONEY)
+            {
+                if(model.Asset.ObtainedBy == (int)Constants.Constants.OBTAIN_BY.EXPENSE)
+                {
+                    model.Asset.Value = 0 - model.Asset.Value;
+                }
+            }
             asset.Username = username;
             asset.CreatedDate = DateTime.Now;
             asset.AssetType = type;
@@ -128,7 +135,8 @@ namespace CashFlowManagement.Queries
                 }
             }
 
-            if (type != (int)Constants.Constants.ASSET_TYPE.STOCK && type != (int)Constants.Constants.ASSET_TYPE.INSURANCE)
+            if (type != (int)Constants.Constants.ASSET_TYPE.STOCK && type != (int)Constants.Constants.ASSET_TYPE.INSURANCE
+                && type != (int)Constants.Constants.ASSET_TYPE.AVAILABLE_MONEY)
             {
                 Incomes income = model.Income;
                 income.CreatedDate = DateTime.Now;
@@ -147,8 +155,15 @@ namespace CashFlowManagement.Queries
 
             string sType = string.Empty;
 
-            Log log = LogQueries.CreateLog((int)Constants.Constants.LOG_TYPE.ADD, "tài sản \"" + model.Asset.AssetName + "\"", username, model.Asset.Value, DateTime.Now);
-
+            Log log = new Log();
+            if (asset.AssetType == (int)Constants.Constants.ASSET_TYPE.AVAILABLE_MONEY)
+            {
+               log = LogQueries.CreateLog(asset.ObtainedBy == (int)Constants.Constants.OBTAIN_BY.INCOME ? (int)Constants.Constants.LOG_TYPE.INCOME : (int)Constants.Constants.LOG_TYPE.EXPENSE, model.Asset.AssetName, username, model.Asset.Value, model.Asset.StartDate.Value);
+            }
+            else
+            {
+                log = LogQueries.CreateLog((int)Constants.Constants.LOG_TYPE.ADD, "tài sản " + model.Asset.AssetName, username, model.Asset.Value, DateTime.Now);
+            }
             entities.Log.Add(log);
             int result = entities.SaveChanges();
             return result;

@@ -2,7 +2,7 @@
 @using CashFlowManagement.EntityModel
 @model CashFlowManagement.ViewModels.AssetViewModel
 <div id="update-asset-modal" class="modal fade" role="dialog">
-    <div class="modal-dialog">
+    <div class="modal-dialog" style="width: 1000px;">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -16,7 +16,7 @@
                         @Html.Raw("Cập nhật bất động sản")
                     }
                     else if (Model.Asset.AssetType == (int)Constants.ASSET_TYPE.BUSINESS)
-                    {       
+                    {
                         @Html.Raw("Cập nhật kinh doanh")
                     }
                     else if (Model.Asset.AssetType == (int)Constants.ASSET_TYPE.INSURANCE)
@@ -35,47 +35,52 @@
             </div>
             <div class="modal-body">
                 <form class="form-horizontal">
-                    <div class="form-group">
-                        <label class="control-label col-sm-3">
-                            @if (Model.Asset.AssetType == (int)Constants.ASSET_TYPE.BANK_DEPOSIT)
-                            {
-                                @Html.Raw("Tài khoản tiết kiệm:")
-                            }
-                            else if (Model.Asset.AssetType == (int)Constants.ASSET_TYPE.REAL_ESTATE)
-                            {
-                                @Html.Raw("Bất động sản:")
-                            }
-                            else if (Model.Asset.AssetType == (int)Constants.ASSET_TYPE.BUSINESS)
-                            {
-                                @Html.Raw("Kinh doanh:")
-                            }
-                            else if (Model.Asset.AssetType == (int)Constants.ASSET_TYPE.INSURANCE)
-                            {
-                                @Html.Raw("Bảo hiểm nhân thọ")
-                            }
-                            else if (Model.Asset.AssetType == (int)Constants.ASSET_TYPE.STOCK)
-                            {
-                                @Html.Raw("Chứng khoán:")
-                            }
-                            else if (Model.Asset.AssetType == (int)Constants.ASSET_TYPE.OTHERS)
-                            {
-                                @Html.Raw("Tài sản khác")
-                            }
-                        </label>
-                        <div class="col-sm-9">
-                            @if (Model.Asset.AssetType == (int)Constants.ASSET_TYPE.STOCK)
-                            {
-                                @Html.TextBoxFor(x => x.Asset.AssetName, new { @type = "text", @class = "form-control", @readonly = "true" })
-                            }
-                            else
-                            {
-                                @Html.TextBoxFor(x => x.Asset.AssetName, new { @type = "text", @class = "form-control" })
-                            }
-                            @Html.HiddenFor(x => x.Asset.AssetType)
-                            @Html.HiddenFor(x => x.Asset.Id)
-                            @Html.HiddenFor(x => x.Asset.Username)
+                    @if (Model.Asset.AssetType != (int)Constants.ASSET_TYPE.STOCK || (Model.Asset.AssetType == (int)Constants.ASSET_TYPE.STOCK
+    && Model.Transaction.TransactionType == (int)Constants.TRANSACTION_TYPE.CREATE))
+                    {
+                        <div class="form-group">
+                            <label class="control-label col-sm-3">
+                                @if (Model.Asset.AssetType == (int)Constants.ASSET_TYPE.BANK_DEPOSIT)
+                                {
+                                    @Html.Raw("Tài khoản tiết kiệm:")
+                                }
+                                else if (Model.Asset.AssetType == (int)Constants.ASSET_TYPE.REAL_ESTATE)
+                                {
+                                    @Html.Raw("Bất động sản:")
+                                }
+                                else if (Model.Asset.AssetType == (int)Constants.ASSET_TYPE.BUSINESS)
+                                {
+                                    @Html.Raw("Kinh doanh:")
+                                }
+                                else if (Model.Asset.AssetType == (int)Constants.ASSET_TYPE.INSURANCE)
+                                {
+                                    @Html.Raw("Bảo hiểm nhân thọ")
+                                }
+                                else if (Model.Asset.AssetType == (int)Constants.ASSET_TYPE.STOCK)
+                                {
+                                    @Html.Raw("Chứng khoán:")
+                                }
+                                else if (Model.Asset.AssetType == (int)Constants.ASSET_TYPE.OTHERS)
+                                {
+                                    @Html.Raw("Tài sản khác")
+                                }
+                            </label>
+                            <div class="col-sm-9">
+                                @if (Model.Asset.AssetType == (int)Constants.ASSET_TYPE.STOCK)
+                                {
+                                    @Html.TextBoxFor(x => x.Asset.AssetName, new { @type = "text", @class = "form-control", @readonly = "true" })
+
+                                }
+                                else
+                                {
+                                    @Html.TextBoxFor(x => x.Asset.AssetName, new { @type = "text", @class = "form-control" })
+                                }
+                                @Html.HiddenFor(x => x.Asset.AssetType)
+                                @Html.HiddenFor(x => x.Asset.Id)
+                                @Html.HiddenFor(x => x.Asset.Username)
+                            </div>
                         </div>
-                    </div>
+                    }
                     @if (Model.Asset.AssetType != (int)Constants.ASSET_TYPE.STOCK)
                     {
                         <div class="form-group">
@@ -144,49 +149,206 @@
                     }
                     @if (Model.Asset.AssetType == (int)Constants.ASSET_TYPE.STOCK)
                     {
-                        <div class="form-group">
-                            <label class="control-label col-sm-3">Ngày giao dịch:</label>
-                            <div class="col-sm-9">
-                                @Html.TextBoxFor(x => x.Transaction.TransactionDate, "{0:dd/MM/yyyy}", new { @type = "text", @class = "form-control date-picker" })
-                                @Html.HiddenFor(x => x.Transaction.Id)
+                        if (Model.Transaction.TransactionType == (int)Constants.TRANSACTION_TYPE.CREATE)
+                        {
+                            <div class="form-group">
+                                <label class="control-label col-sm-3">Ngày giao dịch:</label>
+                                <div class="col-sm-9">
+                                    @Html.TextBoxFor(x => x.Transaction.TransactionDate, "{0:dd/MM/yyyy}", new { @type = "text", @class = "form-control date-picker" })
+                                    @Html.HiddenFor(x => x.Transaction.Id)
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label col-sm-3">Số lượng cổ phiếu:</label>
-                            <div class="col-sm-9">
-                                @Html.TextBoxFor(x => x.Transaction.NumberOfShares, new { @type = "text", @class = "form-control input-mask" })
+                            <div class="form-group">
+                                <label class="control-label col-sm-3">Số lượng cổ phiếu:</label>
+                                <div class="col-sm-9">
+                                    @Html.TextBoxFor(x => x.Transaction.NumberOfShares, new { @type = "text", @class = "form-control input-mask" })
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label col-sm-3">Giá lúc mua/bán:</label>
-                            <div class="col-sm-9">
-                                @Html.TextBoxFor(x => x.Transaction.SpotPrice, new { @type = "text", @class = "form-control input-mask" })
+                            <div class="form-group">
+                                <label class="control-label col-sm-3">Giá lúc mua/bán:</label>
+                                <div class="col-sm-9">
+                                    @Html.TextBoxFor(x => x.Transaction.SpotPrice, new { @type = "text", @class = "form-control input-mask" })
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label col-sm-3">Phí môi giới:</label>
-                            <div class="col-sm-9">
-                                @Html.TextBoxFor(x => x.Transaction.BrokerFee, new { @type = "text", @class = "form-control input-mask" })
+                            <div class="form-group">
+                                <label class="control-label col-sm-3">Phí môi giới:</label>
+                                <div class="col-sm-9">
+                                    @Html.TextBoxFor(x => x.Transaction.BrokerFee, new { @type = "text", @class = "form-control input-mask" })
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label col-sm-3">Tổng giá trị vốn:</label>
-                            <div class="col-sm-9">
-                                @Html.TextBoxFor(x => x.Transaction.Value, new { @type = "text", @class = "form-control input-mask" })
+                            <div class="form-group">
+                                <label class="control-label col-sm-3">Tổng giá trị vốn:</label>
+                                <div class="col-sm-9">
+                                    @Html.TextBoxFor(x => x.Transaction.Value, new { @type = "text", @class = "form-control input-mask" })
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label col-sm-3">Cổ tức mong đợi:</label>
-                            <div class="col-sm-9">
-                                @Html.TextBoxFor(x => x.Transaction.ExpectedDividend, new { @type = "text", @class = "form-control percentage" })
+                            <div class="form-group">
+                                <label class="control-label col-sm-3">Cổ tức mong đợi:</label>
+                                <div class="col-sm-9">
+                                    @Html.TextBoxFor(x => x.Transaction.ExpectedDividend, new { @type = "text", @class = "form-control percentage" })
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label col-sm-3">Ghi chú:</label>
-                            <div class="col-sm-9">
-                                @Html.TextBoxFor(x => x.Transaction.Note, new { @type = "text", @class = "form-control" })
+                            <div class="form-group">
+                                <label class="control-label col-sm-3">Ghi chú:</label>
+                                <div class="col-sm-9">
+                                    @Html.TextBoxFor(x => x.Transaction.Note, new { @type = "text", @class = "form-control" })
+                                </div>
                             </div>
-                        </div>
+                        }
+                        else if (Model.Transaction.TransactionType == (int)Constants.TRANSACTION_TYPE.BUY)
+                        {
+                            <div class="form-group">
+                                <label class="control-label col-sm-3">Cổ phiếu:</label>
+                                <div class="col-sm-9">
+                                    @Html.TextBoxFor(x => x.Asset.AssetName, new { @type = "text", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-3">Ngày giao dịch:</label>
+                                <div class="col-sm-9">
+                                    @Html.TextBoxFor(x => x.Transaction.TransactionDate, "{0:dd/MM/yyyy}", new { @type = "text", @class = "form-control date-picker" })
+                                    @Html.HiddenFor(x => x.Asset.AssetType)
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-3">Số lượng mua:</label>
+                                <div class="col-sm-9">
+                                    @Html.TextBoxFor(x => x.Transaction.NumberOfShares, new { @type = "text", @class = "form-control input-mask" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-3">Giá mua:</label>
+                                <div class="col-sm-9">
+                                    @Html.TextBoxFor(x => x.Transaction.SpotPrice, new { @type = "text", @class = "form-control input-mask" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-3">Thành tiền:</label>
+                                <div class="col-sm-9">
+                                    <input class="form-control input-mask" id="BuyValue" readonly />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-3">Cổ tức mong đợi:</label>
+                                <div class="col-sm-9">
+                                    @Html.TextBoxFor(x => x.Transaction.ExpectedDividend, new { @type = "text", @class = "form-control percentage" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-3">Ghi chú:</label>
+                                <div class="col-sm-9">
+                                    @Html.TextBoxFor(x => x.Transaction.Note, new { @type = "text", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-3">Tiền mặt mua tài sản:</label>
+                                <div class="col-sm-9">
+                                    @Html.TextBoxFor(x => x.Transaction.Value, new { @type = "text", @class = "form-control input-mask" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-3">Tiền mặt có sẵn:</label>
+                                <div class="col-sm-9">
+                                    @Html.TextBoxFor(x => x.CurrentAvailableMoney, new { @type = "text", @class = "form-control input-mask", @readonly = "true" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-3">Tiền mặt sau khi mua:</label>
+                                <div class="col-sm-9">
+                                    <input class="form-control input-mask" id="AfterMoney" readonly />
+                                </div>
+                            </div>
+                            <table id="liability-table" class="table table-bordered table-condensed table-responsive">
+                                <thead>
+                                    <tr>
+                                        <th>Nguồn vay nợ</th>
+                                        <th>Giá trị nợ</th>
+                                        <th>Loại lãi suất</th>
+                                        <th>Lãi vay</th>
+                                        <th>Ngày bắt đầu vay</th>
+                                        <th>Ngày trả hết nợ</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <input type="text" class="form-control input-sm" name="Name" />
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control input-sm input-mask" name="Value" />
+                                        </td>
+                                        <td width="120">
+                                            <select class="form-control input-sm" name="InterestType">
+                                                <option value="1">Cố định</option>
+                                                <option value="2">Giảm dần</option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control input-sm percentage" name="InterestRate" />
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control input-sm date-picker" name="StartDate" />
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control input-sm date-picker" name="EndDate" />
+                                        </td>
+                                        <td>
+                                            <button type="button" class="btn btn-primary create-buy-liability">Vay nợ</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        }
+                        else if (Model.Transaction.TransactionType == (int)Constants.TRANSACTION_TYPE.SELL)
+                        {
+                            <div class="form-group">
+                                <label class="control-label col-sm-3">Cổ phiếu bán:</label>
+                                <div class="col-sm-9">
+                                    @Html.TextBoxFor(x => x.Asset.AssetName, new { @type = "text", @class = "form-control", @readonly = "true" })
+                                    @Html.HiddenFor(x => x.Asset.Id)
+                                    @Html.HiddenFor(x => x.Asset.AssetType)
+                                    @Html.HiddenFor(x => x.Transaction.TransactionType)
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-3">Ngày bán: </label>
+                                <div class="col-sm-9">
+                                    @Html.TextBoxFor(x => x.Transaction.TransactionDate, "{0:dd/MM/yyyy}", new { @type = "text", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-3">Số lượng: </label>
+                                <div class="col-sm-9">
+                                    @Html.TextBoxFor(x => x.Transaction.NumberOfShares, new { @type = "text", @class = "form-control input-mask" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-3">Giá bán: </label>
+                                <div class="col-sm-9">
+                                    @Html.TextBoxFor(x => x.Transaction.SpotPrice, new { @type = "text", @class = "form-control input-mask" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-3">Thành tiền: </label>
+                                <div class="col-sm-9">
+                                    @Html.TextBoxFor(x => x.Transaction.Value, new { @type = "text", @class = "form-control input-mask", @readonly = true })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-3">Số lượng cổ phiếu còn lại: </label>
+                                <div class="col-sm-9">
+                                    <input class="form-control input-mask" id="RemainedStock" readonly />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-3">Ghi chú: </label>
+                                <div class="col-sm-9">
+                                    @Html.TextBoxFor(x => x.Transaction.Note, new { @type = "text", @class = "form-control" })
+                                </div>
+                            </div>
+                        }
+
                     }
                     @if (Model.Asset.AssetType == (int)Constants.ASSET_TYPE.BANK_DEPOSIT)
                     {
@@ -212,6 +374,3 @@
         </div>
     </div>
 </div>
-
-
-

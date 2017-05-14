@@ -60,14 +60,14 @@
         InitiateDatePicker();
     }
 
-    $(document).on("click", ".create-log", function () {
+    $(document).on("click", ".create-available-money", function () {
         RemoveMask();
         var data = $("#log-form").serialize();
         var filter = $(".filter").val();
         MaskInput();
 
         $.ajax({
-            url: Url.CreateLog,
+            url: Url.CreateAsset,
             type: "post",
             data: data,
             success: function (data) {

@@ -26,6 +26,11 @@ namespace CashFlowManagement.Controllers
         public PartialViewResult _AssetUpdateModal(int assetId, int transactionId)
         {
             AssetViewModel model = AssetQueries.GetAssetById(assetId, transactionId);
+            if(model.Asset.AssetType == (int)Constants.Constants.ASSET_TYPE.STOCK
+               && model.Transaction.TransactionType == (int)Constants.Constants.TRANSACTION_TYPE.BUY)
+            {
+                model.CurrentAvailableMoney = AssetQueries.CheckAvailableMoney(model.Asset.Username, model.Transaction.TransactionDate);
+            }
             return PartialView(model);
         }
 
@@ -77,7 +82,7 @@ namespace CashFlowManagement.Controllers
 
         public JsonResult CheckAvailableMoney(DateTime? date)
         {
-            double result = AssetQueries.CheckAvailableMoney("test", date == null ? DateTime.Now : date.Value);
+            int result = (int)AssetQueries.CheckAvailableMoney("test", date == null ? DateTime.Now : date.Value);
             return Json(new { result = result }, JsonRequestBehavior.AllowGet);
         }
 

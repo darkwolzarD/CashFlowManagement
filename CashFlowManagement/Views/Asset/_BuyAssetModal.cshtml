@@ -146,6 +146,12 @@
                             @Html.TextBoxFor(x => x.CurrentAvailableMoney, new { @type = "text", @class = "form-control input-mask", @readonly = "true" })
                         </div>
                     </div>  
+                    <div class="form-group">
+                        <label class="control-label col-sm-3">Tiền mặt sau khi mua:</label>
+                        <div class="col-sm-9">
+                            <input class="form-control input-mask" id="AfterMoney" readonly />
+                        </div>
+                    </div>
                     <table id="liability-table" class="table table-bordered table-condensed table-responsive">
                         <thead>
                             <tr>
