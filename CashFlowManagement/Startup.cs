@@ -15,7 +15,7 @@ namespace CashFlowManagement
 
             app.UseHangfireDashboard();
             app.UseHangfireServer();
-            RecurringJob.AddOrUpdate(() => AssetQueries.CreateCashFlowPerMonth(), Cron.Monthly);
+            RecurringJob.AddOrUpdate(() => AssetQueries.CreateCashFlowPerMonth(), Cron.Daily);
         }
     }
 }

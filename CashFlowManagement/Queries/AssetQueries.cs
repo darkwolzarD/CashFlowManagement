@@ -697,14 +697,15 @@ namespace CashFlowManagement.Queries
 
                 var insuranceExpenses = entities.Assets.Where(x => x.Username.Equals(user.Username)
                                                          && x.AssetType == (int)Constants.Constants.ASSET_TYPE.INSURANCE
-                                                         && !x.DisabledDate.HasValue).Sum(x => x.Liabilities.Sum(y => y.Value));
+                                                         && !x.DisabledDate.HasValue).Sum(x => (double?)x.Liabilities.Sum(y => y.Value)) ?? 0;
 
                 double totalIncomes = salaryIncome + realEstateIncome + businessIncome + interestIncome + stockIncome;
                 double totalExpenses = homeMortgage + carExpenses + creditCardExpenses + businessLoanExpenses + stockExpenses + otherExpenses + familyExpenses + insuranceExpenses + otherExpenses;
                 double monthlyCashflow = totalIncomes - totalExpenses;
 
+                var assetName = "CashFlow:" + DateTime.Now.ToString("MM/yyyy");
                 var cf = entities.Assets.Where(x => x.Username.Equals(user.Username) && x.AssetType == (int)Constants.Constants.ASSET_TYPE.AVAILABLE_MONEY
-                                                    && x.AssetName.Equals("CashFlow:" + DateTime.Now.ToString("MM/yyyy")));
+                                                    && x.AssetName.Equals(assetName));
                 if(!cf.Any())
                 {
                     Assets cashflow = new Assets();
@@ -720,9 +721,9 @@ namespace CashFlowManagement.Queries
                     Log log = LogQueries.CreateLog((int)Constants.Constants.LOG_TYPE.INCOME, cashflow.AssetName, user.Username, cashflow.Value, DateTime.Now);
 
                     entities.Log.Add(log);
-                    int result = entities.SaveChanges();
                 }
             }
+            int result = entities.SaveChanges();
         }
     }
 }
