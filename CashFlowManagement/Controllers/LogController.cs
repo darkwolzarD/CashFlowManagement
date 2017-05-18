@@ -13,13 +13,13 @@ namespace CashFlowManagement.Controllers
         // GET: Log
         public ActionResult Index(int type)
         {
-            List<Log> model = LogQueries.GetLogByUser("test", type);
+            List<Log> model = LogQueries.GetLogByUser(UserQueries.GetCurrentUsername(), type);
             return View(model);
         }
 
         public JsonResult CreateLog(Log model)
         {
-            int result = LogQueries.CreateLog(model, "test");
+            int result = LogQueries.CreateLog(model, UserQueries.GetCurrentUsername());
             return Json(new { result = result });
         }
     }

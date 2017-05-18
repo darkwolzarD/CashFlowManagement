@@ -42,6 +42,8 @@
                         <th class="text-center">Chi tiêu khác</th>
                     }
                     <th class="text-center">Ngày chi tiêu hàng tháng</th>
+                    <th class="text-center">Tháng bắt đầu</th>
+                    <th class="text-center">Tháng kết thúc</th>
                     <th class="text-center">Chi tiêu tháng</th>
                     <th class="text-center">Chi tiêu năm</th>
                     <th class="text-center">Chỉnh sửa</th>
@@ -52,6 +54,8 @@
                 {
                     <tr>
                         <td><strong>Tổng</strong></td>
+                        <td></td>
+                        <td></td>
                         <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.TotalMonthlyExpense)</strong></td>
                         <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.TotalMonthlyExpense * 12)</strong></td>
                         <td></td>
@@ -61,6 +65,8 @@
                         <tr>
                             <td>@item.Name</td>
                             <td>@FormatUtility.DisplayThousandSeparatorsForNumber(item.ExpenseDay)</td>
+                            <td>@item.StartDate.ToString("MM/yyyy")</td>
+                            <td>@(item.EndDate.HasValue ? item.EndDate.Value.ToString("MM/yyyy") : string.Empty)</td>
                             <td>@FormatUtility.DisplayThousandSeparatorsForNumber(item.Value)</td>
                             <td>@FormatUtility.DisplayThousandSeparatorsForNumber(item.Value * 12)</td>
                             <td class="text-center" width="160px">
@@ -79,7 +85,7 @@
                 else
                 {
                     <tr>
-                        <td colspan="5" class="text-center">Không có dữ liệu</td>
+                        <td colspan="7" class="text-center">Không có dữ liệu</td>
                     </tr>
                 }
             </tbody>

@@ -14,7 +14,7 @@ namespace CashFlowManagement.Controllers
         // GET: Income
         public ActionResult IncomeTable(int type)
         {
-            IncomeListViewModel model = IncomeQueries.GetIncomeByUser("test", type);
+            IncomeListViewModel model = IncomeQueries.GetIncomeByUser(UserQueries.GetCurrentUsername(), type);
             return View(model);
         }
 
@@ -33,14 +33,14 @@ namespace CashFlowManagement.Controllers
         public JsonResult CreateIncome(Incomes model)
         {
             int type = model.IncomeType;
-            int result = IncomeQueries.CreateIncome(model, type, "test");
+            int result = IncomeQueries.CreateIncome(model, type, UserQueries.GetCurrentUsername());
             return Json(new { result = result });
         }
 
         public JsonResult UpdateIncome(Incomes model)
         {
             int type = model.IncomeType;
-            int result = IncomeQueries.UpdateIncome(model, "test");
+            int result = IncomeQueries.UpdateIncome(model, UserQueries.GetCurrentUsername());
             return Json(new { result = result });
         }
 

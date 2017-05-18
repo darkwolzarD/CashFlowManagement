@@ -208,7 +208,14 @@ namespace CashFlowManagement.Queries
                 }
                 if (liability.StartDate <= current && current < liability.EndDate)
                 {
-                    liabilityViewModel.MonthlyOriginalPayment = liability.Value / FormatUtility.CalculateTimePeriod(parentLiability.StartDate.Value, parentLiability.EndDate.Value);
+                    if(liability.LiabilityType != (int)Constants.Constants.LIABILITY_TYPE.INSURANCE)
+                    {
+                        liabilityViewModel.MonthlyOriginalPayment = liability.Value / FormatUtility.CalculateTimePeriod(parentLiability.StartDate.Value, parentLiability.EndDate.Value);
+                    }
+                    else
+                    {
+                        liabilityViewModel.MonthlyOriginalPayment = 0;
+                    }
 
                     int currentPeriod = FormatUtility.CalculateTimePeriod(parentLiability.StartDate.Value, DateTime.Now);
 
@@ -229,11 +236,11 @@ namespace CashFlowManagement.Queries
                     else
                     {
                         liabilityViewModel.RemainedValue = liability.Value - 1 * liabilityViewModel.MonthlyOriginalPayment;
-                        liabilityViewModel.MonthlyInterestPayment = liability.Value * liabilityViewModel.CurrentInterestRate / 1200;
+                        liabilityViewModel.MonthlyInterestPayment = liability.Value;
                     }
 
                     liabilityViewModel.MonthlyPayment = liabilityViewModel.MonthlyInterestPayment + liabilityViewModel.MonthlyOriginalPayment;
-                    liabilityViewModel.AnnualPayment = liabilityViewModel.MonthlyPayment * 12;        //chua xu ly// 
+                    liabilityViewModel.AnnualPayment = liabilityViewModel.MonthlyPayment * 12;  
                 }
                 else
                 {

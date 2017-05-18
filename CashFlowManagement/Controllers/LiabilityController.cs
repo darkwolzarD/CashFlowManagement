@@ -14,7 +14,7 @@ namespace CashFlowManagement.Controllers
         // GET: Liability
         public ActionResult LiabilityTable(int type)
         {
-            LiabilityListViewModel model = LiabilityQueries.GetLiabilityByUser("test", type);
+            LiabilityListViewModel model = LiabilityQueries.GetLiabilityByUser(UserQueries.GetCurrentUsername(), type);
             return View(model);
         }
 
@@ -64,7 +64,7 @@ namespace CashFlowManagement.Controllers
 
         public JsonResult CreateLiability(Liabilities model)
         {
-            int result = LiabilityQueries.CreateLiability(model, "test");
+            int result = LiabilityQueries.CreateLiability(model, UserQueries.GetCurrentUsername());
             return Json(new { result = result });
         }
 

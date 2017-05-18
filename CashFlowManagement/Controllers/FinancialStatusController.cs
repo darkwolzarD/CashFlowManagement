@@ -13,7 +13,7 @@ namespace CashFlowManagement.Controllers
         // GET: FinancialStatus
         public ActionResult Index()
         {
-            FinancialStatusViewModel model = FinancialStatusQueries.GetFinancialStatusByUser("test");
+            FinancialStatusViewModel model = FinancialStatusQueries.GetFinancialStatusByUser(UserQueries.GetCurrentUsername());
             return View(model);
         }
     }

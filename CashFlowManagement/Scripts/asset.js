@@ -80,9 +80,14 @@
         }
     })
 
-    $(document).on("shown.bs.modal", "#create-new-liability-modal, #update-liability-modal, #sell-asset-modal", function () {
+    $(document).on("shown.bs.modal", "#create-new-liability-modal, #update-liability-modal", function () {
         MaskInput();
         InitiateDatePicker();
+    })
+
+    $(document).on("shown.bs.modal", "#sell-asset-modal", function () {
+        MaskInput();
+        InitiateDatePicker2();
     })
 
     $(document).on("shown.bs.modal", "#buy-new-asset-modal", function () {
@@ -296,11 +301,21 @@
 
     $(document).on("click", ".delete-asset", function () {
         var id = $(this).data("asset-id");
-        if (confirm("Bạn có muốn xóa tài sản này?") === true) {
+        var transaction_id = $(this).data("transaction-id");
+        if (typeof transaction_id == 'undefined') {
+            transaction_id = 0;
+        }
+
+        var message = "Bạn có muốn xóa tài sản này?";
+        if (transaction_id > 0) {
+            message = "Bạn có muốn xóa giao dịch này?";
+        }
+
+        if (confirm(message) === true) {
             $.ajax({
                 url: Url.DeleteAsset,
                 type: "POST",
-                data: { assetId: id },
+                data: { assetId: id, transactionId: transaction_id },
                 success: function (data) {
                     if (data.result > 0) {
                         LoadTable();
@@ -677,52 +692,8 @@
         })
     })
 
-    $(document).on("change", "#buy-new-asset-modal #Transaction_NumberOfShares, #buy-new-asset-modal #Transaction_SpotPrice", function () {
-        RemoveMask();
-        var numberOfShares = $("#buy-new-asset-modal #Transaction_NumberOfShares").val();
-        if (numberOfShares == "") {
-            numberOfShares = 0;
-        }
-        var spotPrice = $("#buy-new-asset-modal #Transaction_SpotPrice").val();
-        if (spotPrice == "") {
-            spotPrice = 0;
-        }
 
-        var value = parseInt(numberOfShares * spotPrice * 1.0015);
-        $("#buy-new-asset-modal #BuyValue").val(value);
-
-        $("#buy-new-asset-modal input[name='BuyAmount']").val(value);
-        $("#buy-new-asset-modal #AfterMoney").val($("#buy-new-asset-modal #CurrentAvailableMoney").val() - $("#buy-new-asset-modal #BuyAmount").val());
-        var currentAmount = $("#buy-new-asset-modal input[name='BuyAmount']").val();
-        if (currentAmount == "" || currentAmount == 0) {
-            currentAmount = 0;
-        }
-        else {
-            currentAmount = parseInt(currentAmount);
-        }
-
-        var currentLiabilities = 0;
-        $("#liability-table tbody tr:hidden").each(function (index, element) {
-            var liability = parseFloat($(element).find("td:nth-child(2) input").val());
-            if (liability == "") {
-                liability == 0;
-            }
-            currentLiabilities += liability;
-        });
-
-        var availalbleMoney = $("#buy-new-asset-modal #CurrentAvailableMoney").val();
-
-        if (availalbleMoney < currentAmount + currentLiabilities) {
-            $("#liability-table tbody tr:first td:nth-child(2) input").val(currentAmount + currentLiabilities - availalbleMoney);
-        }
-        else {
-            $("#liability-table tbody tr:first td:nth-child(2) input").val(0);
-        }
-
-        MaskInput();
-    })
-
-    $(document).on("change", "#buy-new-asset-modal #BuyAmount", function () {
+    $(document).on("keyup", "#buy-new-asset-modal #BuyAmount", function () {
         RemoveMask();
         var numberOfShares = $("#buy-new-asset-modal #Transaction_NumberOfShares").val();
         if (numberOfShares == "") {
@@ -781,10 +752,53 @@
         MaskInput();
     })
 
+    $(document).on("keyup", "#buy-new-asset-modal #Transaction_NumberOfShares, #buy-new-asset-modal #Transaction_SpotPrice", function () {
+        RemoveMask();
+        var numberOfShares = $("#buy-new-asset-modal #Transaction_NumberOfShares").val();
+        if (numberOfShares == "") {
+            numberOfShares = 0;
+        }
+        var spotPrice = $("#buy-new-asset-modal #Transaction_SpotPrice").val();
+        if (spotPrice == "") {
+            spotPrice = 0;
+        }
+
+        var value = parseInt(numberOfShares * spotPrice * 1.0015);
+        $("#buy-new-asset-modal #Transaction_Value").val(value);
+
+        $("#buy-new-asset-modal input[name='BuyAmount']").val(value);
+        $("#buy-new-asset-modal #AfterMoney").val($("#buy-new-asset-modal #CurrentAvailableMoney").val() - $("#buy-new-asset-modal #BuyAmount").val());
+        var currentAmount = $("#buy-new-asset-modal input[name='BuyAmount']").val();
+        if (currentAmount == "" || currentAmount == 0) {
+            currentAmount = 0;
+        }
+        else {
+            currentAmount = parseInt(currentAmount);
+        }
+
+        var currentLiabilities = 0;
+        $("#liability-table tbody tr:hidden").each(function (index, element) {
+            var liability = parseFloat($(element).find("td:nth-child(2) input").val());
+            if (liability == "") {
+                liability == 0;
+            }
+            currentLiabilities += liability;
+        });
+
+        var availalbleMoney = $("#buy-new-asset-modal #CurrentAvailableMoney").val();
+
+        if (availalbleMoney < currentAmount + currentLiabilities) {
+            $("#liability-table tbody tr:first td:nth-child(2) input").val(currentAmount + currentLiabilities - availalbleMoney);
+        }
+        else {
+            $("#liability-table tbody tr:first td:nth-child(2) input").val(0);
+        }
+
+        MaskInput();
+    })
+
     $(document).on("keyup", "#update-asset-modal #Transaction_NumberOfShares, #update-asset-modal #Transaction_SpotPrice", function () {
         RemoveMask();
-        var transactionType = $("#update-asset-modal #Transaction_TransactionType").val();
-        
         var numberOfShares = $("#update-asset-modal #Transaction_NumberOfShares").val();
         if (numberOfShares == "") {
             numberOfShares = 0;
@@ -794,14 +808,151 @@
             spotPrice = 0;
         }
 
-        if (transactionType == 2) {
+        var value = parseInt(numberOfShares * spotPrice * 1.0015);
+        $("#update-asset-modal #Transaction_Value").val(value);
 
+        $("#update-asset-modal #Transaction_Assets1_Value").val(value);
+        $("#update-asset-modal #AfterMoney").val($("#update-asset-modal #CurrentAvailableMoney").val() - $("#update-asset-modal #Transaction_Assets1_Value").val());
+        var currentAmount = $("#update-asset-modal input[name='BuyAmount']").val();
+        if (currentAmount == "" || currentAmount == 0) {
+            currentAmount = 0;
         }
-        else if (transactionType == 3) {
-            var value = parseInt(numberOfShares * spotPrice * 1.0025);
-            $("#update-asset-modal #Transaction_Value").val(value); 
-        } 
+        else {
+            currentAmount = parseInt(currentAmount);
+        }
+
+        var currentLiabilities = 0;
+        $("#liability-table tbody tr:hidden").each(function (index, element) {
+            var liability = parseFloat($(element).find("td:nth-child(2) input").val());
+            if (liability == "") {
+                liability == 0;
+            }
+            currentLiabilities += liability;
+        });
+
+        var availalbleMoney = $("#update-asset-modal #CurrentAvailableMoney").val();
+
+        if (availalbleMoney < currentAmount + currentLiabilities) {
+            $("#liability-table tbody tr:first td:nth-child(2) input").val(currentAmount + currentLiabilities - availalbleMoney);
+        }
+        else {
+            $("#liability-table tbody tr:first td:nth-child(2) input").val(0);
+        }
 
         MaskInput();
     })
+
+    $(document).on("keyup", "#update-asset-modal #Transaction_Assets1_Value", function () {
+        RemoveMask();
+        var numberOfShares = $("#update-asset-modal #Transaction_NumberOfShares").val();
+        if (numberOfShares == "") {
+            numberOfShares = 0;
+        }
+        var spotPrice = $("#update-asset-modal #Transaction_SpotPrice").val();
+        if (spotPrice == "") {
+            spotPrice = 0;
+        }
+
+        var value = parseInt(numberOfShares * spotPrice * 1.0015);
+        $("#update-asset-modal #Transaction_Value").val(value);
+
+        $("#update-asset-modal #AfterMoney").val($("#update-asset-modal #CurrentAvailableMoney").val() - $("#update-asset-modal #Transaction_Assets1_Value").val());
+        var currentAmount = $("#update-asset-modal input[name='BuyAmount']").val();
+        if (currentAmount == "" || currentAmount == 0) {
+            currentAmount = 0;
+        }
+        else {
+            currentAmount = parseInt(currentAmount);
+        }
+
+        var currentLiabilities = 0;
+        $("#liability-table tbody tr:hidden").each(function (index, element) {
+            var liability = parseFloat($(element).find("td:nth-child(2) input").val());
+            if (liability == "") {
+                liability == 0;
+            }
+            currentLiabilities += liability;
+        });
+
+        var availalbleMoney = $("#update-asset-modal #CurrentAvailableMoney").val();
+
+        if (availalbleMoney < currentAmount + currentLiabilities) {
+            $("#liability-table tbody tr:first td:nth-child(2) input").val(currentAmount + currentLiabilities - availalbleMoney);
+        }
+        else {
+            $("#liability-table tbody tr:first td:nth-child(2) input").val(0);
+        }
+
+        MaskInput();
+    })
+
+
+    $(document).on("keyup", "#update-asset-modal #Transaction_NumberOfShares, #update-asset-modal #Transaction_SpotPrice", function () {
+        RemoveMask();
+        var numberOfShares = $("#update-asset-modal #Transaction_NumberOfShares").val();
+        if (numberOfShares == "") {
+            numberOfShares = 0;
+        }
+        var spotPrice = $("#update-asset-modal #Transaction_SpotPrice").val();
+        if (spotPrice == "") {
+            spotPrice = 0;
+        }
+
+        var value = parseInt(numberOfShares * spotPrice * 1.0015);
+        $("#update-asset-modal #Transaction_Value").val(value);
+
+        $("#update-asset-modal #Transaction_Assets1_Value").val(value);
+        $("#update-asset-modal #AfterMoney").val($("#update-asset-modal #CurrentAvailableMoney").val() - $("#update-asset-modal #Transaction_Assets1_Value").val());
+        var currentAmount = $("#update-asset-modal input[name='BuyAmount']").val();
+        if (currentAmount == "" || currentAmount == 0) {
+            currentAmount = 0;
+        }
+        else {
+            currentAmount = parseInt(currentAmount);
+        }
+
+        var currentLiabilities = 0;
+        $("#liability-table tbody tr:hidden").each(function (index, element) {
+            var liability = parseFloat($(element).find("td:nth-child(2) input").val());
+            if (liability == "") {
+                liability == 0;
+            }
+            currentLiabilities += liability;
+        });
+
+        var availalbleMoney = $("#update-asset-modal #CurrentAvailableMoney").val();
+
+        if (availalbleMoney < currentAmount + currentLiabilities) {
+            $("#liability-table tbody tr:first td:nth-child(2) input").val(currentAmount + currentLiabilities - availalbleMoney);
+        }
+        else {
+            $("#liability-table tbody tr:first td:nth-child(2) input").val(0);
+        }
+
+        MaskInput();
+    })
+
+    //$(document).on("keyup", "#update-asset-modal #Transaction_NumberOfShares, #update-asset-modal #Transaction_SpotPrice", function () {
+    //    RemoveMask();
+    //    var transactionType = $("#update-asset-modal #Transaction_TransactionType").val();
+
+    //    var numberOfShares = $("#update-asset-modal #Transaction_NumberOfShares").val();
+    //    if (numberOfShares == "") {
+    //        numberOfShares = 0;
+    //    }
+    //    var spotPrice = $("#update-asset-modal #Transaction_SpotPrice").val();
+    //    if (spotPrice == "") {
+    //        spotPrice = 0;
+    //    }
+
+    //    if (transactionType == 2) {
+
+    //    }
+    //    else if (transactionType == 3) {
+    //        var value = parseInt(numberOfShares * spotPrice * 1.0025);
+    //        $("#update-asset-modal #Transaction_Value").val(value); 
+    //    } 
+
+    //    MaskInput();
+    //})
 })

@@ -97,7 +97,7 @@
                             </div>
                         </div>
                     }
-                    @if (Model.Asset.AssetType != (int)Constants.ASSET_TYPE.INSURANCE && Model.Asset.AssetType != (int)Constants.ASSET_TYPE.STOCK)
+                    @if (Model.Asset.AssetType != (int)Constants.ASSET_TYPE.INSURANCE && Model.Asset.AssetType != (int)Constants.ASSET_TYPE.STOCK && Model.Asset.AssetType != (int)Constants.ASSET_TYPE.BANK_DEPOSIT)
                     {
                         <div class="form-group">
                             <label class="control-label col-sm-3">Thu hàng tháng:</label>
@@ -181,9 +181,40 @@
                     @if (Model.Asset.AssetType == (int)Constants.ASSET_TYPE.BANK_DEPOSIT)
                     {
                         <div class="form-group">
-                            <label class="control-label col-sm-3">Participant Bank:</label>
+                            <label class="control-label col-sm-3">Lãi suất tiền gửi:</label>
                             <div class="col-sm-9">
-                                @Html.TextBoxFor(x => x.Asset.ParticipantBank, new { @type = "text", @class = "form-control" })
+                                @Html.TextBoxFor(x => x.Asset.InterestRate, new { @type = "text", @class = "form-control percentage" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-3">Kiểu nhận lãi:</label>
+                            <div class="col-sm-9">
+                                @Html.DropDownListFor(x => x.Asset.ObtainedBy, new List<SelectListItem> {
+                                                                                                   new SelectListItem
+                                                                                                   {
+                                                                                                       Text = "Lãi nhập gốc",
+                                                                                                       Value = ((int)Constants.INTEREST_OBTAIN_TYPE.ORIGIN).ToString(),
+                                                                                                       Selected = true
+                                                                                                   },
+                                                                                                   new SelectListItem
+                                                                                                   {
+                                                                                                       Text = "Rút lãi đầu kỳ",
+                                                                                                       Value = ((int)Constants.INTEREST_OBTAIN_TYPE.START).ToString(),
+                                                                                                       Selected = true
+                                                                                                   },
+                                                                                                   new SelectListItem
+                                                                                                   {
+                                                                                                       Text = "Rút lãi cuối kỳ",
+                                                                                                       Value = ((int)Constants.INTEREST_OBTAIN_TYPE.END).ToString(),
+                                                                                                       Selected = true
+                                                                                                   }
+                                                                                                }, new { @type = "text", @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-3">Kỳ hạn:</label>
+                            <div class="col-sm-9">
+                                @Html.TextBoxFor(x => x.Asset.Term, new { @type = "text", @class = "form-control" })
                             </div>
                         </div>
                         <div class="form-group">

@@ -2,6 +2,7 @@
 using CashFlowManagement.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 
@@ -62,12 +63,60 @@ namespace CashFlowManagement.Queries
             updated_expense.Value = model.Value;
             updated_expense.Name = model.Name;
             updated_expense.ExpenseDay = model.ExpenseDay;
+            updated_expense.StartDate = model.StartDate;
+            updated_expense.EndDate = model.EndDate;
             updated_expense.ExpenseType = model.ExpenseType;
             updated_expense.CreatedDate = DateTime.Now;
             updated_expense.CreatedBy = Constants.Constants.USER;
             updated_expense.Username = username;
 
             entities.Expenses.Add(updated_expense);
+
+            var after_cashflows = entities.Assets.Where(x => x.Username.Equals(username) && x.AssetType == (int)Constants.Constants.ASSET_TYPE.AVAILABLE_MONEY
+                                                && x.AssetName.StartsWith("CashFlow") && !x.DisabledDate.HasValue && x.StartDate.Value.Month >= model.StartDate.Month
+                                                && x.StartDate.Value.Year == model.StartDate.Year && (model.EndDate.HasValue ? x.StartDate.Value.Month <= model.EndDate.Value.Month
+                                                && x.StartDate.Value.Year == model.EndDate.Value.Year : true));
+            foreach (var cashflow in after_cashflows)
+            {
+                cashflow.DisabledDate = DateTime.Now;
+                cashflow.DisabledBy = Constants.Constants.SYSTEM;
+                entities.Assets.Attach(cashflow);
+                entities.Entry(cashflow).State = EntityState.Modified;
+
+                Assets updated_cashflow = new Assets();
+                updated_cashflow.AssetName = cashflow.AssetName;
+                updated_cashflow.StartDate = cashflow.StartDate;
+                updated_cashflow.AssetType = (int)Constants.Constants.ASSET_TYPE.AVAILABLE_MONEY;
+                updated_cashflow.CreatedBy = Constants.Constants.SYSTEM;
+                updated_cashflow.CreatedDate = DateTime.Now;
+                updated_cashflow.Value = cashflow.Value - updated_expense.Value + expense.Value;
+                updated_cashflow.Username = expense.Username;
+
+                entities.Assets.Add(updated_cashflow);
+            }
+
+            var previous_cashflows = entities.Assets.Where(x => x.Username.Equals(username) && x.AssetType == (int)Constants.Constants.ASSET_TYPE.AVAILABLE_MONEY
+                                                && x.AssetName.StartsWith("CashFlow") && !x.DisabledDate.HasValue && x.StartDate.Value.Month <= model.StartDate.Month
+                                                && x.StartDate.Value.Year == model.StartDate.Year);
+
+            foreach (var cashflow in previous_cashflows)
+            {
+                cashflow.DisabledDate = DateTime.Now;
+                cashflow.DisabledBy = Constants.Constants.SYSTEM;
+                entities.Assets.Attach(cashflow);
+                entities.Entry(cashflow).State = EntityState.Modified;
+
+                Assets updated_cashflow = new Assets();
+                updated_cashflow.AssetName = cashflow.AssetName;
+                updated_cashflow.StartDate = cashflow.StartDate;
+                updated_cashflow.AssetType = (int)Constants.Constants.ASSET_TYPE.AVAILABLE_MONEY;
+                updated_cashflow.CreatedBy = Constants.Constants.SYSTEM;
+                updated_cashflow.CreatedDate = DateTime.Now;
+                updated_cashflow.Value = cashflow.Value + expense.Value;
+                updated_cashflow.Username = expense.Username;
+
+                entities.Assets.Add(updated_cashflow);
+            }
 
             Log log = LogQueries.CreateLog((int)Constants.Constants.LOG_TYPE.UPDATE, "chi tiêu \"" + expense.Name + "\"", username, expense.Value, DateTime.Now);
             entities.Log.Add(log);

@@ -14,7 +14,7 @@ namespace CashFlowManagement.Controllers
         // GET: Expense
         public ActionResult ExpenseTable(int type)
         {
-            ExpenseListViewModel model = ExpenseQueries.GetExpenseByUser("test", type);
+            ExpenseListViewModel model = ExpenseQueries.GetExpenseByUser(UserQueries.GetCurrentUsername(), type);
             return View(model);
         }
 
@@ -28,7 +28,7 @@ namespace CashFlowManagement.Controllers
         {
             int type = model.ExpenseType;
 
-            int result = ExpenseQueries.CreateExpense(model, type, "test");
+            int result = ExpenseQueries.CreateExpense(model, type, UserQueries.GetCurrentUsername());
             return Json(new { result = result });
         }
 
@@ -36,7 +36,7 @@ namespace CashFlowManagement.Controllers
         {
             int type = model.ExpenseType;
 
-            int result = ExpenseQueries.UpdateExpense(model, "test");
+            int result = ExpenseQueries.UpdateExpense(model, UserQueries.GetCurrentUsername());
             return Json(new { result = result });
         }
 

@@ -14,10 +14,11 @@ namespace CashFlowManagement.Queries
         {
             FinancialStatusViewModel result = new FinancialStatusViewModel();
             Entities entities = new Entities();
+            DateTime current = DateTime.Now;
 
             result.SalaryIncome = entities.Incomes.Where(x => x.Username.Equals(username)
                                                          && x.IncomeType == (int)Constants.Constants.INCOME_TYPE.SALARY_INCOME
-                                                         && !x.DisabledDate.HasValue).Select(x => x.Value).DefaultIfEmpty(0).Sum();
+                                                         && !x.DisabledDate.HasValue && x.StartDate <= current).Select(x => x.Value).DefaultIfEmpty(0).Sum();
 
             result.RealEstateIncome = entities.Incomes.Where(x => x.Username.Equals(username)
                                                          && x.IncomeType == (int)Constants.Constants.INCOME_TYPE.REAL_ESTATE_INCOME
@@ -31,8 +32,23 @@ namespace CashFlowManagement.Queries
                                                          && x.IncomeType == (int)Constants.Constants.INCOME_TYPE.BANK_DEPOSIT_INCOME
                                                          && !x.DisabledDate.HasValue).Select(x => x.Value).DefaultIfEmpty(0).Sum();
 
+            var stocks = entities.Assets.Where(x => x.Username.Equals(username)
+                                                         && x.AssetType == (int)Constants.Constants.ASSET_TYPE.STOCK
+                                                         && !x.DisabledDate.HasValue);
+            foreach (var stock in stocks)
+            {
+                int numberOfShares = entities.StockTransactions.Where(x => x.Username.Equals(username) && x.AssetId == stock.Id && !x.DisabledDate.HasValue).Sum(x => x.NumberOfShares);
+                double currentPrice = entities.StockTransactions.Where(x => x.Username.Equals(username) && x.AssetId == stock.Id && !x.DisabledDate.HasValue).OrderByDescending(x => x.TransactionDate).FirstOrDefault().SpotPrice;
+                double interestRate = entities.StockTransactions.Where(x => x.Username.Equals(username) && x.AssetId == stock.Id && !x.DisabledDate.HasValue).OrderByDescending(x => x.TransactionDate).FirstOrDefault().ExpectedDividend;
+                result.DividendIncome += numberOfShares * currentPrice * interestRate / 100;
+            }
+
             result.FamilyExpenses = entities.Expenses.Where(x => x.Username.Equals(username)
                                                          && x.ExpenseType == (int)Constants.Constants.EXPENSE_TYPE.FAMILY
+                                                         && !x.DisabledDate.HasValue).Select(x => x.Value).DefaultIfEmpty(0).Sum();
+
+            result.FamilyExpenses += entities.Liabilities.Where(x => x.Username.Equals(username)
+                                                         && x.LiabilityType == (int)Constants.Constants.LIABILITY_TYPE.INSURANCE
                                                          && !x.DisabledDate.HasValue).Select(x => x.Value).DefaultIfEmpty(0).Sum();
 
             result.OtherExpenses = entities.Expenses.Where(x => x.Username.Equals(username)
@@ -55,25 +71,32 @@ namespace CashFlowManagement.Queries
                                                          && x.AssetType == (int)Constants.Constants.ASSET_TYPE.BANK_DEPOSIT
                                                          && !x.DisabledDate.HasValue).Select(x => x.Value).DefaultIfEmpty(0).Sum();
 
+            result.InsuranceValue = entities.Assets.Where(x => x.Username.Equals(username)
+                                                         && x.AssetType == (int)Constants.Constants.ASSET_TYPE.INSURANCE
+                                                         && !x.DisabledDate.HasValue).Select(x => x.Value).DefaultIfEmpty(0).Sum();
+
+            result.StockValue = entities.StockTransactions.Where(x => x.Username.Equals(username)
+                                                         && !x.DisabledDate.HasValue).Select(x => x.TransactionType == (int)Constants.Constants.TRANSACTION_TYPE.SELL ? 0 - x.Value : x.Value).DefaultIfEmpty(0).Sum();
+
             result.HomeMortgageLiability = entities.Liabilities.Where(x => x.Username.Equals(username)
                                                          && x.LiabilityType == (int)Constants.Constants.LIABILITY_TYPE.REAL_ESTATE
                                                          && !x.ParentLiabilityId.HasValue && !x.DisabledDate.HasValue).Select(x => x.Value).DefaultIfEmpty(0).Sum();
 
-                var carLiabilities = entities.Liabilities.Where(x => x.Username.Equals(username)
-                                                             && x.LiabilityType == (int)Constants.Constants.LIABILITY_TYPE.CAR
-                                                             && !x.DisabledDate.HasValue);
-                foreach (var carLiability in carLiabilities)
-                {
-                    result.CarPayment += carLiability.Value / FormatUtility.CalculateTimePeriod(carLiability.StartDate.Value, carLiability.EndDate.Value) + carLiability.Value * carLiability.InterestRate / 1200;
-                }
+            var carLiabilities = entities.Liabilities.Where(x => x.Username.Equals(username)
+                                                         && x.LiabilityType == (int)Constants.Constants.LIABILITY_TYPE.CAR
+                                                         && !x.DisabledDate.HasValue);
+            foreach (var carLiability in carLiabilities)
+            {
+                result.CarPayment += carLiability.Value / FormatUtility.CalculateTimePeriod(carLiability.StartDate.Value, carLiability.EndDate.Value) + carLiability.Value * carLiability.InterestRate / 1200;
+            }
 
-                var creditCardLiabilities = entities.Liabilities.Where(x => x.Username.Equals(username)
-                                                             && x.LiabilityType == (int)Constants.Constants.LIABILITY_TYPE.CREDIT_CARD
-                                                             && !x.DisabledDate.HasValue);
-                foreach (var creditCarLiability in creditCardLiabilities)
-                {
-                    result.CreditCard += creditCarLiability.Value / 12 + creditCarLiability.Value * creditCarLiability.InterestRate / 1200;
-                }
+            var creditCardLiabilities = entities.Liabilities.Where(x => x.Username.Equals(username)
+                                                         && x.LiabilityType == (int)Constants.Constants.LIABILITY_TYPE.CREDIT_CARD
+                                                         && !x.DisabledDate.HasValue);
+            foreach (var creditCarLiability in creditCardLiabilities)
+            {
+                result.CreditCard += creditCarLiability.Value / 12 + creditCarLiability.Value * creditCarLiability.InterestRate / 1200;
+            }
 
             var homeLiabilities = entities.Liabilities.Where(x => x.Username.Equals(username)
                                                          && x.LiabilityType == (int)Constants.Constants.LIABILITY_TYPE.REAL_ESTATE
@@ -99,6 +122,18 @@ namespace CashFlowManagement.Queries
                 result.OtherLoanExpenses += otherLiability.Value / FormatUtility.CalculateTimePeriod(otherLiability.StartDate.Value, otherLiability.EndDate.Value) + otherLiability.Value * otherLiability.InterestRate / 1200;
             }
 
+            result.StockLoan = entities.Liabilities.Where(x => x.Username.Equals(username)
+                                                         && x.LiabilityType == (int)Constants.Constants.LIABILITY_TYPE.STOCK
+                                                         && !x.DisabledDate.HasValue && !x.ParentLiabilityId.HasValue).Select(x => x.Value).DefaultIfEmpty(0).Sum();
+
+            var stockLiabilities = entities.Liabilities.Where(x => x.Username.Equals(username)
+                                                         && x.LiabilityType == (int)Constants.Constants.LIABILITY_TYPE.STOCK
+                                                         && !x.DisabledDate.HasValue && !x.ParentLiabilityId.HasValue);
+            foreach (var stockLiability in stockLiabilities)
+            {
+                result.StockExpenses += LiabilityQueries.GetCurrentMonthlyPayment(stockLiability.Id);
+            }
+
             result.CreditCardLiability = entities.Liabilities.Where(x => x.Username.Equals(username)
                                                          && x.LiabilityType == (int)Constants.Constants.LIABILITY_TYPE.CREDIT_CARD
                                                          && !x.DisabledDate.HasValue).Select(x => x.Value).DefaultIfEmpty(0).Sum();
@@ -115,9 +150,10 @@ namespace CashFlowManagement.Queries
                                                          && x.LiabilityType == (int)Constants.Constants.LIABILITY_TYPE.OTHERS
                                                          && !x.DisabledDate.HasValue).Select(x => x.Value).DefaultIfEmpty(0).Sum();
 
+
             result.TotalIncomes = result.SalaryIncome + result.RealEstateIncome + result.BusinessIncome + result.InterestIncome + result.DividendIncome;
-            result.TotalAssets = result.RealEstateValue + result.BusinessValue + result.BankDepositValue + result.StockValue;
-            result.TotalExpenses = result.HomeMortgage + result.CarPayment + result.CreditCard + result.BusinessLoanExpenses + result.StockExpenses + result.OtherExpenses + result.FamilyExpenses + result.OtherExpenses;
+            result.TotalAssets = result.AvailableMoney + result.RealEstateValue + result.BusinessValue + result.BankDepositValue + result.StockValue + result.InsuranceValue;
+            result.TotalExpenses = result.HomeMortgage + result.CarPayment + result.CreditCard + result.BusinessLoanExpenses + result.StockExpenses + result.OtherExpenses + result.FamilyExpenses;
             result.TotalLiabilities = result.HomeMortgageLiability + result.CarLoan + result.CreditCardLiability + result.BusinessLoan + result.StockLoan + result.OtherLoans;
             result.Equipty = result.TotalAssets - result.TotalLiabilities;
 

@@ -13,13 +13,13 @@ namespace CashFlowManagement.Controllers
     {
         public ActionResult AssetTable(int type)
         {
-            AssetListViewModel model = AssetQueries.GetAssetByUser("test", type);
+            AssetListViewModel model = AssetQueries.GetAssetByUser(UserQueries.GetCurrentUsername(), type);
             return View(model);
         }
 
         public ActionResult Report(int type)
         {
-            AssetListViewModel model = AssetQueries.GetAssetByUser("test", type);
+            AssetListViewModel model = AssetQueries.GetAssetByUser(UserQueries.GetCurrentUsername(), type);
             return View(model);
         }
 
@@ -38,13 +38,13 @@ namespace CashFlowManagement.Controllers
         {
             int type = model.Asset.AssetType;
 
-            int result = AssetQueries.CreateAsset(model, type, "test");
+            int result = AssetQueries.CreateAsset(model, type, UserQueries.GetCurrentUsername());
             return Json(new { result = result });
         }
 
         public JsonResult BuyAsset(AssetViewModel model)
         {
-            int result = AssetQueries.BuyAsset(model, "test");
+            int result = AssetQueries.BuyAsset(model, UserQueries.GetCurrentUsername());
             return Json(new { result = result });
         }
 
@@ -56,9 +56,9 @@ namespace CashFlowManagement.Controllers
             return Json(new { result = result });
         }
 
-        public JsonResult DeleteAsset(int assetId)
+        public JsonResult DeleteAsset(int assetId, int transactionId)
         {
-            int result = AssetQueries.DeleteAsset(assetId);
+            int result = AssetQueries.DeleteAsset(assetId, transactionId);
             return Json(new { result = result });
         }
 
@@ -82,7 +82,7 @@ namespace CashFlowManagement.Controllers
 
         public JsonResult CheckAvailableMoney(DateTime? date)
         {
-            int result = (int)AssetQueries.CheckAvailableMoney("test", date == null ? DateTime.Now : date.Value);
+            int result = (int)AssetQueries.CheckAvailableMoney(UserQueries.GetCurrentUsername(), date == null ? DateTime.Now : date.Value);
             return Json(new { result = result }, JsonRequestBehavior.AllowGet);
         }
 

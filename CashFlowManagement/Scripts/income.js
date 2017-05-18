@@ -13,12 +13,22 @@
 
     MaskInput();
 
+    function InitiateDatePicker() {
+        $(".date-picker").datepicker({
+            format: "mm/yyyy",
+            minViewMode: 1,
+            language: "vi-VN"
+        });
+    }
+
     $(document).on("shown.bs.modal", "#create-new-income-modal", function () {
         MaskInput();
+        InitiateDatePicker();
     })
 
     $(document).on("shown.bs.modal", "#update-income-modal", function () {
         MaskInput();
+        InitiateDatePicker();
     })
 
     $('#create-new-income-modal').on('hidden.bs.modal', function (e) {

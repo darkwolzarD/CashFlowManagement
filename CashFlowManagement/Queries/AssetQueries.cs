@@ -26,7 +26,7 @@ namespace CashFlowManagement.Queries
                                                      type == (int)Constants.Constants.ASSET_TYPE.STOCK ?
                                                     (from asset in entities.Assets
                                                      where asset.Username == username && asset.AssetType == type
-                                                     && !asset.DisabledDate.HasValue
+                                                     && !asset.DisabledDate.HasValue && asset.StockTransactions.Where(x => !x.DisabledDate.HasValue).Count() > 0
                                                      select new AssetViewModel { Asset = asset }).ToList()
                                                     :
                                                     (from asset in entities.Assets
@@ -79,6 +79,7 @@ namespace CashFlowManagement.Queries
                     model.Asset.Value = 0 - model.Asset.Value;
                 }
             }
+            
             asset.Username = username;
             asset.CreatedDate = DateTime.Now;
             asset.AssetType = type;
@@ -139,6 +140,11 @@ namespace CashFlowManagement.Queries
                 && type != (int)Constants.Constants.ASSET_TYPE.AVAILABLE_MONEY)
             {
                 Incomes income = model.Income;
+                if(type == (int)Constants.Constants.ASSET_TYPE.BANK_DEPOSIT)
+                {
+                    income = new Incomes();
+                    income.Value = asset.Value * asset.InterestRate.Value / 1200;
+                }
                 income.CreatedDate = DateTime.Now;
                 income.IncomeType = type;
                 income.Username = username;
@@ -224,6 +230,8 @@ namespace CashFlowManagement.Queries
                 available_money.Value = model.BuyAmount * (-1);
                 available_money.Username = username;
 
+                asset.Assets2 = available_money;
+
                 entities.Assets.Add(asset);
                 entities.Assets.Add(available_money);
 
@@ -294,16 +302,17 @@ namespace CashFlowManagement.Queries
                     asset.Liabilities.Add(childLiability);
                 }
 
-                asset.StockTransactions.Add(transaction);
-
                 Assets available_money = new Assets();
-                available_money.AssetName = "Tiền mua cổ phiếu" + asset.AssetName;
+                available_money.AssetName = "Tiền mua cổ phiếu " + asset.AssetName;
                 available_money.AssetType = (int)Constants.Constants.ASSET_TYPE.AVAILABLE_MONEY;
                 available_money.CreatedBy = Constants.Constants.USER;
                 available_money.CreatedDate = DateTime.Now;
                 available_money.Value = model.BuyAmount * (-1);
                 available_money.Username = username;
 
+                transaction.Assets1 = available_money;
+
+                asset.StockTransactions.Add(transaction);
                 entities.Assets.Add(available_money);
 
                 string sType = string.Empty;
@@ -334,7 +343,21 @@ namespace CashFlowManagement.Queries
                     updated_asset.Liabilities.Add(liability);
                 }
 
+                foreach (var income in asset.Incomes)
+                {
+                    income.DisabledDate = DateTime.Now;
+                    income.DisabledBy = Constants.Constants.USER;
+                    entities.Incomes.Attach(income);
+                    entities.Entry(income).State = EntityState.Modified;
+                }
+
                 Incomes updated_income = model.Income;
+                if (asset.AssetType == (int)Constants.Constants.ASSET_TYPE.BANK_DEPOSIT)
+                {
+                    updated_income = new Incomes(); 
+                    updated_income.Value = model.Asset.Value * model.Asset.InterestRate.Value / 1200;
+                }
+                updated_income.IncomeType = asset.Incomes.FirstOrDefault().IncomeType;
                 updated_income.CreatedDate = DateTime.Now;
                 updated_income.CreatedBy = Constants.Constants.USER;
                 updated_income.Username = model.Asset.Username;
@@ -343,7 +366,7 @@ namespace CashFlowManagement.Queries
                 asset.DisabledDate = DateTime.Now;
                 asset.DisabledBy = Constants.Constants.USER;
                 entities.Assets.Attach(asset);
-                entities.Entry(asset).State = System.Data.Entity.EntityState.Modified;
+                entities.Entry(asset).State = EntityState.Modified;
 
                 entities.Assets.Add(updated_asset);
             }
@@ -385,10 +408,6 @@ namespace CashFlowManagement.Queries
             }
             else if (model.Asset.AssetType == (int)Constants.Constants.ASSET_TYPE.STOCK)
             {
-                Assets updated_asset = model.Asset;
-                updated_asset.CreatedDate = DateTime.Now;
-                updated_asset.CreatedBy = Constants.Constants.USER;
-
                 Assets asset = entities.Assets.Where(x => x.Id == model.Asset.Id).FirstOrDefault();
                 StockTransactions transaction = entities.StockTransactions.Where(x => x.Id == model.Transaction.Id).FirstOrDefault();
                 transaction.DisabledDate = DateTime.Now;
@@ -403,8 +422,8 @@ namespace CashFlowManagement.Queries
                     TransactionDate = model.Transaction.TransactionDate,
                     TransactionType = transaction.TransactionType,
                     NumberOfShares = model.Transaction.NumberOfShares,
-                    SpotPrice = model.Transaction.SpotPrice,
-                    BrokerFee = model.Transaction.BrokerFee,
+                    SpotPrice = model.Transaction.NumberOfShares,
+                    BrokerFee = model.Transaction.NumberOfShares * model.Transaction.NumberOfShares * 0.0015,
                     ExpectedDividend = model.Transaction.ExpectedDividend,
                     Note = model.Transaction.Note,
                     CreatedDate = DateTime.Now,
@@ -416,11 +435,18 @@ namespace CashFlowManagement.Queries
                 {
                     updated_transaction.Liabilities.Add(liability);
                 }
+
+                Assets cash = entities.Assets.Where(x => x.Username.Equals(asset.Username) && x.Id == transaction.CashId).FirstOrDefault();
+                cash.DisabledDate = DateTime.Now;
+                cash.DisabledBy = Constants.Constants.SYSTEM;
+                entities.Assets.Attach(cash);
+                entities.Entry(cash).State = EntityState.Modified;
+
                 asset.StockTransactions.Add(updated_transaction); 
 
                 if(transaction.TransactionType == (int)Constants.Constants.TRANSACTION_TYPE.BUY || transaction.TransactionType == (int)Constants.Constants.TRANSACTION_TYPE.SELL)
                 {
-                    double changedAmount = transaction.Value - updated_transaction.Value;
+                    double changedAmount = transaction.Assets1.Value - transaction.TransactionType == (int)Constants.Constants.TRANSACTION_TYPE.BUY ? model.Transaction.Assets1.Value * -1 : model.Transaction.Assets1.Value;
 
                     Assets available_money = new Assets();
                     available_money.AssetName = "Tiền thay đổi cập nhật cổ phiếu " + asset.AssetName;
@@ -437,7 +463,18 @@ namespace CashFlowManagement.Queries
                     }
                     available_money.Username = asset.Username;
 
+                    Assets available_money_2 = new Assets();
+                    available_money_2.AssetName = transaction.TransactionType == (int)Constants.Constants.TRANSACTION_TYPE.SELL ? "Tiền mua cổ phiếu " : "Tiền bán cổ phiếu " + asset.AssetName;
+                    available_money_2.AssetType = (int)Constants.Constants.ASSET_TYPE.AVAILABLE_MONEY;
+                    available_money_2.CreatedBy = Constants.Constants.USER;
+                    available_money_2.CreatedDate = DateTime.Now;
+                    available_money_2.Value = transaction.TransactionType == (int)Constants.Constants.TRANSACTION_TYPE.SELL ? model.Transaction.Assets1.Value : model.Transaction.Assets1.Value * -1;
+                    available_money_2.Username = asset.Username;
+
+                    updated_transaction.Assets1 = available_money_2;
+
                     entities.Assets.Add(available_money);
+                    entities.Assets.Add(available_money_2);
 
                     var logs = entities.Log.Where(x => DbFunctions.TruncateTime(x.Date) >= updated_transaction.TransactionDate && x.Username.Equals(asset.Username));
                     foreach (var item in logs)
@@ -456,43 +493,53 @@ namespace CashFlowManagement.Queries
             return result;
         }
 
-        public static int DeleteAsset(int id)
+        public static int DeleteAsset(int id, int transactionId)
         {
             Entities entities = new Entities();
-            Assets asset = entities.Assets.Where(x => x.Id == id).FirstOrDefault();
-            asset.DisabledDate = DateTime.Now;
-            asset.DisabledBy = Constants.Constants.USER;
-
-            entities.Assets.Attach(asset);
-            var entry = entities.Entry(asset);
-            entry.Property(x => x.DisabledDate).IsModified = true;
-            entry.Property(x => x.DisabledBy).IsModified = true;
-
-            if (asset.AssetType != (int)Constants.Constants.ASSET_TYPE.INSURANCE && asset.AssetType != (int)Constants.Constants.ASSET_TYPE.STOCK)
+            if (transactionId == 0)
             {
-                Incomes income = entities.Incomes.Where(x => x.AssetId == id && !x.DisabledDate.HasValue).FirstOrDefault();
-                income.DisabledDate = DateTime.Now;
-                income.DisabledBy = Constants.Constants.USER;
+                Assets asset = entities.Assets.Where(x => x.Id == id).FirstOrDefault();
+                asset.DisabledDate = DateTime.Now;
+                asset.DisabledBy = Constants.Constants.USER;
 
-                entities.Incomes.Attach(income);
-                var entry_2 = entities.Entry(income);
-                entry_2.Property(x => x.DisabledDate).IsModified = true;
-                entry_2.Property(x => x.DisabledBy).IsModified = true;
+                entities.Assets.Attach(asset);
+                var entry = entities.Entry(asset);
+                entry.Property(x => x.DisabledDate).IsModified = true;
+                entry.Property(x => x.DisabledBy).IsModified = true;
+
+                if (asset.AssetType != (int)Constants.Constants.ASSET_TYPE.INSURANCE && asset.AssetType != (int)Constants.Constants.ASSET_TYPE.STOCK)
+                {
+                    Incomes income = entities.Incomes.Where(x => x.AssetId == id && !x.DisabledDate.HasValue).FirstOrDefault();
+                    income.DisabledDate = DateTime.Now;
+                    income.DisabledBy = Constants.Constants.USER;
+
+                    entities.Incomes.Attach(income);
+                    var entry_2 = entities.Entry(income);
+                    entry_2.Property(x => x.DisabledDate).IsModified = true;
+                    entry_2.Property(x => x.DisabledBy).IsModified = true;
+                }
+
+                IQueryable<Liabilities> liabilities = entities.Liabilities.Where(x => x.AssetId == asset.Id && !x.DisabledDate.HasValue);
+                foreach (var liability in liabilities)
+                {
+                    liability.DisabledDate = DateTime.Now;
+                    liability.DisabledBy = Constants.Constants.USER;
+                    entities.Liabilities.Attach(liability);
+                    var entry_3 = entities.Entry(liability);
+                    entry_3.Property(x => x.DisabledDate).IsModified = true;
+                    entry_3.Property(x => x.DisabledBy).IsModified = true;
+                }
+
+                Log log = LogQueries.CreateLog((int)Constants.Constants.LOG_TYPE.DELETE, "tài sản \"" + asset.AssetName + "\"", asset.Username, asset.Value, DateTime.Now);
+                entities.Log.Add(log);
             }
-
-            IQueryable<Liabilities> liabilities = entities.Liabilities.Where(x => x.AssetId == asset.Id && !x.DisabledDate.HasValue);
-            foreach (var liability in liabilities)
-            {
-                liability.DisabledDate = DateTime.Now;
-                liability.DisabledBy = Constants.Constants.USER;
-                entities.Liabilities.Attach(liability);
-                var entry_3 = entities.Entry(liability);
-                entry_3.Property(x => x.DisabledDate).IsModified = true;
-                entry_3.Property(x => x.DisabledBy).IsModified = true;
+            else {
+                StockTransactions transaction = entities.StockTransactions.Where(x => x.Id == transactionId).FirstOrDefault();
+                transaction.DisabledDate = DateTime.Now;
+                transaction.DisabledBy = Constants.Constants.USER;
+                entities.StockTransactions.Attach(transaction);
+                entities.Entry(transaction).State = EntityState.Modified;
             }
-
-            Log log = LogQueries.CreateLog((int)Constants.Constants.LOG_TYPE.DELETE, "tài sản \"" + asset.AssetName + "\"", asset.Username, asset.Value, DateTime.Now);
-            entities.Log.Add(log);
 
             int result = entities.SaveChanges();
             return result;
@@ -582,6 +629,7 @@ namespace CashFlowManagement.Queries
                         available_money.Value = model.Transaction.NumberOfShares * model.Transaction.SpotPrice * (1 + 0.0025);
                         available_money.Username = asset.Username;
 
+                        transaction.Assets1 = available_money;
                         entities.Assets.Add(available_money);
 
                         Log log = LogQueries.CreateLog((int)Constants.Constants.LOG_TYPE.SELL, "cổ phiếu " + asset.AssetName , asset.Username, transaction.Value, DateTime.Now);
@@ -725,6 +773,7 @@ namespace CashFlowManagement.Queries
                 {
                     Assets cashflow = new Assets();
                     cashflow.AssetName = "CashFlow:" + DateTime.Now.ToString("MM/yyyy");
+                    cashflow.StartDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
                     cashflow.AssetType = (int)Constants.Constants.ASSET_TYPE.AVAILABLE_MONEY;
                     cashflow.CreatedDate = DateTime.Now;
                     cashflow.CreatedBy = Constants.Constants.USER;

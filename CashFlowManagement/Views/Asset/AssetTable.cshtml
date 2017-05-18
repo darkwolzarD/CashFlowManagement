@@ -82,7 +82,8 @@
                         <th>Thu nhập năm</th>
                         <th>Tổng vốn</th>
                         <th>Lãi suất tiền gửi</th>
-                        <th>Participant bank</th>
+                        <th>Kiểu nhận lãi</th>
+                        <th>Kỳ hạn</th>
                         <th>Ghi chú</th>
                         <th></th>
                     }
@@ -252,7 +253,7 @@
                                             <span class="glyphicon glyphicon-pencil"></span>
                                             Cập nhật
                                         </button>
-                                        <button class="btn btn-danger delete-asset" data-asset-id="@item.Asset.Id">
+                                        <button class="btn btn-danger delete-asset" data-asset-id="@item.Asset.Id" data-transaction-id="@transaction.Id">
                                             <span class="glyphicon glyphicon-remove"></span>
                                             Xóa
                                         </button>
@@ -439,13 +440,16 @@
                                     @item.Asset.AssetName
                                     @if (item.Asset.ObtainedBy.HasValue)
                                     {
-                                        if (item.Asset.ObtainedBy == (int)Constants.OBTAIN_BY.CREATE)
+                                        if (item.Asset.AssetType == (int)Constants.ASSET_TYPE.REAL_ESTATE)
                                         {
+                                            if (item.Asset.ObtainedBy == (int)Constants.OBTAIN_BY.CREATE)
+                                            {
                                             <p style="color: red;">Tài sản khai báo</p>
-                                        }
-                                        else if (item.Asset.ObtainedBy == (int)Constants.OBTAIN_BY.BUY)
-                                        {
+                                            }
+                                            else if (item.Asset.ObtainedBy == (int)Constants.OBTAIN_BY.BUY)
+                                            {
                                             <p style="color: red;">Tài sản mua</p>
+                                            }
                                         }
                                     }
                                 </td>
@@ -455,11 +459,26 @@
                                 <td colspan="@(Model.Type == (int)Constants.ASSET_TYPE.REAL_ESTATE || Model.Type == (int)Constants.ASSET_TYPE.BUSINESS ? 2 : 1)">@FormatUtility.DisplayPercentageForNumber(item.Income.Value / item.Asset.Value * 1200)</td>
                                 @if (item.Asset.AssetType == (int)Constants.ASSET_TYPE.BANK_DEPOSIT)
                                 {
-                                    <td>@item.Asset.ParticipantBank</td>
+                                    <td>
+                                        @if(item.Asset.ObtainedBy == (int)Constants.INTEREST_OBTAIN_TYPE.ORIGIN)
+                                        {
+                                            @Html.Raw("Lãi nhập gốc")
+                                        }
+                                        else if (item.Asset.ObtainedBy == (int)Constants.INTEREST_OBTAIN_TYPE.START)
+                                        {
+                                            @Html.Raw("Rút lãi đầu kỳ")
+                                        }
+                                        else if (item.Asset.ObtainedBy == (int)Constants.INTEREST_OBTAIN_TYPE.END)
+                                        {
+                                            @Html.Raw("Rút lãi cuối kỳ")
+                                        }
+                                    </td>
+                                    <td>@item.Asset.Term</td>
                                     <td>@item.Asset.Note</td>
                                 }
                                 <td class="text-center" colspan="@(Model.Type == (int)Constants.ASSET_TYPE.REAL_ESTATE || Model.Type == (int)Constants.ASSET_TYPE.BUSINESS ? 4 : 1)" width="160px">
-                                    @if (!item.Asset.ObtainedBy.HasValue || (item.Asset.ObtainedBy.HasValue && item.Asset.ObtainedBy.Value == (int)Constants.OBTAIN_BY.CREATE))
+                                    @if (!item.Asset.ObtainedBy.HasValue || (item.Asset.AssetType == (int)Constants.ASSET_TYPE.REAL_ESTATE &&
+                                        item.Asset.ObtainedBy.HasValue && item.Asset.ObtainedBy.Value == (int)Constants.OBTAIN_BY.CREATE) || item.Asset.AssetType == (int)Constants.ASSET_TYPE.BANK_DEPOSIT)
                                     {
                                         <button class="btn btn-success update-asset" data-asset-id="@item.Asset.Id">
                                             <span class="glyphicon glyphicon-pencil"></span>
@@ -672,7 +691,7 @@
             {
                 Asset = new Assets { AssetType = Model.Type },
                 Income = new Incomes(),
-                CurrentAvailableMoney = AssetQueries.CheckAvailableMoney("test", DateTime.Now)
+                CurrentAvailableMoney = AssetQueries.CheckAvailableMoney(UserQueries.GetCurrentUsername(), DateTime.Now)
             }); }
     </div>
             }

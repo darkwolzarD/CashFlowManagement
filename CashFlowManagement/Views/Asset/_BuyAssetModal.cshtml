@@ -118,7 +118,7 @@
                         <div class="form-group">
                             <label class="control-label col-sm-3">Thành tiền:</label>
                             <div class="col-sm-9">
-                                <input class="form-control input-mask" id="BuyValue" readonly/>
+                                @Html.TextBoxFor(x => x.Transaction.Value, new { @Value = string.Empty, @type = "text", @class = "form-control input-mask" })
                             </div>
                         </div>
                         <div class="form-group">
