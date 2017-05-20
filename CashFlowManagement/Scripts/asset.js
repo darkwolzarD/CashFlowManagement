@@ -436,21 +436,21 @@
         var interestRate = $("#liability-table input[name='InterestRate']").val();
         var startDate = $("#liability-table input[name='StartDate']").val();
         var endDate = $("#liability-table input[name='EndDate']").val();
-        var newRow = "<tr>";
+        var newRow = "<tr class='" + liabilityCount + "'>";
         newRow += "<td name='Asset.Liabilities[" + liabilityCount + "].Name'>" + name + "</td>";
         newRow += "<td name='Asset.Liabilities[" + liabilityCount + "].Value'>" + value + "</td>";
         newRow += "<td name='Asset.Liabilities[" + liabilityCount + "].InterestType'>" + interestType + "</td>";
         newRow += "<td name='Asset.Liabilities[" + liabilityCount + "].InterestRate'>" + interestRate + "</td>";
         newRow += "<td name='Asset.Liabilities[" + liabilityCount + "].StartDate'>" + startDate + "</td>";
         newRow += "<td name='Asset.Liabilities[" + liabilityCount + "].EndDate'>" + endDate + "</td>";
-        newRow += "<td></td>";
+        newRow += "<td class='text-center'><button type='button' class='btn btn-danger delete-lib'>Xóa</button></td>";
         newRow += "</tr>";
         RemoveMask();
         name = $("#liability-table input[name='Name']").val();
         value = $("#liability-table input[name='Value']").val();
         interestType = $("#liability-table select[name='InterestType']").val();
         interestRate = $("#liability-table input[name='InterestRate']").val();
-        var dataRow = "<tr class='hidden'>";
+        var dataRow = "<tr class='" + liabilityCount + " hidden'>";
         dataRow += "<td><input name='Asset.Liabilities[" + liabilityCount + "].Name' value='" + name + "'/></td>";
         dataRow += "<td><input name='Asset.Liabilities[" + liabilityCount + "].Value' value='" + value + "'/></td>";
         dataRow += "<td><input name='Asset.Liabilities[" + liabilityCount + "].InterestType' value='" + interestType + "'/></td>";
@@ -463,6 +463,41 @@
         $("#liability-table tbody").append(newRow);
         $("#liability-table tbody").append(dataRow);
         liabilityCount++;
+    })
+
+    $(document).on("click", ".delete-lib", function () {
+        var currentCount = $(this).closest("tr").attr("class");
+        $("#liability-table ." + currentCount).remove();
+        liabilityCount -= 1;
+        var count = 0;
+        $("#liability-table tbody tr").each(function (idx, row) {
+            var cls = $(row).attr("class");
+            var rowClass = $(row).attr("class");
+            if (rowClass != undefined) {
+                rowClass = rowClass.split(" ")[0];
+                $(row).find("td").each(function (index, element) {
+                    if ($(row).hasClass("hidden")) {
+                        var name = $(element).find("input").attr("name");
+                        if (name != undefined) {
+                            name = name.replace(rowClass, count);
+                            $(element).find("input").attr("name", name);
+                            $(row).removeClass().addClass("" + count).addClass("hidden");
+                        }
+                    }
+                    else {
+                        var name = $(element).attr("name");
+                        if (name != undefined) {
+                            name = name.replace(rowClass, count);
+                            $(element).attr("name", name);
+                            $(row).removeClass(rowClass).addClass("" + count);
+                        }
+                    }
+                })
+                if ($(row).hasClass("hidden")) {
+                    count++;
+                }
+            }
+        });
     })
 
     $(document).on("click", ".update-liability", function () {
