@@ -23,7 +23,7 @@
                             </div>
                         </div>
                     }
-                    else
+                    else if (Model.Asset.AssetType == (int)Constants.ASSET_TYPE.STOCK)
                     {
                         <div class="form-group">
                             <label class="control-label col-sm-3">Cổ phiếu bán:</label>
@@ -67,6 +67,17 @@
                             <label class="control-label col-sm-3">Ghi chú: </label>
                             <div class="col-sm-9">
                                 @Html.TextBoxFor(x => x.Transaction.Note, new { @type = "text", @class = "form-control" })
+                            </div>
+                        </div>
+                    }
+                    else if (Model.Asset.AssetType == (int)Constants.ASSET_TYPE.BANK_DEPOSIT)
+                    {
+                        <div class="form-group">
+                            <label class="control-label col-sm-3">Số tiền rút:</label>
+                            <div class="col-sm-9">
+                                @Html.HiddenFor(x => x.Asset.Id)
+                                @Html.HiddenFor(x => x.Asset.AssetType)
+                                @Html.TextBoxFor(x => x.Asset.Value, new { @Value = 0, @type = "text", @class = "form-control input-mask" })
                             </div>
                         </div>
                     }

@@ -50,7 +50,7 @@
 <div class="background">
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#create-new-asset-modal">
         <span class="glyphicon glyphicon-plus"></span>
-        Tạo mới
+        Khai báo mới
     </button>
     @if (Model.Type == (int)Constants.ASSET_TYPE.REAL_ESTATE || Model.Type == (int)Constants.ASSET_TYPE.STOCK)
     {
@@ -58,6 +58,17 @@
             <span class="glyphicon glyphicon-home"></span>
             Mua mới
         </button>
+    }
+    else if (Model.Type == (int)Constants.ASSET_TYPE.BANK_DEPOSIT)
+    {
+        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#buy-new-asset-modal">
+            <span class="glyphicon glyphicon-home"></span>
+            Mở sổ tiết kiệm
+        </button>
+    }
+
+    @if (Model.Type == (int)Constants.ASSET_TYPE.STOCK)
+    {
         <button type="button" class="btn btn-warning sell-asset-toggle">
             <span class="glyphicon glyphicon-usd"></span>
             Bán cổ phiếu
@@ -77,14 +88,16 @@
                 <tr>
                     @if (Model.Type == (int)Constants.ASSET_TYPE.BANK_DEPOSIT)
                     {
-                        <th>Tài khoản tiết kiệm</th>
-                        <th>Thu nhập tháng</th>
-                        <th>Thu nhập năm</th>
-                        <th>Tổng vốn</th>
-                        <th>Lãi suất tiền gửi</th>
-                        <th>Kiểu nhận lãi</th>
-                        <th>Kỳ hạn</th>
-                        <th>Ghi chú</th>
+                        <th class="text-center">Tài khoản tiết kiệm</th>
+                        <th class="text-center">Ngày gửi</th>
+                        <th class="text-center">Ngày đáo hạn</th>
+                        <th class="text-center">Thu nhập tháng</th>
+                        <th class="text-center">Thu nhập năm</th>
+                        <th class="text-center">Tổng vốn</th>
+                        <th class="text-center">Lãi suất tiền gửi</th>
+                        <th class="text-center">Kiểu nhận lãi</th>
+                        <th class="text-center">Kỳ hạn</th>
+                        <th class="text-center">Ghi chú</th>
                         <th></th>
                     }
                     else if (Model.Type == (int)Constants.ASSET_TYPE.REAL_ESTATE)
@@ -213,18 +226,18 @@
                             foreach (var transaction in item.Asset.StockTransactions.Where(x => !x.DisabledDate.HasValue))
                             {
                                 @*<tr>
-                                    <th class="text-center">Ngày giao dịch</th>
-                                    <th class="text-center">Loại giao dịch</th>
-                                    <th class="text-center">Số lượng cổ phiếu</th>
-                                    <th class="text-center">Giá lúc mua bán</th>
-                                    <th class="text-center">Trung bình giá giao dịch</th>
-                                    <th class="text-center">Phí môi giới</th>
-                                    <th class="text-center">Tổng giá trị vốn</th>
-                                    <th class="text-center">Cổ tức mong đợi</th>
-                                    <th class="text-center">Ghi chú</th>
-                                    <th class="text-center" colspan="5">Chỉnh sửa</th>
-                                    <th class="text-center"><strong></strong></th>
-                                </tr>*@
+                                        <th class="text-center">Ngày giao dịch</th>
+                                        <th class="text-center">Loại giao dịch</th>
+                                        <th class="text-center">Số lượng cổ phiếu</th>
+                                        <th class="text-center">Giá lúc mua bán</th>
+                                        <th class="text-center">Trung bình giá giao dịch</th>
+                                        <th class="text-center">Phí môi giới</th>
+                                        <th class="text-center">Tổng giá trị vốn</th>
+                                        <th class="text-center">Cổ tức mong đợi</th>
+                                        <th class="text-center">Ghi chú</th>
+                                        <th class="text-center" colspan="5">Chỉnh sửa</th>
+                                        <th class="text-center"><strong></strong></th>
+                                    </tr>*@
                                 <tr>
                                     <td>@transaction.TransactionDate.ToString("dd/MM/yyyy")</td>
                                     <td style="color: red;">
@@ -391,6 +404,11 @@
                     {
                         <tr>
                             <td><strong>Tổng</strong></td>
+                            @if (Model.Type == (int)Constants.ASSET_TYPE.BANK_DEPOSIT)
+                            {
+                                <td></td>
+                                <td></td>
+                            }
                             <td style="color: red;" colspan="@(Model.Type == (int)Constants.ASSET_TYPE.REAL_ESTATE || Model.Type == (int)Constants.ASSET_TYPE.BUSINESS ? 2 : 1)"><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.TotalMonthlyIncome)</strong></td>
                             <td style="color: red;" colspan="@(Model.Type == (int)Constants.ASSET_TYPE.REAL_ESTATE || Model.Type == (int)Constants.ASSET_TYPE.BUSINESS ? 2 : 1)"><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.TotalMonthlyIncome * 12)</strong></td>
                             <td style="color: red;" colspan="@(Model.Type == (int)Constants.ASSET_TYPE.REAL_ESTATE || Model.Type == (int)Constants.ASSET_TYPE.BUSINESS ? 2 : 1)"><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.TotalValue)</strong></td>
@@ -444,15 +462,20 @@
                                         {
                                             if (item.Asset.ObtainedBy == (int)Constants.OBTAIN_BY.CREATE)
                                             {
-                                            <p style="color: red;">Tài sản khai báo</p>
+                                                <p style="color: red;">Tài sản khai báo</p>
                                             }
                                             else if (item.Asset.ObtainedBy == (int)Constants.OBTAIN_BY.BUY)
                                             {
-                                            <p style="color: red;">Tài sản mua</p>
+                                                <p style="color: red;">Tài sản mua</p>
                                             }
                                         }
                                     }
                                 </td>
+                                @if (item.Asset.AssetType == (int)Constants.ASSET_TYPE.BANK_DEPOSIT)
+                                {
+                                    <td>@item.Asset.StartDate.Value.ToString("dd/MM/yyyy")</td>
+                                    <td>@item.Asset.EndDate.Value.ToString("dd/MM/yyyy")</td>
+                                }
                                 <td colspan="@(Model.Type == (int)Constants.ASSET_TYPE.REAL_ESTATE || Model.Type == (int)Constants.ASSET_TYPE.BUSINESS ? 2 : 1)">@FormatUtility.DisplayThousandSeparatorsForNumber(item.Income.Value)</td>
                                 <td colspan="@(Model.Type == (int)Constants.ASSET_TYPE.REAL_ESTATE || Model.Type == (int)Constants.ASSET_TYPE.BUSINESS ? 2 : 1)">@FormatUtility.DisplayThousandSeparatorsForNumber(item.Income.Value * 12)</td>
                                 <td colspan="@(Model.Type == (int)Constants.ASSET_TYPE.REAL_ESTATE || Model.Type == (int)Constants.ASSET_TYPE.BUSINESS ? 2 : 1)">@FormatUtility.DisplayThousandSeparatorsForNumber(item.Asset.Value)</td>
@@ -460,7 +483,7 @@
                                 @if (item.Asset.AssetType == (int)Constants.ASSET_TYPE.BANK_DEPOSIT)
                                 {
                                     <td>
-                                        @if(item.Asset.ObtainedBy == (int)Constants.INTEREST_OBTAIN_TYPE.ORIGIN)
+                                        @if (item.Asset.ObtainedBy == (int)Constants.INTEREST_OBTAIN_TYPE.ORIGIN)
                                         {
                                             @Html.Raw("Lãi nhập gốc")
                                         }
@@ -476,9 +499,9 @@
                                     <td>@item.Asset.Term</td>
                                     <td>@item.Asset.Note</td>
                                 }
-                                <td class="text-center" colspan="@(Model.Type == (int)Constants.ASSET_TYPE.REAL_ESTATE || Model.Type == (int)Constants.ASSET_TYPE.BUSINESS ? 4 : 1)" width="160px">
+                                <td class="text-center" colspan="@(Model.Type == (int)Constants.ASSET_TYPE.REAL_ESTATE || Model.Type == (int)Constants.ASSET_TYPE.BUSINESS ? 4 : 1)" width="300px">
                                     @if (!item.Asset.ObtainedBy.HasValue || (item.Asset.AssetType == (int)Constants.ASSET_TYPE.REAL_ESTATE &&
-                                        item.Asset.ObtainedBy.HasValue && item.Asset.ObtainedBy.Value == (int)Constants.OBTAIN_BY.CREATE) || item.Asset.AssetType == (int)Constants.ASSET_TYPE.BANK_DEPOSIT)
+                            item.Asset.ObtainedBy.HasValue && item.Asset.ObtainedBy.Value == (int)Constants.OBTAIN_BY.CREATE) || item.Asset.AssetType == (int)Constants.ASSET_TYPE.BANK_DEPOSIT)
                                     {
                                         <button class="btn btn-success update-asset" data-asset-id="@item.Asset.Id">
                                             <span class="glyphicon glyphicon-pencil"></span>
@@ -499,6 +522,14 @@
                                             <span class="glyphicon glyphicon-usd"></span>
                                             Bán
                                         </button>
+                                    }
+                                    @if (item.Asset.AssetType == (int)Constants.ASSET_TYPE.BANK_DEPOSIT)
+                                    {
+                                        <button class="btn btn-warning sell-asset-toggle" data-asset-id="@item.Asset.Id">
+                                            <span class="glyphicon glyphicon-usd"></span>
+                                            Rút tiền
+                                        </button>
+
                                     }
                                 </td>
                                 @if (item.Asset.AssetType == (int)Constants.ASSET_TYPE.REAL_ESTATE || item.Asset.AssetType == (int)Constants.ASSET_TYPE.BUSINESS)

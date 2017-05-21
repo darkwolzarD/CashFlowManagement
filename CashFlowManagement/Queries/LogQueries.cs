@@ -92,11 +92,15 @@ namespace CashFlowManagement.Queries
             {
                 content += "Cập nhật ";
             }
+            else if (type == (int)Constants.Constants.LOG_TYPE.WITHDRAW)
+            {
+                content += "Rút ";
+            }
 
             content += logContent;
             Log log = new Log
             {
-                AvailableMoney = type == (int)Constants.Constants.LOG_TYPE.INCOME || type == (int)Constants.Constants.LOG_TYPE.SELL ? currentAvailableMoney + value :
+                AvailableMoney = type == (int)Constants.Constants.LOG_TYPE.INCOME || type == (int)Constants.Constants.LOG_TYPE.SELL || type == (int)Constants.Constants.LOG_TYPE.WITHDRAW ? currentAvailableMoney + value :
                                  type == (int)Constants.Constants.LOG_TYPE.EXPENSE || type == (int)Constants.Constants.LOG_TYPE.BUY ? currentAvailableMoney - value : currentAvailableMoney,
                 CreatedBy = Constants.Constants.SYSTEM,
                 CreatedDate = DateTime.Now,

@@ -11,11 +11,12 @@ namespace CashFlowManagement
         public void Configuration(IAppBuilder app)
         {
             ConfigureAuth(app);
-            GlobalConfiguration.Configuration.UseSqlServerStorage("Server=darkwolzarD\\SQLEXPRESS;Database=CashFlowManagement_V2;User Id=sa;Password=zxcvbnm;");
+            GlobalConfiguration.Configuration.UseSqlServerStorage("Server=ctbinh-pc;Database=CashFlowManagement_V2;User Id=sa;Password=123456;");
 
             app.UseHangfireDashboard();
             app.UseHangfireServer();
             RecurringJob.AddOrUpdate(() => AssetQueries.CreateCashFlowPerMonth(), Cron.Daily);
+            RecurringJob.AddOrUpdate(() => AssetQueries.BankDepositMaturity(), "0 10 * * *");
         }
     }
 }

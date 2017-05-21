@@ -28,6 +28,7 @@ namespace CashFlowManagement.EntityModel
         public string AssetName { get; set; }
         public double Value { get; set; }
         public Nullable<System.DateTime> StartDate { get; set; }
+        public Nullable<System.DateTime> EndDate { get; set; }
         public System.DateTime CreatedDate { get; set; }
         public Nullable<System.DateTime> DisabledDate { get; set; }
         public string CreatedBy { get; set; }
@@ -38,7 +39,7 @@ namespace CashFlowManagement.EntityModel
         public string Username { get; set; }
         public Nullable<int> ObtainedBy { get; set; }
         public Nullable<double> InterestRate { get; set; }
-        public string Term { get; set; }
+        public Nullable<int> Term { get; set; }
         public Nullable<int> CashId { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

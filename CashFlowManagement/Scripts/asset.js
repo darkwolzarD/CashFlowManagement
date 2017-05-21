@@ -52,7 +52,7 @@
 
     $(document).on("shown.bs.modal", "#create-new-asset-modal, #update-asset-modal", function () {
         MaskInput();
-        if (assetType == 5) {
+        if (assetType == 5 || assetType == 3) {
             InitiateDatePicker2();
             var stock = $("#update-asset-modal #Asset_AssetName").val();
             if (stock != null) {
@@ -1005,4 +1005,22 @@
 
     //    MaskInput();
     //})
+
+    $(document).on("change", "#create-new-asset-modal #Asset_StartDate, #create-new-asset-modal #Asset_Term", function () {
+        RemoveMask();
+        var startDate = moment($("#create-new-asset-modal #Asset_StartDate").val(), "DD/MM/YYYY");
+        var term = parseInt($("#create-new-asset-modal #Asset_Term").val());
+        var endDate = startDate.add(term, 'months');
+        $("#create-new-asset-modal #Asset_EndDate").val(endDate.format("DD/MM/YYYY"));
+        MaskInput();
+    })
+
+    $(document).on("change", "#update-asset-modal #Asset_StartDate, #update-asset-modal #Asset_Term", function () {
+        RemoveMask();
+        var startDate = moment($("#update-asset-modal #Asset_StartDate").val(), "DD/MM/YYYY");
+        var term = parseInt($("#update-asset-modal #Asset_Term").val());
+        var endDate = startDate.add(term, 'months');
+        $("#update-asset-modal #Asset_EndDate").val(endDate.format("DD/MM/YYYY"));
+        MaskInput();
+    })
 })

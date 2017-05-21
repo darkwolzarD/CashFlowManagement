@@ -68,7 +68,7 @@ namespace CashFlowManagement.Controllers
             AssetViewModel model = new AssetViewModel();
             model.Asset = new Assets();
             model.Asset.AssetType = assetType;
-            if (assetType == (int)Constants.Constants.ASSET_TYPE.REAL_ESTATE)
+            if (assetType == (int)Constants.Constants.ASSET_TYPE.REAL_ESTATE || assetType == (int)Constants.Constants.ASSET_TYPE.BANK_DEPOSIT)
             {
                 model.Asset.Id = assetId;
             }

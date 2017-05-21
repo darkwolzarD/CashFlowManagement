@@ -144,6 +144,8 @@ namespace CashFlowManagement.Queries
                 {
                     income = new Incomes();
                     income.Value = asset.Value * asset.InterestRate.Value / 1200;
+                    income.StartDate = asset.StartDate.Value;
+                    income.EndDate = asset.EndDate.Value;
                 }
                 income.CreatedDate = DateTime.Now;
                 income.IncomeType = type;
@@ -356,6 +358,8 @@ namespace CashFlowManagement.Queries
                 {
                     updated_income = new Incomes(); 
                     updated_income.Value = model.Asset.Value * model.Asset.InterestRate.Value / 1200;
+                    updated_income.StartDate = model.Asset.StartDate.Value;
+                    updated_income.EndDate = model.Asset.EndDate.Value;
                 }
                 updated_income.IncomeType = asset.Incomes.FirstOrDefault().IncomeType;
                 updated_income.CreatedDate = DateTime.Now;
@@ -551,7 +555,122 @@ namespace CashFlowManagement.Queries
         public static int SellAsset(AssetViewModel model)
         {
             Entities entities = new Entities();
-            if (model.Asset.AssetType == (int)Constants.Constants.ASSET_TYPE.REAL_ESTATE)
+            if (model.Asset.AssetType == (int)Constants.Constants.ASSET_TYPE.BANK_DEPOSIT)
+            {
+                Assets asset = entities.Assets.Where(x => x.Id == model.Asset.Id).FirstOrDefault();
+                if (model.Asset.Value == 0)
+                {
+                    return -1;
+                }
+                else
+                {
+                    if (asset.Value < model.Asset.Value)
+                    {
+                        return -2;
+                    }
+                    else if (asset.Value > model.Asset.Value)
+                    {
+                        asset.DisabledDate = DateTime.Now;
+                        asset.DisabledBy = Constants.Constants.USER;
+                        entities.Assets.Attach(asset);
+                        entities.Entry(asset).State = EntityState.Modified;
+
+                        Assets new_bank_deposit = new Assets();
+                        new_bank_deposit.AssetName = asset.AssetName;
+                        new_bank_deposit.AssetType = (int)Constants.Constants.ASSET_TYPE.BANK_DEPOSIT;
+                        new_bank_deposit.CreatedBy = Constants.Constants.USER;
+                        new_bank_deposit.CreatedDate = DateTime.Now;
+                        new_bank_deposit.EndDate = asset.EndDate;
+                        new_bank_deposit.InterestRate = asset.InterestRate;
+                        new_bank_deposit.Note = asset.Note;
+                        new_bank_deposit.ObtainedBy = asset.ObtainedBy;
+                        new_bank_deposit.StartDate = asset.StartDate;
+                        new_bank_deposit.Term = asset.Term;
+                        new_bank_deposit.Username = asset.Username;
+                        new_bank_deposit.Value = asset.Value - model.Asset.Value;
+
+                        if (asset.ObtainedBy == (int)Constants.Constants.INTEREST_OBTAIN_TYPE.ORIGIN)
+                        {
+
+                        }
+                        else if (asset.ObtainedBy == (int)Constants.Constants.INTEREST_OBTAIN_TYPE.START)
+                        {
+
+                        }
+                        else if (asset.ObtainedBy == (int)Constants.Constants.INTEREST_OBTAIN_TYPE.END)
+                        {
+                            Incomes income = entities.Incomes.Where(x => x.AssetId == asset.Id && !x.DisabledDate.HasValue).FirstOrDefault();
+                            income.DisabledDate = DateTime.Now;
+                            income.DisabledBy = Constants.Constants.USER;
+                            entities.Incomes.Attach(income);
+                            entities.Entry(income).State = EntityState.Modified;
+
+                            Incomes new_income = new Incomes();
+                            new_income.CreatedBy = Constants.Constants.USER;
+                            new_income.CreatedDate = DateTime.Now;
+                            new_income.EndDate = new_bank_deposit.EndDate;
+                            new_income.IncomeType = income.IncomeType;
+                            new_income.Note = income.Note;
+                            new_income.StartDate = new_bank_deposit.StartDate.Value;
+                            new_income.Username = new_bank_deposit.Username;
+                            new_income.Value = new_bank_deposit.Value * new_bank_deposit.InterestRate.Value / 1200;
+
+                            Assets availableMoney = new Assets();
+                            availableMoney.AssetName = "Tiền rút tiết kiệm " + asset.AssetName;
+                            availableMoney.AssetType = (int)Constants.Constants.ASSET_TYPE.AVAILABLE_MONEY;
+                            availableMoney.CreatedDate = DateTime.Now;
+                            availableMoney.CreatedBy = Constants.Constants.USER;
+                            availableMoney.Username = asset.Username;
+                            availableMoney.Value = model.Asset.Value;
+
+                            asset.Assets2 = availableMoney;      //cashID do ban tai san//
+                            entities.Assets.Add(availableMoney);
+
+                            new_bank_deposit.Incomes.Add(new_income);
+                            entities.Incomes.Add(new_income);
+                            entities.Assets.Add(new_bank_deposit);
+
+                            Log log = LogQueries.CreateLog((int)Constants.Constants.LOG_TYPE.WITHDRAW, "tiền tiết kiệm " + asset.AssetName, asset.Username, model.Asset.Value, DateTime.Now);
+                            Log log_2 = LogQueries.CreateLog((int)Constants.Constants.LOG_TYPE.INCOME, "tiền rút tiết kiệm " + asset.AssetName, asset.Username, model.Asset.Value, DateTime.Now);
+                            entities.Log.Add(log);
+                            entities.Log.Add(log_2);
+                        }
+                    }
+                    else    //(asset.Value == model.Asset.Value)//                               
+                    {
+                        asset.DisabledDate = DateTime.Now;
+                        asset.DisabledBy = Constants.Constants.USER;
+                        entities.Assets.Attach(asset);
+                        entities.Entry(asset).State = EntityState.Modified;
+
+                        Incomes income = entities.Incomes.Where(x => x.AssetId == asset.Id && !x.DisabledDate.HasValue).FirstOrDefault();
+                        income.DisabledDate = DateTime.Now;
+                        income.DisabledBy = Constants.Constants.USER;
+                        entities.Incomes.Attach(income);
+                        entities.Entry(income).State = EntityState.Modified;
+
+                        Assets availableMoney = new Assets();
+                        availableMoney.AssetName = "Tiền rút tiết kiệm " + asset.AssetName;
+                        availableMoney.AssetType = (int)Constants.Constants.ASSET_TYPE.AVAILABLE_MONEY;
+                        availableMoney.CreatedDate = DateTime.Now;
+                        availableMoney.CreatedBy = Constants.Constants.USER;
+                        availableMoney.Username = asset.Username;
+
+                        double non_term_interest_rate = 0;
+                        double non_term_interest_money = model.Asset.Value * non_term_interest_rate;
+
+                        availableMoney.Value = model.Asset.Value + non_term_interest_money;
+
+                        asset.Assets2 = availableMoney;
+
+                        Log log = LogQueries.CreateLog((int)Constants.Constants.LOG_TYPE.WITHDRAW, "tiền tiết kiệm " + asset.AssetName, asset.Username, model.Asset.Value, DateTime.Now);
+                        Log log_2 = LogQueries.CreateLog((int)Constants.Constants.LOG_TYPE.INCOME, "tiền rút tiết kiệm " + asset.AssetName, asset.Username, model.Asset.Value, DateTime.Now);
+                        entities.Log.Add(log);
+                        entities.Log.Add(log_2);
+                    }
+                }
+            }
+            else if (model.Asset.AssetType == (int)Constants.Constants.ASSET_TYPE.REAL_ESTATE)
             {
                 Assets asset = entities.Assets.Where(x => x.Id == model.Asset.Id).FirstOrDefault();
                 asset.DisabledDate = DateTime.Now;
@@ -791,6 +910,61 @@ namespace CashFlowManagement.Queries
                 }
             }
             int result = entities.SaveChanges();
+        }
+
+        public static void BankDepositMaturity()
+        {
+            Entities entities = new Entities();
+            DateTime current = DateTime.Now.Date;
+            var bankDeposits = entities.Assets.Where(x => x.AssetType == (int)Constants.Constants.ASSET_TYPE.BANK_DEPOSIT
+                                                    && !x.DisabledDate.HasValue);
+            foreach (var bankDeposit in bankDeposits)
+            {
+                if(bankDeposit.EndDate.Value.Date.Equals(current))
+                {
+                    bankDeposit.DisabledDate = DateTime.Now;
+                    bankDeposit.DisabledBy = Constants.Constants.SYSTEM;
+                    entities.Assets.Attach(bankDeposit);
+                    entities.Entry(bankDeposit).State = EntityState.Modified;
+
+                    Assets new_deposit = new Assets();
+                    new_deposit.AssetName = bankDeposit.AssetName;
+                    new_deposit.AssetType = bankDeposit.AssetType;
+                    new_deposit.CreatedBy = Constants.Constants.SYSTEM;
+                    new_deposit.CreatedDate = DateTime.Now;
+                    new_deposit.StartDate = bankDeposit.EndDate;
+                    new_deposit.EndDate = new_deposit.StartDate.Value.AddMonths(bankDeposit.Term.Value);
+                    new_deposit.InterestRate = bankDeposit.InterestRate;
+                    new_deposit.Note = bankDeposit.Note;
+                    new_deposit.ObtainedBy = bankDeposit.ObtainedBy;
+                    new_deposit.Term = bankDeposit.Term;
+                    new_deposit.CashId = bankDeposit.CashId;
+                    new_deposit.Username = bankDeposit.Username;
+                    new_deposit.Value = bankDeposit.Value * (1 + bankDeposit.Term.Value * bankDeposit.InterestRate.Value / 1200);
+
+                    Incomes income = entities.Incomes.Where(x => x.AssetId == bankDeposit.Id && !x.DisabledDate.HasValue).FirstOrDefault();
+                    income.DisabledDate = DateTime.Now;
+                    income.DisabledBy = Constants.Constants.SYSTEM;
+                    entities.Incomes.Attach(income);
+                    entities.Entry(income).State = EntityState.Modified;
+
+                    Incomes new_income = new Incomes();
+                    new_income.CreatedBy = Constants.Constants.SYSTEM;
+                    new_income.CreatedDate = DateTime.Now;
+                    new_income.EndDate = new_deposit.EndDate;
+                    new_income.IncomeType = (int)Constants.Constants.INCOME_TYPE.BANK_DEPOSIT_INCOME;
+                    new_income.StartDate = new_deposit.StartDate.Value;
+                    new_income.Username = new_deposit.Username;
+                    new_income.Value = new_deposit.Value * new_deposit.InterestRate.Value / 1200;
+
+                    new_deposit.Incomes.Add(new_income);
+
+                    entities.Assets.Add(new_deposit);
+                    entities.Incomes.Add(new_income);
+                }
+            }
+
+            entities.SaveChanges();
         }
     }
 }
