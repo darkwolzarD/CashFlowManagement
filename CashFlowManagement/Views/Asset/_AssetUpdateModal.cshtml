@@ -261,7 +261,7 @@
                                     <input class="form-control input-mask" id="AfterMoney" readonly />
                                 </div>
                             </div>
-                            <table id="liability-table" class="table table-bordered table-condensed table-responsive">
+                            @*<table id="liability-table" class="table table-bordered table-condensed table-responsive">
                                 <thead>
                                     <tr>
                                         <th>Nguồn vay nợ</th>
@@ -300,7 +300,7 @@
                                             <button type="button" class="btn btn-primary create-buy-liability">Vay nợ</button>
                                         </td>
                                     </tr>
-                                    @foreach (var item in Model.Asset.Liabilities.Where(x => !x.ParentLiabilityId.HasValue && !x.DisabledDate.HasValue))
+                                    @foreach (var item in Model.Asset.Liabilities.Where(x => !x.ParentLiabilityId.HasValue && !x.DisabledDate.HasValue && x.TransactionId == Model.Transaction.Id))
                                     {
                                         <tr>
                                             <td>@item.Name</td>
@@ -328,7 +328,7 @@
                                         </tr>
                                     }
                                 </tbody>
-                            </table>
+                            </table>*@
                         }
                         else if (Model.Transaction.TransactionType == (int)Constants.TRANSACTION_TYPE.SELL)
                         {

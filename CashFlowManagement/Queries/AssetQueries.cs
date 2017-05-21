@@ -437,10 +437,13 @@ namespace CashFlowManagement.Queries
                 }
 
                 Assets cash = entities.Assets.Where(x => x.Username.Equals(asset.Username) && x.Id == transaction.CashId).FirstOrDefault();
-                cash.DisabledDate = DateTime.Now;
-                cash.DisabledBy = Constants.Constants.SYSTEM;
-                entities.Assets.Attach(cash);
-                entities.Entry(cash).State = EntityState.Modified;
+                if (cash != null)
+                {
+                    cash.DisabledDate = DateTime.Now;
+                    cash.DisabledBy = Constants.Constants.SYSTEM;
+                    entities.Assets.Attach(cash);
+                    entities.Entry(cash).State = EntityState.Modified;
+                }
 
                 asset.StockTransactions.Add(updated_transaction); 
 

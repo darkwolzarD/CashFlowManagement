@@ -202,7 +202,7 @@
                             <td><strong style="color: red;"></strong></td>
                             <td><strong style="color: red;"></strong></td>
                             <td><strong style="color: red;">@FormatUtility.DisplayThousandSeparatorsForNumber(Model.List.Sum(x => x.Asset.StockTransactions.Where(y => !y.DisabledDate.HasValue).Sum(y => y.BrokerFee)))</strong></td>
-                            <td colspan="3"><strong style="color: red;">@FormatUtility.DisplayThousandSeparatorsForNumber(Model.List.Sum(x => x.Asset.StockTransactions.Where(y => !y.DisabledDate.HasValue).Sum(y => y.Value)))</strong></td>
+                            <td colspan="3"><strong style="color: red;">@FormatUtility.DisplayThousandSeparatorsForNumber(Model.List.Sum(x => x.Asset.StockTransactions.Where(y => !y.DisabledDate.HasValue).Sum(y => y.TransactionType == (int)Constants.TRANSACTION_TYPE.SELL ? 0 - y.Value : y.Value)))</strong></td>
                             <td colspan="6"></td>
                         </tr>
                         foreach (var item in Model.List)

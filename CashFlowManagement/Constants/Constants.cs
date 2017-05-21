@@ -16,6 +16,7 @@ namespace CashFlowManagement.Constants
         public enum TRANSACTION_TYPE {CREATE = 1, BUY = 2, SELL = 3, DIVIDEND = 4 }
         public enum INTEREST_OBTAIN_TYPE { ORIGIN = 1, START = 2, END = 3 }
         public enum OBTAIN_BY { CREATE = 1, BUY = 2, INCOME = 3, EXPENSE = 4}
+        public enum INTEREST_TYPE { FIXED = 1, REDUCED = 2 }
         public static string USER = "user";
         public static string SYSTEM = "system";
     }

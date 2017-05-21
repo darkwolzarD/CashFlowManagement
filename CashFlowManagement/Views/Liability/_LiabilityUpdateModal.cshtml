@@ -44,7 +44,8 @@
                         }
                         <div class="form-group">
                             <label class="control-label col-sm-3">
-                                @if (Model.LiabilityType == (int)Constants.LIABILITY_TYPE.REAL_ESTATE || Model.LiabilityType == (int)Constants.LIABILITY_TYPE.BUSINESS)
+                                @if (Model.LiabilityType == (int)Constants.LIABILITY_TYPE.REAL_ESTATE || Model.LiabilityType == (int)Constants.LIABILITY_TYPE.BUSINESS 
+                                    || Model.LiabilityType == (int)Constants.LIABILITY_TYPE.STOCK)
                                 {
                                     @Html.Raw("Giá trị nợ:");
                                 }
@@ -134,7 +135,7 @@ Model.LiabilityType == (int)Constants.LIABILITY_TYPE.REAL_ESTATE)
                                 }
                                 else
                                 {
-                                    @Html.Raw("Đến' ngày:");
+                                    @Html.Raw("Đến ngày:");
                                 }
                             </label>
                             <div class="col-sm-9">

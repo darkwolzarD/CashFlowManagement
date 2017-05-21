@@ -1,4 +1,7 @@
 ﻿@using CashFlowManagement.Constants
+@using CashFlowManagement.EntityModel
+@using CashFlowManagement.Queries
+@using CashFlowManagement.Utilities
 <!DOCTYPE html>
 <html>
 <head>
@@ -38,8 +41,8 @@
                     <div class="avatar">
                         <img src="~/images/Generic_Avatar.png" class="img-circle" width="80">
                     </div>
-                    <span class="username">ROBERT RAZER</span>
-                    <span class="income-this-month">100.000.000 vnd</span>
+                    <span class="username">@(((Users)HttpContext.Current.Session["USER"]).Username)</span>
+                    <span class="income-this-month">@FormatUtility.DisplayThousandSeparatorsForNumber(AssetQueries.CheckAvailableMoney(((Users)HttpContext.Current.Session["USER"]).Username, DateTime.Now)) vnd</span>
                 </div>
                 <ul class="navigation-bar">
                     <li><a href="@Url.Action("Index", "FinancialStatus")">Báo cáo tài chính</a></li>

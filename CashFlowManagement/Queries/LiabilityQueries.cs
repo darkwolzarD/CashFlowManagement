@@ -134,7 +134,14 @@ namespace CashFlowManagement.Queries
 
             for (int i = 0; i < currentPeriod; i++)
             {
-                monthlyInterestPayment = remainedValue * interestRate / 1200;
+                if(parentLiability.InterestType == (int)Constants.Constants.INTEREST_TYPE.REDUCED)
+                {
+                    monthlyInterestPayment = remainedValue * interestRate / 1200;
+                }
+                else
+                {
+                    monthlyInterestPayment = parentLiability.Value * interestRate / 1200;
+                }
                 remainedValue -= monthlyOriginalPayment;
             }
             return monthlyInterestPayment + monthlyOriginalPayment;
@@ -158,7 +165,17 @@ namespace CashFlowManagement.Queries
                     assetListViewModel.Type == (int)Constants.Constants.ASSET_TYPE.STOCK)
                 {
                     double currentTotalMortgageValue = assetViewModel.LiabilityList.List.Where(x => !x.Liability.ParentLiabilityId.HasValue && x.CurrentInterestRate != 0).Sum(x => x.Liability.Value);
-                    assetViewModel.AverageInterestRate = assetViewModel.TotalInterestPayment / assetViewModel.TotalRemainingValue * 1200;
+                    if (assetViewModel.LiabilityList.List.Count > 0)
+                    {
+                        if (assetViewModel.LiabilityList.List.FirstOrDefault().Liability.InterestType == (int)Constants.Constants.INTEREST_TYPE.REDUCED)
+                        {
+                            assetViewModel.AverageInterestRate = assetViewModel.TotalInterestPayment / assetViewModel.TotalRemainingValue * 1200;
+                        }
+                        else
+                        {
+                            assetViewModel.AverageInterestRate = assetViewModel.TotalInterestPayment / assetViewModel.TotalMortgageValue * 1200;
+                        }
+                    }
                 }
                 else
                 {
@@ -219,12 +236,19 @@ namespace CashFlowManagement.Queries
 
                     int currentPeriod = FormatUtility.CalculateTimePeriod(parentLiability.StartDate.Value, DateTime.Now);
 
-                    if (currentPeriod > 0)
+                    if (currentPeriod >= 0)
                     {
                         if (liability.LiabilityType != (int)Constants.Constants.LIABILITY_TYPE.INSURANCE)
                         {
                             liabilityViewModel.RemainedValue = liability.Value - currentPeriod * liabilityViewModel.MonthlyOriginalPayment;
-                            liabilityViewModel.MonthlyInterestPayment = liabilityViewModel.RemainedValue * liabilityViewModel.CurrentInterestRate / 1200;
+                            if (parentLiability.InterestType == (int)Constants.Constants.INTEREST_TYPE.REDUCED)
+                            {
+                                liabilityViewModel.MonthlyInterestPayment = liabilityViewModel.RemainedValue * liabilityViewModel.CurrentInterestRate / 1200;
+                            }
+                            else
+                            {
+                                liabilityViewModel.MonthlyInterestPayment = parentLiability.Value * liabilityViewModel.CurrentInterestRate / 1200;
+                            }
                         }
                         else
                         {
@@ -257,7 +281,7 @@ namespace CashFlowManagement.Queries
         }
 
         public static LiabilityViewModel GetLiabilityViewModelByLiability(Liabilities liability)
-        {
+        {   
             LiabilityViewModel result = new LiabilityViewModel();
             result.Liability = liability;
             if (liability.LiabilityType == (int)Constants.Constants.LIABILITY_TYPE.CREDIT_CARD)
@@ -317,15 +341,29 @@ namespace CashFlowManagement.Queries
                                 if (liability.StartDate <= startDate && startDate <= liability.EndDate)
                                 {
                                     model.MonthlyOriginalPayment = monthlyOriginalPayment;
-                                    model.MonthlyInterestPayment = remainLoan * liability.InterestRate / 1200;
-                                    model.CurrentInterestRatePerYear = liability.InterestRate;
+                                    if (parentLiability.InterestType == (int)Constants.Constants.INTEREST_TYPE.REDUCED)
+                                    {
+                                        model.MonthlyInterestPayment = remainLoan * liability.InterestRate / 1200;
+                                    }
+                                    else
+                                    {
+                                        model.MonthlyInterestPayment = parentLiability.Value * liability.InterestRate / 1200;
+                                    }
+                                    model.CurrentInterestRatePerYear = parentLiability.InterestRate;
                                     model.CurrentMonth = startDate;
                                     model.Highlight = true;
                                 }
                                 else
                                 {
                                     model.MonthlyOriginalPayment = monthlyOriginalPayment;
-                                    model.MonthlyInterestPayment = remainLoan * interestPerMonth;
+                                    if (parentLiability.InterestType == (int)Constants.Constants.INTEREST_TYPE.REDUCED)
+                                    {
+                                        model.MonthlyInterestPayment = remainLoan * interestPerMonth;
+                                    }
+                                    else
+                                    {
+                                        model.MonthlyInterestPayment = parentLiability.Value * interestPerMonth;
+                                    }
                                     model.CurrentInterestRatePerYear = item.InterestRate;
                                     model.CurrentMonth = startDate;
                                 }
@@ -333,7 +371,14 @@ namespace CashFlowManagement.Queries
                             else
                             {
                                 model.MonthlyOriginalPayment = monthlyOriginalPayment;
-                                model.MonthlyInterestPayment = remainLoan * interestPerMonth;
+                                if (parentLiability.InterestType == (int)Constants.Constants.INTEREST_TYPE.REDUCED)
+                                {
+                                    model.MonthlyInterestPayment = remainLoan * interestPerMonth;
+                                }
+                                else
+                                {
+                                    model.MonthlyInterestPayment = parentLiability.Value * interestPerMonth;
+                                }
                                 model.CurrentInterestRatePerYear = item.InterestRate;
                                 model.CurrentMonth = startDate;
                             }
@@ -391,7 +436,7 @@ namespace CashFlowManagement.Queries
             Liabilities parentLiability = entities.Liabilities.Where(x => x.Id == data.Id).FirstOrDefault();
 
             if (data.LiabilityType == (int)Constants.Constants.LIABILITY_TYPE.REAL_ESTATE ||
-               data.LiabilityType == (int)Constants.Constants.LIABILITY_TYPE.BUSINESS)
+               data.LiabilityType == (int)Constants.Constants.LIABILITY_TYPE.BUSINESS || data.LiabilityType == (int)Constants.Constants.LIABILITY_TYPE.STOCK)
             {
                 List<Liabilities> liabilities = entities.Liabilities.Where(x => x.ParentLiabilityId == data.Id && !x.DisabledDate.HasValue).OrderByDescending(x => x.StartDate).ToList();
 
@@ -521,6 +566,7 @@ namespace CashFlowManagement.Queries
                 updated_liability.CreatedBy = Constants.Constants.USER;
                 updated_liability.Username = parentLiability.Username;
                 updated_liability.LiabilityType = parentLiability.LiabilityType;
+                updated_liability.TransactionId = parentLiability.TransactionId;
                 updated_liability.Note = data.Note;
 
                 entities.Liabilities.Add(updated_liability);

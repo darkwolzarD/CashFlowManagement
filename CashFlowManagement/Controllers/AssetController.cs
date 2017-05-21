@@ -29,6 +29,7 @@ namespace CashFlowManagement.Controllers
             if(model.Asset.AssetType == (int)Constants.Constants.ASSET_TYPE.STOCK
                && model.Transaction.TransactionType == (int)Constants.Constants.TRANSACTION_TYPE.BUY)
             {
+                model.Transaction.Assets1.Value = 0 - model.Transaction.Assets1.Value;
                 model.CurrentAvailableMoney = AssetQueries.CheckAvailableMoney(model.Asset.Username, model.Transaction.TransactionDate);
             }
             return PartialView(model);

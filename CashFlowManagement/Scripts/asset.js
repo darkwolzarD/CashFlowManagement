@@ -799,34 +799,41 @@
         }
 
         var value = parseInt(numberOfShares * spotPrice * 1.0015);
+        var availableMoney = $("#buy-new-asset-modal #CurrentAvailableMoney").val();
+
         $("#buy-new-asset-modal #Transaction_Value").val(value);
 
-        $("#buy-new-asset-modal input[name='BuyAmount']").val(value);
-        $("#buy-new-asset-modal #AfterMoney").val($("#buy-new-asset-modal #CurrentAvailableMoney").val() - $("#buy-new-asset-modal #BuyAmount").val());
-        var currentAmount = $("#buy-new-asset-modal input[name='BuyAmount']").val();
-        if (currentAmount == "" || currentAmount == 0) {
-            currentAmount = 0;
-        }
-        else {
-            currentAmount = parseInt(currentAmount);
-        }
-
-        var currentLiabilities = 0;
-        $("#liability-table tbody tr:hidden").each(function (index, element) {
-            var liability = parseFloat($(element).find("td:nth-child(2) input").val());
-            if (liability == "") {
-                liability == 0;
+        if (value <= availableMoney) {
+            $("#buy-new-asset-modal input[name='BuyAmount']").val(value);
+            $("#buy-new-asset-modal #AfterMoney").val(availableMoney - $("#buy-new-asset-modal #BuyAmount").val());
+            var currentAmount = $("#buy-new-asset-modal input[name='BuyAmount']").val();
+            if (currentAmount == "" || currentAmount == 0) {
+                currentAmount = 0;
             }
-            currentLiabilities += liability;
-        });
+            else {
+                currentAmount = parseInt(currentAmount);
+            }
 
-        var availalbleMoney = $("#buy-new-asset-modal #CurrentAvailableMoney").val();
+            var currentLiabilities = 0;
+            $("#liability-table tbody tr:hidden").each(function (index, element) {
+                var liability = parseFloat($(element).find("td:nth-child(2) input").val());
+                if (liability == "") {
+                    liability == 0;
+                }
+                currentLiabilities += liability;
+            });
 
-        if (availalbleMoney < currentAmount + currentLiabilities) {
-            $("#liability-table tbody tr:first td:nth-child(2) input").val(currentAmount + currentLiabilities - availalbleMoney);
+            if (availableMoney < currentAmount + currentLiabilities) {
+                $("#liability-table tbody tr:first td:nth-child(2) input").val(currentAmount + currentLiabilities - availalbleMoney);
+            }
+            else {
+                $("#liability-table tbody tr:first td:nth-child(2) input").val(0);
+            }
         }
         else {
-            $("#liability-table tbody tr:first td:nth-child(2) input").val(0);
+            $("#buy-new-asset-modal input[name='BuyAmount']").val(availableMoney);
+            $("#buy-new-asset-modal #AfterMoney").val(0);
+            $("#liability-table tbody tr:first td:nth-child(2) input").val(value - availableMoney);
         }
 
         MaskInput();
@@ -844,34 +851,42 @@
         }
 
         var value = parseInt(numberOfShares * spotPrice * 1.0015);
-        $("#update-asset-modal #Transaction_Value").val(value);
+        var availableMoney = $("#update-asset-modal #CurrentAvailableMoney").val();
 
-        $("#update-asset-modal #Transaction_Assets1_Value").val(value);
-        $("#update-asset-modal #AfterMoney").val($("#update-asset-modal #CurrentAvailableMoney").val() - $("#update-asset-modal #Transaction_Assets1_Value").val());
-        var currentAmount = $("#update-asset-modal input[name='BuyAmount']").val();
-        if (currentAmount == "" || currentAmount == 0) {
-            currentAmount = 0;
-        }
-        else {
-            currentAmount = parseInt(currentAmount);
-        }
-
-        var currentLiabilities = 0;
-        $("#liability-table tbody tr:hidden").each(function (index, element) {
-            var liability = parseFloat($(element).find("td:nth-child(2) input").val());
-            if (liability == "") {
-                liability == 0;
+        if (value <= availableMoney) {
+            $("#update-asset-modal #Transaction_Value").val(value);
+            $("#update-asset-modal #Transaction_Assets1_Value").val(value);
+            $("#update-asset-modal #AfterMoney").val(availableMoney - $("#update-asset-modal #Transaction_Assets1_Value").val());
+            var currentAmount = $("#update-asset-modal input[name='BuyAmount']").val();
+            if (currentAmount == "" || currentAmount == 0) {
+                currentAmount = 0;
             }
-            currentLiabilities += liability;
-        });
+            else {
+                currentAmount = parseInt(currentAmount);
+            }
 
-        var availalbleMoney = $("#update-asset-modal #CurrentAvailableMoney").val();
+            var currentLiabilities = 0;
+            $("#liability-table tbody tr:hidden").each(function (index, element) {
+                var liability = parseFloat($(element).find("td:nth-child(2) input").val());
+                if (liability == "") {
+                    liability == 0;
+                }
+                currentLiabilities += liability;
+            });
 
-        if (availalbleMoney < currentAmount + currentLiabilities) {
-            $("#liability-table tbody tr:first td:nth-child(2) input").val(currentAmount + currentLiabilities - availalbleMoney);
+            var availalbleMoney = $("#update-asset-modal #CurrentAvailableMoney").val();
+
+            if (availalbleMoney < currentAmount + currentLiabilities) {
+                $("#liability-table tbody tr:first td:nth-child(2) input").val(currentAmount + currentLiabilities - availalbleMoney);
+            }
+            else {
+                $("#liability-table tbody tr:first td:nth-child(2) input").val(0);
+            }
         }
         else {
-            $("#liability-table tbody tr:first td:nth-child(2) input").val(0);
+            $("#update-asset-modal #Transaction_Value").val(availableMoney);
+            $("#update-asset-modal #AfterMoney").val(0);
+            $("#liability-table tbody tr:first td:nth-child(2) input").val(value - availableMoney);
         }
 
         MaskInput();
