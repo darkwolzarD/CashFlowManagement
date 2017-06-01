@@ -37,10 +37,18 @@ namespace CashFlowManagement.Queries
                                                          && !x.DisabledDate.HasValue);
             foreach (var stock in stocks)
             {
-                int numberOfShares = entities.StockTransactions.Where(x => x.Username.Equals(username) && x.AssetId == stock.Id && !x.DisabledDate.HasValue).Sum(x => x.NumberOfShares);
-                double currentPrice = entities.StockTransactions.Where(x => x.Username.Equals(username) && x.AssetId == stock.Id && !x.DisabledDate.HasValue).OrderByDescending(x => x.TransactionDate).FirstOrDefault().SpotPrice;
-                double interestRate = entities.StockTransactions.Where(x => x.Username.Equals(username) && x.AssetId == stock.Id && !x.DisabledDate.HasValue).OrderByDescending(x => x.TransactionDate).FirstOrDefault().ExpectedDividend;
-                result.DividendIncome += numberOfShares * currentPrice * interestRate / 100;
+                var transactions = entities.StockTransactions.Where(x => x.Username.Equals(username) && x.AssetId == stock.Id && !x.DisabledDate.HasValue);
+                if(transactions.Any())
+                {
+                    int numberOfShares = entities.StockTransactions.Where(x => x.Username.Equals(username) && x.AssetId == stock.Id && !x.DisabledDate.HasValue).Sum(x => x.NumberOfShares);
+                    double currentPrice = entities.StockTransactions.Where(x => x.Username.Equals(username) && x.AssetId == stock.Id && !x.DisabledDate.HasValue).OrderByDescending(x => x.TransactionDate).FirstOrDefault().SpotPrice;
+                    double interestRate = entities.StockTransactions.Where(x => x.Username.Equals(username) && x.AssetId == stock.Id && !x.DisabledDate.HasValue).OrderByDescending(x => x.TransactionDate).FirstOrDefault().ExpectedDividend;
+                    result.DividendIncome += numberOfShares * currentPrice * interestRate / 100;
+                }
+                else
+                {
+                    result.DividendIncome = 0;
+                }
             }
 
             result.FamilyExpenses = entities.Expenses.Where(x => x.Username.Equals(username)

@@ -92,7 +92,7 @@
 
     $(document).on("shown.bs.modal", "#buy-new-asset-modal", function () {
         MaskInput();
-        if (assetType == 5) {
+        if (assetType == 5 || assetType == 3) {
             InitiateDatePicker2();
         }
         else {
@@ -177,33 +177,68 @@
         else {
             assetValue = parseInt($("#buy-new-asset-modal input[name='Transaction.NumberOfShares']").val() * $("#buy-new-asset-modal input[name='Transaction.SpotPrice']").val() * 1.0015);
         }
-        var currentAmount = parseFloat($("#buy-new-asset-modal input[name='BuyAmount']").val());
-        if (currentAmount == "") {
-            currentAmount == 0;
-        }
-        var currentLiabilities = 0;
-        $("#liability-table tbody tr:hidden").each(function (index, element) {
-            var liability = parseFloat($(element).find("td:nth-child(2) input").val());
-            if (liability == "") {
-                liability == 0;
+        if (assetType == 4 || assetType == 5) {
+            var currentAmount = parseFloat($("#buy-new-asset-modal input[name='BuyAmount']").val());
+            if (currentAmount == "") {
+                currentAmount == 0;
             }
-            currentLiabilities += liability;
-        });
-        MaskInput();
-        if (currentAmount == "" || currentAmount == 0) {
-            alert("Vui lòng nhập số tiền mua tài sản!");
+            var currentLiabilities = 0;
+            $("#liability-table tbody tr:hidden").each(function (index, element) {
+                var liability = parseFloat($(element).find("td:nth-child(2) input").val());
+                if (liability == "") {
+                    liability == 0;
+                }
+                currentLiabilities += liability;
+            });
+            MaskInput();
+            if (currentAmount == "" || currentAmount == 0) {
+                alert("Vui lòng nhập số tiền mua tài sản!");
+            }
+            else if (currentAmount + currentLiabilities == assetValue) {
+                if (currentMoney < currentAmount) {
+                    if (currentLiabilities == 0) {
+                        alert("Không đủ tiền mặt để mua tài sản này!");
+                    }
+                    else if (currentLiabilities > 0 && (currentAmount + currentLiabilities < currentMoney)) {
+                        alert("Bạn chưa vay đủ tiền mặt để mua tài sản này!");
+                    }
+                    else if (currentLiabilities > 0 && (currentAmount + currentLiabilities > currentMoney)) {
+                        alert("Bạn đã vay dư tiền mặt để mua bất động sản này!");
+                    }
+                }
+                else {
+                    RemoveMask();
+                    var data = $("#buy-new-asset-modal .form-horizontal").serialize();
+
+                    $.ajax({
+                        url: Url.BuyAsset,
+                        type: "post",
+                        data: data,
+                        success: function (data) {
+                            if (data.result > 0) {
+                                $("#buy-new-asset-modal").modal("hide");
+                                LoadTable();
+                            }
+                            else {
+                                alert("Có lỗi xảy ra");
+                            }
+                        }
+                    })
+                    MaskInput();
+                }
+            }
+            else if (currentAmount + currentLiabilities < assetValue) {
+                alert("Bạn chưa vay đủ tiền mặt để mua tài sản này!");
+            }
+            else if (currentAmount + currentLiabilities > assetValue) {
+                alert("Bạn đã vay dư tiền mặt để mua bất động sản này!");
+            }
         }
-        else if (currentAmount + currentLiabilities == assetValue) {
-            if (currentMoney < currentAmount) {
-                if (currentLiabilities == 0) {
-                    alert("Không đủ tiền mặt để mua tài sản này!");
-                }
-                else if (currentLiabilities > 0 && (currentAmount + currentLiabilities < currentMoney)) {
-                    alert("Bạn chưa vay đủ tiền mặt để mua tài sản này!");
-                }
-                else if (currentLiabilities > 0 && (currentAmount + currentLiabilities > currentMoney)) {
-                    alert("Bạn đã vay dư tiền mặt để mua bất động sản này!");
-                }
+        else if (assetType == 3) {
+            var assetValue = $("#buy-new-asset-modal input[name='Asset.Value']").val();
+            var currentMoney = $("#buy-new-asset-modal #CurrentAvailableMoney").val();
+            if (assetValue > currentMoney) {
+                alert("Tài khoản vượt quá số tiền sẵn có!");
             }
             else {
                 RemoveMask();
@@ -225,12 +260,6 @@
                 })
                 MaskInput();
             }
-        }
-        else if (currentAmount + currentLiabilities < assetValue) {
-            alert("Bạn chưa vay đủ tiền mặt để mua tài sản này!");
-        }
-        else if (currentAmount + currentLiabilities > assetValue) {
-            alert("Bạn đã vay dư tiền mặt để mua bất động sản này!");
         }
     })
 
@@ -982,6 +1011,12 @@
         MaskInput();
     })
 
+    $(document).on("keyup", "#buy-new-asset-modal #Asset_Value", function () {
+        RemoveMask();
+        $("#buy-new-asset-modal #AfterMoney").val($("#buy-new-asset-modal #CurrentAvailableMoney").val() - $("#buy-new-asset-modal #Asset_Value").val());
+        MaskInput();
+    })
+
     //$(document).on("keyup", "#update-asset-modal #Transaction_NumberOfShares, #update-asset-modal #Transaction_SpotPrice", function () {
     //    RemoveMask();
     //    var transactionType = $("#update-asset-modal #Transaction_TransactionType").val();
@@ -1021,6 +1056,15 @@
         var term = parseInt($("#update-asset-modal #Asset_Term").val());
         var endDate = startDate.add(term, 'months');
         $("#update-asset-modal #Asset_EndDate").val(endDate.format("DD/MM/YYYY"));
+        MaskInput();
+    })
+
+    $(document).on("change", "#buy-new-asset-modal #Asset_StartDate, #buy-new-asset-modal #Asset_Term", function () {
+        RemoveMask();
+        var startDate = moment($("#buy-new-asset-modal #Asset_StartDate").val(), "DD/MM/YYYY");
+        var term = parseInt($("#buy-new-asset-modal #Asset_Term").val());
+        var endDate = startDate.add(term, 'months');
+        $("#buy-new-asset-modal #Asset_EndDate").val(endDate.format("DD/MM/YYYY"));
         MaskInput();
     })
 })
