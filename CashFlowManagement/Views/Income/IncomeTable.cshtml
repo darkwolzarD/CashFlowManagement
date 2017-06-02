@@ -15,31 +15,34 @@
     }
 }
 
-<ol class="breadcrumb">
+@*<ol class="breadcrumb">
     <li class="active">@title</li>
-</ol>
-
-<div class="background">
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#create-new-income-modal">
-        <span class="glyphicon glyphicon-plus"></span>
-        @if (Model.Type == (int)Constants.INCOME_TYPE.SALARY_INCOME)
-        {
-            @Html.Raw("Tạo mới")
-        }
-    </button>
-    <div class="asset-table">
+</ol>*@
+<div class="clear10"></div>
+<div class="row background">
+    <div class="col-md-12">
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#create-new-income-modal">
+            <span class="glyphicon glyphicon-plus"></span>
+            @if (Model.Type == (int)Constants.INCOME_TYPE.SALARY_INCOME)
+            {
+                @Html.Raw("Tạo mới")
+            }
+        </button>
+    </div>
+    <div class="clear10"></div>
+    <div class="asset-table col-md-12">
         <table class="table table-bordered table-condensed table-responsive">
             <thead>
                 <tr>
                     @if (Model.Type == (int)Constants.INCOME_TYPE.SALARY_INCOME)
                     {
-                        <th class="text-center">Thu nhập từ lương</th>
-                        <th class="text-center">Ngày nhận lương hàng tháng</th>
-                        <th class="text-center">Tháng bắt đầu</th>
-                        <th class="text-center">Tháng kết thúc</th>
-                        <th class="text-center">Thu nhập tháng</th>
-                        <th class="text-center">Thu nhập năm</th>
-                        <th class="text-center">Ghi chú</th>
+                        <th class="text-left">Thu nhập từ lương</th>
+                        <th class="text-right">Ngày nhận lương hàng tháng</th>
+                        <th class="text-right">Tháng bắt đầu</th>
+                        <th class="text-right">Tháng kết thúc</th>
+                        <th class="text-right">Thu nhập tháng</th>
+                        <th class="text-right">Thu nhập năm</th>
+                        <th class="text-left">Ghi chú</th>
                         <th class="text-center">Chỉnh sửa</th>
                     }
                 </tr>
@@ -50,8 +53,8 @@
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.TotalMonthlyIncome)</strong></td>
-                    <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.TotalMonthlyIncome * 12)</strong></td>
+                    <td class="text-right"><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.TotalMonthlyIncome)</strong></td>
+                    <td class="text-right"><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.TotalMonthlyIncome * 12)</strong></td>
                     <td></td>
                     <td></td>
                 </tr>
@@ -61,11 +64,11 @@
                     {
                         <tr>
                             <td>@item.Name</td>
-                            <td>@FormatUtility.DisplayThousandSeparatorsForNumber(item.IncomeDay.Value)</td>
-                            <td>@item.StartDate.ToString("MM/yyyy")</td>
-                            <td>@(item.EndDate.HasValue ? item.EndDate.Value.ToString("MM/yyyy") : string.Empty)</td>
-                            <td>@FormatUtility.DisplayThousandSeparatorsForNumber(item.Value)</td>
-                            <td>@FormatUtility.DisplayThousandSeparatorsForNumber(item.Value * 12)</td>
+                            <td class="text-right">@FormatUtility.DisplayThousandSeparatorsForNumber(item.IncomeDay.Value)</td>
+                            <td class="text-right">@item.StartDate.ToString("MM/yyyy")</td>
+                            <td class="text-right">@(item.EndDate.HasValue ? item.EndDate.Value.ToString("MM/yyyy") : string.Empty)</td>
+                            <td class="text-right">@FormatUtility.DisplayThousandSeparatorsForNumber(item.Value)</td>
+                            <td class="text-right">@FormatUtility.DisplayThousandSeparatorsForNumber(item.Value * 12)</td>
                             <td>@item.Note</td>
                             <td class="text-center" width="160px">
                                 <button class="btn btn-success update-income" data-income-id="@item.Id">

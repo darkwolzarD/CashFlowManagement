@@ -5,22 +5,33 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="background text-left">
-    <h3 class="text-center">Báo cáo tài chính</h3>
+<div class="row background text-left">
     <div class="col-md-12">
-        <p>
-            Dòng tiền tự do: @FormatUtility.DisplayThousandSeparatorsForNumber(Model.MonthlyCashflow)<br />
-            Thu nhập thụ động: @FormatUtility.DisplayThousandSeparatorsForNumber(Model.PassiveIncome)<br />
-            Tự do tài chính (mức độ cơ bản): @FormatUtility.DisplayPercentageForNumber(Model.FinancialFreedom)<br />
-        </p>
+        <h4>Báo cáo tài chính</h4>
     </div>
-
+    <div class="col-md-3 text-center info">
+        <span><strong>Dòng tiền tự do: </strong></span>
+        @FormatUtility.DisplayThousandSeparatorsForNumber(Model.MonthlyCashflow) đồng
+    </div>
+    <div class="col-md-3 text-center info">
+        <span><strong>Thu nhập thụ động: </strong></span>
+        @FormatUtility.DisplayThousandSeparatorsForNumber(Model.PassiveIncome) đồng
+    </div>
+    <div class="col-md-3 text-center info">
+        <span><strong>Tự do tài chính (mức độ cơ bản): </strong></span>
+        @FormatUtility.DisplayPercentageForNumber(Model.FinancialFreedom)
+    </div>
+    <div class="col-md-3 text-center info">
+        <span><strong>Vốn chủ sở hữu: </strong></span>
+        @FormatUtility.DisplayPercentageForNumber(Model.Equipty)
+    </div>
+    <div class="clear10"></div>
     <div class="col-md-6">
         <table class="table table-bordered table-condensed table-striped">
             <thead>
                 <tr>
-                    <th><strong>Thu nhập hàng tháng</strong></th>
-                    <th><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.TotalIncomes)</strong></th>
+                    <th class="col-md-6"><strong>Thu nhập hàng tháng</strong></th>
+                    <th class="col-md-6"><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.TotalIncomes)</strong></th>
                 </tr>
             </thead>
             <tbody>
@@ -52,8 +63,8 @@
         <table class="table table-bordered table-condensed table-striped">
             <thead>
                 <tr>
-                    <th><strong>Tài sản</strong></th>
-                    <th><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.TotalAssets)</strong></th>
+                    <th class="col-md-6"><strong>Tài sản</strong></th>
+                    <th class="col-md-6"><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.TotalAssets)</strong></th>
                 </tr>
             </thead>
             <tbody>
@@ -89,8 +100,8 @@
         <table class="table table-bordered table-condensed table-striped">
             <thead>
                 <tr>
-                    <th><strong>Chi tiêu hàng tháng</strong></th>
-                    <th><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.TotalExpenses)</strong></th>
+                    <th class="col-md-6"><strong>Chi tiêu hàng tháng</strong></th>
+                    <th class="col-md-6"><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.TotalExpenses)</strong></th>
                 </tr>
             </thead>
             <tbody>
@@ -134,8 +145,8 @@
         <table class="table table-bordered table-condensed table-striped">
             <thead>
                 <tr>
-                    <th><strong>Nợ</strong></th>
-                    <th><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.TotalLiabilities)</strong></th>
+                    <th class="col-md-6"><strong>Nợ</strong></th>
+                    <th class="col-md-6"><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.TotalLiabilities)</strong></th>
                 </tr>
             </thead>
             <tbody>
@@ -166,12 +177,12 @@
             </tbody>
         </table>
     </div>
-    <div class="col-md-6 col-md-offset-6">
+    @*<div class="col-md-6 col-md-offset-6">
         <table class="table table-bordered table-condensed table-striped">
             <thead>
                 <tr>
-                    <th><strong>Vốn chủ sở hữu</strong></th>
-                    <th><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.Equipty)</strong></th>
+                    <th class="col-md-6"><strong>Vốn chủ sở hữu</strong></th>
+                    <th class="col-md-6"><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.Equipty)</strong></th>
                 </tr>
             </thead>
             <tbody>
@@ -181,7 +192,7 @@
                 </tr>
             </tbody>
         </table>
-    </div>
+    </div>*@
 </div>
 
 

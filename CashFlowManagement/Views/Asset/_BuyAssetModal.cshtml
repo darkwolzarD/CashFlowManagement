@@ -167,6 +167,12 @@
                                     @Html.TextBoxFor(x => x.Transaction.Note, new { @type = "text", @class = "form-control" })
                                 </div>
                             </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-3">Tiền mặt mua tài sản:</label>
+                                <div class="col-sm-9">
+                                    @Html.TextBoxFor(x => x.BuyAmount, new { @Value = string.Empty, @type = "text", @class = "form-control input-mask" })
+                                </div>
+                            </div>
                     }
                     <div class="form-group">
                         <label class="control-label col-sm-3">Tiền mặt có sẵn:</label>
@@ -181,7 +187,7 @@
                         </div>
                     </div>
                     @if (Model.Asset.AssetType == (int)Constants.ASSET_TYPE.BUSINESS ||
-        Model.Asset.AssetType == (int)Constants.ASSET_TYPE.REAL_ESTATE)
+        Model.Asset.AssetType == (int)Constants.ASSET_TYPE.REAL_ESTATE || Model.Asset.AssetType == (int)Constants.ASSET_TYPE.STOCK)
                     {
                         <table id="liability-table" class="table table-bordered table-condensed table-responsive">
                             <thead>

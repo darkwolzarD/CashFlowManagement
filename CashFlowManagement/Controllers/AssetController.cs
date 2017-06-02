@@ -30,7 +30,7 @@ namespace CashFlowManagement.Controllers
                && model.Transaction.TransactionType == (int)Constants.Constants.TRANSACTION_TYPE.BUY)
             {
                 model.Transaction.Assets1.Value = 0 - model.Transaction.Assets1.Value;
-                model.CurrentAvailableMoney = AssetQueries.CheckAvailableMoney(model.Asset.Username, model.Transaction.TransactionDate);
+                model.CurrentAvailableMoney = AssetQueries.CheckAvailableMoney(model.Asset.Username, model.Transaction.TransactionDate) + model.Asset.Value;
             }
             return PartialView(model);
         }

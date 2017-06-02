@@ -19,80 +19,49 @@
 </head>
 <body>
     <div class="container-fluid">
-        <nav class="navbar navbar-default">
-            <div class="container-fluid">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#menu">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" href="#">CF Management</a>
-                    <div class="minimize-sidebar">
-                        <span class="fa fa-bars"></span>
-                    </div>
-                </div>
+        <div class="row header">
+            <div class="col-md-2 logo">
+                <img class="logo-image" src="~/images/Generic_Avatar.png" width="40"/>
+                <span class="logo-text">Quản lý tài chính</span>
             </div>
-        </nav>
-        <div class="menu">
-            <div class="sidebar">
-                <div class="user-info">
-                    <div class="avatar">
-                        <img src="~/images/Generic_Avatar.png" class="img-circle" width="80">
-                    </div>
-                    <span class="username">@(((Users)HttpContext.Current.Session["USER"]).Username)</span>
-                    <span class="income-this-month">@FormatUtility.DisplayThousandSeparatorsForNumber(AssetQueries.CheckAvailableMoney(((Users)HttpContext.Current.Session["USER"]).Username, DateTime.Now)) vnd</span>
-                </div>
-                <ul class="navigation-bar">
-                    <li><a href="@Url.Action("Index", "FinancialStatus")">Báo cáo tài chính</a></li>
-                    <li>
-                        <a href="@Url.Action("IncomeTable", "Income", new { type = (int)Constants.INCOME_TYPE.SALARY_INCOME })">
-                            <span class="nav-label">Thu nhập lương</span>
-                        </a>
-                        
-                    </li>
-                    <li>
-                        <a href="#">
-                            <span class="nav-label">Tài sản</span>
-                            <span class="fa fa-angle-left"></span>
-                        </a>
-                        <ul class="second-navbar">
-                            <li><a href="@Url.Action("AssetTable", "Asset", new { type = (int)Constants.ASSET_TYPE.REAL_ESTATE })">Bất động sản</a></li>
-                            <li><a href="@Url.Action("AssetTable", "Asset", new { type = (int)Constants.ASSET_TYPE.BUSINESS })">Kinh doanh</a></li>
-                            <li><a href="@Url.Action("AssetTable", "Asset", new { type = (int)Constants.ASSET_TYPE.BANK_DEPOSIT })">Tài khoản tiết kiệm</a></li>
-                            <li><a href="@Url.Action("AssetTable", "Asset", new { type = (int)Constants.ASSET_TYPE.STOCK })">Chứng khoán</a></li>
-                            <li><a href="@Url.Action("AssetTable", "Asset", new { type = (int)Constants.ASSET_TYPE.INSURANCE })">Bảo hiểm nhân thọ</a></li>
-                            <li><a href="@Url.Action("AssetTable", "Asset", new { type = (int)Constants.ASSET_TYPE.OTHERS })">Tài sản khác</a></li>
+            <div class="col-md-8 navigation">
+                <ul class="nav-bar">
+                    <li><a href="@Url.Action("Index", "FinancialStatus")">Báo cáo</a></li>
+                    <li><a href="@Url.Action("IncomeTable", "Income", new { @type = (int)Constants.INCOME_TYPE.SALARY_INCOME })">Thu nhập</a></li>
+                    <li>    
+                        <a href="#">Tài sản</a>
+                        <ul class="nav-bar">
+                            <li><a href="@Url.Action("AssetTable", "Asset", new { @type = (int)Constants.ASSET_TYPE.REAL_ESTATE })">Bất động sản</a></li>
+                            <li><a href="@Url.Action("AssetTable", "Asset", new { @type = (int)Constants.ASSET_TYPE.BUSINESS })">Kinh doanh</a></li>
+                            <li><a href="@Url.Action("AssetTable", "Asset", new { @type = (int)Constants.ASSET_TYPE.BANK_DEPOSIT })">Tài khoản tiết kiệm</a></li>
+                            <li><a href="@Url.Action("AssetTable", "Asset", new { @type = (int)Constants.ASSET_TYPE.STOCK })">Chứng khoán</a></li>
+                            <li><a href="@Url.Action("AssetTable", "Asset", new { @type = (int)Constants.ASSET_TYPE.INSURANCE })">Bảo hiểm nhân thọ</a></li>
+                            <li><a href="@Url.Action("AssetTable", "Asset", new { @type = (int)Constants.ASSET_TYPE.OTHERS })">Tài sản khác</a></li>
                         </ul>
                     </li>
                     <li>
-                        <a href="#">
-                            <span class="nav-label">Chi tiêu</span>
-                            <span class="fa fa-angle-left"></span>
-                        </a>
-                        <ul class="second-navbar">
-                            <li><a href="@Url.Action("ExpenseTable", "Expense", new { type = (int)Constants.EXPENSE_TYPE.FAMILY })">Chi tiêu gia đình</a></li>
-                            <li><a href="@Url.Action("ExpenseTable", "Expense", new { type = (int)Constants.EXPENSE_TYPE.OTHERS })">Chi tiêu khác</a></li>
+                        <a href="#">Khoản nợ</a>
+                        <ul class="nav-bar">
+                            <li><a href="@Url.Action("LiabilityTable", "Liability", new { @type = (int)Constants.LIABILITY_TYPE.CAR })">Xe hơi và tiêu sản khác</a></li>
+                            <li><a href="@Url.Action("LiabilityTable", "Liability", new { @type = (int)Constants.LIABILITY_TYPE.CREDIT_CARD })">Thẻ tín dụng</a></li>
+                            <li><a href="@Url.Action("LiabilityTable", "Liability", new { @type = (int)Constants.LIABILITY_TYPE.OTHERS })">Nợ khác</a></li>
                         </ul>
                     </li>
                     <li>
-                        <a href="#">
-                            <span class="nav-label">Các khoản nợ</span>
-                            <span class="fa fa-angle-left"></span>
-                        </a>
-                        <ul class="second-navbar">
-                            <li><a href="@Url.Action("LiabilityTable", "Liability", new { type = (int)Constants.LIABILITY_TYPE.CAR })">Xe hơi và tiêu sản</a></li>
-                            <li><a href="@Url.Action("LiabilityTable", "Liability", new { type = (int)Constants.LIABILITY_TYPE.CREDIT_CARD })">Thẻ tín dụng</a></li>
-                            <li><a href="@Url.Action("LiabilityTable", "Liability", new { type = (int)Constants.LIABILITY_TYPE.OTHERS })">Nợ khác</a></li>
+                        <a href="#">Chi tiêu</a>
+                        <ul class="nav-bar">
+                            <li><a href="@Url.Action("ExpenseTable", "Expense", new { @type = (int)Constants.EXPENSE_TYPE.FAMILY })">Chi tiêu gia đình</a></li>
+                            <li><a href="@Url.Action("ExpenseTable", "Expense", new { @type = (int)Constants.LIABILITY_TYPE.OTHERS })">Chi tiêu khác</a></li>
                         </ul>
                     </li>
-                    <li><a href="@Url.Action("Index", "Log", new { type = 1 })">Nhật ký</a></li>
+                    <li><a href="@Url.Action("Index", "Log")">Lịch sử</a></li>
                 </ul>
             </div>
         </div>
-        <div class="content">
-            <div class="scrollable-content">
+    </div>
+    <div class="container-fluid">
+        <div class="row content">
+            <div class="col-md-12">
                 @RenderBody()
             </div>
         </div>

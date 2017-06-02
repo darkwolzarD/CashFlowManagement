@@ -123,18 +123,22 @@ namespace CashFlowManagement.Queries
                 };
 
 
-                if (!CheckExistAssetName(model.Asset.AssetName, model.Asset.AssetType))
+                if (!CheckExistAssetName(model.Asset.AssetName, username, model.Asset.AssetType))
                 {
                     asset.StockTransactions.Add(transaction);
                 }
                 else
                 {
                     Assets current = entities.Assets.Where(x => x.AssetName.Equals(model.Asset.AssetName)
+                                                            && x.Username.Equals(username)
                                                             && x.AssetType == (int)Constants.Constants.ASSET_TYPE.STOCK
                                                             && !x.DisabledDate.HasValue).FirstOrDefault();
-                    current.StockTransactions.Add(transaction);
+                    transaction.AssetId = current.Id;
                 }
+                entities.StockTransactions.Add(transaction);
             }
+
+
 
             if (type != (int)Constants.Constants.ASSET_TYPE.STOCK && type != (int)Constants.Constants.ASSET_TYPE.INSURANCE
                 && type != (int)Constants.Constants.ASSET_TYPE.AVAILABLE_MONEY)
@@ -156,7 +160,7 @@ namespace CashFlowManagement.Queries
 
 
             if (type != (int)Constants.Constants.ASSET_TYPE.STOCK ||
-                (type == (int)Constants.Constants.ASSET_TYPE.STOCK && !CheckExistAssetName(model.Asset.AssetName, model.Asset.AssetType)))
+                (type == (int)Constants.Constants.ASSET_TYPE.STOCK && !CheckExistAssetName(model.Asset.AssetName, username, model.Asset.AssetType)))
             {
                 entities.Assets.Add(asset);
             }
@@ -847,10 +851,10 @@ namespace CashFlowManagement.Queries
                                                          && !x.DisabledDate.HasValue && DbFunctions.TruncateTime(x.CreatedDate) <= dataDate).Select(x => x.Value).DefaultIfEmpty(0).Sum();
         }
 
-        public static bool CheckExistAssetName(string assetName, int type)
+        public static bool CheckExistAssetName(string assetName, string username, int type)
         {
             Entities entities = new Entities();
-            return entities.Assets.Where(x => x.AssetName.Equals(assetName) && x.AssetType == type).Any();
+            return entities.Assets.Where(x => x.AssetName.Equals(assetName) && x.Username.Equals(username) && x.AssetType == type && !x.DisabledDate.HasValue).Any();
         }
 
         public static double CheckRemainedStock(string stock)
