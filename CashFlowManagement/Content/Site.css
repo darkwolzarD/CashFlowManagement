@@ -12,6 +12,14 @@ input, textarea, select, button {
     font-size: 11px !important;
 }
 
+.selectize-input > * , .selectize-dropdown  > * {
+    font-size: 11px !important;
+}
+
+hr {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
 .clear10 {
     margin-top: 10px;
     clear: both;
@@ -19,7 +27,7 @@ input, textarea, select, button {
 
 /*Page header*/
 .header {
-    background: #FF9900;
+    background: #ff6a00;
     height: 50px;
     line-height: 45px;
 }
@@ -54,7 +62,7 @@ input, textarea, select, button {
             .header .navigation .nav-bar li {
                 float: left;
                 line-height: 20px;
-                width: 80px;
+                width: 70px;
                 position: relative;
                 margin-top: 15px;
                 text-align: center;
@@ -124,7 +132,7 @@ table th, table td {
 }
 
 table thead th {
-    background: #808080;
+    background: #6a6c6f;
     color: white;
 }
 
@@ -132,11 +140,11 @@ table tbody th {
     background: #e4e5e7;
 }
 
-.table td, 
+/*.table td, 
 .table th {
     white-space: nowrap;
     width: 1%;
-}
+}*/
 
 .login-page {
     width: 400px;
@@ -160,4 +168,29 @@ table tbody th {
     }
 /*Display info on financial status page*/
 .info {
+}
+
+.register-page {
+    width: 500px;
+    padding: 4% 0 0;
+    margin: auto;
+}
+
+    .register-page form {
+        height: 500px;
+        position: relative;
+        z-index: 1;
+        background: #FFFFFF;
+        max-width: 500px;
+        margin: 0;
+        padding: 15px 30px 0px 30px;
+        text-align: center;
+        box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+    }
+
+footer {
+    position: fixed !important;
+    bottom: 0;
+    right: 90px;
+    height: 50px;
 }

@@ -1,5 +1,6 @@
 ﻿$(document).ready(function () {
     var liabilityCount = 0;
+    var oldRow = "";
 
     function MaskInput() {
         $(".input-mask").mask("000.000.000.000.000", { reverse: true });
@@ -21,10 +22,8 @@
             minViewMode: 1,
             language: "vi-VN"
         });
-    }
 
-    function InitiateDatePicker2() {
-        $(".date-picker").datepicker({
+        $(".date-picker-2").datepicker({
             format: "dd/mm/yyyy",
             language: "vi-VN"
         });
@@ -52,8 +51,8 @@
 
     $(document).on("shown.bs.modal", "#create-new-asset-modal, #update-asset-modal", function () {
         MaskInput();
+        InitiateDatePicker();
         if (assetType == 5 || assetType == 3) {
-            InitiateDatePicker2();
             var stock = $("#update-asset-modal #Asset_AssetName").val();
             if (stock != null) {
                 $.ajax({
@@ -75,29 +74,16 @@
                 })
             }
         }
-        else {
-            InitiateDatePicker();
-        }
     })
 
-    $(document).on("shown.bs.modal", "#create-new-liability-modal, #update-liability-modal", function () {
+    $(document).on("shown.bs.modal", "#create-new-liability-modal, #update-liability-modal, #sell-asset-modal", function () {
         MaskInput();
         InitiateDatePicker();
     })
 
-    $(document).on("shown.bs.modal", "#sell-asset-modal", function () {
-        MaskInput();
-        InitiateDatePicker2();
-    })
-
     $(document).on("shown.bs.modal", "#buy-new-asset-modal", function () {
         MaskInput();
-        if (assetType == 5 || assetType == 3) {
-            InitiateDatePicker2();
-        }
-        else {
-            InitiateDatePicker();
-        }
+        InitiateDatePicker();
         liabilityCount = 0;
     })
 
@@ -109,7 +95,7 @@
                 type: "post",
                 data: { date: date },
                 success: function (data) {
-                    $("#buy-new-asset-modal #CurrentAvailableMoney").val(data.result);
+                    $("#buy-new-asset-modal #CurrentAvailableMoney").val(data);
                     $("#buy-new-asset-modal #CurrentAvailableMoney").unmask();
                 }
             });
@@ -117,6 +103,23 @@
         else {
             $("#buy-new-asset-modal #CurrentAvailableMoney").val(0);
             $("#buy-new-asset-modal #CurrentAvailableMoney").unmask();
+        }
+    })
+
+    $(document).on("change", "#buy-new-asset-modal #Asset_StartDate", function () {
+        var date = $(this).val();
+        if (moment(date, "dd/MM/yyyy").isValid()) {
+            $.ajax({
+                url: Url.CheckAvailableMoney,
+                type: "post",
+                data: { date: date },
+                success: function (data) {
+                    $("#buy-new-asset-modal #CurrentAvailableMoney").val(data);
+                }
+            });
+        }
+        else {
+            $("#buy-new-asset-modal #CurrentAvailableMoney").val(0);
         }
     })
 
@@ -235,8 +238,8 @@
             }
         }
         else if (assetType == 3) {
-            var assetValue = $("#buy-new-asset-modal input[name='Asset.Value']").val();
-            var currentMoney = $("#buy-new-asset-modal #CurrentAvailableMoney").val();
+            var assetValue = parseInt($("#buy-new-asset-modal input[name='Asset.Value']").val());
+            var currentMoney = parseInt($("#buy-new-asset-modal #CurrentAvailableMoney").val());
             if (assetValue > currentMoney) {
                 alert("Tài khoản vượt quá số tiền sẵn có!");
             }
@@ -472,7 +475,7 @@
         newRow += "<td name='Asset.Liabilities[" + liabilityCount + "].InterestRate'>" + interestRate + "</td>";
         newRow += "<td name='Asset.Liabilities[" + liabilityCount + "].StartDate'>" + startDate + "</td>";
         newRow += "<td name='Asset.Liabilities[" + liabilityCount + "].EndDate'>" + endDate + "</td>";
-        newRow += "<td class='text-center'><button type='button' class='btn btn-danger delete-lib'>Xóa</button></td>";
+        newRow += "<td class='text-center' width='180'><button type='button' class='btn btn-success edit-lib'><span class='glyphicon glyphicon-pencil'></span>Cập nhật</button><button type='button' class='btn btn-danger delete-lib'><span class='glyphicon glyphicon-remove'></span>Xóa</button></td>";
         newRow += "</tr>";
         RemoveMask();
         name = $("#liability-table input[name='Name']").val();
@@ -492,6 +495,37 @@
         $("#liability-table tbody").append(newRow);
         $("#liability-table tbody").append(dataRow);
         liabilityCount++;
+    })
+
+    $(document).on("click", ".edit-lib", function () {
+        var row = $(this).closest("tr");
+        oldRow = row.html();
+        var currentCount = row.attr("class");
+        var dataRow = $("#liability-table ." + currentCount + ":last");
+        var html = "<td><input class='form-control input-sm'value='" + dataRow.find("td:nth-child(1) input").val() + "'/></td>";
+        html += "<td><input class='form-control input-sm input-mask' value='" + dataRow.find("td:nth-child(2) input").val() + "'/></td>";
+        if (dataRow.find("td:nth-child(3) input").val() == 1) {
+            html += "<td><select class='form-control input-sm'><option value='1' selected>Cố định</option><option value='2'>Giảm dần</option></select></td>";
+        }
+        else {
+            html += "<td><select class='form-control input-sm'><option value='1' selected>Cố định</option><option value='2' selected>Giảm dần</option></select></td>";
+        }
+        html += "<td><input class='form-control input-sm percentage' value='" + dataRow.find("td:nth-child(4) input").val() + "'/></td>";
+        html += "<td><input class='form-control input-sm date-picker' value='" + dataRow.find("td:nth-child(5) input").val() + "'/></td>";
+        html += "<td><input class='form-control input-sm date-picker' value='" + dataRow.find("td:nth-child(6) input").val() + "'/></td>";
+        html += "<td class='text-center' width='180'><button type='button' class='btn btn-success save-edit-lib'><span class='glyphicon glyphicon-save'></span>Lưu</button><button type='button' class='btn btn-danger cancel-edit-lib'><span class='glyphicon glyphicon-remove'></span>Hủy</button></td>";
+        row.html(html);
+        InitiateDatePicker();
+    })
+
+    $(document).on("click", ".cancel-edit-lib", function () {
+        $(this).closest("tr").html(oldRow);
+        oldRow = "";
+    })
+
+    $(document).on("click", ".save-edit-lib", function () {
+        $(this).closest("tr").html(oldRow);
+        oldRow = "";
     })
 
     $(document).on("click", ".delete-lib", function () {
@@ -1044,27 +1078,47 @@
     $(document).on("change", "#create-new-asset-modal #Asset_StartDate, #create-new-asset-modal #Asset_Term", function () {
         RemoveMask();
         var startDate = moment($("#create-new-asset-modal #Asset_StartDate").val(), "DD/MM/YYYY");
-        var term = parseInt($("#create-new-asset-modal #Asset_Term").val());
-        var endDate = startDate.add(term, 'months');
-        $("#create-new-asset-modal #Asset_EndDate").val(endDate.format("DD/MM/YYYY"));
-        MaskInput();
+        var valid = moment($("#create-new-asset-modal #Asset_StartDate").val(), "DD/MM/YYYY").isValid();
+        if (valid) {
+            var term = parseInt($("#create-new-asset-modal #Asset_Term").val());
+            var endDate = startDate.add(term, 'months');
+            $("#create-new-asset-modal #Asset_EndDate").val(endDate.format("DD/MM/YYYY"));
+            MaskInput();
+        }
     })
 
     $(document).on("change", "#update-asset-modal #Asset_StartDate, #update-asset-modal #Asset_Term", function () {
         RemoveMask();
-        var startDate = moment($("#update-asset-modal #Asset_StartDate").val(), "DD/MM/YYYY");
-        var term = parseInt($("#update-asset-modal #Asset_Term").val());
-        var endDate = startDate.add(term, 'months');
-        $("#update-asset-modal #Asset_EndDate").val(endDate.format("DD/MM/YYYY"));
-        MaskInput();
+        var valid = moment($("#update-asset-modal #Asset_StartDate").val(), "DD/MM/YYYY").isValid();
+        if (valid) {
+            var startDate = moment($("#update-asset-modal #Asset_StartDate").val(), "DD/MM/YYYY");
+            var term = parseInt($("#update-asset-modal #Asset_Term").val());
+            var endDate = startDate.add(term, 'months');
+            $("#update-asset-modal #Asset_EndDate").val(endDate.format("DD/MM/YYYY"));
+            MaskInput();
+        }
     })
 
     $(document).on("change", "#buy-new-asset-modal #Asset_StartDate, #buy-new-asset-modal #Asset_Term", function () {
         RemoveMask();
-        var startDate = moment($("#buy-new-asset-modal #Asset_StartDate").val(), "DD/MM/YYYY");
-        var term = parseInt($("#buy-new-asset-modal #Asset_Term").val());
-        var endDate = startDate.add(term, 'months');
-        $("#buy-new-asset-modal #Asset_EndDate").val(endDate.format("DD/MM/YYYY"));
-        MaskInput();
+        var valid = moment($("#buy-new-asset-modal #Asset_StartDate").val(), "DD/MM/YYYY").isValid();
+        if (valid) {
+            var startDate = moment($("#buy-new-asset-modal #Asset_StartDate").val(), "DD/MM/YYYY");
+            var term = parseInt($("#buy-new-asset-modal #Asset_Term").val());
+            var endDate = startDate.add(term, 'months');
+            $("#buy-new-asset-modal #Asset_EndDate").val(endDate.format("DD/MM/YYYY"));
+            MaskInput();
+        }
+    })
+
+    $(document).on("click", ".toggle-confirmation", function () {;
+        $.ajax({
+            url: Url.InitializeModal,
+            type: "get",
+            success: function (data) {
+                $("#confirmation-modal").html(data);
+                $("#asset-confirmation").modal("show");
+            }
+        })
     })
 })

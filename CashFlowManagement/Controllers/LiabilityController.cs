@@ -11,6 +11,17 @@ namespace CashFlowManagement.Controllers
 {
     public class LiabilityController : Controller
     {
+        public ActionResult Initialize(int type)
+        {
+            LiabilityListViewModel model = LiabilityQueries.GetLiabilityByUser(UserQueries.GetCurrentUsername(), type);
+            return View(model);
+        }
+
+        public ActionResult _InitializeConfirmation()
+        {
+            return PartialView();
+        }
+
         // GET: Liability
         public ActionResult LiabilityTable(int type)
         {
@@ -78,6 +89,12 @@ namespace CashFlowManagement.Controllers
         {
             int result = LiabilityQueries.DeleteLiability(id);
             return Json(new { result = result });
+        }
+
+        public ActionResult _Report(int type)
+        {
+            LiabilityListViewModel model = LiabilityQueries.GetLiabilityByUser(UserQueries.GetCurrentUsername(), type);
+            return PartialView(model);
         }
     }
 }

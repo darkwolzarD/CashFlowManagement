@@ -1,0 +1,106 @@
+﻿@model CashFlowManagement.ViewModels.IncomeListViewModel
+@using CashFlowManagement.Constants
+@using CashFlowManagement.Utilities
+@using CashFlowManagement.Queries;
+@using CashFlowManagement.EntityModel
+@{
+    ViewBag.Title = "IncomeTable";
+}
+@{
+    string title = string.Empty;
+    string type = string.Empty;
+    if (Model.Type == (int)Constants.INCOME_TYPE.SALARY_INCOME)
+    {
+        title = "Thu nhập từ lương";
+    }
+    DateTime current = DateTime.Now;
+}
+
+@*<ol class="breadcrumb">
+        <li class="active">@title</li>
+    </ol>*@
+@using (Ajax.BeginForm("_IncomeTable", "Income", null, new AjaxOptions { HttpMethod = "GET", UpdateTargetId = "table-ajax" }, new { @id = "table-ajax" }))
+{
+    <div class="row background">
+        <div class="clear10"></div>
+        <div class="asset-table col-md-12">
+            <table class="table table-responsive">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th class="text-left">Nguồn thu nhập</th>
+                        <th class="text-right">Ngày nhận hàng tháng</th>
+                        <th class="text-right">Tháng bắt đầu</th>
+                        <th class="text-right">Tháng kết thúc</th>
+                        <th class="text-right">Thu nhập tháng</th>
+                        <th class="text-right">Thu nhập năm</th>
+                        <th class="text-left">Ghi chú</th>
+                        <th class="text-center">Hiệu lực</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td></td>
+                        <td class="text-danger"><strong>Tổng</strong></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td class="text-right text-danger"><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.TotalMonthlyIncome)</strong></td>
+                        <td class="text-right text-danger"><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.TotalMonthlyIncome * 12)</strong></td>
+                        <td class="text-right"></td>
+                        <td></td>
+                        <td class="text-center">
+                            <button type="button" class="btn btn-primary create-income" data-toggle="modal">
+                                <span class="glyphicon glyphicon-plus"></span>
+                                Tạo (Create)
+                            </button>
+                        </td>
+                    </tr>
+                    @if (Model.List.Any())
+                {
+                    foreach (var item in Model.List)
+                    {
+                            <tr>
+                                <td>
+                                    <input type="checkbox" class="id" value="@item.Id" />
+                                </td>
+                                <td>@item.Name</td>
+                                <td class="text-right">@FormatUtility.DisplayThousandSeparatorsForNumber(item.IncomeDay.Value)</td>
+                                <td class="text-right">@item.StartDate.ToString("MM/yyyy")</td>
+                                <td class="text-right">@(item.EndDate.HasValue ? item.EndDate.Value.ToString("MM/yyyy") : string.Empty)</td>
+                                <td class="text-right">@FormatUtility.DisplayThousandSeparatorsForNumber(item.Value)</td>
+                                <td class="text-right">@FormatUtility.DisplayThousandSeparatorsForNumber(item.Value * 12)</td>
+                                <td>@item.Note</td>
+                                <td class="text-center">
+                                    @if(item.StartDate <= current && (item.EndDate.HasValue ? item.EndDate.Value >= current : true))
+                                    {
+                                        @*<span class="label label-primary" style="font-size: 10px;">Đang hiện hành</span>*@
+                                        <input type="checkbox" checked disabled/>
+                                    }
+                                    else
+                                    {
+                                        @*<span class="label label-danger" style="font-size: 10px;">Đã kết thúc</span>*@
+                                        <input type="checkbox" disabled />
+                                    }
+                                </td>
+                                <td class="text-center">
+                                    <button type="button" class="btn btn-danger delete-income-info">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                        Xóa (Delete)
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="10" class="text-center">Không có dữ liệu</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}

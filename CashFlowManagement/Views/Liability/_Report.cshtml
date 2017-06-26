@@ -1,0 +1,162 @@
+﻿@model CashFlowManagement.ViewModels.LiabilityListViewModel
+@using CashFlowManagement.Utilities
+@using CashFlowManagement.EntityModel
+@using CashFlowManagement.Constants
+@using CashFlowManagement.ViewModels
+@{
+    ViewBag.Title = "Report";
+    Layout = "";
+}
+
+<div class="background">
+    <div class="text-right"></div>
+    <div class="liability-table">
+        <table class="table table-bordered table-condensed table-responsive">
+            <thead>
+                <tr>
+                    @if (Model.Type == (int)Constants.LIABILITY_TYPE.CAR)
+                    {
+                        <th class="text-center">Nguồn vay</th>
+                        <th class="text-center">Tổng giá trị</th>
+                        <th class="text-center">Vốn vay</th>
+                        <th class="text-center">Lãi vay</th>
+                        <th class="text-center">Từ ngày</th>
+                        <th class="text-center">Đến ngày</th>
+                        <th class="text-center">Tổng số tháng phải trả</th>
+                        <th class="text-center">Trả lãi vay tháng</th>
+                        <th class="text-center">Trả vốn vay tháng</th>
+                        <th class="text-center">Tổng phải trả hàng tháng</th>
+                        <th class="text-center">Tiền vay còn phải trả</th>
+                        <th class="text-center">Ghi chú</th>
+                    }
+                    else if (Model.Type == (int)Constants.LIABILITY_TYPE.CREDIT_CARD)
+                    {
+                        <th class="text-center">Nguồn vay</th>
+                        <th class="text-center">Giá trị đã dùng</th>
+                        <th class="text-center">Chi phí lãi</th>
+                        <th class="text-center">Phải trả hàng tháng</th>
+                        <th class="text-center">Phải trả hàng năm</th>
+                        <th class="text-center">Ghi chú</th>
+                    }
+                    else if (Model.Type == (int)Constants.LIABILITY_TYPE.OTHERS)
+                    {
+                        <th class="text-center">Nguồn vay</th>
+                        <th class="text-center">Mục tiêu sử dụng</th>
+                        <th class="text-center">Số tiền vay</th>
+                        <th class="text-center">Lãi vay</th>
+                        <th class="text-center">Từ ngày</th>
+                        <th class="text-center">Đến ngày</th>
+                        <th class="text-center">Tổng số tháng phải trả</th>
+                        <th class="text-center">Trả lãi vay tháng</th>
+                        <th class="text-center">Trả vốn vay tháng</th>
+                        <th class="text-center">Tổng phải trả hàng tháng</th>
+                        <th class="text-center">Tiền vay còn phải trả</th>
+                        <th class="text-center">Ghi chú</th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.List.Any())
+                {
+                    if (Model.Type == (int)Constants.LIABILITY_TYPE.CAR)
+                    {
+                        <tr>
+                            <td class="text-center"><strong>Tổng</strong></td>
+                            <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.TotalOriginalValue)</strong></td>
+                            <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.TotalLiabilityValue)</strong></td>
+                            <td><strong>@FormatUtility.DisplayPercentageForNumber(Model.AverageInterestRate)</strong></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.TotalMonthlyInterestPayment)</strong></td>
+                            <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.TotalMonthlyOriginalPayment)</strong></td>
+                            <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.TotalMonthlyPayment)</strong></td>
+                            <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.RemainedValue)</strong></td>
+                            <td></td>
+                        </tr>
+                        foreach (var liabilityViewModel in Model.List.Where(x => !x.Liability.ParentLiabilityId.HasValue))
+                        {
+                            <tr>
+                                <td>@liabilityViewModel.Liability.Name</td>
+                                <td>@FormatUtility.DisplayThousandSeparatorsForNumber(liabilityViewModel.Liability.OriginalValue.Value)</td>
+                                <td>@FormatUtility.DisplayThousandSeparatorsForNumber(liabilityViewModel.Liability.Value)</td>
+                                <td>@FormatUtility.DisplayPercentageForNumber(liabilityViewModel.Liability.InterestRate)</td>
+                                <td>@liabilityViewModel.Liability.StartDate.Value.ToString("MM/yyyy")</td>
+                                <td>@liabilityViewModel.Liability.EndDate.Value.ToString("MM/yyyy")</td>
+                                <td>@FormatUtility.DisplayThousandSeparatorsForNumber(liabilityViewModel.TotalPaymentPeriod)</td>
+                                <td><a href="#" class="interest-info" data-liability-id="@liabilityViewModel.Liability.Id">@FormatUtility.DisplayThousandSeparatorsForNumber(liabilityViewModel.MonthlyInterestPayment)</a></td>
+                                <td>@FormatUtility.DisplayThousandSeparatorsForNumber(liabilityViewModel.MonthlyOriginalPayment)</td>
+                                <td>@FormatUtility.DisplayThousandSeparatorsForNumber(liabilityViewModel.MonthlyPayment)</td>
+                                <td>@FormatUtility.DisplayThousandSeparatorsForNumber(liabilityViewModel.RemainedValue)</td>
+                                <td>@liabilityViewModel.Liability.Note</td>
+                            </tr>
+                        }
+                    }
+                    else if (Model.Type == (int)Constants.LIABILITY_TYPE.CREDIT_CARD)
+                    {
+                        <tr>
+                            <td class="text-center"><strong>Tổng</strong></td>
+                            <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.TotalLiabilityValue)</strong></td>
+                            <td><strong>@FormatUtility.DisplayPercentageForNumber(Model.AverageInterestRate)</strong></td>
+                            <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.TotalMonthlyPayment)</strong></td>
+                            <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.TotalMonthlyPayment * 12)</strong></td>
+                            <td></td>
+                        </tr>
+                        foreach (var liabilityViewModel in Model.List.Where(x => !x.Liability.ParentLiabilityId.HasValue))
+                        {
+                            <tr>
+                                <td>@liabilityViewModel.Liability.Name</td>
+                                <td>@FormatUtility.DisplayThousandSeparatorsForNumber(liabilityViewModel.Liability.Value)</td>
+                                <td>@FormatUtility.DisplayPercentageForNumber(liabilityViewModel.Liability.InterestRate)</td>
+                                <td>@FormatUtility.DisplayThousandSeparatorsForNumber(liabilityViewModel.MonthlyInterestPayment)</td>
+                                <td>@FormatUtility.DisplayThousandSeparatorsForNumber(liabilityViewModel.MonthlyInterestPayment * 12)</td>
+                                <td>@liabilityViewModel.Liability.Note</td>
+                            </tr>
+                        }
+                    }
+                    else if (Model.Type == (int)Constants.LIABILITY_TYPE.OTHERS)
+                    {
+                        <tr>
+                            <td class="text-center"><strong>Tổng</strong></td>
+                            <td></td>
+                            <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.TotalLiabilityValue)</strong></td>
+                            <td><strong>@FormatUtility.DisplayPercentageForNumber(Model.AverageInterestRate)</strong></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.TotalMonthlyInterestPayment)</strong></td>
+                            <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.TotalMonthlyOriginalPayment)</strong></td>
+                            <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.TotalMonthlyPayment)</strong></td>
+                            <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.RemainedValue)</strong></td>
+                            <td></td>
+                        </tr>
+                        foreach (var liabilityViewModel in Model.List.Where(x => !x.Liability.ParentLiabilityId.HasValue))
+                        {
+                            <tr>
+                                <td>@liabilityViewModel.Liability.Name</td>
+                                <td>@liabilityViewModel.Liability.Purpose</td>
+                                <td>@FormatUtility.DisplayThousandSeparatorsForNumber(liabilityViewModel.Liability.Value)</td>
+                                <td>@FormatUtility.DisplayPercentageForNumber(liabilityViewModel.Liability.InterestRate)</td>
+                                <td>@liabilityViewModel.Liability.StartDate.Value.ToString("MM/yyyy")</td>
+                                <td>@liabilityViewModel.Liability.EndDate.Value.ToString("MM/yyyy")</td>
+                                <td>@FormatUtility.DisplayThousandSeparatorsForNumber(liabilityViewModel.TotalPaymentPeriod)</td>
+                                <td><a href="#" class="interest-info" data-liability-id="@liabilityViewModel.Liability.Id">@FormatUtility.DisplayThousandSeparatorsForNumber(liabilityViewModel.MonthlyInterestPayment)</a></td>
+                                <td>@FormatUtility.DisplayThousandSeparatorsForNumber(liabilityViewModel.MonthlyOriginalPayment)</td>
+                                <td>@FormatUtility.DisplayThousandSeparatorsForNumber(liabilityViewModel.MonthlyPayment)</td>
+                                <td>@FormatUtility.DisplayThousandSeparatorsForNumber(liabilityViewModel.RemainedValue)</td>
+                                <td>@liabilityViewModel.Liability.Note</td>
+                            </tr>
+                        }
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="14" class="text-center">Không có khởi tạo</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+

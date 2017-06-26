@@ -1,5 +1,6 @@
 ﻿using CashFlowManagement.EntityModel;
 using CashFlowManagement.Queries;
+using CashFlowManagement.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,8 @@ namespace CashFlowManagement.Controllers
         // GET: Log
         public ActionResult Index(int type)
         {
-            List<Log> model = LogQueries.GetLogByUser(UserQueries.GetCurrentUsername(), type);
+
+            LogListViewModel model = LogQueries.GetLogByUser(UserQueries.GetCurrentUsername(), type);
             return View(model);
         }
 

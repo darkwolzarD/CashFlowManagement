@@ -14,6 +14,14 @@ namespace CashFlowManagement.EntityModel
     
     public partial class Incomes
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Incomes()
+        {
+            this.Assets = new HashSet<Assets>();
+            this.History = new HashSet<History>();
+            this.Incomes1 = new HashSet<Incomes>();
+        }
+    
         public int Id { get; set; }
         public double Value { get; set; }
         public Nullable<int> IncomeDay { get; set; }
@@ -28,8 +36,16 @@ namespace CashFlowManagement.EntityModel
         public string Username { get; set; }
         public string Name { get; set; }
         public string Note { get; set; }
+        public Nullable<int> ParentId { get; set; }
     
-        public virtual Assets Assets { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Assets> Assets { get; set; }
+        public virtual Assets Assets1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<History> History { get; set; }
         public virtual Users Users { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Incomes> Incomes1 { get; set; }
+        public virtual Incomes Incomes2 { get; set; }
     }
 }

@@ -1,0 +1,26 @@
+﻿@using CashFlowManagement.Constants
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="clear10"></div>
+@{ Html.RenderAction("_IncomeForm"); }
+@{ Html.RenderAction("_IncomeTable"); }
+
+<div id="modal">
+
+</div>
+
+<script type="text/javascript" src="~/Scripts/income.js"></script>
+<script type="text/javascript">
+    var Url = new Object();
+    Url.ProcessIncome = '@Url.Action("ProcessIncome", "Income")';
+    Url.LoadTable = '@Url.Action("IncomeTable", "Income")';
+    Url.IncomeForm = '@Url.Action("_IncomeForm", "Income")';
+    Url.CashflowDetail = '@Url.Action("_CashflowDetail", "Income")';
+    Url.UpdateIncome = '@Url.Action("UpdateIncome", "Income")';
+    Url.DeleteIncome = '@Url.Action("DeleteIncome", "Income")';
+    Url.GetStartDate = '@Url.Action("GetStartDate", "Income")';
+</script>
+

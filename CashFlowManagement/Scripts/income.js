@@ -1,143 +1,196 @@
-﻿$(document).ready(function () {
-    function MaskInput() {
-        $(".input-mask").mask("000,000,000,000,000", { reverse: true });
-        $(".percentage").mask("##0,00%", { reverse: true });
-        $('.date').mask('00/00/0000');
+﻿var CashFlowModal = function (data) {
+    if(data == -1) {
+        $("#status").html("Xin kết thúc giai đoạn trước trước khi tạo giai đoạn mới");
     }
+    else if (data == -2) {
+        $("#status").html("Thu nhập đã tồn tại trước đó");
+    }
+    else {
+        $("#modal").html(data);
+        $("#cashflow-modal").modal("show");
+    }
+}
+
+$(document).ready(function () {
+    function InitializeSelect(clear) {
+        var $select = $(".select").selectize({
+            create: true,
+            sortField: 'text',
+            render: {
+                option_create: function (data, escape) {
+                    return '<div class="create">Tạo <strong>' + escape(data.input) + '</strong>&hellip;</div>';
+                }
+            },
+        });
+        if (clear) {
+            $select[0].selectize.setValue("");
+        }
+    }
+
+    InitializeSelect(true);
+
+    $.validator.methods.date = function (value, element) {
+        return this.optional(element) || moment(value, "MM/YYYY", true).isValid();
+    }
+
+    $.validator.methods.number = function (value, element) {
+        return this.optional(element) || /^-?(?:\d+|\d{1,3}(?:\.\d{3})+)(?:,\d+)?$/.test(value);
+    }
+    $(".input-mask").mask("000.000.000.000.000", { reverse: true });
+    $(".percentage").mask("##0,00%", { reverse: true });
 
     function RemoveMask() {
         $(".input-mask").unmask();
         $(".percentage").unmask();
-        $(".date").unmask();
     }
 
-    MaskInput();
-
-    function InitiateDatePicker() {
-        $(".date-picker").datepicker({
-            format: "mm/yyyy",
-            minViewMode: 1,
-            language: "vi-VN"
-        });
-    }
-
-    $(document).on("shown.bs.modal", "#create-new-income-modal", function () {
-        MaskInput();
-        InitiateDatePicker();
-    })
-
-    $(document).on("shown.bs.modal", "#update-income-modal", function () {
-        MaskInput();
-        InitiateDatePicker();
-    })
-
-    $('#create-new-income-modal').on('hidden.bs.modal', function (e) {
-        $(this)
-            .find("input[type!='hidden'],textarea,select")
-            .val('')
-            .end()
-            .find("input[type=checkbox], input[type=radio]")
-            .prop("checked", "")
-            .end();
-        MaskInput();
-    })
-
-    $(document).on("click", ".create-income", function () {
-        RemoveMask();
-        var data = $("#create-new-income-modal .form-horizontal").serialize();
-
+    function RefreshIncomeForm(id, msg) {
         $.ajax({
-            url: Url.CreateIncome,
-            type: "post",
-            data: data,
-            success: function (data) {
-                if (data.result > 0) {
-                    $("#create-new-income-modal").modal("hide");
-                    LoadTable();
-                }
-                else {
-                    alert("Có lỗi xảy ra");
-                }
-            }
-        })
-        MaskInput();
-    })
-
-    function LoadTable() {
-        $.ajax({
-            url: Url.LoadTable,
-            type: "post",
-            data: { type: incomeType },
-            dataType: "html",
-            success: function (data) {
-                if (data.length > 0) {
-                    $(".background").html($(data).find(".background").children());
-                }
-                else {
-                    alert("Có lỗi xảy ra");
-                }
-            }
-        })
-    }
-
-    $(document).on("click", ".update-income", function () {
-        var id = $(this).data("income-id");
-
-        $.ajax({
-            url: Url.LoadIncome,
+            url: Url.IncomeForm,
             type: "get",
-            data: { incomeId: id },
-            contentType: "html",
+            data: { id: id },
             success: function (data) {
-                if (data.length > 0) {
-                    $(".update-modal").html(data);
-                    $("#update-income-modal").modal("show");
+                $("#income-form").html($(data).html());
+                $("#status").html(msg);
+                $.validator.unobtrusive.parse("#income-form");
+                if (id > 0) {
+                    InitializeSelect(false);
                 }
                 else {
-                    alert("Có lỗi xảy ra");
+                    InitializeSelect(true);
                 }
             }
         })
-    })
+    }
 
-    $(document).on("click", ".save-income", function () {
-        RemoveMask();
-        var data = $("#update-income-modal .form-horizontal").serialize();
+    function RefreshAvailableMoney() {
+        $(".available-money").submit();
+    }
 
-        $.ajax({
-            url: Url.UpdateIncome,
-            type: "post",
-            data: data,
-            success: function (data) {
-                if (data.result > 0) {
-                    $("#update-income-modal").modal("hide");
-                    LoadTable();
-                }
-                else {
-                    alert("Có lỗi xảy ra");
-                }
-            }
-        })
-        MaskInput();
-    })
+    //function InitiateDatePicker() {
+    //    $(".date-picker").datepicker({
+    //        format: "mm/yyyy",
+    //        minViewMode: 1,
+    //        language: "vi-VN"
+    //    });
+    //}
 
-    $(document).on("click", ".delete-income", function () {
-        var id = $(this).data("income-id");
-        if (confirm("Bạn có muốn xóa thu nhập này?") === true) {
-            $.ajax({
-                url: Url.DeleteIncome,
-                type: "POST",
-                data: { incomeId: id },
-                success: function (data) {
-                    if (data.result > 0) {
-                        LoadTable();
-                    }
-                    else {
-                        alert("Có lỗi xảy ra");
-                    }
-                }
-            })
+    //MaskInput();
+    //InitiateDatePicker();
+
+    $(document).on("click", "input[type='checkbox']", function () {
+        var row = $(this).closest("tr");
+        if ($(this).is(":checked")) {
+            $(".id").not(this).attr("checked", false);
+            $(".asset-table tr").removeClass("success");
+            $(this).closest("tr").addClass("success");
+            var id = $(this).val();
+            RefreshIncomeForm(id, null);
+        }
+        else {
+            $(".asset-table tr").removeClass("success");
+            RefreshIncomeForm();
         }
     })
 
+    $(document).on("click", ".process-income", function () {
+        var income = $("#income-form input,select").serialize();
+        $.ajax({
+            url: Url.ProcessIncome,
+            type: "post",
+            data: income,
+            success: function (data) {
+                $("#cashflow-modal").modal("hide");
+                RefreshIncomeForm(0, data);
+                RefreshAvailableMoney();
+                $(".text-danger").html("");
+                $("#table-ajax").submit();
+            }
+        })
+    })
+
+    $(document).on("click", ".delete-income-info", function () {
+        var id = $(this).closest("tr").find(".id").val();
+        $(".id").not(this).attr("checked", false);
+        $(this).closest("tr").find(".id").prop("checked", true);
+        $(".asset-table tr").removeClass("success");
+        $(this).closest("tr").addClass("success");
+        $.ajax({
+            url: Url.CashflowDetail,
+            type: "post",
+            data: { incomeId: id },
+            success: function (data) {
+                $("#modal").html(data);
+                $("#cashflow-modal").modal("show");
+            }
+        })
+    })
+
+    $(document).on("click", ".delete-income", function () {
+        var id = $(".asset-table tr[class='success']").find(".id").val();
+        $.ajax({
+            url: Url.DeleteIncome,
+            type: "post",
+            data: { incomeId: id },
+            success: function (data) {
+                $("#cashflow-modal").modal("hide");
+                RefreshIncomeForm(0, data);
+                RefreshAvailableMoney();
+                $("#table-ajax").submit();
+            }
+        })
+    })
+
+    $(document).on("click", ".create-income", function () {
+        $(".id").attr("checked", false);
+        $("#table-ajax tr").removeClass("success");
+        $.ajax({
+            url: Url.IncomeForm,
+            type: "get",
+            success: function (data) {
+                $(".text-danger").html("");
+                RefreshIncomeForm();
+            }
+        })
+    })
+
+    $(document).on("change", "#Name", function () {
+        var name = $(this).find("option:selected").val();
+        $.ajax({
+            url: Url.GetStartDate,
+            type: "post",
+            data: { name: name },
+            success: function (data) {
+                $("#StartDate").val(data);
+                var startDate = new moment(data, "MM/YYYY").toDate();
+                $("#StartDate").datepicker("destroy");
+                $("#StartDate").datepicker({
+                    format: "mm/yyyy",
+                    minViewMode: 1,
+                    language: "vi-VN",
+                    startDate: startDate
+                });
+            }
+        })
+    })
+
+    $(document).on("click", ".toggle-form", function () {
+        if ($(this).hasClass("glyphicon-circle-arrow-down")) {
+            $(this).removeClass("glyphicon-circle-arrow-down").addClass("glyphicon-circle-arrow-up");
+        }
+        else {
+            $(this).removeClass("glyphicon-circle-arrow-up").addClass("glyphicon-circle-arrow-down");
+        }
+    })
+
+    $(document).on("click", ".toggle-confirmation", function () {;
+        $.ajax({
+            url: Url.InitializeModal,
+            type: "get",
+            success: function (data) {
+                $("#confirmation-modal").html(data);
+                $("#income-confirmation").modal("show");
+            }
+        })
+    })
 })

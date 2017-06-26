@@ -1,0 +1,64 @@
+﻿@model CashFlowManagement.ViewModels.ExpenseListViewModel
+@using CashFlowManagement.Utilities
+@using CashFlowManagement.EntityModel
+@using CashFlowManagement.Constants
+@using CashFlowManagement.ViewModels
+@{
+    ViewBag.Title = "Report";
+    Layout = "";
+
+    DateTime current = DateTime.Now;
+}
+
+<div class="background">
+    <div class="text-right"></div>
+    <div class="liability-table">
+        <table class="table table-bordered table-condensed table-responsive">
+            <thead>
+                <tr>
+                    <th class="text-left">Nguồn chi tiêu</th>
+                    <th class="text-right">Ngày chi hàng tháng</th>
+                    <th class="text-right">Tháng bắt đầu</th>
+                    <th class="text-right">Tháng kết thúc</th>
+                    <th class="text-right">Chi tiêu tháng</th>
+                    <th class="text-right">Chi tiêu năm</th>
+                    <th class="text-left">Ghi chú</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="text-danger"><strong>Tổng</strong></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td class="text-right text-danger"><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.TotalMonthlyExpense)</strong></td>
+                    <td class="text-right text-danger"><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.TotalMonthlyExpense * 12)</strong></td>
+                    <td></td>
+                </tr>
+                @if (Model.List.Any())
+                {
+                    foreach (var item in Model.List)
+                    {
+                        <tr>
+                            <td>@item.Name</td>
+                            <td class="text-right">@FormatUtility.DisplayThousandSeparatorsForNumber(item.ExpenseDay)</td>
+                            <td class="text-right">@item.StartDate.ToString("MM/yyyy")</td>
+                            <td class="text-right">@(item.EndDate.HasValue ? item.EndDate.Value.ToString("MM/yyyy") : string.Empty)</td>
+                            <td class="text-right">@FormatUtility.DisplayThousandSeparatorsForNumber(item.Value)</td>
+                            <td class="text-right">@FormatUtility.DisplayThousandSeparatorsForNumber(item.Value * 12)</td>
+                            <td>@item.Note</td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="14" class="text-center">Không có khởi tạo/td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+

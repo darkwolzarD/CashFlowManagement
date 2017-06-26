@@ -1,0 +1,79 @@
+﻿@using CashFlowManagement.Constants
+@using CashFlowManagement.EntityModel
+@using CashFlowManagement.Queries
+@using CashFlowManagement.Utilities
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    @Styles.Render("https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/bootstrap")
+    <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+    @Scripts.Render("https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.10/jquery.mask.min.js")
+    <script src="@Url.Content("~/Scripts/cldr.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/globalize.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/selectize.js")" type="text/javascript"></script>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row header">
+            <div class="col-md-4 logo">
+                <img class="logo-image" src="~/images/Generic_Avatar.png" width="40" />
+                <span class="logo-text">Quản lý tài chính</span>
+                @using (Ajax.BeginForm("CheckAvailableMoney", "Asset", null, new AjaxOptions { HttpMethod = "Post", UpdateTargetId = "available-money" }, new { @class = "available-money", @style = "display: inline;" }))
+                {
+                    <span class="logo-text" style="font-size: 12px; margin-left: 20px; padding-top: 70px;"><strong>Tiền mặt có sẵn: </strong> <span id="available-money">@FormatUtility.DisplayThousandSeparatorsForNumber(AssetQueries.CheckAvailableMoney(UserQueries.GetCurrentUsername(), DateTime.Now))</span> đồng</span>
+                }
+            </div>
+            <div class="col-md-7 navigation">
+                <ul class="nav-bar">
+                    <li><a href="#"></a></li>
+                    <li><a href="#">Thu nhập</a></li>
+                    <li>
+                        <a href="#"></a>
+                        <ul class="nav-bar">
+                            <li><a href="#"></a></li>
+                            <li><a href="#"></a></li>
+                            <li><a href="#"></a></li>
+                            <li><a href="#"></a></li>
+                            <li><a href="#"></a></li>
+                            <li><a href="#"></a></li>
+                        </ul>
+                    </li>
+                    <li style="width: 100px">
+                        <a href="#"></a>
+                        <ul class="nav-bar">
+                            <li><a href="#"></a></li>
+                            <li><a href="#"></a></li>
+                            <li><a href="#"></a></li>
+                        </ul>
+                    </li>
+                    <li style="width: 150px">
+                        <a href="#"></a>
+                        <ul class="nav-bar">
+                            <li><a href="#"></a></li>
+                            <li><a href="#"></a></li>
+                        </ul>
+                    </li>
+                    <li style="width: 30px;"><a href="#"></a></li>
+                    <li style="width: 90px"><a href="#"></a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row content">
+            @RenderBody()
+        </div>
+    </div>
+
+    @Scripts.Render("~/bundles/layout")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

@@ -143,7 +143,7 @@
                         <div class="form-group">
                             <label class="control-label col-sm-3">Ghi chú:</label>
                             <div class="col-sm-9">
-                                @Html.TextBoxFor(x => x.Asset.Note, new { @type = "text", @class = "form-control" })
+                                @Html.TextBoxFor(x => x.Asset.Note, new { @type = "text", @class = "form-control", @placeholder = "Không bắt buộc" })
                             </div>
                         </div>
                     }
@@ -154,7 +154,7 @@
                             <div class="form-group">
                                 <label class="control-label col-sm-3">Ngày giao dịch:</label>
                                 <div class="col-sm-9">
-                                    @Html.TextBoxFor(x => x.Transaction.TransactionDate, "{0:dd/MM/yyyy}", new { @type = "text", @class = "form-control date-picker" })
+                                    @Html.TextBoxFor(x => x.Transaction.TransactionDate, "{0:dd/MM/yyyy}", new { @type = "text", @class = "form-control date-picker-2" })
                                     @Html.HiddenFor(x => x.Transaction.Id)
                                 </div>
                             </div>
@@ -191,7 +191,7 @@
                             <div class="form-group">
                                 <label class="control-label col-sm-3">Ghi chú:</label>
                                 <div class="col-sm-9">
-                                    @Html.TextBoxFor(x => x.Transaction.Note, new { @type = "text", @class = "form-control" })
+                                    @Html.TextBoxFor(x => x.Transaction.Note, new { @type = "text", @class = "form-control", @placeholder = "Không bắt buộc" })
                                 </div>
                             </div>
                         }
@@ -209,7 +209,7 @@
                             <div class="form-group">
                                 <label class="control-label col-sm-3">Ngày giao dịch:</label>
                                 <div class="col-sm-9">
-                                    @Html.TextBoxFor(x => x.Transaction.TransactionDate, "{0:dd/MM/yyyy}", new { @type = "text", @class = "form-control date-picker" })
+                                    @Html.TextBoxFor(x => x.Transaction.TransactionDate, "{0:dd/MM/yyyy}", new { @type = "text", @class = "form-control date-picker-2" })
                                     @Html.HiddenFor(x => x.Asset.AssetType)
                                 </div>
                             </div>
@@ -240,7 +240,7 @@
                             <div class="form-group">
                                 <label class="control-label col-sm-3">Ghi chú:</label>
                                 <div class="col-sm-9">
-                                    @Html.TextBoxFor(x => x.Transaction.Note, new { @type = "text", @class = "form-control" })
+                                    @Html.TextBoxFor(x => x.Transaction.Note, new { @type = "text", @class = "form-control", @placeholder = "Không bắt buộc" })
                                 </div>
                             </div>
                             <div class="form-group">
@@ -346,7 +346,7 @@
                             <div class="form-group">
                                 <label class="control-label col-sm-3">Ngày bán: </label>
                                 <div class="col-sm-9">
-                                    @Html.TextBoxFor(x => x.Transaction.TransactionDate, "{0:dd/MM/yyyy}", new { @type = "text", @class = "form-control date-picker" })
+                                    @Html.TextBoxFor(x => x.Transaction.TransactionDate, "{0:dd/MM/yyyy}", new { @type = "text", @class = "form-control date-picker-2" })
                                 </div>
                             </div>
                             <div class="form-group">
@@ -376,7 +376,7 @@
                             <div class="form-group">
                                 <label class="control-label col-sm-3">Ghi chú: </label>
                                 <div class="col-sm-9">
-                                    @Html.TextBoxFor(x => x.Transaction.Note, new { @type = "text", @class = "form-control" })
+                                    @Html.TextBoxFor(x => x.Transaction.Note, new { @type = "text", @class = "form-control", @placeholder = "Không bắt buộc" })
                                 </div>
                             </div>
                         }
@@ -387,7 +387,7 @@
                         <div class="form-group">
                             <label class="control-label col-sm-3">Ngày gửi:</label>
                             <div class="col-sm-9">
-                                @Html.TextBoxFor(x => x.Asset.StartDate, "{0:dd/MM/yyyy}", new { @type = "text", @class = "form-control date-picker" })
+                                @Html.TextBoxFor(x => x.Asset.StartDate, "{0:dd/MM/yyyy}", new { @type = "text", @class = "form-control date-picker-2" })
                             </div>
                         </div>
                         <div class="form-group">

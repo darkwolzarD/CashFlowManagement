@@ -349,7 +349,7 @@ namespace CashFlowManagement.Queries
                                     {
                                         model.MonthlyInterestPayment = parentLiability.Value * liability.InterestRate / 1200;
                                     }
-                                    model.CurrentInterestRatePerYear = parentLiability.InterestRate;
+                                    model.CurrentInterestRatePerYear = liability.InterestRate;
                                     model.CurrentMonth = startDate;
                                     model.Highlight = true;
                                 }

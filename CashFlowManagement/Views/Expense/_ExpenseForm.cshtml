@@ -1,0 +1,147 @@
+﻿@using CashFlowManagement.Constants
+@using CashFlowManagement.EntityModel
+@using CashFlowManagement.Queries
+@model CashFlowManagement.EntityModel.Expenses
+@{
+    Entities entities = new Entities();
+    List<SelectListItem> dates = new List<SelectListItem>();
+    for (int i = 1; i <= 30; i++)
+    {
+        if (i != 29)
+        {
+            dates.Add(new SelectListItem { Text = i.ToString(), Value = i.ToString() });
+        }
+    }
+
+    string username = UserQueries.GetCurrentUsername();
+    List<SelectListItem> expenseNames = new List<SelectListItem>();
+    foreach (var expense in entities.Expenses.Where(x => x.Username.Equals(username) && x.ExpenseType == Model.ExpenseType && !x.DisabledDate.HasValue).GroupBy(x => x.Name))
+    {
+        expenseNames.Add(new SelectListItem
+        {
+            Text = expense.FirstOrDefault().Name,
+            Value = expense.FirstOrDefault().Name
+        });
+    }
+}
+<div id="expense-form">
+    @using (Ajax.BeginForm("_CashflowDetail", "Expense", null, new AjaxOptions { OnSuccess = "CashFlowModal", HttpMethod = "Post" }, new { @class = "form-horizontal" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+        <div class="col-md-6">
+            @if (Model.ExpenseType == (int)Constants.EXPENSE_TYPE.FAMILY)
+            {
+            <strong style="font-size: 12px;">Thông tin chi tiêu gia đình (Family expense information)</strong>
+            }
+            else if (Model.ExpenseType == (int)Constants.EXPENSE_TYPE.OTHERS)
+            {
+                <strong style="font-size: 12px;">Thông tin chi tiêu khác (Other expense information)</strong>
+            }
+        </div>
+        <div class="col-md-6 text-right">
+            <span style="font-size: 15px" class="glyphicon glyphicon-circle-arrow-down toggle-form" data-toggle="collapse" data-target=".hidable-form"></span>
+        </div>
+        <div class="clear10"></div>
+        <div class="col-md-12">
+            <hr />
+        </div>
+        <div class="hidable-form in">
+            <div class="col-md-4">
+                <label class="control-label col-md-5">Nguồn (Expense source): </label>
+                <div class="col-md-7">
+                    @if (Model.Id > 0)
+                    {
+                        @Html.DropDownListFor(x => x.Name, expenseNames, new { @type = "text", @class = "form-control", @readonly = "true" })
+                    }
+                    else
+                    {
+                        @Html.DropDownListFor(x => x.Name, expenseNames, new { @type = "text", @class = "form-control select" })
+                        @Html.ValidationMessageFor(x => x.Name, null, new { @class = "text-danger" })
+                    }
+                    @Html.HiddenFor(x => x.Id)
+                    @Html.HiddenFor(x => x.ExpenseType)
+                </div>
+            </div>
+            <div class="col-md-4">
+                <label class="control-label col-md-4">Chi hàng tháng(Expense value):</label>
+                <div class="col-md-8">
+                    @Html.EditorFor(x => x.Value, new { htmlAttributes = new { @Value = (Model.Value == 0 ? "" : string.Format("{0:N0}", Model.Value)), @type = "text", @class = "form-control input-mask" } })
+                    @Html.ValidationMessageFor(x => x.Value, null, new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-4">
+                <label class="control-label col-md-4">Ghi chú (Note):</label>
+                <div class="col-md-8">
+                    @Html.TextBoxFor(x => x.Note, new { @type = "text", @class = "form-control", @placeholder = "Không bắt buộc (Optional)" })
+                </div>
+            </div>
+            <div class="clear10"></div>
+
+            <div class="col-md-4">
+                <label class="control-label col-md-5">Ngày chi (Expense day):</label>
+                <div class="col-md-7">
+                    @Html.DropDownListFor(x => x.ExpenseDay, dates, new { @type = "text", @class = "form-control" })
+                    @Html.ValidationMessageFor(x => x.ExpenseDay)
+                </div>
+            </div>
+            <div class="col-md-4">
+                <label class="control-label col-md-4">Tháng bắt đầu (Start month):</label>
+                @if (Model.Id > 0)
+                {
+                    <div class="col-md-8">
+                        @Html.EditorFor(x => x.StartDate, new { htmlAttributes = new { @Value = Model.StartDate.Equals(DateTime.MinValue) ? "" : Model.StartDate.ToString("MM/yyyy"), @type = "text", @class = "form-control", @readonly = "true" } })
+                        @Html.ValidationMessageFor(x => x.StartDate, null, new { @class = "text-danger" })
+                    </div>
+                }
+                else
+                {
+                    <div class="col-md-8">
+                        @Html.EditorFor(x => x.StartDate, new { htmlAttributes = new { @Value = Model.StartDate.Equals(DateTime.MinValue) ? "" : Model.StartDate.ToString("MM/yyyy"), @type = "text", @class = "form-control", @data_provide = "datepicker", @data_date_format = "mm/yyyy", @data_date_min_view_mode = "1", @data_date_language = "vi-VN", @data_date_start_date = Model.StartDate.ToString("MM/yyyy") } })
+                        @Html.ValidationMessageFor(x => x.StartDate, null, new { @class = "text-danger" })
+                    </div>
+
+                }
+            </div>
+            <div class="col-md-4">
+                @if (Model.Id == 0 || (Model.Id > 0 && !Model.EndDate.HasValue))
+                {
+                    <label class="control-label col-md-4">Tháng kết thúc (End month):</label>
+                    <div class="col-md-8">
+                        @Html.EditorFor(x => x.EndDate, new { htmlAttributes = new { @type = "text", @class = "form-control", @data_provide = "datepicker", @data_date_format = "mm/yyyy", @data_date_min_view_mode = "1", @data_date_language = "vi-VN", @placeholder = "Không bắt buộc (Optional)" } })
+                        @Html.ValidationMessageFor(x => x.EndDate, null, new { @class = "text-danger" })
+                    </div>
+                }
+                else
+                {
+                    <label class="control-label col-md-4">Tháng kết thúc (End month):</label>
+                    <div class="col-md-8">
+                        @Html.EditorFor(x => x.EndDate, new { htmlAttributes = new { @type = "text", @class = "form-control", @readonly = "true" } })
+                        @Html.ValidationMessageFor(x => x.EndDate, null, new { @class = "text-danger" })
+                    </div>
+                }
+            </div>
+            <div class="clear10"></div>
+            <div class="col-md-6 col-md-offset-6 text-right">
+                <div id="status" class="col-md-8 text-right text-success" style="font-weight: bold; padding-top: 7px;"></div>
+                <div class="col-md-4">
+                    @if (Model.Id == 0)
+                {
+                        <button type="submit" class="btn btn-success">
+                            <span class="glyphicon glyphicon-ok"></span>
+                            Lưu (Save)
+                        </button>
+                    }
+                    else
+                    {
+                        <button type="submit" class="btn btn-warning">
+                            <span class="glyphicon glyphicon-ok"></span>
+                            Cập nhật (Update)
+                        </button>
+                    }
+                </div>
+            </div>
+            <div class="clear10"></div>
+        </div>
+    }
+</div>

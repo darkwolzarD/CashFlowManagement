@@ -1,0 +1,193 @@
+﻿@model List<CashFlowManagement.EntityModel.History>
+@using CashFlowManagement.Constants
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="clear10"></div>
+<table class="table table-responsive">
+    <thead>
+        <tr>
+            <th>Type</th>
+            <th>Action</th>
+            <th>Content</th>
+            <th>Field</th>
+            <th>Old Value</th>
+            <th>New Value</th>
+            <th>Created Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var history in Model)
+        {
+            <tr>
+                <td>
+                    @if(history.AssetId.HasValue) {
+                        if(history.Type == (int)Constants.ASSET_TYPE.AVAILABLE_MONEY)
+                        {
+                            @Html.Raw("Tiền mặt")
+                        }
+                        else if (history.Type == (int)Constants.ASSET_TYPE.BANK_DEPOSIT)
+                        {
+                            @Html.Raw("Tiền tiết kiệm")
+                        }
+                        else if (history.Type == (int)Constants.ASSET_TYPE.BUSINESS)
+                        {
+                            @Html.Raw("Kinh doanh")
+                        }
+                        else if (history.Type == (int)Constants.ASSET_TYPE.INSURANCE)
+                        {
+                            @Html.Raw("Bảo hiểm nhân thọ")
+                        }
+                        else if (history.Type == (int)Constants.ASSET_TYPE.OTHERS)
+                        {
+                            @Html.Raw("Tài sản khác")
+                        }
+                        else if (history.Type == (int)Constants.ASSET_TYPE.REAL_ESTATE)
+                        {
+                            @Html.Raw("Bất động sản")
+                        }
+                        else if (history.Type == (int)Constants.ASSET_TYPE.STOCK)
+                        {
+                            @Html.Raw("Chứng khoán")
+                        }
+                    }
+                    else if (history.IncomeId.HasValue)
+                    {
+                        if (history.Type == (int)Constants.INCOME_TYPE.BANK_DEPOSIT_INCOME)
+                        {
+                            @Html.Raw("Thu nhập từ tiền tiết kiệm")
+                        }
+                        else if (history.Type == (int)Constants.INCOME_TYPE.BUSINESS_INCOME)
+                        {
+                            @Html.Raw("Thu nhập từ kinh doanh")
+                        }
+                        else if (history.Type == (int)Constants.INCOME_TYPE.REAL_ESTATE_INCOME)
+                        {
+                            @Html.Raw("Thu nhập từ cho thuê bất động sản")
+                        }
+                        else if (history.Type == (int)Constants.INCOME_TYPE.SALARY_INCOME)
+                        {
+                            @Html.Raw("Thu nhập từ lương")
+                        }
+                        else if (history.Type == (int)Constants.INCOME_TYPE.STOCK_INCOME)
+                        {
+                            @Html.Raw("Thu nhập từ chứng khoán")
+                        }
+                    }
+                    else if (history.LiabilityId.HasValue)
+                    {
+                        if (history.Type == (int)Constants.LIABILITY_TYPE.BUSINESS)
+                        {
+                            @Html.Raw("Nợ kinh doanh")
+                        }
+                        else if (history.Type == (int)Constants.LIABILITY_TYPE.CAR)
+                        {
+                            @Html.Raw("Nợ xe hơi và tiêu sản khác")
+                        }
+                        else if (history.Type == (int)Constants.LIABILITY_TYPE.CREDIT_CARD)
+                        {
+                            @Html.Raw("Nợ thẻ tính dụng")
+                        }
+                        else if (history.Type == (int)Constants.LIABILITY_TYPE.INSURANCE)
+                        {
+                            @Html.Raw("Nợ bảo hiểm")
+                        }
+                        else if (history.Type == (int)Constants.LIABILITY_TYPE.OTHERS)
+                        {
+                            @Html.Raw("Nợ khác")
+                        }
+                        else if (history.Type == (int)Constants.LIABILITY_TYPE.REAL_ESTATE)
+                        {
+                            @Html.Raw("Nợ mua bất động sản")
+                        }
+                        else if (history.Type == (int)Constants.LIABILITY_TYPE.STOCK)
+                        {
+                            @Html.Raw("Nợ mua chứng khoán")
+                        }
+                    }
+                    else if (history.ExpenseId.HasValue)
+                    {
+                        if (history.Type == (int)Constants.EXPENSE_TYPE.BUSINESS)
+                        {
+                            @Html.Raw("Chi tiêu cho kinh doanh")
+                        }
+                        else if (history.Type == (int)Constants.EXPENSE_TYPE.CAR)
+                        {
+                            @Html.Raw("Chi tiêu từ nợ mua xe")
+                        }
+                        else if (history.Type == (int)Constants.EXPENSE_TYPE.CREDIT_CARD)
+                        {
+                            @Html.Raw("Chi tiêu từ nợ thẻ tín dụng")
+                        }
+                        else if (history.Type == (int)Constants.EXPENSE_TYPE.FAMILY)
+                        {
+                            @Html.Raw("Chi tiêu cho gia đình")
+                        }
+                        else if (history.Type == (int)Constants.EXPENSE_TYPE.INSURANCE)
+                        {
+                            @Html.Raw("Chi tiêu cho bảo hiểm nhân thọ")
+                        }
+                        else if (history.Type == (int)Constants.EXPENSE_TYPE.LIABILITY_OTHERS)
+                        {
+                            @Html.Raw("Chi tiêu từ nợ khác")
+                        }
+                        else if (history.Type == (int)Constants.EXPENSE_TYPE.OTHERS)
+                        {
+                            @Html.Raw("Chi tiêu khác")
+                        }
+                        else if (history.Type == (int)Constants.EXPENSE_TYPE.REAL_ESTATE)
+                        {
+                            @Html.Raw("Chi tiêu từ nợ bất động sản")
+                        }
+                        else if (history.Type == (int)Constants.EXPENSE_TYPE.STOCK)
+                        {
+                            @Html.Raw("Chi tiêu từ nợ chứng khoán")
+                        }
+                    }
+                </td>
+                <td>
+                    @if(history.ActionType == (int)Constants.HISTORY_TYPE.BUY)
+                    {
+                        @Html.Raw("Mua")
+                    }
+                    else if (history.ActionType == (int)Constants.HISTORY_TYPE.CREATE)
+                    {
+                        @Html.Raw("Tạo mới")
+                    }
+                    else if (history.ActionType == (int)Constants.HISTORY_TYPE.DELETE)
+                    {
+                        @Html.Raw("Hủy")
+                    }
+                    else if (history.ActionType == (int)Constants.HISTORY_TYPE.EXPENSE)
+                    {
+                        @Html.Raw("Chi")
+                    }
+                    else if (history.ActionType == (int)Constants.HISTORY_TYPE.INCOME)
+                    {
+                        @Html.Raw("Thu")
+                    }
+                    else if (history.ActionType == (int)Constants.HISTORY_TYPE.SELL)
+                    {
+                        @Html.Raw("Bán")
+                    }
+                    else if (history.ActionType == (int)Constants.HISTORY_TYPE.UPDATE)
+                    {
+                        @Html.Raw("Cập nhật")
+                    }
+                    else if (history.ActionType == (int)Constants.HISTORY_TYPE.WITHDRAW)
+                    {
+                        @Html.Raw("Rút tiền")
+                    }
+                </td>
+                <td>@history.Content</td>
+                <td>@(string.IsNullOrEmpty(history.Field) ? "-" : history.Field)</td>
+                <td>@(string.IsNullOrEmpty(history.OldValue) ? "-" : history.OldValue)</td>
+                <td>@(string.IsNullOrEmpty(history.NewValue) ? "-" : history.NewValue)</td>
+                <td>@history.CreatedDate.ToString("dd/MM/yyyy")</td>
+            </tr>
+        }
+    </tbody>
+</table>
+

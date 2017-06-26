@@ -46,6 +46,8 @@
         <li class="active">Tài sản</li>
         <li class="active">@title</li>
     </ol>*@
+<h4>@title</h4>
+<hr />
 <div class="clear10"></div>
 <div class="background">
     <div class="row">
@@ -173,16 +175,16 @@
                 if (Model.Type == (int)Constants.ASSET_TYPE.INSURANCE)
                 {
                             <tr>
-                                <td><strong style="color: red;">Tổng</strong></td>
-                                <td><strong style="color: red;">@FormatUtility.DisplayThousandSeparatorsForNumber(Model.TotalValue)</strong></td>
-                                <td><strong style="color: red;">@FormatUtility.DisplayThousandSeparatorsForNumber(Model.List.Select(x => x.LiabilityList.List.FirstOrDefault().TotalPaymentPeriod * x.Liability.Value).DefaultIfEmpty(0).Sum())</strong></td>
-                                <td><strong style="color: red;"></strong></td>
-                                <td><strong style="color: red;"></strong></td>
-                                <td><strong style="color: red;"></strong></td>
-                                <td><strong style="color: red;">@FormatUtility.DisplayThousandSeparatorsForNumber(Model.List.Select(x => x.LiabilityList.List.FirstOrDefault().MonthlyPayment).DefaultIfEmpty(0).Sum())</strong></td>
-                                <td><strong style="color: red;">@FormatUtility.DisplayThousandSeparatorsForNumber(Model.List.Select(x => x.LiabilityList.List.FirstOrDefault().AnnualPayment).DefaultIfEmpty(0).Sum())</strong></td>
-                                <td><strong style="color: red;">@FormatUtility.DisplayThousandSeparatorsForNumber(Model.List.Select(x => x.LiabilityList.List.FirstOrDefault().RemainedValue).DefaultIfEmpty(0).Sum())</strong></td>
-                                <td><strong style="color: red;"></strong></td>
+                                <td><strong class="text-danger">Tổng</strong></td>
+                                <td><strong class="text-danger">@FormatUtility.DisplayThousandSeparatorsForNumber(Model.TotalValue)</strong></td>
+                                <td><strong class="text-danger">@FormatUtility.DisplayThousandSeparatorsForNumber(Model.List.Select(x => x.LiabilityList.List.FirstOrDefault().TotalPaymentPeriod * x.Liability.Value).DefaultIfEmpty(0).Sum())</strong></td>
+                                <td><strong class="text-danger"></strong></td>
+                                <td><strong class="text-danger"></strong></td>
+                                <td><strong class="text-danger"></strong></td>
+                                <td><strong class="text-danger">@FormatUtility.DisplayThousandSeparatorsForNumber(Model.List.Select(x => x.LiabilityList.List.FirstOrDefault().MonthlyPayment).DefaultIfEmpty(0).Sum())</strong></td>
+                                <td><strong class="text-danger">@FormatUtility.DisplayThousandSeparatorsForNumber(Model.List.Select(x => x.LiabilityList.List.FirstOrDefault().AnnualPayment).DefaultIfEmpty(0).Sum())</strong></td>
+                                <td><strong class="text-danger">@FormatUtility.DisplayThousandSeparatorsForNumber(Model.List.Select(x => x.LiabilityList.List.FirstOrDefault().RemainedValue).DefaultIfEmpty(0).Sum())</strong></td>
+                                <td><strong class="text-danger"></strong></td>
                                 <td></td>
                             </tr>
                             foreach (var item in Model.List)
@@ -214,14 +216,14 @@
                         else if (Model.Type == (int)Constants.ASSET_TYPE.STOCK)
                         {
                             <tr>
-                                <td class="text-center"><strong style="color: red;">Tổng</strong></td>
-                                <td><strong style="color: red;"></strong></td>
-                                <td><strong style="color: red;"></strong></td>
-                                <td><strong style="color: red;"></strong></td>
-                                <td><strong style="color: red;"></strong></td>
-                                <td><strong style="color: red;"></strong></td>
-                                <td><strong style="color: red;">@FormatUtility.DisplayThousandSeparatorsForNumber(Model.List.Sum(x => x.Asset.StockTransactions.Where(y => !y.DisabledDate.HasValue).Sum(y => y.BrokerFee)))</strong></td>
-                                <td colspan="3"><strong style="color: red;">@FormatUtility.DisplayThousandSeparatorsForNumber(Model.List.Sum(x => x.Asset.StockTransactions.Where(y => !y.DisabledDate.HasValue).Sum(y => y.TransactionType == (int)Constants.TRANSACTION_TYPE.SELL ? 0 - y.Value : y.Value)))</strong></td>
+                                <td class="text-center"><strong class="text-danger">Tổng</strong></td>
+                                <td><strong class="text-danger"></strong></td>
+                                <td><strong class="text-danger"></strong></td>
+                                <td><strong class="text-danger"></strong></td>
+                                <td><strong class="text-danger"></strong></td>
+                                <td><strong class="text-danger"></strong></td>
+                                <td><strong class="text-danger">@FormatUtility.DisplayThousandSeparatorsForNumber(Model.List.Sum(x => x.Asset.StockTransactions.Where(y => !y.DisabledDate.HasValue).Sum(y => y.BrokerFee)))</strong></td>
+                                <td colspan="3"><strong class="text-danger">@FormatUtility.DisplayThousandSeparatorsForNumber(Model.List.Sum(x => x.Asset.StockTransactions.Where(y => !y.DisabledDate.HasValue).Sum(y => y.TransactionType == (int)Constants.TRANSACTION_TYPE.SELL ? 0 - y.Value : y.Value)))</strong></td>
                                 <td colspan="6"></td>
                             </tr>
                             foreach (var item in Model.List)
@@ -258,6 +260,10 @@
                                             else if (transaction.TransactionType == (int)Constants.TRANSACTION_TYPE.SELL)
                                             {
                                                 @Html.Raw("Bán")
+                                            }
+                                            else if (transaction.TransactionType == (int)Constants.TRANSACTION_TYPE.DIVIDEND)
+                                            {
+                                                @Html.Raw("Cổ tức")
                                             }
                                         </td>
                                         <td>@FormatUtility.DisplayThousandSeparatorsForNumber(transaction.NumberOfShares)</td>
@@ -339,7 +345,7 @@
                                                 <td>@FormatUtility.DisplayThousandSeparatorsForNumber(liabilityViewModel.MonthlyPayment)</td>
                                                 <td>@FormatUtility.DisplayThousandSeparatorsForNumber(liabilityViewModel.AnnualPayment)</td>
                                                 <td>@FormatUtility.DisplayThousandSeparatorsForNumber(liabilityViewModel.RemainedValue)</td>
-                                                <td class="text-center" width="200px" style="vertical-align: middle" colspan="2">
+                                                <td class="text-center" width="210px" style="vertical-align: middle" colspan="2">
                                                     @*<button class="btn btn-success update-loan" data-loan-id="@loanViewModel.Loan.Id">
                                                             <span class="glyphicon glyphicon-pencil"></span>
                                                         </button>*@
@@ -415,11 +421,11 @@
                                     <td></td>
                                     <td></td>
                                 }
-                                <td class="text-right" style="color: red;" colspan="@(Model.Type == (int)Constants.ASSET_TYPE.REAL_ESTATE || Model.Type == (int)Constants.ASSET_TYPE.BUSINESS ? 2 : 1)"><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.TotalMonthlyIncome)</strong></td>
-                                <td class="text-right" style="color: red;" colspan="@(Model.Type == (int)Constants.ASSET_TYPE.REAL_ESTATE || Model.Type == (int)Constants.ASSET_TYPE.BUSINESS ? 2 : 1)"><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.TotalMonthlyIncome * 12)</strong></td>
-                                <td class="text-right" style="color: red;" colspan="@(Model.Type == (int)Constants.ASSET_TYPE.REAL_ESTATE || Model.Type == (int)Constants.ASSET_TYPE.BUSINESS ? 2 : 1)"><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.TotalValue)</strong></td>
-                                <td class="text-right" style="color: red;" colspan="@(Model.Type == (int)Constants.ASSET_TYPE.REAL_ESTATE || Model.Type == (int)Constants.ASSET_TYPE.BUSINESS ? 2 : 1)"><strong>@FormatUtility.DisplayPercentageForNumber(Model.TotalMonthlyIncome / Model.TotalValue * 1200)</strong></td>
-                                <td class="text-right" style="color: red;" colspan="@(Model.Type == (int)Constants.ASSET_TYPE.REAL_ESTATE || Model.Type == (int)Constants.ASSET_TYPE.BUSINESS ? 4 : 1)"></td>
+                                <td class="text-right text-danger" colspan="@(Model.Type == (int)Constants.ASSET_TYPE.REAL_ESTATE || Model.Type == (int)Constants.ASSET_TYPE.BUSINESS ? 2 : 1)"><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.TotalMonthlyIncome)</strong></td>
+                                <td class="text-right text-danger" colspan="@(Model.Type == (int)Constants.ASSET_TYPE.REAL_ESTATE || Model.Type == (int)Constants.ASSET_TYPE.BUSINESS ? 2 : 1)"><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.TotalMonthlyIncome * 12)</strong></td>
+                                <td class="text-right text-danger" colspan="@(Model.Type == (int)Constants.ASSET_TYPE.REAL_ESTATE || Model.Type == (int)Constants.ASSET_TYPE.BUSINESS ? 2 : 1)"><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.TotalValue)</strong></td>
+                                <td class="text-right text-danger" colspan="@(Model.Type == (int)Constants.ASSET_TYPE.REAL_ESTATE || Model.Type == (int)Constants.ASSET_TYPE.BUSINESS ? 2 : 1)"><strong>@FormatUtility.DisplayPercentageForNumber(Model.TotalMonthlyIncome / Model.TotalValue * 1200)</strong></td>
+                                <td class="text-right text-danger" colspan="@(Model.Type == (int)Constants.ASSET_TYPE.REAL_ESTATE || Model.Type == (int)Constants.ASSET_TYPE.BUSINESS ? 4 : 1)"></td>
                                 @if (Model.Type == (int)Constants.ASSET_TYPE.BANK_DEPOSIT)
                                 {
                                     <td></td>
@@ -468,11 +474,11 @@
                                             {
                                                 if (item.Asset.ObtainedBy == (int)Constants.OBTAIN_BY.CREATE)
                                                 {
-                                                    <p style="color: red;">Tài sản khai báo</p>
+                                                    <p class="text-danger">Tài sản khai báo</p>
                                                 }
                                                 else if (item.Asset.ObtainedBy == (int)Constants.OBTAIN_BY.BUY)
                                                 {
-                                                    <p style="color: red;">Tài sản mua</p>
+                                                    <p class="text-danger">Tài sản mua</p>
                                                 }
                                             }
                                         }
@@ -661,17 +667,17 @@ item.Asset.ObtainedBy.HasValue && item.Asset.ObtainedBy.Value == (int)Constants.
                                         <tr>
                                             <td><strong>Tổng</strong></td>
                                             <td></td>
-                                            <td class="text-right"><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(item.TotalMortgageValue)</strong></td>
+                                            <td class="text-right text-danger"><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(item.TotalMortgageValue)</strong></td>
                                             <td></td>
-                                            <td class="text-right"><strong>@FormatUtility.DisplayPercentageForNumber(item.AverageInterestRate)</strong></td>
+                                            <td class="text-right text-danger"><strong>@FormatUtility.DisplayPercentageForNumber(item.AverageInterestRate)</strong></td>
                                             <td></td>
                                             <td></td>
                                             <td></td>
-                                            <td class="text-right"><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(item.TotalOriginalPayment)</strong></td>
-                                            <td class="text-right"><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(item.TotalInterestPayment)</strong></td>
-                                            <td class="text-right"><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(item.TotalMonthlyPayment)</strong></td>
-                                            <td class="text-right"><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(item.TotalAnnualPayment)</strong></td>
-                                            <td class="text-right"><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(item.TotalRemainingValue)</strong></td>
+                                            <td class="text-right text-danger"><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(item.TotalOriginalPayment)</strong></td>
+                                            <td class="text-right text-danger"><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(item.TotalInterestPayment)</strong></td>
+                                            <td class="text-right text-danger"><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(item.TotalMonthlyPayment)</strong></td>
+                                            <td class="text-right text-danger"><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(item.TotalAnnualPayment)</strong></td>
+                                            <td class="text-right text-danger"><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(item.TotalRemainingValue)</strong></td>
                                             <td></td>
                                         </tr>
                                     }

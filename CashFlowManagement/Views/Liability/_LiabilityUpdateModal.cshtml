@@ -149,7 +149,7 @@ Model.LiabilityType != (int)Constants.LIABILITY_TYPE.REAL_ESTATE)
                         <div class="form-group">
                             <label class="control-label col-sm-3">Ghi chú:</label>
                             <div class="col-sm-9">
-                                @Html.TextBoxFor(x => x.Note, new { @type = "text", @class = "form-control" })
+                                @Html.TextBoxFor(x => x.Note, new { @type = "text", @class = "form-control", @placeholder = "Không bắt buộc" })
                             </div>
                         </div>
                     }

@@ -1,0 +1,36 @@
+﻿@using CashFlowManagement.ViewModels
+@using CashFlowManagement.Constants
+@using CashFlowManagement.Queries
+@{
+    DateTime current = DateTime.Now;
+}
+
+<div id="expense-confirmation" class="modal fade" role="dialog">
+    <div class="modal-dialog" style="width: 1000px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">
+                    Xác nhận các khoản chi tiêu
+                </h4>
+            </div>
+            <div class="modal-body">
+            </div>
+            <h4 style="padding-left: 20px;">Chi tiêu gia đình</h4>
+            @Html.Partial("_Report", model: ExpenseQueries.GetExpenseByUser(UserQueries.GetCurrentUsername(), (int)Constants.EXPENSE_TYPE.FAMILY))
+            <h4 style="padding-left: 20px;">Kinh doanh</h4>
+            @Html.Partial("_Report", model: ExpenseQueries.GetExpenseByUser(UserQueries.GetCurrentUsername(), (int)Constants.EXPENSE_TYPE.OTHERS))
+            <div class="modal-footer text-center">
+                <a href="@Url.Action("OtherExpenseInitialize", "Account")" class="btn btn-success process-income" style="font-size: 11px;">
+                    <span class="glyphicon glyphicon-ok"></span>
+                    Xác nhận
+                </a>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">
+                    <span class="glyphicon glyphicon-remove"></span>
+                    Hủy xác nhận
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+

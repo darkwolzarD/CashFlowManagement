@@ -13,13 +13,6 @@
 
     MaskInput();
 
-    function InitiateDatePicker() {
-        $(".date-picker").datepicker({
-            format: "dd/mm/yyyy",
-            language: "vi-VN"
-        });
-    }
-
     function isValidDate(dateString) {
         // First check for the pattern
         var regex_date = /^\d{2}\/\d{4}$/;
@@ -38,8 +31,6 @@
         }
         return true;
     }
-
-    InitiateDatePicker();
 
     function LoadTable(filter) {
         $.ajax({

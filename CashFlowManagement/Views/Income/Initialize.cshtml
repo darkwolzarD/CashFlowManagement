@@ -1,0 +1,40 @@
+﻿@using CashFlowManagement.Constants
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_IncomeLayout.cshtml";
+}
+
+<div class="clear10"></div>
+@{ Html.RenderAction("_IncomeInitializeForm"); }
+@{ Html.RenderAction("_IncomeTable"); }
+
+<footer class="col-md-12 text-right">
+    <button type="button" class="btn btn-primary toggle-confirmation" style="font-size: 11px;">
+        <span class="glyphicon glyphicon-ok"></span>
+        Hoàn tất khởi tạo thu nhập
+    </button>
+</footer>
+
+<div id="modal">
+
+</div>
+
+<div id="confirmation-modal">
+
+</div>
+
+<script type="text/javascript" src="~/Scripts/income_initialize.js"></script>
+<script type="text/javascript">
+    var Url = new Object();
+    Url.ProcessIncome = '@Url.Action("InitializeIncome", "Income")';
+    Url.LoadTable = '@Url.Action("_IncomeTable", "Income")';
+    Url.InitializeModal = '@Url.Action("_InitializeConfirmation", "Income")';
+    Url.IncomeForm = '@Url.Action("_IncomeForm", "Income")';
+    Url.IncomeInitializeForm = '@Url.Action("_IncomeInitializeForm", "Income")';
+    Url.CashflowDetail = '@Url.Action("_CashflowDetail", "Income")';
+    Url.UpdateIncome = '@Url.Action("UpdateInitializeIncome", "Income")';
+    Url.DeleteIncome = '@Url.Action("DeleteInitializeIncome", "Income")';
+    Url.GetStartDate = '@Url.Action("GetStartDate", "Income")';
+</script>
+
+

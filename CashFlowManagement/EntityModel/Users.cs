@@ -26,6 +26,24 @@ namespace CashFlowManagement.EntityModel
     
         public string Username { get; set; }
         public string Password { get; set; }
+        public System.DateTime CreatedDate { get; set; }
+        public string FullName { get; set; }
+        public string Email { get; set; }
+        public int Sex { get; set; }
+        public string Job { get; set; }
+        public int NumberOfChildren { get; set; }
+        public bool IncomeInitialized { get; set; }
+        public bool RealEstateInitialized { get; set; }
+        public bool BusinessInitialized { get; set; }
+        public bool BankDepositInitialized { get; set; }
+        public bool StockInitialized { get; set; }
+        public bool InsuranceInitialized { get; set; }
+        public bool OtherAssetInitialized { get; set; }
+        public bool CarLiabilityInitialized { get; set; }
+        public bool CreditCardInitialized { get; set; }
+        public bool OtherLiabilityInitialized { get; set; }
+        public bool FamilyExpenseInitialized { get; set; }
+        public bool OtherExpenseInitialized { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Assets> Assets { get; set; }

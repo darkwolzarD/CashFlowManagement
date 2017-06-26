@@ -1,0 +1,135 @@
+﻿@model CashFlowManagement.ViewModels.ExpenseListViewModel
+@using CashFlowManagement.Constants
+@using CashFlowManagement.Utilities
+@using CashFlowManagement.Queries;
+@using CashFlowManagement.EntityModel
+@{
+    ViewBag.Title = "ExpenseTable";
+}
+@{
+    string title = string.Empty;
+    string type = string.Empty;
+    if (Model.Type == (int)Constants.EXPENSE_TYPE.FAMILY)
+    {
+        title = "Chi tiêu gia đình";
+    }
+    else if (Model.Type == (int)Constants.EXPENSE_TYPE.OTHERS)
+    {
+        title = "Chi tiêu khác";
+    }
+    DateTime current = DateTime.Now;
+}
+
+@*<ol class="breadcrumb">
+        <li class="active">@title</li>
+    </ol>*@
+@using (Ajax.BeginForm("_ExpenseTable", "Expense", new { @type = Model.Type }, new AjaxOptions { HttpMethod = "GET", UpdateTargetId = "table-ajax" }, new { @id = "table-ajax" }))
+{
+    <div class="row background">
+        <div class="clear10"></div>
+        <div class="expense-table col-md-12">
+            <table class="table table-responsive">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th class="text-left">Nguồn chi tiêu</th>
+                        <th class="text-right">Ngày chi hàng tháng</th>
+                        <th class="text-right">Tháng bắt đầu</th>
+                        <th class="text-right">Tháng kết thúc</th>
+                        <th class="text-right">Chi tiêu tháng</th>
+                        <th class="text-right">Chi tiêu năm</th>
+                        <th class="text-left">Ghi chú</th>
+                        <th class="text-center">Hiệu lực</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td></td>
+                        <td class="text-danger"><strong>Tổng</strong></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td class="text-right text-danger"><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.TotalMonthlyExpense)</strong></td>
+                        <td class="text-right text-danger"><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.TotalMonthlyExpense * 12)</strong></td>
+                        <td class="text-right"></td>
+                        <td></td>
+                        <td class="text-center">
+                            <button type="button" class="btn btn-primary create-income" data-toggle="modal">
+                                <span class="glyphicon glyphicon-plus"></span>
+                                Tạo (Create)
+                            </button>
+                        </td>
+                    </tr>
+                    @if (Model.List.Any())
+                {
+                    foreach (var item in Model.List)
+                    {
+                            <tr>
+                                <td>
+                                    <input type="checkbox" class="id" value="@item.Id" />
+                                </td>
+                                <td>@item.Name</td>
+                                <td class="text-right">@FormatUtility.DisplayThousandSeparatorsForNumber(item.ExpenseDay)</td>
+                                <td class="text-right">@item.StartDate.ToString("MM/yyyy")</td>
+                                <td class="text-right">@(item.EndDate.HasValue ? item.EndDate.Value.ToString("MM/yyyy") : string.Empty)</td>
+                                <td class="text-right">@FormatUtility.DisplayThousandSeparatorsForNumber(item.Value)</td>
+                                <td class="text-right">@FormatUtility.DisplayThousandSeparatorsForNumber(item.Value * 12)</td>
+                                <td>@item.Note</td>
+                                <td class="text-center">
+                                    @if(item.StartDate <= current && (item.EndDate.HasValue ? item.EndDate.Value >= current : true))
+                                    {
+                                        @*<span class="label label-primary" style="font-size: 10px;">Đang hiện hành</span>*@
+                                        <input type="checkbox" checked disabled/>
+                                    }
+                                    else
+                                    {
+                                        @*<span class="label label-danger" style="font-size: 10px;">Đã kết thúc</span>*@
+                                        <input type="checkbox" disabled />
+                                    }
+                                </td>
+                                <td class="text-center">
+                                    <button type="button" class="btn btn-danger delete-expense-info">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                        Xóa (Delete)
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="10" class="text-center">Không có dữ liệu</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+
+<footer class="col-md-12 text-right">
+    @if (Model.Type == (int)Constants.EXPENSE_TYPE.FAMILY)
+    {
+        <a type="button" class="btn btn-default" href="@Url.Action("Initialize", "Liability", new { @type = (int)Constants.LIABILITY_TYPE.OTHERS })" style="font-size: 11px;">
+            <span class="glyphicon glyphicon-arrow-left"></span>
+            Khởi tạo nợ khác
+        </a>
+        <a type="button" class="btn btn-default" href="@Url.Action("Initialize", "Expense", new { @type = (int)Constants.EXPENSE_TYPE.OTHERS })" style="font-size: 11px;">
+            <span class="glyphicon glyphicon-arrow-right"></span>
+            Khởi tạo chi tiêu khác
+        </a>
+    }
+    else if (Model.Type == (int)Constants.EXPENSE_TYPE.OTHERS)
+    {
+        <a type="button" class="btn btn-default" href="@Url.Action("Initialize", "Expense", new { @type = (int)Constants.EXPENSE_TYPE.FAMILY })" style="font-size: 11px;">
+            <span class="glyphicon glyphicon-arrow-left"></span>
+            Khởi tạo chi tiêu gia đình
+        </a>
+        <button type="button" class="btn btn-primary toggle-confirmation" style="font-size: 11px;">
+            <span class="glyphicon glyphicon-ok"></span>
+            Kết thúc khởi tạo
+        </button>
+    }
+</footer>

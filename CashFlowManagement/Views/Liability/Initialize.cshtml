@@ -1,0 +1,247 @@
+﻿@model CashFlowManagement.ViewModels.LiabilityListViewModel
+@using CashFlowManagement.Constants
+@using CashFlowManagement.Utilities
+@using CashFlowManagement.EntityModel
+@{
+    ViewBag.Title = "LiabilityTable";
+    Layout = "~/Views/Shared/_LiabilityLayout.cshtml";
+}
+
+@{
+    string title = string.Empty;
+    string type = string.Empty;
+    if (Model.Type == (int)Constants.LIABILITY_TYPE.CAR)
+    {
+        title = "Chi tiết các khoản vay xe hơi và tiêu sản khác";
+    }
+    else if (Model.Type == (int)Constants.LIABILITY_TYPE.CREDIT_CARD)
+    {
+        title = "Chi tiết các khoản vay thẻ tín dụng";
+    }
+    else if (Model.Type == (int)Constants.LIABILITY_TYPE.OTHERS)
+    {
+        title = "Chi tiết các khoản vay khác";
+    }
+    int count = 0;
+    int rsCount = 0;
+    int childCount = 0;
+}
+<h4>@title</h4>
+<hr />
+@*<ol class="breadcrumb">
+        <li class="active">Các khoản nợ</li>
+        <li class="active">@title</li>
+    </ol>*@
+<div class="clear10"></div>
+<div class="background">
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#create-new-liability-modal">
+        <span class="glyphicon glyphicon-plus"></span>
+        Tạo mới
+    </button>
+    <div class="clear10"></div>
+
+    <div class="liability-table">
+        <table class="table table-bordered table-condensed table-responsive">
+            <thead>
+                <tr>
+                    <th class="text-center">Nguồn vay</th>
+                    @if (Model.Type == (int)Constants.LIABILITY_TYPE.CAR)
+                    {
+                        <th class="text-center">Tổng giá trị</th>
+                        <th class="text-center">Vốn vay</th>
+                    }
+                    else if (Model.Type == (int)Constants.LIABILITY_TYPE.CREDIT_CARD)
+                    {
+                        <th class="text-center">Giá trị đã dùng</th>
+                    }
+                    else if (Model.Type == (int)Constants.LIABILITY_TYPE.OTHERS)
+                    {
+                        <th class="text-center">Mục tiêu sử dụng</th>
+                        <th class="text-center">Số tiền vay</th>
+                    }
+                    @if (Model.Type == (int)Constants.LIABILITY_TYPE.CREDIT_CARD)
+                    {
+                        <th class="text-center">Chi phí lãi</th>
+                    }
+                    else
+                    {
+                        <th class="text-center">Lãi vay</th>
+                    }
+                    @if (Model.Type == (int)Constants.LIABILITY_TYPE.CAR || Model.Type == (int)Constants.LIABILITY_TYPE.OTHERS)
+                    {
+                        <th class="text-center">Từ ngày</th>
+                        <th class="text-center">Đến ngày</th>
+                        <th class="text-center">Tổng số tháng phải trả</th>
+                        <th class="text-center">Trả lãi vay tháng</th>
+                        <th class="text-center">Trả vốn vay tháng</th>
+                        <th class="text-center">Tổng phải trả hàng tháng</th>
+                        <th class="text-center">Tiền vay còn phải trả</th>
+                    }
+                    else if (Model.Type == (int)Constants.LIABILITY_TYPE.CREDIT_CARD)
+                    {
+                        <th class="text-center">Phải trả hàng tháng</th>
+                        <th class="text-center">Phải trả hàng năm</th>
+                    }
+                    <th class="text-center">Ghi chú</th>
+                    <th class="text-center">Chỉnh sửa</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.List != null && Model.List.Count > 0)
+                {
+                    <tr>
+                        <td class="text-center"><strong>Tổng</strong></td>
+                        @if (Model.Type == (int)Constants.LIABILITY_TYPE.CAR)
+                        {
+                            <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.TotalOriginalValue)</strong></td>
+                        }
+                        else if (Model.Type == (int)Constants.LIABILITY_TYPE.OTHERS)
+                        {
+                            <td></td>
+                        }
+                        @if (Model.Type == (int)Constants.LIABILITY_TYPE.CAR || Model.Type == (int)Constants.LIABILITY_TYPE.OTHERS)
+                        {
+                            <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.TotalLiabilityValue)</strong></td>
+                            <td><strong>@FormatUtility.DisplayPercentageForNumber(Model.AverageInterestRate)</strong></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.TotalMonthlyInterestPayment)</strong></td>
+                            <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.TotalMonthlyOriginalPayment)</strong></td>
+                            <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.TotalMonthlyPayment)</strong></td>
+                            <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.RemainedValue)</strong></td>
+                        }
+                        else
+                        {
+                            <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.TotalLiabilityValue)</strong></td>
+                            <td><strong>@FormatUtility.DisplayPercentageForNumber(Model.AverageInterestRate)</strong></td>
+                            <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.TotalMonthlyPayment)</strong></td>
+                            <td><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.TotalMonthlyPayment * 12)</strong></td>
+                        }
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    foreach (var liabilityViewModel in Model.List.Where(x => !x.Liability.ParentLiabilityId.HasValue))
+                    {
+                        <tr class="rs-@rsCount child-@childCount">
+                            <td>@liabilityViewModel.Liability.Name</td>
+                            @if (Model.Type == (int)Constants.LIABILITY_TYPE.CAR)
+                            {
+                                <td>@FormatUtility.DisplayThousandSeparatorsForNumber(liabilityViewModel.Liability.OriginalValue.Value)</td>
+                            }
+                            else if (Model.Type == (int)Constants.LIABILITY_TYPE.OTHERS)
+                            {
+                                <td>@liabilityViewModel.Liability.Purpose</td>
+                            }
+                            <td>@FormatUtility.DisplayThousandSeparatorsForNumber(liabilityViewModel.Liability.Value)</td>
+                            <td>@FormatUtility.DisplayPercentageForNumber(liabilityViewModel.Liability.InterestRate)</td>
+                            @if (Model.Type == (int)Constants.LIABILITY_TYPE.CAR || Model.Type == (int)Constants.LIABILITY_TYPE.OTHERS)
+                            {
+                                <td>@liabilityViewModel.Liability.StartDate.Value.ToString("MM/yyyy")</td>
+                                <td>@liabilityViewModel.Liability.EndDate.Value.ToString("MM/yyyy")</td>
+                                <td>@FormatUtility.DisplayThousandSeparatorsForNumber(liabilityViewModel.TotalPaymentPeriod)</td>
+                                <td><a href="#" class="interest-info" data-liability-id="@liabilityViewModel.Liability.Id">@FormatUtility.DisplayThousandSeparatorsForNumber(liabilityViewModel.MonthlyInterestPayment)</a></td>
+                                <td>@FormatUtility.DisplayThousandSeparatorsForNumber(liabilityViewModel.MonthlyOriginalPayment)</td>
+                                <td>@FormatUtility.DisplayThousandSeparatorsForNumber(liabilityViewModel.MonthlyPayment)</td>
+                                <td>@FormatUtility.DisplayThousandSeparatorsForNumber(liabilityViewModel.RemainedValue)</td>
+                            }
+                            else if (Model.Type == (int)Constants.LIABILITY_TYPE.CREDIT_CARD)
+                            {
+                                <td>@FormatUtility.DisplayThousandSeparatorsForNumber(liabilityViewModel.MonthlyInterestPayment)</td>
+                                <td>@FormatUtility.DisplayThousandSeparatorsForNumber(liabilityViewModel.MonthlyInterestPayment * 12)</td>
+                            }
+                            <td>@liabilityViewModel.Liability.Note</td>
+                            <td class="text-center" width="160" style="vertical-align: middle">
+                                <button class="btn btn-success update-liability" data-liability-id="@liabilityViewModel.Liability.Id">
+                                    <span class="glyphicon glyphicon-pencil"></span>
+                                    Cập nhật
+                                </button>
+                                <button class="btn btn-danger delete-liability" data-liability-id="@liabilityViewModel.Liability.Id">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                    Xóa
+                                </button>
+                            </td>
+                        </tr>
+                        {
+                            count++;
+                        }
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="13" class="text-center">Không có khoản nợ</td>
+                    </tr>
+                }
+                @{ rsCount++; }
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="liability-modal">
+    @{ Html.RenderPartial("_LiabilityModal", new Liabilities
+            {
+                LiabilityType = Model.Type
+            }); }
+</div>
+
+<div class="update-liability-modal-div">
+
+</div>
+
+<div class="interest-modal-div">
+
+</div>
+
+<footer class="col-md-12 text-right">
+    @if (Model.Type == (int)Constants.LIABILITY_TYPE.CAR)
+    {
+        <a type="button" class="btn btn-default" href="@Url.Action("Initialize", "Asset", new { @type = (int)Constants.ASSET_TYPE.OTHERS })" style="font-size: 11px;">
+            <span class="glyphicon glyphicon-arrow-left"></span>
+            Khởi tạo tài sản khác
+        </a>
+        <a type="button" class="btn btn-default" href="@Url.Action("Initialize", "Liability", new { @type = (int)Constants.LIABILITY_TYPE.CREDIT_CARD })" style="font-size: 11px;">
+            <span class="glyphicon glyphicon-arrow-right"></span>
+            Khởi tạo nợ thẻ tín dụng
+        </a>
+    }
+    else if (Model.Type == (int)Constants.LIABILITY_TYPE.CREDIT_CARD)
+    {
+        <a type="button" class="btn btn-default" href="@Url.Action("Initialize", "Liability", new { @type = (int)Constants.LIABILITY_TYPE.CAR })" style="font-size: 11px;">
+            <span class="glyphicon glyphicon-arrow-left"></span>
+            Khởi tạo nợ xe hơi và tiêu sản khác
+        </a>
+        <a type="button" class="btn btn-default" href="@Url.Action("Initialize", "Liability", new { @type = (int)Constants.LIABILITY_TYPE.OTHERS })" style="font-size: 11px;">
+            <span class="glyphicon glyphicon-arrow-right"></span>
+            Khởi tạo nợ khác
+        </a>
+    }
+    else if (Model.Type == (int)Constants.LIABILITY_TYPE.OTHERS)
+    {
+        <a type="button" class="btn btn-default" href="@Url.Action("Initialize", "Liability", new { @type = (int)Constants.LIABILITY_TYPE.CREDIT_CARD })" style="font-size: 11px;">
+            <span class="glyphicon glyphicon-arrow-left"></span>
+            Khởi tạo nợ thẻ tín dụng
+        </a>
+        <button type="button" class="btn btn-primary toggle-confirmation" style="font-size: 11px;">
+            <span class="glyphicon glyphicon-ok"></span>
+            Hoàn tất khởi tạo các khoản nợ
+        </button>
+    }
+</footer>
+
+<div id="confirmation-modal">
+
+</div>
+
+<script type="text/javascript" src="~/Scripts/liability.js"></script>
+<script type="text/javascript">
+    var Url = new Object();
+    Url.LiabilityModal = '@Url.Action("_LiabilityModal", "Liability")';
+    Url.CreateLiability = '@Url.Action("CreateLiability", "Liability")';
+    Url.LoadLiability = '@Url.Action("_LiabilityUpdateModal", "Liability")';
+    Url.UpdateLiability = '@Url.Action("UpdateLiability", "Liability")';
+    Url.DeleteLiability = '@Url.Action("DeleteLiability", "Liability")';
+    Url.PaymentPerMonth = '@Url.Action("_PaymentPerMonth", "Liability")';
+    Url.InitializeModal = '@Url.Action("_InitializeConfirmation", "Liability")';
+    var liabilityType = @Model.Type;
+</script>

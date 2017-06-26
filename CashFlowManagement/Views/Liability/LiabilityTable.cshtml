@@ -26,17 +26,19 @@
     int rsCount = 0;
     int childCount = 0;
 }
-
-<ol class="breadcrumb">
+<h4>@title</h4>
+<hr />
+@*<ol class="breadcrumb">
     <li class="active">Các khoản nợ</li>
     <li class="active">@title</li>
-</ol>
-
+</ol>*@
+<div class="clear10"></div>
 <div class="background">
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#create-new-liability-modal">
         <span class="glyphicon glyphicon-plus"></span>
         Tạo mới
     </button>
+    <div class="clear10"></div>
 
     <div class="liability-table">
         <table class="table table-bordered table-condensed table-responsive">
@@ -145,8 +147,8 @@
                             }
                             else if (Model.Type == (int)Constants.LIABILITY_TYPE.CREDIT_CARD)
                             {
-                                <td>@FormatUtility.DisplayThousandSeparatorsForNumber(liabilityViewModel.MonthlyPayment)</td>
-                                <td>@FormatUtility.DisplayThousandSeparatorsForNumber(liabilityViewModel.MonthlyPayment * 12)</td>
+                                <td>@FormatUtility.DisplayThousandSeparatorsForNumber(liabilityViewModel.MonthlyInterestPayment)</td>
+                                <td>@FormatUtility.DisplayThousandSeparatorsForNumber(liabilityViewModel.MonthlyInterestPayment * 12)</td>
                             }
                             <td>@liabilityViewModel.Liability.Note</td>
                             <td class="text-center" width="160" style="vertical-align: middle">

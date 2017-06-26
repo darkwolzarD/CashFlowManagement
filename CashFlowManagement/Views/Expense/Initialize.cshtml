@@ -1,0 +1,31 @@
+﻿@model int
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_ExpenseLayout.cshtml";
+}
+
+<div class="clear10"></div>
+@{ Html.RenderAction("_ExpenseInitializeForm", new { @type = Model }); }
+@{ Html.RenderAction("_ExpenseTable", new { @type = Model }); }
+
+<div id="modal">
+
+</div>
+<div id="confirmation-modal">
+
+</div>
+<script type="text/javascript" src="~/Scripts/expense_initialize.js"></script>
+<script type="text/javascript">
+    var Url = new Object();
+    Url.ProcessExpense = '@Url.Action("ProcessExpense", "Expense")';
+    Url.LoadTable = '@Url.Action("ExpenseTable", "Expense")';
+    Url.ExpenseForm = '@Url.Action("_ExpenseForm", "Expense")';
+    Url.CashflowDetail = '@Url.Action("_CashflowDetail", "Expense")';
+    Url.UpdateExpense = '@Url.Action("UpdateExpense", "Expense")';
+    Url.DeleteExpense = '@Url.Action("DeleteExpense", "Expense")';
+    Url.GetStartDate = '@Url.Action("GetStartDate", "Expense")';
+    Url.InitializeModal = '@Url.Action("_InitializeConfirmation", "Expense")';
+    Url.ExpenseInitializeForm = '@Url.Action("_ExpenseInitializeForm", "Expense")';
+    var expenseType = @Model;
+</script>
+

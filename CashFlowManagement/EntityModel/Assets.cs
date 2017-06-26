@@ -18,7 +18,8 @@ namespace CashFlowManagement.EntityModel
         public Assets()
         {
             this.Assets1 = new HashSet<Assets>();
-            this.Incomes = new HashSet<Incomes>();
+            this.History = new HashSet<History>();
+            this.Incomes1 = new HashSet<Incomes>();
             this.Liabilities = new HashSet<Liabilities>();
             this.StockTransactions = new HashSet<StockTransactions>();
             this.StockTransactions1 = new HashSet<StockTransactions>();
@@ -41,18 +42,24 @@ namespace CashFlowManagement.EntityModel
         public Nullable<double> InterestRate { get; set; }
         public Nullable<int> Term { get; set; }
         public Nullable<int> CashId { get; set; }
+        public Nullable<int> IncomeId { get; set; }
+        public Nullable<int> ExpenseId { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Assets> Assets1 { get; set; }
         public virtual Assets Assets2 { get; set; }
+        public virtual Incomes Incomes { get; set; }
         public virtual Users Users { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Incomes> Incomes { get; set; }
+        public virtual ICollection<History> History { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Incomes> Incomes1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Liabilities> Liabilities { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<StockTransactions> StockTransactions { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<StockTransactions> StockTransactions1 { get; set; }
+        public virtual Expenses Expenses { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using CashFlowManagement.EntityModel;
+using CashFlowManagement.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,7 @@ namespace CashFlowManagement.Queries
 {
     public class LogQueries
     {
-        public static List<Log> GetLogByUser(string username, int type)
+        public static LogListViewModel GetLogByUser(string username, int type)
         {
             Entities entities = new Entities();
             var result = entities.Log.Where(x => x.Username.Equals(username));
@@ -20,7 +21,15 @@ namespace CashFlowManagement.Queries
             {
                 result = result.Where(x => x.LogType != (int)Constants.Constants.LOG_TYPE.INCOME && x.LogType != (int)Constants.Constants.LOG_TYPE.EXPENSE);
             }
-            return result.OrderBy(x => x.Date).ToList();
+
+            var stocks = entities.Assets.Where(x => x.AssetType == (int)Constants.Constants.ASSET_TYPE.STOCK && !x.DisabledDate.HasValue).ToList();
+            LogListViewModel rs = new LogListViewModel
+            {
+                Type = type,
+                List = result.OrderBy(x => x.Date).ToList(),
+                Stocks = stocks
+            };
+            return rs;
         }
 
         public static int CreateLog(Log log, string username)

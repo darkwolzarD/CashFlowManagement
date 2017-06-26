@@ -42,6 +42,13 @@
     }
 
     $(document).on("shown.bs.modal", "#create-new-liability-modal", function () {
+        $(this)
+            .find("input[type!='hidden'],textarea,select")
+            .val('')
+            .end()
+            .find("input[type=checkbox], input[type=radio]")
+            .prop("checked", "")
+            .end();
         MaskInput();
         InitiateDatePicker();
     })
@@ -161,6 +168,17 @@
             success: function (data) {
                 $(".interest-modal-div").html(data);
                 $("#interest-modal").modal("show");
+            }
+        })
+    })
+
+    $(document).on("click", ".toggle-confirmation", function () {;
+        $.ajax({
+            url: Url.InitializeModal,
+            type: "get",
+            success: function (data) {
+                $("#confirmation-modal").html(data);
+                $("#liability-confirmation").modal("show");
             }
         })
     })

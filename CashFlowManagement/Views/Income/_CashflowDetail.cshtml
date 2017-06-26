@@ -1,0 +1,95 @@
+﻿@model CashFlowManagement.ViewModels.CashFlowDetailListViewModel
+@using CashFlowManagement.Utilities
+@{ int count = 1; }
+<div id="cashflow-modal" class="modal fade" role="dialog">
+    <div class="modal-dialog" width="600">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">
+                    Thay đổi tiền mặt sau thu nhập
+                </h4>
+            </div>
+            <div class="modal-body">
+                <div class="text-right">
+                    <p><strong>Tiền mặt có sẵn trước (Available money before):</strong> @FormatUtility.DisplayThousandSeparatorsForNumber(Model.BeforeAvailableMoney) đồng</p>
+                    <p><strong>Tiền mặt có sẵn sau (Available money after):</strong> @FormatUtility.DisplayThousandSeparatorsForNumber(Model.AfterAvailableMoney) đồng</p>
+                    <p><strong>Tiền mặt có sẵn thay đổi (Change amount):</strong> @FormatUtility.DisplayThousandSeparatorsForNumber(Model.AfterAvailableMoney - Model.BeforeAvailableMoney) đồng</p>
+                </div>
+                <table class="table table-condensed table-responsive">
+                    <thead>
+                        <tr>
+                            <th class="text-right">STT</th>
+                            <th class="text-right">Tháng (Month)</th>
+                            <th class="text-right">Thu nhập trước (Income before)</th>
+                            <th class="text-right">Thu nhập sau (Income after)</th>
+                            <th class="text-right">Thay đổi (Change amount)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (!Model.CashflowDetails.Any() || Model.CashflowDetails.Count == 0)
+                        {
+                            <tr class="text-center">
+                                <td colspan="10">Không có thay đổi nào</td>
+                            </tr>
+                        }
+                        else
+                        {
+                            foreach (var item in Model.CashflowDetails)
+                            {
+                                <tr>
+                                    <td>@count</td>
+                                    <td class="text-right">@item.Month</td>
+                                    <td class="text-right">@FormatUtility.DisplayThousandSeparatorsForNumber(item.IncomeBefore) đồng</td>
+                                    <td class="text-right">@FormatUtility.DisplayThousandSeparatorsForNumber(item.IncomeAfter) đồng</td>
+
+                                    @if (item.IncomeAfter - item.IncomeBefore >= 0)
+                                    {
+                                        <td class="text-right text-success">
+                                            @FormatUtility.DisplayThousandSeparatorsForNumber(item.IncomeAfter - item.IncomeBefore) đồng
+                                        </td>
+                                    }
+                                    else if (item.IncomeAfter - item.IncomeBefore < 0)
+                                    {
+                                        <td class="text-right text-danger">
+                                            @FormatUtility.DisplayThousandSeparatorsForNumber(item.IncomeAfter - item.IncomeBefore) đồng
+                                        </td>
+                                    }
+
+                                </tr>
+                                { count++; }
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer text-center">
+                @if (Model.Action.Equals("Create"))
+                {
+                    <button type="button" class="btn btn-success process-income">
+                        <span class="glyphicon glyphicon-ok"></span>
+                        Lưu (Save)
+                    </button>
+                }
+                else if (Model.Action.Equals("Update"))
+                {
+                    <button type="button" class="btn btn-success process-income">
+                        <span class="glyphicon glyphicon-ok"></span>
+                        Cập nhật (Update)
+                    </button>
+                }
+                else if (Model.Action.Equals("Delete"))
+                {
+                    <button type="button" class="btn btn-warning delete-income">
+                        <span class="glyphicon glyphicon-remove"></span>
+                        Xóa (Delete)
+                    </button>
+                }
+                <button type="button" class="btn btn-danger" data-dismiss="modal">
+                    <span class="glyphicon glyphicon-remove"></span>
+                    Đóng
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

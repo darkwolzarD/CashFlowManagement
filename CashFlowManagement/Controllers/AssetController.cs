@@ -1,5 +1,6 @@
 ﻿using CashFlowManagement.EntityModel;
 using CashFlowManagement.Queries;
+using CashFlowManagement.Utilities;
 using CashFlowManagement.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -11,13 +12,22 @@ namespace CashFlowManagement.Controllers
 {
     public class AssetController : Controller
     {
+        public ActionResult Initialize(int type)
+        {
+            AssetListViewModel model = AssetQueries.GetAssetByUser(UserQueries.GetCurrentUsername(), type);
+            return View(model);
+        }
+        public ActionResult _InitializeConfirmation()
+        {
+            return PartialView();
+        }
         public ActionResult AssetTable(int type)
         {
             AssetListViewModel model = AssetQueries.GetAssetByUser(UserQueries.GetCurrentUsername(), type);
             return View(model);
         }
 
-        public ActionResult Report(int type)
+        public ActionResult _Report(int type)
         {
             AssetListViewModel model = AssetQueries.GetAssetByUser(UserQueries.GetCurrentUsername(), type);
             return View(model);
@@ -81,10 +91,10 @@ namespace CashFlowManagement.Controllers
             return Json(new { result = result });
         }
 
-        public JsonResult CheckAvailableMoney(DateTime? date)
+        public ActionResult CheckAvailableMoney(DateTime? date)
         {
             double result = (double)AssetQueries.CheckAvailableMoney(UserQueries.GetCurrentUsername(), date == null ? DateTime.Now : date.Value);
-            return Json(new { result = result }, JsonRequestBehavior.AllowGet);
+            return Content(FormatUtility.DisplayThousandSeparatorsForNumber(result));
         }
 
         public JsonResult CheckRemainedStock(string stock)

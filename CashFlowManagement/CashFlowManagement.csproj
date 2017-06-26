@@ -174,7 +174,6 @@
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
-    <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Constants\Constants.cs" />
@@ -182,6 +181,7 @@
     <Compile Include="Controllers\AssetController.cs" />
     <Compile Include="Controllers\ExpenseController.cs" />
     <Compile Include="Controllers\FinancialStatusController.cs" />
+    <Compile Include="Controllers\HistoryController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\IncomeController.cs" />
     <Compile Include="Controllers\LiabilityController.cs" />
@@ -207,6 +207,9 @@
     <Compile Include="EntityModel\Expenses.cs">
       <DependentUpon>EntityModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="EntityModel\History.cs">
+      <DependentUpon>EntityModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="EntityModel\Incomes.cs">
       <DependentUpon>EntityModel.tt</DependentUpon>
     </Compile>
@@ -216,6 +219,8 @@
     <Compile Include="EntityModel\Log.cs">
       <DependentUpon>EntityModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="EntityModel\Metadata.cs" />
+    <Compile Include="EntityModel\PartialClasses.cs" />
     <Compile Include="EntityModel\StockTransactions.cs">
       <DependentUpon>EntityModel.tt</DependentUpon>
     </Compile>
@@ -226,26 +231,28 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
-    <Compile Include="Models\IdentityModels.cs" />
-    <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Queries\AssetQueries.cs" />
     <Compile Include="Queries\ExpenseQueries.cs" />
     <Compile Include="Queries\FinancialStatusQueries.cs" />
+    <Compile Include="Queries\HistoryQueries.cs" />
     <Compile Include="Queries\IncomeQueries.cs" />
     <Compile Include="Queries\LiabilityQueries.cs" />
     <Compile Include="Queries\LogQueries.cs" />
     <Compile Include="Queries\UserQueries.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="Utilities\DoubleModelBinder.cs" />
     <Compile Include="Utilities\FormatUtility.cs" />
     <Compile Include="ViewModels\AssetListViewModel.cs" />
     <Compile Include="ViewModels\AssetViewModel.cs" />
+    <Compile Include="ViewModels\CashFlowDetailViewModel.cs" />
     <Compile Include="ViewModels\ExpenseListViewModel.cs" />
     <Compile Include="ViewModels\FinancialStatusViewModel.cs" />
     <Compile Include="ViewModels\IncomeListViewModel.cs" />
     <Compile Include="ViewModels\LiabilityPaymentViewModel.cs" />
     <Compile Include="ViewModels\LiabilityListViewModel.cs" />
     <Compile Include="ViewModels\LiabilityViewModel.cs" />
+    <Compile Include="ViewModels\LogListViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-datepicker.css" />
@@ -403,6 +410,7 @@
     <Content Include="Content\DataTables\images\sort_desc.png" />
     <Content Include="Content\DataTables\images\sort_desc_disabled.png" />
     <Content Include="Content\DataTables\swf\flashExport.swf" />
+    <Content Include="Content\selectize.bootstrap3.css" />
     <Content Include="EntityModel\EntityModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>EntityModel.edmx</DependentUpon>
@@ -440,8 +448,13 @@
     <Content Include="EntityModel\EntityModel.edmx.diagram">
       <DependentUpon>EntityModel.edmx</DependentUpon>
     </Content>
+    <None Include="Properties\PublishProfiles\CF.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\asset.js" />
+    <Content Include="Scripts\cldr.js" />
+    <Content Include="Scripts\cldr\event.js" />
+    <Content Include="Scripts\cldr\supplemental.js" />
+    <Content Include="Scripts\cldr\unresolved.js" />
     <Content Include="Scripts\DataTables\autoFill.bootstrap.js" />
     <Content Include="Scripts\DataTables\autoFill.bootstrap.min.js" />
     <Content Include="Scripts\DataTables\autoFill.bootstrap4.js" />
@@ -516,11 +529,23 @@
     <Content Include="Scripts\DataTables\responsive.jqueryui.min.js" />
     <Content Include="Scripts\DataTables\responsive.semanticui.js" />
     <Content Include="Scripts\DataTables\responsive.semanticui.min.js" />
+    <Content Include="Scripts\expense_initialize.js" />
     <Content Include="Scripts\expense.js" />
+    <Content Include="Scripts\globalize.js" />
+    <Content Include="Scripts\globalize\currency.js" />
+    <Content Include="Scripts\globalize\date.js" />
+    <Content Include="Scripts\globalize\message.js" />
+    <Content Include="Scripts\globalize\number.js" />
+    <Content Include="Scripts\globalize\plural.js" />
+    <Content Include="Scripts\globalize\relative-time.js" />
+    <Content Include="Scripts\globalize\unit.js" />
+    <Content Include="Scripts\income_initialize.js" />
     <Content Include="Scripts\income.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
@@ -596,12 +621,14 @@
     <Content Include="Scripts\log.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\dividend.js" />
+    <Content Include="Scripts\moment-range.js" />
     <Content Include="Scripts\moment.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\business.js" />
     <Content Include="Scripts\realestate.js" />
     <Content Include="Scripts\salary.js" />
+    <Content Include="Scripts\selectize.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -618,18 +645,8 @@
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
-    <Content Include="Views\Account\ConfirmEmail.cshtml" />
-    <Content Include="Views\Account\ExternalLoginConfirmation.cshtml" />
-    <Content Include="Views\Account\ExternalLoginFailure.cshtml" />
-    <Content Include="Views\Account\ForgotPassword.cshtml" />
-    <Content Include="Views\Account\ForgotPasswordConfirmation.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Account\Register.cshtml" />
-    <Content Include="Views\Account\ResetPassword.cshtml" />
-    <Content Include="Views\Account\ResetPasswordConfirmation.cshtml" />
-    <Content Include="Views\Account\SendCode.cshtml" />
-    <Content Include="Views\Account\VerifyCode.cshtml" />
     <Content Include="Views\Manage\AddPhoneNumber.cshtml" />
     <Content Include="Views\Manage\ChangePassword.cshtml" />
     <Content Include="Views\Manage\Index.cshtml" />
@@ -646,17 +663,39 @@
     <Content Include="Views\Liability\_LiabilityModal.cshtml" />
     <Content Include="Views\Liability\_PaymentPerMonth.cshtml" />
     <Content Include="Views\Liability\_LiabilityUpdateModal.cshtml" />
-    <Content Include="Views\Expense\ExpenseTable.cshtml" />
-    <Content Include="Views\Income\IncomeTable.cshtml" />
-    <Content Include="Views\Income\_IncomeModal.cshtml" />
-    <Content Include="Views\Income\_IncomeUpdateModal.cshtml" />
-    <Content Include="Views\Expense\_ExpenseModal.cshtml" />
-    <Content Include="Views\Expense\_ExpenseUpdateModal.cshtml" />
+    <Content Include="Views\Income\_IncomeTable.cshtml" />
+    <Content Include="Views\Income\_IncomeForm.cshtml" />
     <Content Include="Views\Liability\LiabilityTable.cshtml" />
     <Content Include="Views\Log\Index.cshtml" />
     <Content Include="Views\Asset\_BuyAssetModal.cshtml" />
     <Content Include="Views\Asset\_SellAssetModal.cshtml" />
-    <Content Include="Views\Asset\Report.cshtml" />
+    <Content Include="Views\Asset\_Report.cshtml" />
+    <Content Include="Views\Income\Index.cshtml" />
+    <Content Include="Views\Income\_CashflowDetail.cshtml" />
+    <Content Include="Views\Expense\_CashflowDetail.cshtml" />
+    <Content Include="Views\Expense\_ExpenseForm.cshtml" />
+    <Content Include="Views\Expense\_ExpenseTable.cshtml" />
+    <Content Include="Views\Expense\Index.cshtml" />
+    <Content Include="Views\History\Index.cshtml" />
+    <Content Include="Views\Income\Initialize.cshtml" />
+    <Content Include="Views\Asset\Initialize.cshtml" />
+    <Content Include="Views\Liability\Initialize.cshtml" />
+    <Content Include="Views\Expense\Initialize.cshtml" />
+    <Content Include="Views\Shared\_IncomeLayout.cshtml" />
+    <Content Include="Views\Shared\_AssetLayout.cshtml" />
+    <Content Include="Views\Shared\_LiabilityLayout.cshtml" />
+    <Content Include="Views\Shared\_ExpenseLayout.cshtml" />
+    <Content Include="Views\Income\_InitializeConfirmation.cshtml" />
+    <Content Include="Views\Asset\_InitializeConfirmation.cshtml" />
+    <Content Include="Views\Liability\_InitializeConfirmation.cshtml" />
+    <Content Include="Views\Liability\_Report.cshtml" />
+    <Content Include="Views\Expense\_InitializeConfirmation.cshtml" />
+    <Content Include="Views\Expense\_Report.cshtml" />
+    <Content Include="Views\Account\Index.cshtml" />
+    <Content Include="Views\Account\_Login.cshtml" />
+    <Content Include="Views\Account\_Register.cshtml" />
+    <Content Include="Views\Income\_IncomeInitializeForm.cshtml" />
+    <Content Include="Views\Expense\_ExpenseInitializeForm.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -686,7 +725,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>50585</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>

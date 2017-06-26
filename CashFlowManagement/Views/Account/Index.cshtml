@@ -1,0 +1,205 @@
+﻿@using CashFlowManagement.Constants
+@using CashFlowManagement.EntityModel
+@using CashFlowManagement.Queries
+@using CashFlowManagement.Utilities
+@{
+    Layout = "";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    @Styles.Render("https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/bootstrap")
+    <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+    @Scripts.Render("https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.10/jquery.mask.min.js")
+    <script src="@Url.Content("~/Scripts/cldr.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/globalize.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/selectize.js")" type="text/javascript"></script>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row header">
+            <div class="col-md-4 logo">
+                <img class="logo-image" src="~/images/Generic_Avatar.png" width="40" />
+                <span class="logo-text">Quản lý tài chính</span>
+            </div>
+            <div class="col-md-5 navigation" style="margin-right: 30px">
+                @Html.Partial("_Login")
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="clear10"></div>
+        <div class="row content">
+            <div class="col-md-6">
+                <h4>Website công cụ hỗ trợ quản lý thu chi ngân sách và đầu tư tài chính cá nhân của bạn!</h4>
+                <h4>Báo cáo ngân sách của bạn:</h4>
+                <div class="col-md-6">
+                    <table class="table table-bordered table-condensed table-striped">
+                        <thead>
+                            <tr>
+                                <th class="col-md-10"><strong>Thu nhập hàng tháng</strong></th>
+                                <th><strong>0</strong></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Thu nhập từ lương</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td>Thu nhập từ bất động sản</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td>Thu nhập từ kinh doanh</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td>Thu nhập từ tiền gửi tiết kiệm</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td>Thu nhập từ cổ tức</td>
+                                <td>0</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="col-md-6">
+                    <table class="table table-bordered table-condensed table-striped">
+                        <thead>
+                            <tr>
+                                <th class="col-md-10"><strong>Tài sản</strong></th>
+                                <th>0</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Tiền mặt có sẵn</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td>Tổng giá trị các bất động sản</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td>Tổng giá trị các hoạt động kinh doanh</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td>Tổng giá trị các khoản gửi tiết kiệm</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td>Tổng giá trị cổ phiếu</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td>Bảo hiểm nhân thọ và tài sản khác</td>
+                                <td>0</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="col-md-6">
+                    <table class="table table-bordered table-condensed table-striped">
+                        <thead>
+                            <tr>
+                                <th class="col-md-10"><strong>Chi tiêu hàng tháng</strong></th>
+                                <th>0</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Chi tiêu cho các bất động sản</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td>Chi tiêu cho xe hơi và các tiêu sản khác</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td>Chi tiêu cho thẻ tín dụng</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td>Chi cho các khoản vay kinh doanh</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td>Chi cho các khoản vay chứng khoán</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td>Chi cho các khoản vay khác</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td>Chi tiêu trong gia đình (và cả bảo hiểm nhân thọ)</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td>Chi tiêu khác</td>
+                                <td>0</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="col-md-6">
+                    <table class="table table-bordered table-condensed table-striped">
+                        <thead>
+                            <tr>
+                                <th class="col-md-10"><strong>Nợ</strong></th>
+                                <th>0</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Nợ bất động sản</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td>Nợ xe hơi và tiêu sản khác</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td>Nợ tín dụng</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td>Nợ vay cho kinh doanh</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td>Vay mua chứng khoán</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td>Vay nợ cho các mục đích khác</td>
+                                <td>0</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col-md-6">
+                @Html.Partial("_Register")
+            </div>
+        </div>
+    </div>
+
+    @Scripts.Render("~/bundles/layout")
+    @*@RenderSection("scripts", required: false)*@
+</body>
+</html>

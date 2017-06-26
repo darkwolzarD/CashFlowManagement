@@ -1,4 +1,4 @@
-﻿@model List<CashFlowManagement.EntityModel.Log>
+﻿@model CashFlowManagement.ViewModels.LogListViewModel
 @using CashFlowManagement.Utilities
 @using CashFlowManagement.Constants
 @{
@@ -14,55 +14,129 @@
         <select class="form-control input-sm filter">
             <option value="@((int)Constants.LOG_FILTER_TYPE.INCOME_EXPENSE)">Thu chi</option>
             <option value="@((int)Constants.LOG_FILTER_TYPE.OTHERS)">Khác</option>
+            <option value="@((int)Constants.LOG_FILTER_TYPE.DIVIDEND)">Cổ tức</option>
         </select>
     </div>
     <form id="log-form">
-        <table class="table table-bordered table-condensed table-responsive">
-            <thead>
-                <tr>
-                    <th class="text-center">Ngày</th>
-                    <th class="text-center">Loại phát sinh</th>
-                    <th class="text-center">Diễn giải</th>
-                    <th class="text-center">Giá trị</th>
-                    <th class="text-center">Số tiền có sẵn</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>
-                        <input class="form-control input-sm date-picker" name="Asset.StartDate" placeholder="Ngày" />
-                    </td>
-                    <td>
-                        <select class="form-control input-sm" name="Asset.ObtainedBy" placeholder="Loại phát sinh">
-                            <option value="@((int)Constants.OBTAIN_BY.INCOME)">Thu</option>
-                            <option value="@((int)Constants.OBTAIN_BY.EXPENSE)">Chi</option>
-                        </select>
-                    </td>
-                    <td>
-                        <input class="form-control input-sm" name="Asset.AssetName" placeholder="Diễn giải" />
-                        <input class="form-control input-sm hidden" name="Asset.AssetType" value="@((int)Constants.ASSET_TYPE.AVAILABLE_MONEY)"/>
-                    </td>
-                    <td>
-                        <input class="form-control input-sm input-mask" name="Asset.Value" placeholder="Giá trị" />
-                    </td>
-                    <td></td>
-                    <td class="text-center">
-                        <button type="button" class="btn btn-primary btn-sm create-available-money">Tạo mới</button>
-                    </td>
-                </tr>
-                @if (Model.Any())
-                {
-                    foreach (var item in Model)
+        @if (Model.Type == (int)Constants.LOG_FILTER_TYPE.DIVIDEND)
+        {
+            <table class="table table-bordered table-condensed table-responsive">
+                <thead>
+                    <tr>
+                        <th class="text-center">Ngày</th>
+                        <th class="text-center">Cổ phiếu</th>
+                        <th class="text-center">Loại cổ phiếu</th>
+                        <th class="text-center">Số lượng/ Giá trị</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <input class="form-control input-sm" name="Asset.StartDate" placeholder="Ngày" data-provide="datepicker" data-date-format="dd/mm/yyyy" data-date-language="vi-VN" />
+                            <input class="form-control hidden" name="Asset.AssetType" value="@((int)Constants.ASSET_TYPE.STOCK)"/>
+                        </td>
+                        <td>
+                            <select class="form-control input-sm" name="Asset.AssetName">
+                                @foreach (var stock in Model.Stocks)
+                                {
+                                    <option value="@stock.Id">@stock.AssetName</option>
+                                }
+                            </select>
+                        </td>
+                        <td>
+                            <select class="form-control input-sm" name="Asset.ObtainedBy" placeholder="Loại phát sinh">
+                                <option value="@((int)Constants.DIVIDEND_TYPE.MONEY)">Cổ tức bằng tiền</option>
+                                <option value="@((int)Constants.DIVIDEND_TYPE.STOCK)">Cổ tức bằng cổ phiếu</option>
+                            </select>
+                        </td>
+                        <td>
+                            <input class="form-control input-sm input-mask" name="Asset.Value" placeholder="Số lượng/Giá trị" />
+                        </td>
+                        <td class="text-center">
+                            <button type="button" class="btn btn-primary btn-sm create-available-money">Tạo mới</button>
+                        </td>
+                    </tr>
+                    @if (Model.List.Any())
                     {
+                        foreach (var item in Model.List)
+                        {
+                            <tr>
+                                <td>@item.Date.ToString("dd/MM/yyyy")</td>
+                                <td>@item.LogContent</td>
+                                <td>
+                                    @if (item.LogType == (int)Constants.DIVIDEND_TYPE.MONEY)
+                                    {
+                                        @Html.Raw("Cổ tức bằng tiền")
+                                    }
+                                    else if (item.LogType == (int)Constants.DIVIDEND_TYPE.STOCK)
+                                    {
+                                        @Html.Raw("Cổ tức bằng cổ phiếu")
+                                    }
+                                </td>
+                                <td>@FormatUtility.DisplayThousandSeparatorsForNumber(item.Value)</td>
+                                <td></td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr class="text-center">
+                            <td colspan="6">Không có dữ liệu</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <table class="table table-bordered table-condensed table-responsive">
+                <thead>
+                    <tr>
+                        <th class="text-center">Ngày</th>
+                        <th class="text-center">Loại phát sinh</th>
+                        <th class="text-center">Diễn giải</th>
+                        <th class="text-center">Giá trị</th>
+                        <th class="text-center">Số tiền có sẵn</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <input class="form-control input-sm" name="Asset.StartDate" placeholder="Ngày" data-provide="datepicker" data-date-format="dd/mm/yyyy" data-date-language="vi-VN" />
+                            <input class="form-control hidden" name="Asset.AssetType" value="@((int)Constants.ASSET_TYPE.AVAILABLE_MONEY)" />
+                        </td>
+                        <td>
+                            <select class="form-control input-sm" name="Asset.ObtainedBy" placeholder="Loại phát sinh">
+                                <option value="@((int)Constants.OBTAIN_BY.INCOME)">Thu</option>
+                                <option value="@((int)Constants.OBTAIN_BY.EXPENSE)">Chi</option>
+                            </select>
+                        </td>
+                        <td>
+                            <input class="form-control input-sm" name="Asset.AssetName" placeholder="Diễn giải" />
+                            <input class="form-control input-sm hidden" name="Asset.AssetType" value="@((int)Constants.ASSET_TYPE.AVAILABLE_MONEY)" />
+                        </td>
+                        <td>
+                            <input class="form-control input-sm input-mask" name="Asset.Value" placeholder="Giá trị" />
+                        </td>
+                        <td></td>
+                        <td class="text-center">
+                            <button type="button" class="btn btn-primary btn-sm create-available-money">Tạo mới</button>
+                        </td>
+                    </tr>
+                    @if (Model.List.Any())
+                    {
+                        foreach (var item in Model.List)
+                        {
                             <tr>
                                 <td>@item.Date.ToString("dd/MM/yyyy")</td>
                                 <td>
-                                    @if(item.LogType == (int)Constants.LOG_TYPE.INCOME)
+                                    @if (item.LogType == (int)Constants.LOG_TYPE.INCOME)
                                     {
                                         @Html.Raw("Thu")
                                     }
-                                    else if(item.LogType == (int)Constants.LOG_TYPE.EXPENSE)
+                                    else if (item.LogType == (int)Constants.LOG_TYPE.EXPENSE)
                                     {
                                         @Html.Raw("Chi")
                                     }
@@ -94,14 +168,15 @@
                             </tr>
                         }
                     }
-                else
-                {
-                    <tr class="text-center">
-                        <td colspan="6">Không có dữ liệu</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+                    else
+                    {
+                        <tr class="text-center">
+                            <td colspan="6">Không có dữ liệu</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
     </form>
 </div>
 <script type="text/javascript" src="~/Scripts/log.js"></script>
