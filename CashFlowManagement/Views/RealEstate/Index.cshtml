@@ -1,51 +1,128 @@
-﻿@{
-    ViewBag.Title = "Index";
+﻿@model CashFlowManagement.Models.RealEstateListViewModel
+@{
+    ViewBag.Title = "Quản lý bất động sản";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="background">
-    <h3 class="text-center">REAL ESTATE INCOMES</h3>
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#create-new-real-estate-modal">Add Real Estate Income</button>
-    <div class="real-estate-table">
-        @{ Html.RenderAction("RealEstateTable", "RealEstate");  }
+    <div class="row">
+        <div class="col-md-12">
+            <h4>Quản lý bất động sản</h4>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#buy-new-asset-modal">
+                <span class="glyphicon glyphicon-home"></span>
+                Mua bất động sản
+            </button>
+        </div>
+    </div>
+    <div class="clear10"></div>
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table table-responsive">
+                <thead>
+                    <tr>
+                        <th>Bất động sản</th>
+                        <th class="text-right">Trị giá tài sản</th>
+                        <th class="text-right" colspan="2">Thu nhập hàng tháng cho thuê</th>
+                        <th class="text-right" colspan="2">Thu nhập hàng năm cho thuê</th>
+                        <th class="text-right" colspan="2">Tỷ suất lợi nhuận cho thuê</th>
+                        <th class="text-center">Chỉnh sửa</th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.RealEstates.Any())
+                    {
+                        <tr>
+                            <td><strong class="text-danger">Tổng</strong></td>
+                            <td class="text-right"><strong class="text-danger">@Html.DisplayFor(x => x.TotalValue)</strong></td>
+                            <td class="text-right" colspan="2"><strong class="text-danger">@Html.DisplayFor(x => x.TotalMonthlyIncome)</strong></td>
+                            <td class="text-right" colspan="2"><strong class="text-danger">@Html.DisplayFor(x => x.TotalAnnualIncome)</strong></td>
+                            <td class="text-right" colspan="2"><strong class="text-danger">@Html.DisplayFor(x => x.TotalRentYield)</strong></td>
+                            <td class="text-center"></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        foreach (var realEstate in Model.RealEstates)
+                        {
+                            <tr>
+                                <td rowspan="@Html.DisplayFor(x => realEstate.RowSpan)">@Html.DisplayFor(x => realEstate.Name)</td>
+                                <td class="text-right">@Html.DisplayFor(x => realEstate.Value)</td>
+                                <td class="text-right" colspan="2">@Html.DisplayFor(x => realEstate.Income)</td>
+                                <td class="text-right" colspan="2">@Html.DisplayFor(x => realEstate.AnnualIncome)</td>
+                                <td class="text-right" colspan="2">@Html.DisplayFor(x => realEstate.RentYield)<td>
+                                <td class="text-center"></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            if (realEstate.Liabilities.Any())
+                            {
+                                <tr>
+                                    <th>Nguồn vay nợ</th>
+                                    <th class="text-right">Giá trị nợ</th>
+                                    <th>Loại lãi suất</th>
+                                    <th class="text-right">Lãi vay</th>
+                                    <th class="text-right">Ngày vay</th>
+                                    <th class="text-right">Ngày hết nợ</th>
+                                    <th class="text-right">Số tháng trả</th>
+                                    <th class="text-right">Trả gốc tháng</th>
+                                    <th class="text-right">Trả lãi tháng</th>
+                                    <th class="text-right">Tổng trả tháng</th>
+                                    <th class="text-right">Tổng trả năm</th>
+                                    <th class="text-right">Nợ còn phải trả</th>
+                                </tr>
+                                <tr>
+                                    <td><strong class="text-danger">Tổng</strong></td>
+                                    <td class="text-right"><strong class="text-danger">@Html.DisplayFor(x => realEstate.TotalLiabilityValue)</strong></td>
+                                    <td></td>
+                                    <td class="text-right"><strong class="text-danger">@Html.DisplayFor(x => realEstate.TotalInterestRate)</strong></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td class="text-right"><strong class="text-danger">@Html.DisplayFor(x => realEstate.TotalOriginalPayment)</strong></td>
+                                    <td class="text-right"><strong class="text-danger">@Html.DisplayFor(x => realEstate.TotalInterestPayment)</strong></td>
+                                    <td class="text-right"><strong class="text-danger">@Html.DisplayFor(x => realEstate.TotalMonthlyPayment)</strong></td>
+                                    <td class="text-right"><strong class="text-danger">@Html.DisplayFor(x => realEstate.TotalPayment)</strong></td>
+                                    <td class="text-right"><strong class="text-danger">@Html.DisplayFor(x => realEstate.TotalRemainedValue)</strong></td>
+                                </tr>
+                                foreach (var liability in realEstate.Liabilities)
+                                {
+                                    <tr>
+                                        <td>@Html.DisplayFor(x => liability.Source)</td>
+                                        <td class="text-right">@Html.DisplayFor(x => liability.Value)</td>
+                                        <td>@Html.DisplayFor(x => liability.InterestType)</td>
+                                        <td class="text-right">@Html.DisplayFor(x => liability.InterestRate)</td>
+                                        <td class="text-right">@Html.DisplayFor(x => liability.StartDate)</td>
+                                        <td class="text-right">@Html.DisplayFor(x => liability.EndDate)</td>
+                                        <td class="text-right">@Html.DisplayFor(x => liability.PaymentPeriod)</td>
+                                        <td class="text-right">@Html.DisplayFor(x => liability.MonthlyOriginalPayment)</td>
+                                        <td class="text-right">@Html.DisplayFor(x => liability.MonthlyInterestPayment)</td>
+                                        <td class="text-right">@Html.DisplayFor(x => liability.TotalMonthlyPayment)</td>
+                                        <td class="text-right">@Html.DisplayFor(x => liability.TotalPayment)</td>
+                                        <td class="text-right">@Html.DisplayFor(x => liability.RemainedValue)</td>
+                                    </tr>
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="13" class="text-center">Chưa có bất động sản</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
-
-<div class="real-estate-modal">
-    @{ Html.RenderPartial("RealEstateModal");  }
-</div>
-
-<div class="update-modal">
-    @{ Html.RenderPartial("UpdateRealEstateModal");  }
-</div>
-
-<div class="loan-modal">
-    @{ Html.RenderPartial("LoanModal");  }
-</div>
-
-<div class="update-loan-modal-div">
-    @{ Html.RenderPartial("UpdateLoanModal");  }
-</div>
-
-<div class="interest-modal-div">
-    
-</div>
-
-
-<script type="text/javascript" src="~/Scripts/realestate.js"></script>
-<script type="text/javascript">
-    var Url = new Object();
-    Url.CreateRealEstate = '@Url.Action("CreateRealEstate", "RealEstate")';
-    Url.LoadTable = '@Url.Action("RealEstateTable", "RealEstate")';
-    Url.LoadRealEstate = '@Url.Action("UpdateRealEstateModal", "RealEstate")';
-    Url.UpdateRealEstate = '@Url.Action("UpdateRealEstate", "RealEstate")';
-    Url.DeleteRealEstate = '@Url.Action("DeleteRealEstate", "RealEstate")';
-    Url.LoanModal = '@Url.Action("LoanModal", "RealEstate")';
-    Url.CreateLoan = '@Url.Action("CreateLoan", "RealEstate")';
-    Url.LoadLoan = '@Url.Action("UpdateLoanModal", "RealEstate")';
-    Url.LoadLoanWithRate = '@Url.Action("UpdateLoanWithRateModal", "RealEstate")';
-    Url.UpdateLoan = '@Url.Action("UpdateLoan", "RealEstate")';
-    Url.DeleteLoan = '@Url.Action("DeleteLoan", "RealEstate")';
-    Url.PaymentsPerMonth = '@Url.Action("PaymentsPerMonth", "RealEstate")';
-</script>
 

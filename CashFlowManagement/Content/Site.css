@@ -131,13 +131,8 @@ table th, table td {
     z-index: 2000;
 }
 
-table thead th {
-    background: #6a6c6f;
-    color: white;
-}
-
-table tbody th {
-    background: #e4e5e7;
+table th {
+    
 }
 
 /*.table td, 
