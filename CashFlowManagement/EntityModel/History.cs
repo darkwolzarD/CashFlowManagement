@@ -30,7 +30,7 @@ namespace CashFlowManagement.EntityModel
         public string Username { get; set; }
     
         public virtual Assets Assets { get; set; }
-        public virtual Incomes Incomes { get; set; }
         public virtual Expenses Expenses { get; set; }
+        public virtual Incomes Incomes { get; set; }
     }
 }

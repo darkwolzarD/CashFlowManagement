@@ -4,14 +4,13 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<div class="clear10"></div>
 <div class="background">
     <div class="row">
-        <div class="col-md-12">
-            <h4>Quản lý bất động sản</h4>
+        <div class="col-md-6">
+            <p style="font-size: 24px;">Quản lý bất động sản</p>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-6 text-right">
             <button type="button" class="btn btn-success" data-toggle="modal" data-target="#buy-new-asset-modal">
                 <span class="glyphicon glyphicon-home"></span>
                 Mua bất động sản
@@ -21,15 +20,18 @@
     <div class="clear10"></div>
     <div class="row">
         <div class="col-md-12">
-            <table class="table table-responsive">
+            <table class="table table-responsive table-condensed real-estate-table">
                 <thead>
                     <tr>
                         <th>Bất động sản</th>
                         <th class="text-right">Trị giá tài sản</th>
-                        <th class="text-right" colspan="2">Thu nhập hàng tháng cho thuê</th>
-                        <th class="text-right" colspan="2">Thu nhập hàng năm cho thuê</th>
-                        <th class="text-right" colspan="2">Tỷ suất lợi nhuận cho thuê</th>
-                        <th class="text-center">Chỉnh sửa</th>
+                        <th class="text-right">Thu nhập hàng tháng cho thuê</th>
+                        <th class="text-right">Thu nhập hàng năm cho thuê</th>
+                        <th class="text-right">Tỷ suất lợi nhuận cho thuê</th>
+                        <th class="text-right">Chỉnh sửa</th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
                         <th></th>
                         <th></th>
                         <th></th>
@@ -42,10 +44,10 @@
                         <tr>
                             <td><strong class="text-danger">Tổng</strong></td>
                             <td class="text-right"><strong class="text-danger">@Html.DisplayFor(x => x.TotalValue)</strong></td>
-                            <td class="text-right" colspan="2"><strong class="text-danger">@Html.DisplayFor(x => x.TotalMonthlyIncome)</strong></td>
-                            <td class="text-right" colspan="2"><strong class="text-danger">@Html.DisplayFor(x => x.TotalAnnualIncome)</strong></td>
-                            <td class="text-right" colspan="2"><strong class="text-danger">@Html.DisplayFor(x => x.TotalRentYield)</strong></td>
-                            <td class="text-center"></td>
+                            <td class="text-right"><strong class="text-danger">@Html.DisplayFor(x => x.TotalMonthlyIncome)</strong></td>
+                            <td class="text-right"><strong class="text-danger">@Html.DisplayFor(x => x.TotalAnnualIncome)</strong></td>
+                            <td class="text-right"><strong class="text-danger">@Html.DisplayFor(x => x.TotalRentYield)</strong></td>
+                            <td class="text-right"></td>
                             <td></td>
                             <td></td>
                             <td></td>
@@ -56,10 +58,11 @@
                             <tr>
                                 <td rowspan="@Html.DisplayFor(x => realEstate.RowSpan)">@Html.DisplayFor(x => realEstate.Name)</td>
                                 <td class="text-right">@Html.DisplayFor(x => realEstate.Value)</td>
-                                <td class="text-right" colspan="2">@Html.DisplayFor(x => realEstate.Income)</td>
-                                <td class="text-right" colspan="2">@Html.DisplayFor(x => realEstate.AnnualIncome)</td>
-                                <td class="text-right" colspan="2">@Html.DisplayFor(x => realEstate.RentYield)<td>
-                                <td class="text-center"></td>
+                                <td class="text-right">@Html.DisplayFor(x => realEstate.Income)</td>
+                                <td class="text-right">@Html.DisplayFor(x => realEstate.AnnualIncome)</td>
+                                <td class="text-right">@Html.DisplayFor(x => realEstate.RentYield)</td>
+                                <td class="text-right">
+                                </td>
                                 <td></td>
                                 <td></td>
                                 <td></td>
@@ -68,8 +71,8 @@
                             {
                                 <tr>
                                     <th>Nguồn vay nợ</th>
-                                    <th class="text-right">Giá trị nợ</th>
                                     <th>Loại lãi suất</th>
+                                    <th class="text-right">Giá trị nợ</th>
                                     <th class="text-right">Lãi vay</th>
                                     <th class="text-right">Ngày vay</th>
                                     <th class="text-right">Ngày hết nợ</th>
@@ -82,8 +85,8 @@
                                 </tr>
                                 <tr>
                                     <td><strong class="text-danger">Tổng</strong></td>
-                                    <td class="text-right"><strong class="text-danger">@Html.DisplayFor(x => realEstate.TotalLiabilityValue)</strong></td>
                                     <td></td>
+                                    <td class="text-right"><strong class="text-danger">@Html.DisplayFor(x => realEstate.TotalLiabilityValue)</strong></td>
                                     <td class="text-right"><strong class="text-danger">@Html.DisplayFor(x => realEstate.TotalInterestRate)</strong></td>
                                     <td></td>
                                     <td></td>
@@ -98,8 +101,8 @@
                                 {
                                     <tr>
                                         <td>@Html.DisplayFor(x => liability.Source)</td>
-                                        <td class="text-right">@Html.DisplayFor(x => liability.Value)</td>
                                         <td>@Html.DisplayFor(x => liability.InterestType)</td>
+                                        <td class="text-right">@Html.DisplayFor(x => liability.Value)</td>
                                         <td class="text-right">@Html.DisplayFor(x => liability.InterestRate)</td>
                                         <td class="text-right">@Html.DisplayFor(x => liability.StartDate)</td>
                                         <td class="text-right">@Html.DisplayFor(x => liability.EndDate)</td>
@@ -112,6 +115,9 @@
                                     </tr>
                                 }
                             }
+                            <tr>
+                                <td colspan="12"></td>
+                            </tr>
                         }
                     }
                     else

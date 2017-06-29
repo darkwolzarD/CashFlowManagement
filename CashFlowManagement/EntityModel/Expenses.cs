@@ -17,8 +17,8 @@ namespace CashFlowManagement.EntityModel
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Expenses()
         {
-            this.History = new HashSet<History>();
             this.Assets = new HashSet<Assets>();
+            this.History = new HashSet<History>();
         }
     
         public int Id { get; set; }
@@ -36,11 +36,11 @@ namespace CashFlowManagement.EntityModel
         public string Name { get; set; }
         public string Note { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Assets> Assets { get; set; }
         public virtual Liabilities Liabilities { get; set; }
         public virtual Users Users { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<History> History { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Assets> Assets { get; set; }
     }
 }

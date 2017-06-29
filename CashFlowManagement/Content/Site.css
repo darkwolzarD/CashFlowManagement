@@ -9,7 +9,7 @@ body {
 }
 
 input, textarea, select, button {
-    font-size: 11px !important;
+    font-size: 12px !important;
 }
 
 .selectize-input > * , .selectize-dropdown  > * {
@@ -25,7 +25,7 @@ hr {
     clear: both;
 }
 
-/*Page header*/
+/*/*Page header*/
 .header {
     background: #ff6a00;
     height: 50px;
@@ -124,22 +124,12 @@ hr {
 }
 
 table th, table td {
-    vertical-align: middle !important;
+    border-top: none !important;
 }
 
 #create-new-liability-modal {
     z-index: 2000;
 }
-
-table th {
-    
-}
-
-/*.table td, 
-.table th {
-    white-space: nowrap;
-    width: 1%;
-}*/
 
 .login-page {
     width: 400px;
@@ -188,4 +178,4 @@ footer {
     bottom: 0;
     right: 90px;
     height: 50px;
-}
+}*/

@@ -27,6 +27,7 @@ namespace CashFlowManagement.EntityModel
     
         public virtual DbSet<Assets> Assets { get; set; }
         public virtual DbSet<Expenses> Expenses { get; set; }
+        public virtual DbSet<History> History { get; set; }
         public virtual DbSet<Incomes> Incomes { get; set; }
         public virtual DbSet<Liabilities> Liabilities { get; set; }
         public virtual DbSet<Log> Log { get; set; }

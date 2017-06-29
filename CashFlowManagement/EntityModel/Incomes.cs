@@ -43,9 +43,9 @@ namespace CashFlowManagement.EntityModel
         public virtual Assets Assets1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<History> History { get; set; }
-        public virtual Users Users { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Incomes> Incomes1 { get; set; }
         public virtual Incomes Incomes2 { get; set; }
+        public virtual Users Users { get; set; }
     }
 }

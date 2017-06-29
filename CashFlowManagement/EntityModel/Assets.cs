@@ -48,6 +48,7 @@ namespace CashFlowManagement.EntityModel
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Assets> Assets1 { get; set; }
         public virtual Assets Assets2 { get; set; }
+        public virtual Expenses Expenses { get; set; }
         public virtual Incomes Incomes { get; set; }
         public virtual Users Users { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -60,6 +61,5 @@ namespace CashFlowManagement.EntityModel
         public virtual ICollection<StockTransactions> StockTransactions { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<StockTransactions> StockTransactions1 { get; set; }
-        public virtual Expenses Expenses { get; set; }
     }
 }
