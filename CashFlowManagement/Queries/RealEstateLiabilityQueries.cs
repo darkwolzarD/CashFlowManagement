@@ -11,6 +11,8 @@ namespace CashFlowManagement.Queries
     {
         public static RealEstateLiabilityViewModel CreateViewModel(Liabilities liability)
         {
+            DateTime current = DateTime.Now;
+
             RealEstateLiabilityViewModel liabilityViewModel = new RealEstateLiabilityViewModel();
             liabilityViewModel.Source = liability.Name;
             liabilityViewModel.Value = liability.Value;
@@ -20,9 +22,9 @@ namespace CashFlowManagement.Queries
             liabilityViewModel.EndDate = liability.EndDate.Value;
             liabilityViewModel.PaymentPeriod = Helper.CalculateTimePeriod(liabilityViewModel.StartDate, liabilityViewModel.EndDate);
 
-            int currentPeriod = Helper.CalculateTimePeriod(liabilityViewModel.StartDate, DateTime.Now);
-            if (currentPeriod > 0)
+            if (liabilityViewModel.StartDate <= current && current <= liabilityViewModel.EndDate)
             {
+                int currentPeriod = Helper.CalculateTimePeriod(liabilityViewModel.StartDate, DateTime.Now);
                 //Fixed interest type
                 if (liability.InterestType == (int)Constants.Constants.INTEREST_TYPE.FIXED)
                 {
@@ -31,6 +33,8 @@ namespace CashFlowManagement.Queries
                     liabilityViewModel.TotalMonthlyPayment = liabilityViewModel.MonthlyOriginalPayment + liabilityViewModel.MonthlyInterestPayment;
                     liabilityViewModel.TotalPayment = liabilityViewModel.TotalMonthlyPayment * currentPeriod;
                     liabilityViewModel.RemainedValue = liabilityViewModel.Value - liabilityViewModel.TotalPayment;
+                    liabilityViewModel.Status = "Đang nợ";
+                    liabilityViewModel.StatusCode = "label-success";
                 }
                 //Reduced interest type
                 else
@@ -40,6 +44,8 @@ namespace CashFlowManagement.Queries
                     liabilityViewModel.MonthlyInterestPayment = liabilityViewModel.RemainedValue * liabilityViewModel.InterestRate / 12;
                     liabilityViewModel.TotalMonthlyPayment = liabilityViewModel.MonthlyOriginalPayment + liabilityViewModel.MonthlyInterestPayment;
                     liabilityViewModel.TotalPayment = liabilityViewModel.InterestRate / 12 * (currentPeriod * liabilityViewModel.Value + currentPeriod * (currentPeriod + 1) / 2 * liabilityViewModel.MonthlyOriginalPayment);
+                    liabilityViewModel.Status = "Đang nợ";
+                    liabilityViewModel.StatusCode = "label-success";
                 }
             }
             else
@@ -49,6 +55,16 @@ namespace CashFlowManagement.Queries
                 liabilityViewModel.TotalMonthlyPayment = 0;
                 liabilityViewModel.TotalPayment = 0;
                 liabilityViewModel.RemainedValue = 0;
+                if(liabilityViewModel.EndDate < current)
+                {
+                    liabilityViewModel.StatusCode = "label-warning";
+                    liabilityViewModel.Status = "Đã trả hết nợ";
+                }
+                else
+                {
+                    liabilityViewModel.StatusCode = "label-danger";
+                    liabilityViewModel.Status = "Chưa tới kì hạn";
+                }
             }
             return liabilityViewModel;
         }

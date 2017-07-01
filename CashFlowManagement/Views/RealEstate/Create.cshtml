@@ -1,0 +1,136 @@
+﻿@model CashFlowManagement.Models.RealEstateCreateViewModel
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="btn-group btn-breadcrumb">
+            <a href="#" class="btn btn-default"><i class="glyphicon glyphicon-home"></i></a>
+            <a href="#" class="btn btn-default">Tài sản</a>
+            <a href="#" class="btn btn-default">Bất động sản</a>
+            <a href="#" class="btn btn-default">Mua bất động sản</a>
+        </div>
+    </div>
+</div>
+<div class="clear10"></div>
+<div class="row">
+    <div class="col-md-6">
+        <p style="font-size: 20px;">Mua bất động sản</p>
+    </div>
+    <div class="col-md-6 text-right">
+        <button type="submit" class="btn btn-success create-real-estate">
+            <span class="glyphicon glyphicon-ok"></span>
+            Mua bất động sản
+        </button>
+    </div>
+</div>
+<div class="row">
+    @using (Html.BeginForm("Create", "RealEstate", FormMethod.Post))
+    {
+        <div id="real-estate-table" class="col-md-4 col-md-offset-4">
+            <h4>Thông tin bất động sản</h4>
+            <div class="form-group">
+                @Html.LabelFor(x => x.Name)
+                @Html.TextBoxFor(x => x.Name, new { @class = "form-control input-sm" })
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(x => x.BuyDate)
+                <div class="input-group input-group-sm">
+                    @Html.TextBoxFor(x => x.BuyDate, "{0:dd/MM/yyyy}", new { @class = "form-control input-sm date-picker-with-day" })
+                    <div class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(x => x.Value)
+                @Html.TextBoxFor(x => x.Value, new { @class = "form-control input-mask input-sm" })
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(x => x.Value)
+                @Html.TextBoxFor(x => x.Value, new { @class = "form-control input-mask input-sm" })
+            </div>
+            <div class="checkbox">
+                <label>
+                    @Html.CheckBoxFor(x => x.IsInDept)
+                    Bạn có vay khoản nợ nào để mua bất động sản này không?
+                </label>
+            </div>
+        </div>
+        <div id="liability-div" class="col-md-9 hidden">
+            <h4>Các khoản nợ mua bất động sản</h4>
+            <div class="form-group col-md-4">
+                <label for="Source">Nguồn vay nợ</label>
+                <input type="text" class="form-control input-sm" id="Source" name="Source" />
+            </div>
+            <div class="form-group col-md-4">
+                <label for="Value">Giá trị nợ</label>
+                <input type="text" class="form-control input-sm input-mask" id="LiabilityValue" name="LiabilityValue" />
+            </div>
+            <div class="form-group col-md-4">
+                <label for="InterestType">Loại lãi suất</label>
+                <select class="form-control input-sm" id="InterestType" name="InterestType">
+                    <option value="1">Cố định</option>
+                    <option value="1">Giảm dần</option>
+                </select>
+            </div>
+            <div class="form-group col-md-4">
+                <label for="InterestRate">Lãi suất vay</label>
+                <input type="text" class="form-control input-sm percentage" id="InterestRate" name="InterestRate" />
+            </div>
+            <div class="form-group col-md-4">
+                <label for="StartDate">Ngày vay</label>
+                <div class="input-group input-group-sm">
+                    <input type="text" class="form-control input-sm date-picker" id="StartDate" name="StartDate" />
+                    <div class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group col-md-4">
+                <label for="EndDate">Ngày trả hết nợ</label>
+                <div class="input-group input-group-sm">
+                    <input type="text" class="form-control input-sm date-picker" id="EndDate" name="EndDate" />
+                    <div class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="clear10"></div>
+            <div class="text-right col-md-12">
+                <button type="button" class="btn btn-primary create-real-estate-liability">
+                    <span class="glyphicon glyphicon-ok"></span>
+                    Tạo khoản nợ
+                </button>
+            </div>
+            <div class="col-md-12">
+                <table id="liability-table" class="table table-condensed table-responsive">
+                    <thead>
+                        <tr>
+                            <th>Nguồn vay nợ</th>
+                            <th class="text-right">Giá trị nợ</th>
+                            <th>Loại lãi suất</th>
+                            <th class="text-right">Lãi suất vay</th>
+                            <th class="text-right">Ngày vay</th>
+                            <th class="text-right">Ngày trả hết nợ</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="text-danger"><strong>Tổng</strong></td>
+                            <td class="text-danger text-right"><strong>0</strong></td>
+                            <td class="text-danger text-right"><strong></strong></td>
+                            <td class="text-danger text-right"><strong>0</strong></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+</div>
+<script type="text/javascript" src="~/Scripts/realestate.js"></script>

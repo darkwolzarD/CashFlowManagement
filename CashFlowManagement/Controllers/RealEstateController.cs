@@ -19,7 +19,9 @@ namespace CashFlowManagement.Controllers
 
         public ActionResult Create()
         {
-            return View();
+            RealEstateCreateViewModel model = new RealEstateCreateViewModel();
+            model.BuyDate = DateTime.Now;
+            return View(model);
         }
     }
 }

@@ -27,7 +27,7 @@
     <div class="container-fluid">
         <div class="row header">
             <div class="col-md-4 logo">
-                <img class="logo-image" src="~/images/Generic_Avatar.png" width="40" />
+                <img class="logo-image" src="~/images/Generic_Avatar.png" width="30" />
                 <span class="logo-text">Quản lý tài chính</span>
                 @if (HttpContext.Current.Session["USER"] != null)
                 {
@@ -80,7 +80,7 @@
             </div>
         </div>
     </div>
-    <div class="container-fluid">
+    <div class="container">
         <div class="col-md-12 content">
             @RenderBody()
         </div>
