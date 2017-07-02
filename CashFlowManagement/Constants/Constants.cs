@@ -32,5 +32,13 @@ namespace CashFlowManagement.Constants
             list.Add(new SelectListItem { Text = "Nữ", Value = "2" });
             return list;
         }
+
+        public static List<SelectListItem> RealEstateInterestType()
+        {
+            List<SelectListItem> list = new List<SelectListItem>();
+            list.Add(new SelectListItem { Text = "Cố định", Value = ((int)Constants.INTEREST_TYPE.FIXED).ToString(), Selected = true });
+            list.Add(new SelectListItem { Text = "Giảm dần", Value = ((int)Constants.INTEREST_TYPE.REDUCED).ToString() });
+            return list;
+        }
     }
 }

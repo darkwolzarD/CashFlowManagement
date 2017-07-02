@@ -15,7 +15,7 @@ namespace CashFlowManagement.Utilities
             var result = bindingContext.ValueProvider.GetValue(bindingContext.ModelName);
             if (result != null && !string.IsNullOrEmpty(result.AttemptedValue))
             {
-                if (bindingContext.ModelType == typeof(double))
+                if (bindingContext.ModelType == typeof(double) || bindingContext.ModelType == typeof(double?))
                 {
                     double temp;
                     if (double.TryParse(

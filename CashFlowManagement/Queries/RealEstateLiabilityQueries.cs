@@ -20,30 +20,30 @@ namespace CashFlowManagement.Queries
             liabilityViewModel.InterestRate = liability.InterestRate / 100;
             liabilityViewModel.StartDate = liability.StartDate.Value;
             liabilityViewModel.EndDate = liability.EndDate.Value;
-            liabilityViewModel.PaymentPeriod = Helper.CalculateTimePeriod(liabilityViewModel.StartDate, liabilityViewModel.EndDate);
+            liabilityViewModel.PaymentPeriod = Helper.CalculateTimePeriod(liabilityViewModel.StartDate.Value, liabilityViewModel.EndDate.Value);
 
             if (liabilityViewModel.StartDate <= current && current <= liabilityViewModel.EndDate)
             {
-                int currentPeriod = Helper.CalculateTimePeriod(liabilityViewModel.StartDate, DateTime.Now);
+                int currentPeriod = Helper.CalculateTimePeriod(liabilityViewModel.StartDate.Value, DateTime.Now);
                 //Fixed interest type
                 if (liability.InterestType == (int)Constants.Constants.INTEREST_TYPE.FIXED)
                 {
-                    liabilityViewModel.MonthlyOriginalPayment = liabilityViewModel.Value / liabilityViewModel.PaymentPeriod;
-                    liabilityViewModel.MonthlyInterestPayment = liabilityViewModel.Value * liabilityViewModel.InterestRate / 12;
+                    liabilityViewModel.MonthlyOriginalPayment = liabilityViewModel.Value.Value / liabilityViewModel.PaymentPeriod;
+                    liabilityViewModel.MonthlyInterestPayment = liabilityViewModel.Value.Value * liabilityViewModel.InterestRate.Value / 12;
                     liabilityViewModel.TotalMonthlyPayment = liabilityViewModel.MonthlyOriginalPayment + liabilityViewModel.MonthlyInterestPayment;
                     liabilityViewModel.TotalPayment = liabilityViewModel.TotalMonthlyPayment * currentPeriod;
-                    liabilityViewModel.RemainedValue = liabilityViewModel.Value - liabilityViewModel.TotalPayment;
+                    liabilityViewModel.RemainedValue = liabilityViewModel.Value.Value - liabilityViewModel.TotalPayment;
                     liabilityViewModel.Status = "Đang nợ";
                     liabilityViewModel.StatusCode = "label-success";
                 }
                 //Reduced interest type
                 else
                 {
-                    liabilityViewModel.MonthlyOriginalPayment = liabilityViewModel.Value / liabilityViewModel.PaymentPeriod;
-                    liabilityViewModel.RemainedValue = liabilityViewModel.Value - liabilityViewModel.MonthlyOriginalPayment * currentPeriod;
-                    liabilityViewModel.MonthlyInterestPayment = liabilityViewModel.RemainedValue * liabilityViewModel.InterestRate / 12;
+                    liabilityViewModel.MonthlyOriginalPayment = liabilityViewModel.Value.Value / liabilityViewModel.PaymentPeriod;
+                    liabilityViewModel.RemainedValue = liabilityViewModel.Value.Value - liabilityViewModel.MonthlyOriginalPayment * currentPeriod;
+                    liabilityViewModel.MonthlyInterestPayment = liabilityViewModel.RemainedValue * liabilityViewModel.InterestRate.Value / 12;
                     liabilityViewModel.TotalMonthlyPayment = liabilityViewModel.MonthlyOriginalPayment + liabilityViewModel.MonthlyInterestPayment;
-                    liabilityViewModel.TotalPayment = liabilityViewModel.InterestRate / 12 * (currentPeriod * liabilityViewModel.Value + currentPeriod * (currentPeriod + 1) / 2 * liabilityViewModel.MonthlyOriginalPayment);
+                    liabilityViewModel.TotalPayment = liabilityViewModel.InterestRate.Value / 12 * (currentPeriod * liabilityViewModel.Value.Value + currentPeriod * (currentPeriod + 1) / 2 * liabilityViewModel.MonthlyOriginalPayment);
                     liabilityViewModel.Status = "Đang nợ";
                     liabilityViewModel.StatusCode = "label-success";
                 }
@@ -69,7 +69,7 @@ namespace CashFlowManagement.Queries
             return liabilityViewModel;
         }
 
-        protected class Helper
+        public class Helper
         {
             public static string GetInterestType(int interestType)
             {

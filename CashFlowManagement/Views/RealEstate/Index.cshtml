@@ -23,7 +23,7 @@
     <div class="col-md-6 text-right">
         <a href="@Url.Action("Create", "RealEstate")" class="btn btn-success">
             <span class="glyphicon glyphicon-home"></span>
-            Mua bất động sản
+            Tạo bất động sản
         </a>
     </div>
 </div>
@@ -43,9 +43,7 @@
                     <th></th>
                     <th></th>
                     <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
+                    <th></th>   
                 </tr>
             </thead>
             <tbody>
@@ -58,6 +56,7 @@
                         <td class="text-right" colspan="2"><strong class="text-danger">@Html.DisplayFor(x => x.TotalAnnualIncome)</strong></td>
                         <td class="text-right" colspan="2"><strong class="text-danger">@Html.DisplayFor(x => x.TotalRentYield)</strong></td>
                         <td class="text-right"></td>
+                        <td></td>
                         <td></td>
                         <td></td>
                         <td></td>
@@ -77,6 +76,8 @@
                             <td class="text-right" colspan="2">@Html.DisplayFor(x => realEstate.AnnualIncome)</td>
                             <td class="text-right" colspan="2">@Html.DisplayFor(x => realEstate.RentYield)</td>
                             <td class="text-right"></td>
+                            <td></td>
+                            <td></td>
                             <td></td>
                             <td></td>
                             <td></td>
@@ -135,7 +136,7 @@
                             }
                         }
                         <tr>
-                            <td colspan="12"></td>
+                            <td colspan="12" style="border-top: none"></td>
                         </tr>
                     }
                 }

@@ -1,0 +1,45 @@
+﻿@model CashFlowManagement.Models.RealEstateLiabilityListViewModel
+@{
+    Layout = null;
+}
+
+<div id="liability-table-div">
+    <h4>Danh sách các khoản vay</h4>
+    <div class="col-md-12">
+        <table id="liability-table" class="table table-condensed table-responsive">
+            <thead>
+                <tr>
+                    <th>Nguồn vay nợ</th>
+                    <th class="text-right">Giá trị nợ</th>
+                    <th>Loại lãi suất</th>
+                    <th class="text-right">Lãi suất vay</th>
+                    <th class="text-right">Ngày vay</th>
+                    <th class="text-right">Ngày trả hết nợ</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Liabilities.Any())
+            {
+                foreach (var liability in Model.Liabilities)
+                {
+                        <tr>
+                            <td>@Html.DisplayFor(x => liability.Source)</td>
+                            <td class="text-right">@Html.DisplayFor(x => liability.Value)</td>
+                            <td>@Html.DisplayFor(x => liability.InterestType)</td>
+                            <td class="text-right">@Html.DisplayFor(x => liability.InterestRate)</td>
+                            <td class="text-right">@Html.DisplayFor(x => liability.StartDate)</td>
+                            <td class="text-right">@Html.DisplayFor(x => liability.EndDate)</td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="6" class="text-center">Không có có khoản nợ nào</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

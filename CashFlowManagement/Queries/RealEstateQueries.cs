@@ -34,7 +34,7 @@ namespace CashFlowManagement.Queries
                     realEstateViewModel.Liabilities.Add(liabilityViewModel);
                 }
 
-                realEstateViewModel.TotalLiabilityValue = realEstateViewModel.Liabilities.Select(x => x.Value).DefaultIfEmpty(0).Sum();
+                realEstateViewModel.TotalLiabilityValue = realEstateViewModel.Liabilities.Select(x => x.Value.Value).DefaultIfEmpty(0).Sum();
                 realEstateViewModel.TotalOriginalPayment = realEstateViewModel.Liabilities.Select(x => x.MonthlyOriginalPayment).DefaultIfEmpty(0).Sum();
                 realEstateViewModel.TotalInterestPayment = realEstateViewModel.Liabilities.Select(x => x.MonthlyInterestPayment).DefaultIfEmpty(0).Sum();
                 realEstateViewModel.TotalMonthlyPayment = realEstateViewModel.Liabilities.Select(x => x.TotalMonthlyPayment).DefaultIfEmpty(0).Sum();
@@ -51,6 +51,59 @@ namespace CashFlowManagement.Queries
             result.TotalAnnualIncome = result.TotalMonthlyIncome * 12;
             result.TotalRentYield = result.TotalMonthlyIncome / result.TotalValue;
 
+            return result;
+        }
+
+        public static int CreateRealEstate(RealEstateCreateViewModel model, string username)
+        {
+            int result = 0;
+            DateTime current = DateTime.Now;
+            Entities entities = new Entities();
+
+            //Create real estate
+            Assets realEstate = new Assets();
+            realEstate.AssetName = model.Name;
+            realEstate.Value = model.Value.Value;
+            realEstate.StartDate = current;
+            realEstate.CreatedDate = current;
+            realEstate.CreatedBy = Constants.Constants.USER;
+            realEstate.AssetType = (int)Constants.Constants.ASSET_TYPE.REAL_ESTATE;
+            realEstate.ObtainedBy = (int)Constants.Constants.OBTAIN_BY.CREATE;
+            realEstate.Username = username;
+
+            //Create rent income
+            Incomes income = new Incomes();
+            income.Name = "Thu nhập cho thuê từ " + realEstate.AssetName;
+            income.Value = model.Income.Value;
+            income.IncomeDay = 1;
+            income.StartDate = current;
+            income.CreatedDate = current;
+            income.CreatedBy = Constants.Constants.USER;
+            income.IncomeType = (int)Constants.Constants.INCOME_TYPE.REAL_ESTATE_INCOME;
+            income.Username = username;
+            realEstate.Incomes1.Add(income);
+
+            if (model.IsInDept)
+            {
+                foreach (var liabilityViewModel in model.Liabilities.Liabilities)
+                {
+                    Liabilities liability = new Liabilities();
+                    liability.Name = liabilityViewModel.Source;
+                    liability.Value = liabilityViewModel.Value.Value;
+                    liability.InterestType = liabilityViewModel.InterestType;
+                    liability.InterestRate = liabilityViewModel.InterestRate.Value;
+                    liability.StartDate = liabilityViewModel.StartDate.Value;
+                    liability.EndDate = liabilityViewModel.EndDate.Value;
+                    liability.LiabilityType = (int)Constants.Constants.LIABILITY_TYPE.REAL_ESTATE;
+                    liability.CreatedDate = current;
+                    liability.CreatedBy = Constants.Constants.USER;
+                    liability.Username = username;
+                    realEstate.Liabilities.Add(liability);
+                }
+            }
+
+            entities.Assets.Add(realEstate);
+            result = entities.SaveChanges();
             return result;
         }
     }

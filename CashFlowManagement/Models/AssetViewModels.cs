@@ -12,10 +12,10 @@ namespace CashFlowManagement.Models
         [Display(Name = "Tên bất động sản")]
         public string Name { get; set; }
 
-        [Display(Name = "Ngày mua bất động sản")]
-        [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
-        public DateTime? BuyDate { get; set; }
+        //[Display(Name = "Ngày mua bất động sản")]
+        //[DataType(DataType.Date)]
+        //[DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
+        //public DateTime? BuyDate { get; set; }
 
         [Required]
         [Display(Name = "Giá trị bất động sản")]
@@ -24,14 +24,14 @@ namespace CashFlowManagement.Models
         [Required]
         [Display(Name = "Thu nhập hàng tháng cho thuê")]
         public double? Income { get; set; }
-        public List<RealEstateLiabilityCreateViewModel> Liabilities { get; set; }
-        
+        public RealEstateLiabilityListCreateViewModel Liabilities { get; set; }
+
         [Display(Name = "Bạn có vay khoản nợ nào để mua bất động sản này không?")]
         public bool IsInDept { get; set; }
 
         public RealEstateCreateViewModel()
         {
-            Liabilities = new List<RealEstateLiabilityCreateViewModel>();
+            Liabilities = new RealEstateLiabilityListCreateViewModel();
         }
     }
 

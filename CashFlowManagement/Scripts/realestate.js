@@ -1,5 +1,23 @@
-﻿$(document).ready(function () {
-    var count = 0;
+﻿function RefreshLiabilityTable() {
+    $.ajax({
+        url: Url._LiabilityTable,
+        type: "get",
+        success: function (data) {
+            $("#liability-form")[0].reset();
+            $("#liability-table-div").html($(data).html());
+        }
+    })
+}
+
+$(document).ready(function () {
+    $.validator.methods.date = function (value, element) {
+        return this.optional(element) || moment(value, "MM/YYYY", true).isValid();
+    }
+
+    $.validator.methods.number = function (value, element) {
+        return this.optional(element) || /^-?(?:\d+|\d{1,3}(?:\.\d{3})+)(?:,\d+)?$/.test(value);
+    }
+
     function MaskInput() {
         $(".input-mask").mask("000.000.000.000.000", { reverse: true });
         $(".percentage").mask("##0,00%", { reverse: true });
@@ -22,33 +40,25 @@
     
     MaskInput();
 
-    $(document).on("click", ".create-real-estate-liability", function () {
-        var source = $("#Source").val();
-        var value = $("#LiabilityValue").val();
-        var interestType = $("#InterestType :selected").text();
-        var interestRate = $("#InterestRate").val();
-        var startDate = $("#StartDate").val();
-        var endDate = $("#EndDate").val();
-        var html = "<tr>";
-        html += "<td>" + source + "</td>";
-        html += "<td class='text-right'>" + value + "</td>";
-        html += "<td>" + interestType + "</td>";
-        html += "<td class='text-right'>" + interestRate + "</td>";
-        html += "<td class='text-right'>" + startDate + "</td>";
-        html += "<td class='text-right'>" + endDate + "</td>";
-        html +="<td class='text-center'><button type='button' class='btn btn-danger'>Xóa nợ</button></td>";
-        html += "</tr>";
-        $("#liability-table tbody").append(html);
-        count += 1;
+    $(document).on("click", ".create-real-estate", function () {
+        var model = $("#real-estate-form").serialize();
+        $.ajax({
+            url: Url.CreateRealEstate,
+            type: "post",
+            data: model,
+            success: function (data) {
+                alert(data);
+            }
+        });
     })
 
     $(document).on("click", "#IsInDept", function () {
         if ($(this).prop("checked")) {
-            $("#real-estate-table").removeClass("col-md-4 col-md-offset-4").addClass("col-md-3");
+            $("#real-estate-div").removeClass("col-md-6 col-md-offset-3").addClass("col-md-3");
             $("#liability-div").removeClass("hidden");
         }
         else {
-            $("#real-estate-table").removeClass("col-md-3").addClass("col-md-4 col-md-offset-4");
+            $("#real-estate-div").removeClass("col-md-3").addClass("col-md-6 col-md-offset-3");
             $("#liability-div").addClass("hidden");
         }
     })
