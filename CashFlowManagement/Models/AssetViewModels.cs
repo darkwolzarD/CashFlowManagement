@@ -20,8 +20,7 @@ namespace CashFlowManagement.Models
         [Required]
         [Display(Name = "Giá trị bất động sản")]
         public double? Value { get; set; }
-
-        [Required]
+    
         [Display(Name = "Thu nhập hàng tháng cho thuê")]
         public double? Income { get; set; }
         public RealEstateLiabilityListCreateViewModel Liabilities { get; set; }

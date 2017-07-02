@@ -1,0 +1,25 @@
+﻿<div id="real-estate-create-modal" class="modal fade" role="dialog">
+    <div class="modal-dialog" style="width: 400px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <p style="font-size: 16px; margin-bottom: 0px;">Khởi tạo bất động sản</p>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    @{ Html.RenderAction("_RealEstateForm"); }
+                    <div id="liability-div" class="col-md-12 hidden">
+                        @{ Html.RenderAction("_LiabilityForm"); }
+                        @{ Html.RenderAction("_LiabilityTable"); }
+                    </div>
+                    <div id="confirm-real-estate-info" class="col-md-12 hidden"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success create-real-estate-info">
+                    <span class="glyphicon glyphicon-ok"></span>
+                    Tạo bất động sản
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

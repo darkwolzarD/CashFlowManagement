@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using static CashFlowManagement.Queries.RealEstateLiabilityQueries;
 
 namespace CashFlowManagement.Controllers
 {
@@ -17,32 +18,41 @@ namespace CashFlowManagement.Controllers
             return View(model);
         }
 
-        public ActionResult Create()
+        public ActionResult _Create()
         {
             RealEstateCreateViewModel model = new RealEstateCreateViewModel();
             HttpContext.Session["LIABILITIES"] = null;
-            return View(model);
+            return PartialView(model);
         }
 
         [HttpPost]
-        public ActionResult Create(RealEstateCreateViewModel model)
+        public ActionResult _Create(RealEstateCreateViewModel model)
         {
-            model.Liabilities = (RealEstateLiabilityListCreateViewModel)HttpContext.Session["LIABILITIES"];
-            int result = RealEstateQueries.CreateRealEstate(model, UserQueries.GetCurrentUsername());
-            if(result > 0)
+            if (ModelState.IsValid)
             {
-                return Content("Tạo bất động sản thành công");
+                HttpContext.Session["REAL_ESTATE"] = model;
+                return Content("success");
             }
             else
             {
-                return Content("Có lỗi xảy ra");
+                return PartialView(model);
             }
+        }
+
+        public ActionResult _RealEstateForm()
+        {
+            RealEstateCreateViewModel model = (RealEstateCreateViewModel)HttpContext.Session["REAL_ESTATE"];
+            if(model == null)
+            {
+                model = new RealEstateCreateViewModel();
+            }
+            return PartialView(model);
         }
 
         public ActionResult _LiabilityForm()
         {
             RealEstateLiabilityCreateViewModel model = new RealEstateLiabilityCreateViewModel();
-            return View(model);
+            return PartialView(model);
         }
         public ActionResult _LiabilityTable()
         {
@@ -63,7 +73,7 @@ namespace CashFlowManagement.Controllers
                 viewModel.InterestType = RealEstateLiabilityQueries.Helper.GetInterestType(liability.InterestType);
                 model.Liabilities.Add(viewModel);
             }
-            return View(model);
+            return PartialView(model);
         }
 
         [HttpPost]
@@ -85,6 +95,67 @@ namespace CashFlowManagement.Controllers
             {
                 return View(model);
             }
+        }
+
+        public ActionResult _Confirm()
+        {
+            DateTime current = DateTime.Now;
+
+            RealEstateCreateViewModel model = (RealEstateCreateViewModel)HttpContext.Session["REAL_ESTATE"];
+            RealEstateViewModel viewModel = new RealEstateViewModel();
+            viewModel.Name = model.Name;
+            viewModel.Value = model.Value.Value;
+            viewModel.Income = model.Income.HasValue ? model.Income.Value : 0;
+            viewModel.AnnualIncome = viewModel.Income * 12;
+            viewModel.RentYield = viewModel.Income / viewModel.Value;
+
+            RealEstateLiabilityListCreateViewModel liabilities = (RealEstateLiabilityListCreateViewModel)HttpContext.Session["LIABILITIES"];
+            foreach (var liability in liabilities.Liabilities)
+            {
+                RealEstateLiabilityViewModel liabilityViewModel = new RealEstateLiabilityViewModel();
+                liabilityViewModel.Source = liability.Source;
+                liabilityViewModel.Value = liability.Value;
+                liabilityViewModel.InterestType = Helper.GetInterestType(liability.InterestType);
+                liabilityViewModel.InterestRate = liability.InterestRate / 100;
+                liabilityViewModel.StartDate = liability.StartDate.Value;
+                liabilityViewModel.EndDate = liability.EndDate.Value;
+                liabilityViewModel.PaymentPeriod = Helper.CalculateTimePeriod(liabilityViewModel.StartDate.Value, liabilityViewModel.EndDate.Value);
+
+                if (liabilityViewModel.StartDate <= current && current <= liabilityViewModel.EndDate)
+                {
+                    int currentPeriod = Helper.CalculateTimePeriod(liabilityViewModel.StartDate.Value, DateTime.Now);
+                    //Fixed interest type
+                    if (liability.InterestType == (int)Constants.Constants.INTEREST_TYPE.FIXED)
+                    {
+                        liabilityViewModel.MonthlyOriginalPayment = liabilityViewModel.Value.Value / liabilityViewModel.PaymentPeriod;
+                        liabilityViewModel.MonthlyInterestPayment = liabilityViewModel.Value.Value * liabilityViewModel.InterestRate.Value / 12;
+                        liabilityViewModel.TotalMonthlyPayment = liabilityViewModel.MonthlyOriginalPayment + liabilityViewModel.MonthlyInterestPayment;
+                        liabilityViewModel.TotalPayment = liabilityViewModel.TotalMonthlyPayment * currentPeriod;
+                        liabilityViewModel.RemainedValue = liabilityViewModel.Value.Value - liabilityViewModel.TotalPayment;
+                    }
+                    //Reduced interest type
+                    else
+                    {
+                        liabilityViewModel.MonthlyOriginalPayment = liabilityViewModel.Value.Value / liabilityViewModel.PaymentPeriod;
+                        liabilityViewModel.RemainedValue = liabilityViewModel.Value.Value - liabilityViewModel.MonthlyOriginalPayment * currentPeriod;
+                        liabilityViewModel.MonthlyInterestPayment = liabilityViewModel.RemainedValue * liabilityViewModel.InterestRate.Value / 12;
+                        liabilityViewModel.TotalMonthlyPayment = liabilityViewModel.MonthlyOriginalPayment + liabilityViewModel.MonthlyInterestPayment;
+                        liabilityViewModel.TotalPayment = liabilityViewModel.InterestRate.Value / 12 * (currentPeriod * liabilityViewModel.Value.Value + currentPeriod * (currentPeriod + 1) / 2 * liabilityViewModel.MonthlyOriginalPayment);
+                    }
+                }
+                else
+                {
+                    liabilityViewModel.MonthlyOriginalPayment = 0;
+                    liabilityViewModel.MonthlyInterestPayment = 0;
+                    liabilityViewModel.TotalMonthlyPayment = 0;
+                    liabilityViewModel.TotalPayment = 0;
+                    liabilityViewModel.RemainedValue = 0;
+                }
+
+                viewModel.Liabilities.Add(liabilityViewModel);
+            }
+
+            return PartialView(viewModel);
         }
     }
 }

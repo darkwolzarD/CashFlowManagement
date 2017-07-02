@@ -25,6 +25,10 @@ hr {
     clear: both;
 }
 
+.glyphicon {
+    margin-right: 5px;
+}
+
 /*/*Page header*/
 .header {
     background: #ff6a00;
@@ -231,4 +235,8 @@ footer {
 }
 .btn-breadcrumb .btn.btn-default:hover:not(:last-child):before {
   border-left: 10px solid #adadad;
+}
+
+.modal-body {
+    padding: 20px 20px 0 20px;
 }

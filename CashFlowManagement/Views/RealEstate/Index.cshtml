@@ -21,10 +21,10 @@
         <p style="font-size: 20px;">Quản lý bất động sản</p>
     </div>
     <div class="col-md-6 text-right">
-        <a href="@Url.Action("Create", "RealEstate")" class="btn btn-success">
+        <button type="button" class="btn btn-success toggle-modal">
             <span class="glyphicon glyphicon-home"></span>
             Tạo bất động sản
-        </a>
+        </button>
     </div>
 </div>
 <div class="clear10"></div>
@@ -151,3 +151,15 @@
     </div>
 </div>
 
+<div id="modal">
+
+</div>
+
+<script type="text/javascript" src="~/Scripts/realestate.js"></script>
+<script type="text/javascript">
+    var Url = {};
+    Url._LiabilityForm = '@Url.Action("_LiabilityForm", "RealEstate")';
+    Url._LiabilityTable = '@Url.Action("_LiabilityTable", "RealEstate")';
+    Url.CreateRealEstate = '@Url.Action("_Create", "RealEstate")';
+    Url.Confirm = '@Url.Action("_Confirm", "RealEstate")';
+</script>

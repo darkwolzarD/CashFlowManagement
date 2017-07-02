@@ -1,0 +1,41 @@
+﻿@model CashFlowManagement.Models.RealEstateCreateViewModel
+@{ 
+    Layout = null;
+}
+
+@using (Html.BeginForm("Create", "RealEstate", FormMethod.Post, new { @id = "real-estate-form" }))
+{
+    @Html.AntiForgeryToken()
+    <div id="real-estate-div" class="col-md-12">
+        <div class="form-group">
+            @Html.LabelFor(x => x.Name)
+            @Html.TextBoxFor(x => x.Name, new { @class = "form-control input-sm" })
+            @Html.ValidationMessageFor(x => x.Name)
+        </div>
+        @*<div class="form-group">
+                @Html.LabelFor(x => x.BuyDate)
+                <div class="input-group input-group-sm">
+                    @Html.TextBoxFor(x => x.BuyDate, "{0:dd/MM/yyyy}", new { @class = "form-control input-sm date-picker-with-day" })
+                    <div class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </div>
+                </div>
+            </div>*@
+        <div class="form-group">
+            @Html.LabelFor(x => x.Value)
+            @Html.EditorFor(x => x.Value, new { htmlAttributes = new { @class = "form-control input-mask input-sm" } })
+            @Html.ValidationMessageFor(x => x.Value)
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(x => x.Income)
+            @Html.EditorFor(x => x.Income, new { htmlAttributes = new { @class = "form-control input-mask input-sm", placeholder = "Không bắt buộc" } })
+            @Html.ValidationMessageFor(x => x.Income)
+        </div>
+        <div class="checkbox">
+            <label>
+                @Html.CheckBoxFor(x => x.IsInDept)
+                Bạn có vay khoản nợ nào để mua bất động sản này không?
+            </label>
+        </div>
+    </div>
+}
