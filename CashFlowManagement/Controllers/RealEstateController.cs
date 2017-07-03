@@ -22,6 +22,7 @@ namespace CashFlowManagement.Controllers
         {
             RealEstateCreateViewModel model = new RealEstateCreateViewModel();
             HttpContext.Session["LIABILITIES"] = null;
+            HttpContext.Session["REAL_ESTATE"] = null;
             return PartialView(model);
         }
 
@@ -35,7 +36,7 @@ namespace CashFlowManagement.Controllers
             }
             else
             {
-                return PartialView(model);
+                return PartialView("_RealEstateForm",  model);
             }
         }
 
@@ -46,6 +47,12 @@ namespace CashFlowManagement.Controllers
             {
                 model = new RealEstateCreateViewModel();
             }
+            return PartialView(model);
+        }
+
+        public ActionResult _RealEstateTable()
+        {
+            RealEstateListViewModel model = RealEstateQueries.GetRealEstateByUser(UserQueries.GetCurrentUsername());
             return PartialView(model);
         }
 
@@ -110,6 +117,8 @@ namespace CashFlowManagement.Controllers
             viewModel.RentYield = viewModel.Income / viewModel.Value;
 
             RealEstateLiabilityListCreateViewModel liabilities = (RealEstateLiabilityListCreateViewModel)HttpContext.Session["LIABILITIES"];
+            viewModel.RowSpan = liabilities.Liabilities.Any() ? liabilities.Liabilities.Count() + 3 : 2;
+
             foreach (var liability in liabilities.Liabilities)
             {
                 RealEstateLiabilityViewModel liabilityViewModel = new RealEstateLiabilityViewModel();
@@ -156,6 +165,29 @@ namespace CashFlowManagement.Controllers
             }
 
             return PartialView(viewModel);
+        }
+
+        [HttpPost]
+        public ActionResult Save(RealEstateCreateViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                model.Liabilities = (RealEstateLiabilityListCreateViewModel)HttpContext.Session["LIABILITIES"];
+                string user = UserQueries.GetCurrentUsername();
+                int result = RealEstateQueries.CreateRealEstate(model, user);
+                if (result > 0)
+                {
+                    return Content("success");
+                }
+                else
+                {
+                    return Content("failed");
+                }
+            }
+            else
+            {
+                return PartialView("_RealEstateForm", model);
+            }
         }
     }
 }

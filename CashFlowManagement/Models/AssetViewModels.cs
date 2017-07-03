@@ -8,7 +8,7 @@ namespace CashFlowManagement.Models
 {
     public class RealEstateCreateViewModel
     {
-        [Required]
+        [Required(ErrorMessage = "Nhập tên bất động sản")]
         [Display(Name = "Tên bất động sản")]
         public string Name { get; set; }
 
@@ -17,7 +17,7 @@ namespace CashFlowManagement.Models
         //[DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         //public DateTime? BuyDate { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Nhập giá trị bất động sản")]
         [Display(Name = "Giá trị bất động sản")]
         public double? Value { get; set; }
     

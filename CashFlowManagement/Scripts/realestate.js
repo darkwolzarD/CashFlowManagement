@@ -9,6 +9,26 @@
     })
 }
 
+function RefreshRealEstateTable() {
+    $.ajax({
+        url: Url.RealEstateTable,
+        type: "get",
+        success: function (data) {
+            $("#real-estate-table").html($(data).html());
+        }
+    })
+}
+
+function LoadLiabilityForm() {
+    $(".modal-dialog").css("width", "1000px");
+    $("#real-estate-form").addClass("hidden");
+    $("#liability-div").removeClass("hidden");
+    var html = "<button type='button' class='btn btn-default return-real-estate-info'><span class='glyphicon glyphicon-arrow-left'></span>Thông tin bất động sản</button>";
+    html += "<button type='button' class='btn btn-primary real-estate-summary'><span class='glyphicon glyphicon-ok'></span>Xác nhận thông tin bất động sản</button>";;
+    $(".modal-footer").html(html);
+}
+
+
 $(document).ready(function () {
     $.validator.methods.date = function (value, element) {
         return this.optional(element) || moment(value, "MM/YYYY", true).isValid();
@@ -44,11 +64,17 @@ $(document).ready(function () {
     $(document).on("click", ".create-real-estate", function () {
         var model = $("#real-estate-form").serialize();
         $.ajax({
-            url: Url.CreateRealEstate,
+            url: Url.SaveRealEstate,
             type: "post",
             data: model,
             success: function (data) {
-                alert(data);
+                if (data === "success") {
+                    $("#real-estate-create-modal").modal("hide");
+                    RefreshRealEstateTable();
+                }
+                else {
+                    $(".modal-body .row").html($(data).html());
+                }
             }
         });
     })
@@ -59,7 +85,7 @@ $(document).ready(function () {
             $(".modal-footer").html(html);
         }
         else {
-            var html = "<button type='button' class='btn btn-success create-real-estate-info'><span class='glyphicon glyphicon-ok'></span>Tạo bất động sản</button>";
+            var html = "<button type='button' class='btn btn-success create-real-estate'><span class='glyphicon glyphicon-ok'></span>Tạo bất động sản</button>";
             $(".modal-footer").html(html);
         }
     })
@@ -88,11 +114,11 @@ $(document).ready(function () {
                     $("#real-estate-form").addClass("hidden");
                     $("#liability-div").removeClass("hidden");
                     var html = "<button type='button' class='btn btn-default return-real-estate-info'><span class='glyphicon glyphicon-arrow-left'></span>Thông tin bất động sản</button>";
-                    html += "<button type='button' class='btn btn-success real-estate-summary'><span class='glyphicon glyphicon-ok'></span>Tạo bất động sản</button>";;
+                    html += "<button type='button' class='btn btn-primary real-estate-summary'><span class='glyphicon glyphicon-ok'></span>Xác nhận thông tin bất động sản</button>";;
                     $(".modal-footer").html(html);
                 }
                 else {
-                    $("#real-estate-form").html($(data).html());
+                    $(".modal-body .row").html($(data).html());
                 }
             }
         });
@@ -107,7 +133,7 @@ $(document).ready(function () {
             $(".modal-footer").html(html);
         }
         else {
-            var html = "<button type='button' class='btn btn-success create-real-estate-info'><span class='glyphicon glyphicon-ok'></span>Tạo bất động sản</button>";
+            var html = "<button type='button' class='btn btn-success create-real-estate'><span class='glyphicon glyphicon-ok'></span>Tạo bất động sản</button>";
             $(".modal-footer").html(html);
         }
     })
@@ -121,7 +147,7 @@ $(document).ready(function () {
                 $("#confirm-real-estate-info").html($(data));
                 $("#confirm-real-estate-info").removeClass("hidden");
                 var html = "<button type='button' class='btn btn-default return-real-estate-liability-info'><span class='glyphicon glyphicon-arrow-left'></span>Thông tin các khoản vay</button>";
-                html += "<button type='button' class='btn btn-success real-estate-summary'><span class='glyphicon glyphicon-ok'></span>Tạo bất động sản</button>";;
+                html += "<button type='button' class='btn btn-success create-real-estate'><span class='glyphicon glyphicon-ok'></span>Tạo bất động sản</button>";;
                 $(".modal-footer").html(html);
             }
         });

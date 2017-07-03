@@ -24,7 +24,14 @@ namespace CashFlowManagement.Queries
                 RealEstateViewModel realEstateViewModel = new RealEstateViewModel();
                 realEstateViewModel.Name = realEstate.AssetName;
                 realEstateViewModel.Value = realEstate.Value;
-                realEstateViewModel.Income = realEstate.Incomes1.FirstOrDefault().Value;
+                if (realEstate.Incomes1.Any())
+                {
+                    realEstateViewModel.Income = realEstate.Incomes1.FirstOrDefault().Value;
+                }
+                else
+                {
+                    realEstateViewModel.Income = 0;
+                }
                 realEstateViewModel.AnnualIncome = realEstateViewModel.Income * 12;
                 realEstateViewModel.RentYield = realEstateViewModel.Income / realEstateViewModel.Value;
 
@@ -41,7 +48,7 @@ namespace CashFlowManagement.Queries
                 realEstateViewModel.TotalPayment = realEstateViewModel.Liabilities.Select(x => x.TotalPayment).DefaultIfEmpty(0).Sum();
                 realEstateViewModel.TotalRemainedValue = realEstateViewModel.Liabilities.Select(x => x.RemainedValue).DefaultIfEmpty(0).Sum();
                 realEstateViewModel.TotalInterestRate = realEstateViewModel.TotalInterestPayment / realEstateViewModel.TotalLiabilityValue * 12;
-                realEstateViewModel.RowSpan = realEstateViewModel.Liabilities.Count() + 3;
+                realEstateViewModel.RowSpan = realEstateViewModel.Liabilities.Any() ? realEstateViewModel.Liabilities.Count() + 3 : 2;
 
                 result.RealEstates.Add(realEstateViewModel);
             }
@@ -71,17 +78,20 @@ namespace CashFlowManagement.Queries
             realEstate.ObtainedBy = (int)Constants.Constants.OBTAIN_BY.CREATE;
             realEstate.Username = username;
 
-            //Create rent income
-            Incomes income = new Incomes();
-            income.Name = "Thu nhập cho thuê từ " + realEstate.AssetName;
-            income.Value = model.Income.Value;
-            income.IncomeDay = 1;
-            income.StartDate = current;
-            income.CreatedDate = current;
-            income.CreatedBy = Constants.Constants.USER;
-            income.IncomeType = (int)Constants.Constants.INCOME_TYPE.REAL_ESTATE_INCOME;
-            income.Username = username;
-            realEstate.Incomes1.Add(income);
+            if (model.Income.HasValue && model.Income.Value > 0)
+            {
+                //Create rent income
+                Incomes income = new Incomes();
+                income.Name = "Thu nhập cho thuê từ " + realEstate.AssetName;
+                income.Value = model.Income.Value;
+                income.IncomeDay = 1;
+                income.StartDate = current;
+                income.CreatedDate = current;
+                income.CreatedBy = Constants.Constants.USER;
+                income.IncomeType = (int)Constants.Constants.INCOME_TYPE.REAL_ESTATE_INCOME;
+                income.Username = username;
+                realEstate.Incomes1.Add(income);
+            }
 
             if (model.IsInDept)
             {
