@@ -38,6 +38,15 @@ $(document).ready(function () {
         return this.optional(element) || /^-?(?:\d+|\d{1,3}(?:\.\d{3})+)(?:,\d+)?$/.test(value);
     }
 
+    function() {
+        $(document).tooltip({
+            items: ".input-validation-error",
+            content: function () {
+                return $(this).attr('data-val-required');
+            }
+        });
+    }
+
     function MaskInput() {
         $(".input-mask").mask("000.000.000.000.000", { reverse: true });
         $(".percentage").mask("##0,00%", { reverse: true });
@@ -73,7 +82,9 @@ $(document).ready(function () {
                     RefreshRealEstateTable();
                 }
                 else {
-                    $(".modal-body .row").html($(data).html());
+                    $("#real-estate-div").html($(data).html());
+                    var html = "<button type='button' class='btn btn-success create-real-estate'><span class='glyphicon glyphicon-ok'></span>Tạo bất động sản</button>";
+                    $(".modal-footer").html(html);
                 }
             }
         });
@@ -103,11 +114,11 @@ $(document).ready(function () {
     })
 
     $(document).on("click", ".create-liability-info", function () {
-        var realEstate = $("#real-estate-form").serialize();
+        var model = $("#real-estate-form").serialize();
         $.ajax({
             url: Url.CreateRealEstate,
             type: "post",
-            data: realEstate,
+            data: model,
             success: function (data) {
                 if (data === "success") {
                     $(".modal-dialog").css("width", "1000px");
@@ -118,7 +129,7 @@ $(document).ready(function () {
                     $(".modal-footer").html(html);
                 }
                 else {
-                    $(".modal-body .row").html($(data).html());
+                    $("#real-estate-div").html($(data).html());
                 }
             }
         });
@@ -159,5 +170,9 @@ $(document).ready(function () {
         var html = "<button type='button' class='btn btn-default return-real-estate-info'><span class='glyphicon glyphicon-arrow-left'></span>Thông tin bất động sản</button>";
         html += "<button type='button' class='btn btn-success real-estate-summary'><span class='glyphicon glyphicon-ok'></span>Tạo bất động sản</button>";;
         $(".modal-footer").html(html);
+    })
+
+    $(document).on("change", "#real-estate-form input", function () {
+        $(this).validate();
     })
 })

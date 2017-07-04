@@ -164,6 +164,14 @@ namespace CashFlowManagement.Controllers
                 viewModel.Liabilities.Add(liabilityViewModel);
             }
 
+            viewModel.TotalLiabilityValue = viewModel.Liabilities.Select(x => x.Value.Value).DefaultIfEmpty(0).Sum();
+            viewModel.TotalOriginalPayment = viewModel.Liabilities.Select(x => x.MonthlyOriginalPayment).DefaultIfEmpty(0).Sum();
+            viewModel.TotalInterestPayment = viewModel.Liabilities.Select(x => x.MonthlyInterestPayment).DefaultIfEmpty(0).Sum();
+            viewModel.TotalMonthlyPayment = viewModel.Liabilities.Select(x => x.TotalMonthlyPayment).DefaultIfEmpty(0).Sum();
+            viewModel.TotalPayment = viewModel.Liabilities.Select(x => x.TotalPayment).DefaultIfEmpty(0).Sum();
+            viewModel.TotalRemainedValue = viewModel.Liabilities.Select(x => x.RemainedValue).DefaultIfEmpty(0).Sum();
+            viewModel.TotalInterestRate = viewModel.TotalInterestPayment / viewModel.TotalLiabilityValue * 12;
+
             return PartialView(viewModel);
         }
 
@@ -186,6 +194,7 @@ namespace CashFlowManagement.Controllers
             }
             else
             {
+                model.IsInDept = false;
                 return PartialView("_RealEstateForm", model);
             }
         }
