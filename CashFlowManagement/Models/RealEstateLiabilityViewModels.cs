@@ -9,6 +9,8 @@ namespace CashFlowManagement.Models
 {
     public class RealEstateLiabilityCreateViewModel
     {
+        public int Temp_Id { get; set; }
+
         [Required(ErrorMessage = "Nhập nguồn vay nợ")]
         [Display(Name = "Nguồn vay nợ")]
         public string Source { get; set; }
@@ -24,7 +26,6 @@ namespace CashFlowManagement.Models
 
         [Required(ErrorMessage = "Nhập lãi suất vay")]
         [Display(Name = "Lãi suất vay")]
-        [DisplayFormat(DataFormatString = "{0:P2}", ApplyFormatInEditMode = true)]
         public double? InterestRate { get; set; }
 
         [Required(ErrorMessage = "Chọn ngày vay nợ")]
@@ -36,10 +37,15 @@ namespace CashFlowManagement.Models
         [Display(Name = "Ngày kết thúc nợ")]
         [DisplayFormat(DataFormatString = "{0:MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime? EndDate { get; set; }
+
+        [Required(ErrorMessage = "Chọn lãi suất năm hoặc tháng")]
+        [Display(Name = "Lãi suất áp dụng")]
+        public int InterestRatePerX { get; set; }
     }
 
     public class RealEstateLiabilityViewModel
     {
+        public int Temp_Id { get; set; }
         public string Source { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:N0}")]
@@ -48,6 +54,7 @@ namespace CashFlowManagement.Models
 
         [DisplayFormat(DataFormatString = "{0:P2}")]
         public double? InterestRate { get; set; }
+        public string InterestRatePerX { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:MM/yyyy}")]
         public DateTime? StartDate { get; set; }

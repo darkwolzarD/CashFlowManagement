@@ -95,20 +95,24 @@ namespace CashFlowManagement.Queries
 
             if (model.IsInDept)
             {
-                foreach (var liabilityViewModel in model.Liabilities.Liabilities)
+                if (model.Liabilities != null && model.Liabilities.Liabilities.Count > 0)
                 {
-                    Liabilities liability = new Liabilities();
-                    liability.Name = liabilityViewModel.Source;
-                    liability.Value = liabilityViewModel.Value.Value;
-                    liability.InterestType = liabilityViewModel.InterestType;
-                    liability.InterestRate = liabilityViewModel.InterestRate.Value;
-                    liability.StartDate = liabilityViewModel.StartDate.Value;
-                    liability.EndDate = liabilityViewModel.EndDate.Value;
-                    liability.LiabilityType = (int)Constants.Constants.LIABILITY_TYPE.REAL_ESTATE;
-                    liability.CreatedDate = current;
-                    liability.CreatedBy = Constants.Constants.USER;
-                    liability.Username = username;
-                    realEstate.Liabilities.Add(liability);
+                    foreach (var liabilityViewModel in model.Liabilities.Liabilities)
+                    {
+                        Liabilities liability = new Liabilities();
+                        liability.Name = liabilityViewModel.Source;
+                        liability.Value = liabilityViewModel.Value.Value;
+                        liability.InterestType = liabilityViewModel.InterestType;
+                        liability.InterestRate = liabilityViewModel.InterestRate.Value;
+                        liability.InterestRatePerX = liabilityViewModel.InterestRatePerX;
+                        liability.StartDate = liabilityViewModel.StartDate.Value;
+                        liability.EndDate = liabilityViewModel.EndDate.Value;
+                        liability.LiabilityType = (int)Constants.Constants.LIABILITY_TYPE.REAL_ESTATE;
+                        liability.CreatedDate = current;
+                        liability.CreatedBy = Constants.Constants.USER;
+                        liability.Username = username;
+                        realEstate.Liabilities.Add(liability);
+                    }
                 }
             }
 

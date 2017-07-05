@@ -3,8 +3,18 @@
         url: Url._LiabilityTable,
         type: "get",
         success: function (data) {
-            $("#liability-form")[0].reset();
+            RefreshLiabilityForm();
             $("#liability-table-div").html($(data).html());
+        }
+    })
+}
+
+function RefreshLiabilityForm() {
+    $.ajax({
+        url: Url._LiabilityForm,
+        type: "get",
+        success: function (data) {
+            $("#liability-form").html($(data).html());
         }
     })
 }
@@ -36,15 +46,6 @@ $(document).ready(function () {
 
     $.validator.methods.number = function (value, element) {
         return this.optional(element) || /^-?(?:\d+|\d{1,3}(?:\.\d{3})+)(?:,\d+)?$/.test(value);
-    }
-
-    function() {
-        $(document).tooltip({
-            items: ".input-validation-error",
-            content: function () {
-                return $(this).attr('data-val-required');
-            }
-        });
     }
 
     function MaskInput() {
@@ -172,7 +173,39 @@ $(document).ready(function () {
         $(".modal-footer").html(html);
     })
 
-    $(document).on("change", "#real-estate-form input", function () {
-        $(this).validate();
+    $(document).on("click", ".remove-real-estate-liability", function () {
+        if (confirm("Bạn có muốn xóa khoản nợ này không")) {
+            var id = $(this).closest("tr").find(".liability-id").val();
+            $.ajax({
+                url: Url.DeleteLiability,
+                type: "post",
+                data: { id: id },
+                success: function (data) {
+                    if (data === "success") {
+                        RefreshLiabilityTable();
+                    }
+                    else {
+                        alert("Error!");
+                    }
+                }
+            });
+        }
+    })
+
+    $(document).on("click", ".liability-id", function () {
+        if ($(this).prop("checked")) {
+            var id = $(this).closest("tr").find(".liability-id").val();
+            $.ajax({
+                url: Url.LiabilityUpdateForm,
+                type: "get",
+                data: { id: id },
+                success: function (data) {
+                    $("#liability-form-div").html($(data).html());
+                }
+            });
+        }
+        else {
+            RefreshLiabilityForm();
+        }
     })
 })

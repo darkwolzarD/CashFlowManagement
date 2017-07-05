@@ -25,7 +25,11 @@ hr {
     clear: both;
 }
 
-.glyphicon {
+td {
+    vertical-align: middle !important;
+}
+
+button .glyphicon {
     margin-right: 5px;
 }
 

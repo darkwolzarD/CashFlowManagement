@@ -23,6 +23,8 @@ namespace CashFlowManagement.Constants
         public enum INCOME_ERROR { INVALID_START_DATE = -1, INVALID_END_DATE = -2, INVALID_NAME = -3 }
         public enum EXPENSE_ERROR { INVALID_START_DATE = -1, INVALID_END_DATE = -2, INVALID_NAME = -3 }
         public enum OBJECT_TYPE { ASSET = 1, INCOME = 2, LIABILITY = 3, EXPENSE = 4 }
+        public enum INTEREST_RATE_PER { MONTH = 1, YEAR = 2 }
+
         public static string USER = "user";
         public static string SYSTEM = "system";
         public static List<SelectListItem> SexList()

@@ -17,6 +17,7 @@ namespace CashFlowManagement.Queries
             liabilityViewModel.Source = liability.Name;
             liabilityViewModel.Value = liability.Value;
             liabilityViewModel.InterestType = Helper.GetInterestType(liability.InterestType.Value);
+            liabilityViewModel.InterestRatePerX = Helper.GetInterestTypePerX(liability.InterestRatePerX);
             liabilityViewModel.InterestRate = liability.InterestRate / 100;
             liabilityViewModel.StartDate = liability.StartDate.Value;
             liabilityViewModel.EndDate = liability.EndDate.Value;
@@ -80,6 +81,18 @@ namespace CashFlowManagement.Queries
                 else if (interestType == (int)Constants.Constants.INTEREST_TYPE.REDUCED)
                 {
                     return "Giảm dần";
+                }
+                return string.Empty;
+            }
+            public static string GetInterestTypePerX(int interestTypePerX)
+            {
+                if (interestTypePerX == (int)Constants.Constants.INTEREST_RATE_PER.MONTH)
+                {
+                    return "Tháng";
+                }
+                else if (interestTypePerX == (int)Constants.Constants.INTEREST_RATE_PER.YEAR)
+                {
+                    return "Năm";
                 }
                 return string.Empty;
             }

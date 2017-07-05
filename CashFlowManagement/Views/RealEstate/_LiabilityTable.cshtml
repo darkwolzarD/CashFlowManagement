@@ -1,12 +1,14 @@
 ﻿@model CashFlowManagement.Models.RealEstateLiabilityListViewModel
 
-<div id="liability-table-div" class="col-md-8">
+<div id="liability-table-div" class="col-md-9">
     <table id="liability-table" class="table table-condensed table-responsive">
         <thead>
             <tr>
+                <th></th>
                 <th>Nguồn vay nợ</th>
                 <th class="text-right">Giá trị nợ</th>
                 <th>Loại lãi suất</th>
+                <th>Áp dụng</th>
                 <th class="text-right">Lãi suất vay</th>
                 <th class="text-right">Ngày vay</th>
                 <th class="text-right">Ngày trả hết nợ</th>
@@ -19,12 +21,19 @@
             foreach (var liability in Model.Liabilities)
             {
             <tr>
+                <td><input type="checkbox" class="checkbox liability-id" value="@liability.Temp_Id"/></td>
                 <td>@Html.DisplayFor(x => liability.Source)</td>
                 <td class="text-right">@Html.DisplayFor(x => liability.Value)</td>
                 <td>@Html.DisplayFor(x => liability.InterestType)</td>
+                <td>@Html.DisplayFor(x => liability.InterestRatePerX)</td>
                 <td class="text-right">@Html.DisplayFor(x => liability.InterestRate)</td>
                 <td class="text-right">@Html.DisplayFor(x => liability.StartDate)</td>
                 <td class="text-right">@Html.DisplayFor(x => liability.EndDate)</td>
+                <td>
+                    <a class="remove-real-estate-liability" href="#">
+                        <span class="glyphicon glyphicon-remove text-danger"></span>
+                    </a>
+                </td>
             </tr>
             }
             }
