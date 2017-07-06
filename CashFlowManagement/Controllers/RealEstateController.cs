@@ -36,14 +36,14 @@ namespace CashFlowManagement.Controllers
             }
             else
             {
-                return PartialView("_RealEstateForm",  model);
+                return PartialView("_RealEstateForm", model);
             }
         }
 
         public ActionResult _RealEstateForm()
         {
             RealEstateCreateViewModel model = (RealEstateCreateViewModel)HttpContext.Session["REAL_ESTATE"];
-            if(model == null)
+            if (model == null)
             {
                 model = new RealEstateCreateViewModel();
             }
@@ -54,6 +54,26 @@ namespace CashFlowManagement.Controllers
         {
             RealEstateUpdateViewModel model = RealEstateQueries.GetRealEstateById(id);
             return PartialView(model);
+        }
+
+        [HttpPost]
+        public ActionResult _RealEstateUpdateForm(RealEstateUpdateViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                int result = RealEstateQueries.UpdateRealEstate(model);
+                if(result > 0)
+                {
+                    return Content("success");
+                }
+                else
+                {
+                    return Content("failed");
+                }
+            }
+            else {
+                return PartialView(model);
+            }
         }
 
         public ActionResult _RealEstateTable()
@@ -70,8 +90,35 @@ namespace CashFlowManagement.Controllers
         public ActionResult _LiabilityUpdateForm(int id)
         {
             RealEstateLiabilityListCreateViewModel liabilities = (RealEstateLiabilityListCreateViewModel)HttpContext.Session["LIABILITIES"];
-            RealEstateLiabilityCreateViewModel model = liabilities.Liabilities.Where(x => x.Temp_Id == id).FirstOrDefault();
+            RealEstateLiabilityCreateViewModel model = liabilities.Liabilities.Where(x => x.Id == id).FirstOrDefault();
             return PartialView(model);
+        }
+
+        public ActionResult _LiabilityUpdateForm2nd(int id)
+        {
+            RealEstateLiabilityUpdateViewModel model = RealEstateLiabilityQueries.GetViewModelById(id);
+            return PartialView(model);
+        }
+
+        [HttpPost]
+        public ActionResult _LiabilityUpdateForm2nd(RealEstateLiabilityUpdateViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                int result = RealEstateLiabilityQueries.UpdateRealEstateLiability(model);
+                if (result > 0)
+                {
+                    return Content("success");
+                }
+                else
+                {
+                    return Content("failed");
+                }
+            }
+            else
+            {
+                return PartialView(model);
+            }
         }
 
         [HttpPost]
@@ -80,8 +127,8 @@ namespace CashFlowManagement.Controllers
             if (ModelState.IsValid)
             {
                 RealEstateLiabilityListCreateViewModel liabilities = (RealEstateLiabilityListCreateViewModel)HttpContext.Session["LIABILITIES"];
-                RealEstateLiabilityCreateViewModel updateModel = liabilities.Liabilities.Where(x => x.Temp_Id == model.Temp_Id).FirstOrDefault();
-                updateModel.Temp_Id = model.Temp_Id;
+                RealEstateLiabilityCreateViewModel updateModel = liabilities.Liabilities.Where(x => x.Id == model.Id).FirstOrDefault();
+                updateModel.Id = model.Id;
                 updateModel.Value = model.Value;
                 updateModel.Source = model.Source;
                 updateModel.InterestType = model.InterestType;
@@ -108,7 +155,7 @@ namespace CashFlowManagement.Controllers
             foreach (var liability in liabilities.Liabilities)
             {
                 RealEstateLiabilityViewModel viewModel = new RealEstateLiabilityViewModel();
-                viewModel.Temp_Id = liability.Temp_Id;
+                viewModel.Id = liability.Id;
                 viewModel.Source = liability.Source;
                 viewModel.Value = liability.Value;
                 viewModel.InterestRate = liability.InterestRate / 100;
@@ -136,9 +183,9 @@ namespace CashFlowManagement.Controllers
                 }
                 else
                 {
-                    id = liabilities.Liabilities.Max(x => x.Temp_Id) + 1;
+                    id = liabilities.Liabilities.Max(x => x.Id) + 1;
                 }
-                model.Temp_Id = id;
+                model.Id = id;
                 liabilities.Liabilities.Add(model);
                 HttpContext.Session["LIABILITIES"] = liabilities;
                 return Content("success");
@@ -252,7 +299,7 @@ namespace CashFlowManagement.Controllers
         public ActionResult DeleteTempLiability(int id)
         {
             RealEstateLiabilityListCreateViewModel liabilities = (RealEstateLiabilityListCreateViewModel)HttpContext.Session["LIABILITIES"];
-            liabilities.Liabilities.Remove(liabilities.Liabilities.Where(x => x.Temp_Id == id).FirstOrDefault());
+            liabilities.Liabilities.Remove(liabilities.Liabilities.Where(x => x.Id == id).FirstOrDefault());
             return Content("success");
         }
 

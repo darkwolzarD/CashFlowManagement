@@ -7,9 +7,9 @@ using System.Web;
 
 namespace CashFlowManagement.Models
 {
-    public class RealEstateLiabilityCreateViewModel
+    public class RealEstateLiabilityCreateViewModel: IValidatableObject
     {
-        public int Temp_Id { get; set; }
+        public int Id { get; set; }
 
         [Required(ErrorMessage = "Nhập nguồn vay nợ")]
         [Display(Name = "Nguồn vay nợ")]
@@ -26,6 +26,7 @@ namespace CashFlowManagement.Models
 
         [Required(ErrorMessage = "Nhập lãi suất vay")]
         [Display(Name = "Lãi suất vay")]
+        [Range(1, 100, ErrorMessage = "Lãi suất phải lớn hơn 1 và nhỏ hơn hoặc bằng 100%")]
         public double? InterestRate { get; set; }
 
         [Required(ErrorMessage = "Chọn ngày vay nợ")]
@@ -41,11 +42,26 @@ namespace CashFlowManagement.Models
         [Required(ErrorMessage = "Chọn lãi suất năm hoặc tháng")]
         [Display(Name = "Lãi suất áp dụng")]
         public int InterestRatePerX { get; set; }
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            if (EndDate < StartDate)
+            {
+                yield return
+                  new ValidationResult(errorMessage: "Ngày bắt đầu phải nhỏ hơn ngày trả hết nợ",
+                                       memberNames: new[] { "EndDate" });
+            }
+        }
+    }
+
+    public class RealEstateLiabilityUpdateViewModel : RealEstateLiabilityCreateViewModel
+    {
+
     }
 
     public class RealEstateLiabilityViewModel
     {
-        public int Temp_Id { get; set; }
+        public int Id { get; set; }
         public string Source { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:N0}")]

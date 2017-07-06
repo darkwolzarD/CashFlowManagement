@@ -9,12 +9,28 @@ namespace CashFlowManagement.Queries
 {
     public class RealEstateLiabilityQueries
     {
+        public static RealEstateLiabilityUpdateViewModel GetViewModelById(int id)
+        {
+            Entities entities = new Entities();
+            var realEstateLiability = entities.Liabilities.Where(x => x.Id == id).FirstOrDefault();
+            RealEstateLiabilityUpdateViewModel liabilityViewModel = new RealEstateLiabilityUpdateViewModel();
+            liabilityViewModel.Id = realEstateLiability.Id;
+            liabilityViewModel.Source = realEstateLiability.Name;
+            liabilityViewModel.Value = realEstateLiability.Value;
+            liabilityViewModel.InterestType = realEstateLiability.InterestType.Value;
+            liabilityViewModel.InterestRatePerX = realEstateLiability.InterestRatePerX;
+            liabilityViewModel.InterestRate = realEstateLiability.InterestRate;
+            liabilityViewModel.StartDate = realEstateLiability.StartDate.Value;
+            liabilityViewModel.EndDate = realEstateLiability.EndDate.Value;
+            return liabilityViewModel;
+        }
+
         public static RealEstateLiabilityViewModel CreateViewModel(Liabilities liability)
         {
             DateTime current = DateTime.Now;
 
             RealEstateLiabilityViewModel liabilityViewModel = new RealEstateLiabilityViewModel();
-            liabilityViewModel.Temp_Id = liability.Id;
+            liabilityViewModel.Id = liability.Id;
             liabilityViewModel.Source = liability.Name;
             liabilityViewModel.Value = liability.Value;
             liabilityViewModel.InterestType = Helper.GetInterestType(liability.InterestType.Value);
@@ -69,6 +85,22 @@ namespace CashFlowManagement.Queries
                 }
             }
             return liabilityViewModel;
+        }
+
+        public static int UpdateRealEstateLiability(RealEstateLiabilityUpdateViewModel model)
+        {
+            Entities entities = new Entities();
+            var realEstateLiability = entities.Liabilities.Where(x => x.Id == model.Id).FirstOrDefault();
+            realEstateLiability.Name = model.Source;
+            realEstateLiability.Value = model.Value.Value;
+            realEstateLiability.InterestType = model.InterestType;
+            realEstateLiability.InterestRatePerX = model.InterestRatePerX;
+            realEstateLiability.InterestRate = model.InterestRate.Value;
+            realEstateLiability.StartDate = model.StartDate.Value;
+            realEstateLiability.EndDate = model.EndDate.Value;
+            entities.Liabilities.Attach(realEstateLiability);
+            entities.Entry(realEstateLiability).State = System.Data.Entity.EntityState.Modified;
+            return entities.SaveChanges();
         }
 
         public static int DeleteRealEstateLiability(int id)

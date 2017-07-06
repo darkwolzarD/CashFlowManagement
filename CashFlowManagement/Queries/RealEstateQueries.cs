@@ -141,6 +141,25 @@ namespace CashFlowManagement.Queries
             return result;
         }
 
+        public static int UpdateRealEstate(RealEstateUpdateViewModel model)
+        {
+            Entities entities = new Entities();
+            var realEstate = entities.Assets.Where(x => x.Id == model.Id).FirstOrDefault();
+            realEstate.AssetName = model.Name;
+            realEstate.Value = model.Value.Value;
+            
+            if(entities.Incomes.Where(x => x.AssetId == model.Id).Any())
+            {
+                var income = entities.Incomes.Where(x => x.AssetId == model.Id).FirstOrDefault();
+                income.Value = model.Income.HasValue ? model.Income.Value : 0;
+                income.Name = "Thu nhập từ " + model.Name;
+                entities.Incomes.Attach(income);
+                entities.Entry(income).State = System.Data.Entity.EntityState.Modified;
+            }
+
+            return entities.SaveChanges();
+        }
+
         public static int DeleteRealEstate(int id)
         {
             DateTime current = DateTime.Now;

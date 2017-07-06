@@ -40,6 +40,7 @@ namespace CashFlowManagement.EntityModel
         public Nullable<double> OriginalValue { get; set; }
         public string Purpose { get; set; }
         public Nullable<int> TransactionId { get; set; }
+        public int InterestRatePerX { get; set; }
     
         public virtual Assets Assets { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

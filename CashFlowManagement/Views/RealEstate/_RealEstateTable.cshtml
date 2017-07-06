@@ -36,7 +36,7 @@
             foreach (var realEstate in Model.RealEstates)
             {
                 <tr>
-                    <td rowspan="@Html.DisplayFor(x => realEstate.RowSpan)">
+                    <td rowspan="@Html.DisplayFor(x => realEstate.RowSpan)" style="vertical-align: top !important;">
                         @Html.DisplayFor(x => realEstate.Name)<br/>
                         <a href="#">
                             <span class="glyphicon glyphicon-edit text-success update-real-estate" data-value="@Html.DisplayFor(x => realEstate.Id)" style="font-size: 12px"></span>
@@ -95,10 +95,10 @@
                             <td>
                                 @Html.DisplayFor(x => liability.Source)<br />
                                 <a href="#">
-                                    <span class="glyphicon glyphicon-edit text-success update-real-estate-liability" data-value="@Html.DisplayFor(x => liability.Temp_Id)" style="font-size: 12px"></span>
+                                    <span class="glyphicon glyphicon-edit text-success update-real-estate-liability" data-value="@Html.DisplayFor(x => liability.Id)" style="font-size: 12px"></span>
                                 </a>
                                 <a href="#">
-                                    <span class="glyphicon glyphicon-remove text-danger delete-real-estate-liability" data-value="@Html.DisplayFor(x => liability.Temp_Id)" style="font-size: 12px"></span>
+                                    <span class="glyphicon glyphicon-remove text-danger delete-real-estate-liability" data-value="@Html.DisplayFor(x => liability.Id)" style="font-size: 12px"></span>
                                 </a>
                             </td>
                             <td>@Html.DisplayFor(x => liability.InterestType)</td>

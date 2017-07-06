@@ -69,7 +69,7 @@ $(document).ready(function () {
 
     function MaskInput() {
         $(".input-mask").mask("000.000.000.000.000", { reverse: true });
-        $(".percentage").mask("##0,00", { reverse: true });
+        $(".percentage").mask("000.000.000.000.000,00", { reverse: true });
         $(".date-picker-with-day").datepicker({
             format: "dd/mm/yyyy",
             language: "vi-VN",
@@ -268,5 +268,75 @@ $(document).ready(function () {
 
     $(document).on("keyup", "form input", function () {
         $("form .field-validation-error").text("");
+    })
+
+    $(document).on("click", ".update-real-estate", function () {
+        var id = $(this).data("value");
+        $.ajax({
+            url: Url.RealEstateUpdateForm,
+            type: "get",
+            data: { id: id },
+            success: function (data) {
+                $("#modal").html(data);
+                $("#real-estate-update-modal").modal("show");
+                MaskInput();
+            }
+        });
+    })
+
+    $(document).on("click", ".save-update-real-estate", function () {
+        var model = $("#real-estate-update-form").serialize();
+        $.ajax({
+            url: Url.RealEstateUpdateForm,
+            type: "post",
+            data: model,
+            success: function (data) {
+                if (data === "success") {
+                    $("#real-estate-update-modal").modal("hide");
+                    RefreshRealEstateTable();
+                }
+                else if (data === "failed") {
+                    alert("Error!");
+                }
+                else {
+                    $("#real-estate-update-modal").html($(data).html());
+                }
+            }
+        });
+    })
+
+    $(document).on("click", ".update-real-estate-liability", function () {
+        var id = $(this).data("value");
+        $.ajax({
+            url: Url.LiabilityUpdateForm2nd,
+            type: "get",
+            data: { id: id },
+            success: function (data) {
+                $("#modal").html(data);
+                $("#liability-update-modal").modal("show");
+                MaskInput();
+            }
+        });
+    })
+
+    $(document).on("click", ".save-update-real-estate-liability", function () {
+        var model = $("#liability-update-form").serialize();
+        $.ajax({
+            url: Url.LiabilityUpdateForm2nd,
+            type: "post",
+            data: model,
+            success: function (data) {
+                if (data === "success") {
+                    $("#liability-update-modal").modal("hide");
+                    RefreshRealEstateTable();
+                }
+                else if (data === "failed") {
+                    alert("Error!");
+                }
+                else {
+                    $("#liability-update-modal").html($(data).html());
+                }
+            }
+        });
     })
 })
