@@ -42,5 +42,13 @@ namespace CashFlowManagement.Constants
             list.Add(new SelectListItem { Text = "Giảm dần", Value = ((int)Constants.INTEREST_TYPE.REDUCED).ToString() });
             return list;
         }
+
+        public static List<SelectListItem> RealEstateInterestPerX()
+        {
+            List<SelectListItem> list = new List<SelectListItem>();
+            list.Add(new SelectListItem { Text = "Tháng", Value = ((int)Constants.INTEREST_RATE_PER.MONTH).ToString() });
+            list.Add(new SelectListItem { Text = "Năm", Value = ((int)Constants.INTEREST_RATE_PER.YEAR).ToString(), Selected = true });
+            return list;
+        }
     }
 }

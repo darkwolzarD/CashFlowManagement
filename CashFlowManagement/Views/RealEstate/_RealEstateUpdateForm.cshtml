@@ -1,0 +1,62 @@
+﻿@model CashFlowManagement.Models.RealEstateUpdateViewModel
+@{
+    Layout = null;
+}
+
+<div id="real-estate-update-modal" class="modal fade" role="dialog">
+    <div class="modal-dialog" style="width: 400px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <p style="font-size: 16px; margin-bottom: 0px;">Khởi tạo bất động sản</p>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div id="real-estate-div" class="col-md-12">
+                        @using (Html.BeginForm("Create", "RealEstate", FormMethod.Post, new { @id = "real-estate-form" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            <div class="form-group">
+                                @Html.LabelFor(x => x.Name)
+                                @Html.TextBoxFor(x => x.Name, new { @class = "form-control input-sm" })
+                                @Html.ValidationMessageFor(x => x.Name, null, new { @class = "text-danger" })
+                            </div>
+                            @*<div class="form-group">
+                                    @Html.LabelFor(x => x.BuyDate)
+                                    <div class="input-group input-group-sm">
+                                        @Html.TextBoxFor(x => x.BuyDate, "{0:dd/MM/yyyy}", new { @class = "form-control input-sm date-picker-with-day" })
+                                        <div class="input-group-addon">
+                                            <span class="glyphicon glyphicon-calendar"></span>
+                                        </div>
+                                    </div>
+                                </div>*@
+                            <div class="form-group">
+                                @Html.LabelFor(x => x.Value)
+                                @Html.EditorFor(x => x.Value, new { htmlAttributes = new { @class = "form-control input-mask input-sm" } })
+                                @Html.ValidationMessageFor(x => x.Value, null, new { @class = "text-danger" })
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(x => x.Income)
+                                @Html.EditorFor(x => x.Income, new { htmlAttributes = new { @class = "form-control input-mask input-sm", placeholder = "Không bắt buộc" } })
+                                @Html.ValidationMessageFor(x => x.Income, null, new { @class = "text-danger" })
+                            </div>
+                            <div class="checkbox">
+                                <label>
+                                    @Html.CheckBoxFor(x => x.IsInDept)
+                                    Bạn có vay khoản nợ nào để mua bất động sản này không?
+                                </label>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success create-real-estate">
+                    <span class="glyphicon glyphicon-ok"></span>
+                    Tạo bất động sản
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+

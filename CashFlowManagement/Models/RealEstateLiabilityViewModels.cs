@@ -30,12 +30,12 @@ namespace CashFlowManagement.Models
 
         [Required(ErrorMessage = "Chọn ngày vay nợ")]
         [Display(Name = "Ngày vay nợ")]
-        [DisplayFormat(DataFormatString = "{0:MM/yyyy}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime? StartDate { get; set; }
 
         [Required(ErrorMessage = "Chọn ngày kết thúc nợ")]
         [Display(Name = "Ngày kết thúc nợ")]
-        [DisplayFormat(DataFormatString = "{0:MM/yyyy}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime? EndDate { get; set; }
 
         [Required(ErrorMessage = "Chọn lãi suất năm hoặc tháng")]
@@ -56,10 +56,10 @@ namespace CashFlowManagement.Models
         public double? InterestRate { get; set; }
         public string InterestRatePerX { get; set; }
 
-        [DisplayFormat(DataFormatString = "{0:MM/yyyy}")]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime? StartDate { get; set; }
 
-        [DisplayFormat(DataFormatString = "{0:MM/yyyy}")]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime? EndDate { get; set; }
         [DisplayFormat(DataFormatString = "{0:N0}")]
         public int PaymentPeriod { get; set; }

@@ -2,7 +2,7 @@
 @using CashFlowManagement.Constants
 
 <div id="liability-form-div" class="col-md-3">
-    @using (Ajax.BeginForm("_LiabilityUpdateForm", "RealEstate", new AjaxOptions { HttpMethod = "Post", OnSuccess = "RefreshLiabilityTable()" }, new { @id = "liability-form" }))
+    @using (Ajax.BeginForm("_LiabilityUpdateForm", null, new AjaxOptions { HttpMethod = "Post", OnSuccess = "LiabilityUpdateSuccess(data)" }, new { @id = "liability-form" }))
     {
         @Html.AntiForgeryToken()
         <div class="form-group">
@@ -21,23 +21,21 @@
             @Html.DropDownListFor(x => x.InterestType, Constants.RealEstateInterestType(), new { @class = "form-control input-sm " })
         </div>
         <div class="form-group">
-            @Html.LabelFor(x => x.InterestRate)
-            <div class="input-group input-group-sm">
-                @Html.EditorFor(x => x.InterestRate, new { htmlAttributes = new { @class = "form-control input-sm input-mask" } })
-                <div class="input-group-addon">
-                    <span class="fa fa-percent"></span>
+            <div class="col-md-12" style="padding-left: 0; padding-right: 0;">
+                @Html.LabelFor(x => x.InterestRate)
+            </div>
+            <div class="col-md-7" style="padding-left: 0; padding-right: 5px; margin-bottom: 15px;">
+                <div class="input-group input-group-sm">
+                    @Html.EditorFor(x => x.InterestRate, new { htmlAttributes = new { @class = "form-control input-sm percentage" } })
+                    <div class="input-group-addon">
+                        <span class="fa fa-percent"></span>
+                    </div>
                 </div>
             </div>
+            <div class="col-md-5" style="padding-left: 0px; padding-right: 0; margin-bottom: 15px;">
+                @Html.DropDownListFor(x => x.InterestRatePerX, Constants.RealEstateInterestPerX(), new { @class = "form-control input-sm" })
+            </div>
             @Html.ValidationMessageFor(x => x.InterestRate, null, new { @class = "text-danger" })
-        </div>
-        <div class="form-group">
-            @Html.LabelFor(x => x.InterestRatePerX)
-            <div class="radio">
-                <label>@Html.RadioButtonFor(x => x.InterestRatePerX, (int)Constants.INTEREST_RATE_PER.MONTH) Lãi suất tháng</label>
-            </div>
-            <div class="radio">
-                <label>@Html.RadioButtonFor(x => x.InterestRatePerX, (int)Constants.INTEREST_RATE_PER.YEAR) Lãi suất năm</label>
-            </div>
             @Html.ValidationMessageFor(x => x.InterestRatePerX, null, new { @class = "text-danger" })
         </div>
         <div class="form-group">

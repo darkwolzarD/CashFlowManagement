@@ -8,7 +8,7 @@
                 <th>Nguồn vay nợ</th>
                 <th class="text-right">Giá trị nợ</th>
                 <th>Loại lãi suất</th>
-                <th>Áp dụng</th>
+                <th class="text-right">Số tháng trả</th>
                 <th class="text-right">Lãi suất vay</th>
                 <th class="text-right">Ngày vay</th>
                 <th class="text-right">Ngày trả hết nợ</th>
@@ -25,8 +25,8 @@
                 <td>@Html.DisplayFor(x => liability.Source)</td>
                 <td class="text-right">@Html.DisplayFor(x => liability.Value)</td>
                 <td>@Html.DisplayFor(x => liability.InterestType)</td>
-                <td>@Html.DisplayFor(x => liability.InterestRatePerX)</td>
-                <td class="text-right">@Html.DisplayFor(x => liability.InterestRate)</td>
+                <td class="text-right">@Html.DisplayFor(x => liability.PaymentPeriod)</td>
+                <td class="text-right">@Html.DisplayFor(x => liability.InterestRate) / @Html.DisplayFor(x => liability.InterestRatePerX)</td>
                 <td class="text-right">@Html.DisplayFor(x => liability.StartDate)</td>
                 <td class="text-right">@Html.DisplayFor(x => liability.EndDate)</td>
                 <td>
@@ -40,7 +40,7 @@
             else
             {
             <tr>
-                <td colspan="6" class="text-center">Không có có khoản nợ nào</td>
+                <td colspan="8" class="text-center">Không có có khoản nợ nào</td>
             </tr>
             }
         </tbody>

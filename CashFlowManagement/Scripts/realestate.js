@@ -1,9 +1,28 @@
-﻿function RefreshLiabilityTable() {
+﻿function LiabilityCreateSuccess(data) {
+    if (data === "success") {
+        RefreshLiabilityForm();
+        RefreshLiabilityTable();
+    }
+    else {
+        $("#liability-form").replaceWith($(data).html());
+    }
+}
+
+function LiabilityUpdateSuccess(data) {
+    if (data === "success") {
+        RefreshLiabilityForm();
+        RefreshLiabilityTable();
+    }
+    else {
+        $("#liability-form").replaceWith($(data).html());
+    }
+}
+
+function RefreshLiabilityTable() {
     $.ajax({
         url: Url._LiabilityTable,
         type: "get",
         success: function (data) {
-            RefreshLiabilityForm();
             $("#liability-table-div").html($(data).html());
         }
     })
@@ -14,7 +33,7 @@ function RefreshLiabilityForm() {
         url: Url._LiabilityForm,
         type: "get",
         success: function (data) {
-            $("#liability-form").html($(data).html());
+            $("#liability-form").replaceWith($(data).html());
         }
     })
 }
@@ -41,7 +60,7 @@ function LoadLiabilityForm() {
 
 $(document).ready(function () {
     $.validator.methods.date = function (value, element) {
-        return this.optional(element) || moment(value, "MM/YYYY", true).isValid();
+        return this.optional(element) || moment(value, "MM/YYYY", true).isValid() || moment(value, "dd/MM/YYYY", true).isValid();
     }
 
     $.validator.methods.number = function (value, element) {
@@ -50,7 +69,7 @@ $(document).ready(function () {
 
     function MaskInput() {
         $(".input-mask").mask("000.000.000.000.000", { reverse: true });
-        $(".percentage").mask("##0,00%", { reverse: true });
+        $(".percentage").mask("##0,00", { reverse: true });
         $(".date-picker-with-day").datepicker({
             format: "dd/mm/yyyy",
             language: "vi-VN",
@@ -177,12 +196,50 @@ $(document).ready(function () {
         if (confirm("Bạn có muốn xóa khoản nợ này không")) {
             var id = $(this).closest("tr").find(".liability-id").val();
             $.ajax({
-                url: Url.DeleteLiability,
+                url: Url.DeleteTempLiability,
                 type: "post",
                 data: { id: id },
                 success: function (data) {
                     if (data === "success") {
                         RefreshLiabilityTable();
+                    }
+                    else {
+                        alert("Error!");
+                    }
+                }
+            });
+        }
+    })
+
+    $(document).on("click", ".delete-real-estate-liability", function () {
+        if (confirm("Bạn có muốn xóa khoản nợ này không")) {
+            var id = $(this).data("value");
+            $.ajax({
+                url: Url.DeleteLiability,
+                type: "post",
+                data: { id: id },
+                success: function (data) {
+                    if (data === "success") {
+                        RefreshRealEstateTable();
+                    }
+                    else {
+                        alert("Error!");
+                    }
+                }
+            });
+        }
+    })
+
+    $(document).on("click", ".delete-real-estate", function () {
+        if (confirm("Bạn có muốn xóa bất động sản này không")) {
+            var id = $(this).data("value");
+            $.ajax({
+                url: Url.DeleteRealEstate,
+                type: "post",
+                data: { id: id },
+                success: function (data) {
+                    if (data === "success") {
+                        RefreshRealEstateTable();
                     }
                     else {
                         alert("Error!");
@@ -207,5 +264,9 @@ $(document).ready(function () {
         else {
             RefreshLiabilityForm();
         }
+    })
+
+    $(document).on("keyup", "form input", function () {
+        $("form .field-validation-error").text("");
     })
 })

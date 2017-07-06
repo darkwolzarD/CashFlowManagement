@@ -41,6 +41,7 @@ namespace CashFlowManagement.Models
 
     public class RealEstateViewModel
     {
+        public int Id { get; set; }
         public string Name { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:N0}")]

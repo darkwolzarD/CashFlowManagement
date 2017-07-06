@@ -6,9 +6,10 @@
             <th>Bất động sản</th>
             <th class="text-right">Trị giá tài sản</th>
             <th class="text-right" colspan="2">Thu nhập hàng tháng cho thuê</th>
-            <th class="text-right" colspan="2">Thu nhập hàng năm cho thuê</th>
+            <th class="text-right" colspan="1">Thu nhập hàng năm cho thuê</th>
             <th class="text-right" colspan="2">Tỷ suất lợi nhuận cho thuê</th>
             <th class="text-right">Chỉnh sửa</th>
+            <th></th>
             <th></th>
             <th></th>
             <th></th>
@@ -23,9 +24,10 @@
             </td>
             <td class="text-right">@Html.DisplayFor(x => Model.Value)</td>
             <td class="text-right" colspan="2">@Html.DisplayFor(x => Model.Income)</td>
-            <td class="text-right" colspan="2">@Html.DisplayFor(x => Model.AnnualIncome)</td>
+            <td class="text-right" colspan="1">@Html.DisplayFor(x => Model.AnnualIncome)</td>
             <td class="text-right" colspan="2">@Html.DisplayFor(x => Model.RentYield)</td>
             <td class="text-right"></td>
+            <td></td>
             <td></td>
             <td></td>
             <td></td>
@@ -52,7 +54,7 @@
                 <td><strong class="text-danger">Tổng</strong></td>
                 <td></td>
                 <td class="text-right"><strong class="text-danger">@Html.DisplayFor(x => Model.TotalLiabilityValue)</strong></td>
-                <td class="text-right"><strong class="text-danger">@Html.DisplayFor(x => Model.TotalInterestRate)</strong></td>
+                <td class="text-right"><strong class="text-danger">@*@Html.DisplayFor(x => Model.TotalInterestRate)*@</strong></td>
                 <td></td>
                 <td></td>
                 <td></td>
@@ -68,7 +70,7 @@
                     <td>@Html.DisplayFor(x => liability.Source)</td>
                     <td>@Html.DisplayFor(x => liability.InterestType)</td>
                     <td class="text-right">@Html.DisplayFor(x => liability.Value)</td>
-                    <td class="text-right">@Html.DisplayFor(x => liability.InterestRate)</td>
+                    <td class="text-right">@Html.DisplayFor(x => liability.InterestRate) / @Html.DisplayFor(x => liability.InterestRatePerX)</td>
                     <td class="text-right">@Html.DisplayFor(x => liability.StartDate)</td>
                     <td class="text-right">@Html.DisplayFor(x => liability.EndDate)</td>
                     <td class="text-right">@Html.DisplayFor(x => liability.PaymentPeriod)</td>

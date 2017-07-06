@@ -14,6 +14,7 @@ namespace CashFlowManagement.Queries
             DateTime current = DateTime.Now;
 
             RealEstateLiabilityViewModel liabilityViewModel = new RealEstateLiabilityViewModel();
+            liabilityViewModel.Temp_Id = liability.Id;
             liabilityViewModel.Source = liability.Name;
             liabilityViewModel.Value = liability.Value;
             liabilityViewModel.InterestType = Helper.GetInterestType(liability.InterestType.Value);
@@ -70,6 +71,16 @@ namespace CashFlowManagement.Queries
             return liabilityViewModel;
         }
 
+        public static int DeleteRealEstateLiability(int id)
+        {
+            DateTime current = DateTime.Now;
+            Entities entities = new Entities();
+            var realEstateLiability = entities.Liabilities.Where(x => x.Id == id).FirstOrDefault();
+            realEstateLiability.DisabledDate = current;
+            realEstateLiability.DisabledBy = Constants.Constants.USER;
+            return entities.SaveChanges();
+        }
+
         public class Helper
         {
             public static string GetInterestType(int interestType)
@@ -101,7 +112,12 @@ namespace CashFlowManagement.Queries
             {
                 if (endDate >= startDate)
                 {
-                    return (endDate.Year - startDate.Year) * 12 + endDate.Month - startDate.Month;
+                    int period = (endDate.Year - startDate.Year) * 12 + endDate.Month - startDate.Month;
+                    if((endDate.Day - startDate.Day) / 30 >= 0.5)
+                    {
+                        period += 1;
+                    }
+                    return period;
                 }
                 else
                 {

@@ -22,9 +22,10 @@ namespace CashFlowManagement.Queries
             foreach (var realEstate in realEstates)
             {
                 RealEstateViewModel realEstateViewModel = new RealEstateViewModel();
+                realEstateViewModel.Id = realEstate.Id;
                 realEstateViewModel.Name = realEstate.AssetName;
                 realEstateViewModel.Value = realEstate.Value;
-                if (realEstate.Incomes1.Any())
+                if (realEstate.Incomes1.Where(x => !x.DisabledDate.HasValue).Any())
                 {
                     realEstateViewModel.Income = realEstate.Incomes1.FirstOrDefault().Value;
                 }
@@ -59,6 +60,25 @@ namespace CashFlowManagement.Queries
             result.TotalRentYield = result.TotalMonthlyIncome / result.TotalValue;
 
             return result;
+        }
+
+        public static RealEstateUpdateViewModel GetRealEstateById(int id)
+        {
+            RealEstateUpdateViewModel viewmodel = new RealEstateUpdateViewModel();
+            Entities entities = new Entities();
+            var realEstate = entities.Assets.Where(x => x.Id == id).FirstOrDefault();
+            viewmodel.Id = realEstate.Id;
+            viewmodel.Name = realEstate.AssetName;
+            viewmodel.Value = realEstate.Value;
+            if (realEstate.Incomes1.Where(x => !x.DisabledDate.HasValue).Any())
+            {
+                viewmodel.Income = realEstate.Incomes1.FirstOrDefault().Value;
+            }
+            else
+            {
+                viewmodel.Income = 0;
+            }
+            return viewmodel;
         }
 
         public static int CreateRealEstate(RealEstateCreateViewModel model, string username)
@@ -119,6 +139,35 @@ namespace CashFlowManagement.Queries
             entities.Assets.Add(realEstate);
             result = entities.SaveChanges();
             return result;
+        }
+
+        public static int DeleteRealEstate(int id)
+        {
+            DateTime current = DateTime.Now;
+            Entities entities = new Entities();
+            var realEstate = entities.Assets.Where(x => x.Id == id).FirstOrDefault();
+            realEstate.DisabledDate = current;
+            realEstate.DisabledBy = Constants.Constants.USER;
+            entities.Assets.Attach(realEstate);
+            entities.Entry(realEstate).State = System.Data.Entity.EntityState.Modified;
+
+            foreach (var income in entities.Incomes.Where(x => x.AssetId == id && !x.DisabledDate.HasValue))
+            {
+                income.DisabledDate = current;
+                income.DisabledBy = Constants.Constants.USER;
+                entities.Incomes.Attach(income);
+                entities.Entry(income).State = System.Data.Entity.EntityState.Modified;
+            }
+
+            foreach (var liability in entities.Liabilities.Where(x => x.AssetId == id && !x.DisabledDate.HasValue))
+            {
+                liability.DisabledDate = current;
+                liability.DisabledBy = Constants.Constants.USER;
+                entities.Liabilities.Attach(liability);
+                entities.Entry(liability).State = System.Data.Entity.EntityState.Modified;
+            }
+
+            return entities.SaveChanges();
         }
     }
 }

@@ -50,6 +50,12 @@ namespace CashFlowManagement.Controllers
             return PartialView(model);
         }
 
+        public ActionResult _RealEstateUpdateForm(int id)
+        {
+            RealEstateUpdateViewModel model = RealEstateQueries.GetRealEstateById(id);
+            return PartialView(model);
+        }
+
         public ActionResult _RealEstateTable()
         {
             RealEstateListViewModel model = RealEstateQueries.GetRealEstateByUser(UserQueries.GetCurrentUsername());
@@ -71,17 +77,24 @@ namespace CashFlowManagement.Controllers
         [HttpPost]
         public ActionResult _LiabilityUpdateForm(RealEstateLiabilityCreateViewModel model)
         {
-            RealEstateLiabilityListCreateViewModel liabilities = (RealEstateLiabilityListCreateViewModel)HttpContext.Session["LIABILITIES"];
-            RealEstateLiabilityCreateViewModel updateModel = liabilities.Liabilities.Where(x => x.Temp_Id == model.Temp_Id).FirstOrDefault();
-            updateModel.Temp_Id = model.Temp_Id;
-            updateModel.Value = model.Value;
-            updateModel.Source = model.Source;
-            updateModel.InterestType = model.InterestType;
-            updateModel.InterestRate = model.InterestRate;
-            updateModel.StartDate = model.StartDate;
-            updateModel.EndDate = model.EndDate;
-            HttpContext.Session["LIABILITIES"] = liabilities;
-            return PartialView(model);
+            if (ModelState.IsValid)
+            {
+                RealEstateLiabilityListCreateViewModel liabilities = (RealEstateLiabilityListCreateViewModel)HttpContext.Session["LIABILITIES"];
+                RealEstateLiabilityCreateViewModel updateModel = liabilities.Liabilities.Where(x => x.Temp_Id == model.Temp_Id).FirstOrDefault();
+                updateModel.Temp_Id = model.Temp_Id;
+                updateModel.Value = model.Value;
+                updateModel.Source = model.Source;
+                updateModel.InterestType = model.InterestType;
+                updateModel.InterestRate = model.InterestRate;
+                updateModel.StartDate = model.StartDate;
+                updateModel.EndDate = model.EndDate;
+                HttpContext.Session["LIABILITIES"] = liabilities;
+                return Content("success");
+            }
+            else
+            {
+                return PartialView(model);
+            }
         }
 
         public ActionResult _LiabilityTable()
@@ -103,6 +116,7 @@ namespace CashFlowManagement.Controllers
                 viewModel.StartDate = liability.StartDate;
                 viewModel.EndDate = liability.EndDate;
                 viewModel.InterestType = RealEstateLiabilityQueries.Helper.GetInterestType(liability.InterestType);
+                viewModel.PaymentPeriod = Helper.CalculateTimePeriod(viewModel.StartDate.Value, viewModel.EndDate.Value);
                 model.Liabilities.Add(viewModel);
             }
             return PartialView(model);
@@ -131,7 +145,7 @@ namespace CashFlowManagement.Controllers
             }
             else
             {
-                return View(model);
+                return PartialView(model);
             }
         }
 
@@ -235,11 +249,41 @@ namespace CashFlowManagement.Controllers
         }
 
         [HttpPost]
-        public ActionResult DeleteLiability(int id)
+        public ActionResult DeleteTempLiability(int id)
         {
             RealEstateLiabilityListCreateViewModel liabilities = (RealEstateLiabilityListCreateViewModel)HttpContext.Session["LIABILITIES"];
             liabilities.Liabilities.Remove(liabilities.Liabilities.Where(x => x.Temp_Id == id).FirstOrDefault());
             return Content("success");
+        }
+
+
+        [HttpPost]
+        public ActionResult DeleteLiability(int id)
+        {
+            int result = RealEstateLiabilityQueries.DeleteRealEstateLiability(id);
+            if (result > 0)
+            {
+                return Content("success");
+            }
+            else
+            {
+                return Content("failed");
+            }
+        }
+
+
+        [HttpPost]
+        public ActionResult DeleteRealEstate(int id)
+        {
+            int result = RealEstateQueries.DeleteRealEstate(id);
+            if (result > 0)
+            {
+                return Content("success");
+            }
+            else
+            {
+                return Content("failed");
+            }
         }
     }
 }

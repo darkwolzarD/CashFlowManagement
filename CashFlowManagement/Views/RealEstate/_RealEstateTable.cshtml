@@ -5,9 +5,10 @@
             <th>Bất động sản</th>
             <th class="text-right">Trị giá tài sản</th>
             <th class="text-right" colspan="2">Thu nhập hàng tháng cho thuê</th>
-            <th class="text-right" colspan="2">Thu nhập hàng năm cho thuê</th>
+            <th class="text-right" colspan="1">Thu nhập hàng năm cho thuê</th>
             <th class="text-right" colspan="2">Tỷ suất lợi nhuận cho thuê</th>
             <th class="text-right">Chỉnh sửa</th>
+            <th></th>
             <th></th>
             <th></th>
             <th></th>
@@ -22,9 +23,10 @@
                 <td><strong class="text-danger">Tổng</strong></td>
                 <td class="text-right"><strong class="text-danger">@Html.DisplayFor(x => x.TotalValue)</strong></td>
                 <td class="text-right" colspan="2"><strong class="text-danger">@Html.DisplayFor(x => x.TotalMonthlyIncome)</strong></td>
-                <td class="text-right" colspan="2"><strong class="text-danger">@Html.DisplayFor(x => x.TotalAnnualIncome)</strong></td>
+                <td class="text-right" colspan="1"><strong class="text-danger">@Html.DisplayFor(x => x.TotalAnnualIncome)</strong></td>
                 <td class="text-right" colspan="2"><strong class="text-danger">@Html.DisplayFor(x => x.TotalRentYield)</strong></td>
                 <td class="text-right"></td>
+                <td></td>
                 <td></td>
                 <td></td>
                 <td></td>
@@ -35,16 +37,20 @@
             {
                 <tr>
                     <td rowspan="@Html.DisplayFor(x => realEstate.RowSpan)">
+                        @Html.DisplayFor(x => realEstate.Name)<br/>
                         <a href="#">
-                            @Html.DisplayFor(x => realEstate.Name)
-                            <span class="glyphicon glyphicon-edit"></span>
+                            <span class="glyphicon glyphicon-edit text-success update-real-estate" data-value="@Html.DisplayFor(x => realEstate.Id)" style="font-size: 12px"></span>
+                        </a>
+                        <a href="#">
+                            <span class="glyphicon glyphicon-remove text-danger delete-real-estate" data-value="@Html.DisplayFor(x => realEstate.Id)" style="font-size: 12px"></span>
                         </a>
                     </td>
                     <td class="text-right">@Html.DisplayFor(x => realEstate.Value)</td>
                     <td class="text-right" colspan="2">@Html.DisplayFor(x => realEstate.Income)</td>
-                    <td class="text-right" colspan="2">@Html.DisplayFor(x => realEstate.AnnualIncome)</td>
+                    <td class="text-right" colspan="1">@Html.DisplayFor(x => realEstate.AnnualIncome)</td>
                     <td class="text-right" colspan="2">@Html.DisplayFor(x => realEstate.RentYield)</td>
                     <td class="text-right"></td>
+                    <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -57,7 +63,7 @@
                         <th>Nguồn vay nợ</th>
                         <th>Loại lãi suất</th>
                         <th class="text-right">Giá trị nợ</th>
-                        <th class="text-right">Lãi vay</th>
+                        <th>Lãi vay</th>
                         <th class="text-right">Ngày vay</th>
                         <th class="text-right">Ngày hết nợ</th>
                         <th class="text-right">Số tháng trả</th>
@@ -72,7 +78,7 @@
                                 <td><strong class="text-danger">Tổng</strong></td>
                                 <td></td>
                                 <td class="text-right"><strong class="text-danger">@Html.DisplayFor(x => realEstate.TotalLiabilityValue)</strong></td>
-                                <td class="text-right"><strong class="text-danger">@Html.DisplayFor(x => realEstate.TotalInterestRate)</strong></td>
+                                <td class="text-right"><strong class="text-danger">@*@Html.DisplayFor(x => realEstate.TotalInterestRate)*@</strong></td>
                                 <td></td>
                                 <td></td>
                                 <td></td>
@@ -86,10 +92,18 @@
                     foreach (var liability in realEstate.Liabilities)
                     {
                         <tr>
-                            <td>@Html.DisplayFor(x => liability.Source)</td>
+                            <td>
+                                @Html.DisplayFor(x => liability.Source)<br />
+                                <a href="#">
+                                    <span class="glyphicon glyphicon-edit text-success update-real-estate-liability" data-value="@Html.DisplayFor(x => liability.Temp_Id)" style="font-size: 12px"></span>
+                                </a>
+                                <a href="#">
+                                    <span class="glyphicon glyphicon-remove text-danger delete-real-estate-liability" data-value="@Html.DisplayFor(x => liability.Temp_Id)" style="font-size: 12px"></span>
+                                </a>
+                            </td>
                             <td>@Html.DisplayFor(x => liability.InterestType)</td>
                             <td class="text-right">@Html.DisplayFor(x => liability.Value)</td>
-                            <td class="text-right">@Html.DisplayFor(x => liability.InterestRate)</td>
+                            <td>@Html.DisplayFor(x => liability.InterestRate) / @Html.DisplayFor(x => liability.InterestRatePerX)</td>
                             <td class="text-right">@Html.DisplayFor(x => liability.StartDate)</td>
                             <td class="text-right">@Html.DisplayFor(x => liability.EndDate)</td>
                             <td class="text-right">@Html.DisplayFor(x => liability.PaymentPeriod)</td>
