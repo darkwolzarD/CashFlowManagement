@@ -35,7 +35,7 @@ button .glyphicon {
 
 /*/*Page header*/
 .header {
-    background: #ff6a00;
+    background: #e95e40;
     height: 35px;
     line-height: 35px;
 }
@@ -243,4 +243,9 @@ footer {
 
 .modal-body {
     padding: 20px 20px 0 20px;
+}
+
+.orange-header {
+    background: #e95e40;
+    color: #ffffff;
 }

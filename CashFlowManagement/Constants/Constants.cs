@@ -50,5 +50,15 @@ namespace CashFlowManagement.Constants
             list.Add(new SelectListItem { Text = "Năm", Value = ((int)Constants.INTEREST_RATE_PER.YEAR).ToString(), Selected = true });
             return list;
         }
+
+        public static List<SelectListItem> IncomeDayList()
+        {
+            List<SelectListItem> list = new List<SelectListItem>();
+            for (int i = 1; i <= 28; i++)
+            {
+                list.Add(new SelectListItem { Text = i.ToString(), Value = i.ToString() });
+            }
+            return list;
+        }
     }
 }

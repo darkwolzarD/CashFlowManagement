@@ -21,42 +21,43 @@ namespace CashFlowManagement.Models
 
     public class RegisterViewModel
     {
-        [Required]
+        [Required(ErrorMessage = "Nhập tên đăng nhập")]
         [StringLength(20, ErrorMessage = "{0} phải dài tối thiểu {2} kí tự.", MinimumLength = 6)]
         [Display(Name = "Tên tài khoản")]
         public string Username { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Nhập tên người dùng")]
         [StringLength(50, ErrorMessage = "{0} phải dài tối thiểu {2} kí tự.", MinimumLength = 6)]
         [Display(Name = "Tên người dùng")]
         public string FullName { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Nhập email")]
         [EmailAddress]
         [Display(Name = "Email")]
         public string Email { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Nhập mật khẩu")]
         [StringLength(100, ErrorMessage = "{0} phải dài tối thiểu {2} kí tự.", MinimumLength = 6)]
         [DataType(DataType.Password)]
         [Display(Name = "Mật khẩu")]
         public string Password { get; set; }
 
+        [Required(ErrorMessage = "Nhập xác nhận mật khẩu")]
         [DataType(DataType.Password)]
         [Display(Name = "Xác nhận mật khẩu")]
         [System.ComponentModel.DataAnnotations.Compare("Password", ErrorMessage = "Mật khẩu và mật khẩu xác nhận không giống nhau")]
         public string ConfirmPassword { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Chọn giới tính")]
         [Display(Name = "Giới tính")]
         public int Sex { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Nhập công việc")]
         [StringLength(20, ErrorMessage = "{0} phải dài tối thiểu {2} kí tự.", MinimumLength = 1)]
         [Display(Name = "Công việc")]
         public string Job { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Nhập số con")]
         [Display(Name = "Số con")]
         public int NumberOfChildren { get; set; }
     }

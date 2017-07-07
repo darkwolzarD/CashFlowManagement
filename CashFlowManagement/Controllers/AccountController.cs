@@ -98,7 +98,7 @@ namespace CashFlowManagement.Controllers
         }
 
         [HttpPost]
-        public ActionResult Register(RegisterViewModel model)
+        public ActionResult _Register(RegisterViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -106,7 +106,7 @@ namespace CashFlowManagement.Controllers
                 HttpContext.Session["USER"] = user;
                 return RedirectToAction("Initialize", "Income");
             }
-            else return View(model);
+            else return PartialView(model);
         }
 
         public ActionResult IncomeInitialize()

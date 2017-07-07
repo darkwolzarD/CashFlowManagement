@@ -5,58 +5,65 @@
 {
     @Html.AntiForgeryToken()
     <h4>Tạo tài khoản mới</h4>
-    @Html.ValidationSummary("", new { @class = "text-danger" })
     <div class="form-group">
         @Html.LabelFor(m => m.Username, new { @class = "col-md-4 control-label" })
         <div class="col-md-8">
             @Html.TextBoxFor(m => m.Username, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Username, null, new { @class = "text-danger" })
         </div>
     </div>
     <div class="form-group">
         @Html.LabelFor(m => m.FullName, new { @class = "col-md-4 control-label" })
         <div class="col-md-8">
             @Html.TextBoxFor(m => m.FullName, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.FullName, null, new { @class = "text-danger" })
         </div>
     </div>
     <div class="form-group">
         @Html.LabelFor(m => m.Email, new { @class = "col-md-4 control-label" })
         <div class="col-md-8">
             @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Email, null, new { @class = "text-danger" })
         </div>
     </div>
     <div class="form-group">
         @Html.LabelFor(m => m.Password, new { @class = "col-md-4 control-label" })
         <div class="col-md-8">
             @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Password, null, new { @class = "text-danger" })
         </div>
     </div>
     <div class="form-group">
         @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-4 control-label" })
         <div class="col-md-8">
             @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.ConfirmPassword, null, new { @class = "text-danger" })
         </div>
     </div>
     <div class="form-group">
         @Html.LabelFor(m => m.Sex, new { @class = "col-md-4 control-label" })
         <div class="col-md-8">
             @Html.DropDownListFor(m => m.Sex, Constants.SexList(), new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Sex, null, new { @class = "text-danger" })
         </div>
     </div>
     <div class="form-group">
         @Html.LabelFor(m => m.Job, new { @class = "col-md-4 control-label" })
         <div class="col-md-8">
             @Html.TextBoxFor(m => m.Job, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Job, null, new { @class = "text-danger" })
         </div>
     </div>
     <div class="form-group">
         @Html.LabelFor(m => m.NumberOfChildren, new { @class = "col-md-4 control-label" })
         <div class="col-md-8">
             @Html.TextBoxFor(m => m.NumberOfChildren, new { @class = "form-control input-mask" })
+            @Html.ValidationMessageFor(m => m.NumberOfChildren, null, new { @class = "text-danger" })
         </div>
     </div>
     <div class="form-group">
         <div class="col-md-offset-4 col-md-8">
-            <input type="submit" class="btn btn-primary" value="Đăng ký" style="font-size: 14px !important"/>
+            <input type="submit" class="btn btn-primary" value="Đăng ký" style="font-size: 14px !important" />
         </div>
     </div>
 }
