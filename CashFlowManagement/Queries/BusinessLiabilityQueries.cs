@@ -87,6 +87,31 @@ namespace CashFlowManagement.Queries
             return liabilityViewModel;
         }
 
+        public static int AddBusinessLiability(BusinessLiabilityCreateViewModel model)
+        {
+            DateTime current = DateTime.Now;
+            Entities entities = new Entities();
+
+            string username = entities.Assets.Where(x => x.Id == model.AssetId).FirstOrDefault().Username;
+
+            Liabilities liability = new Liabilities();
+            liability.Name = model.Source;
+            liability.Value = model.Value.Value;
+            liability.InterestType = model.InterestType;
+            liability.InterestRate = model.InterestRate.Value;
+            liability.InterestRatePerX = model.InterestRatePerX;
+            liability.StartDate = model.StartDate.Value;
+            liability.EndDate = model.EndDate.Value;
+            liability.LiabilityType = (int)Constants.Constants.LIABILITY_TYPE.BUSINESS;
+            liability.CreatedDate = current;
+            liability.CreatedBy = Constants.Constants.USER;
+            liability.Username = username;
+            liability.AssetId = model.AssetId;
+
+            entities.Liabilities.Add(liability);
+            return entities.SaveChanges();
+        }
+
         public static int UpdateBusinessLiability(BusinessLiabilityUpdateViewModel model)
         {
             Entities entities = new Entities();

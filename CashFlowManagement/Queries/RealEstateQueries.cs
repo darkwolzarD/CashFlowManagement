@@ -81,6 +81,13 @@ namespace CashFlowManagement.Queries
             return viewmodel;
         }
 
+        public static double GetRealEstateValue(int id)
+        {
+            Entities entities = new Entities();
+            var realEstate = entities.Assets.Where(x => x.Id == id).FirstOrDefault();
+            return realEstate.Value;
+        }
+
         public static int CreateRealEstate(RealEstateCreateViewModel model, string username)
         {
             int result = 0;
@@ -113,7 +120,7 @@ namespace CashFlowManagement.Queries
                 realEstate.Incomes1.Add(income);
             }
 
-            if (model.IsInDept)
+            if (model.IsInDebt)
             {
                 if (model.Liabilities != null && model.Liabilities.Liabilities.Count > 0)
                 {

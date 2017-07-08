@@ -4,115 +4,17 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
+using static CashFlowManagement.Models.BaseLiabilityModels;
 
 namespace CashFlowManagement.Models
 {
-    public class RealEstateLiabilityCreateViewModel: IValidatableObject
-    {
-        public int Id { get; set; }
+    public class RealEstateLiabilityCreateViewModel: LiabilityViewModel { }
 
-        [Required(ErrorMessage = "Nhập nguồn vay nợ")]
-        [Display(Name = "Nguồn vay nợ")]
-        public string Source { get; set; }
+    public class RealEstateLiabilityUpdateViewModel : LiabilityCreateViewModel { }
 
-        [Required(ErrorMessage = "Nhập giá trị nợ")]
-        [Display(Name = "Giá trị nợ")]
-        [DisplayFormat(DataFormatString = "{0:N0}", ApplyFormatInEditMode = true)]
-        public double? Value { get; set; }
+    public class RealEstateLiabilityViewModel: LiabilityViewModel { }
 
-        [Required(ErrorMessage = "Chọn loại lãi suất")]
-        [Display(Name = "Loại lãi suất")]
-        public int InterestType { get; set; }
+    public class RealEstateLiabilityListViewModel: LiabilityListViewModel { }
 
-        [Required(ErrorMessage = "Nhập lãi suất vay")]
-        [Display(Name = "Lãi suất vay")]
-        [Range(1, 100, ErrorMessage = "Lãi suất phải lớn hơn 1 và nhỏ hơn hoặc bằng 100%")]
-        public double? InterestRate { get; set; }
-
-        [Required(ErrorMessage = "Chọn ngày vay nợ")]
-        [Display(Name = "Ngày vay nợ")]
-        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
-        public DateTime? StartDate { get; set; }
-
-        [Required(ErrorMessage = "Chọn ngày kết thúc nợ")]
-        [Display(Name = "Ngày kết thúc nợ")]
-        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
-        public DateTime? EndDate { get; set; }
-
-        [Required(ErrorMessage = "Chọn lãi suất năm hoặc tháng")]
-        [Display(Name = "Lãi suất áp dụng")]
-        public int InterestRatePerX { get; set; }
-
-        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
-        {
-            if (EndDate < StartDate)
-            {
-                yield return
-                  new ValidationResult(errorMessage: "Ngày bắt đầu phải nhỏ hơn ngày trả hết nợ",
-                                       memberNames: new[] { "EndDate" });
-            }
-        }
-    }
-
-    public class RealEstateLiabilityUpdateViewModel : RealEstateLiabilityCreateViewModel
-    {
-
-    }
-
-    public class RealEstateLiabilityViewModel
-    {
-        public int Id { get; set; }
-        public string Source { get; set; }
-
-        [DisplayFormat(DataFormatString = "{0:N0}")]
-        public double? Value { get; set; }
-        public string InterestType { get; set; }
-
-        [DisplayFormat(DataFormatString = "{0:P2}")]
-        public double? InterestRate { get; set; }
-        public string InterestRatePerX { get; set; }
-
-        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
-        public DateTime? StartDate { get; set; }
-
-        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
-        public DateTime? EndDate { get; set; }
-        [DisplayFormat(DataFormatString = "{0:N0}")]
-        public int PaymentPeriod { get; set; }
-
-        [DisplayFormat(DataFormatString = "{0:N0}")]
-        public double MonthlyInterestPayment { get; set; }
-
-        [DisplayFormat(DataFormatString = "{0:N0}")]
-        public double MonthlyOriginalPayment { get; set; }
-
-        [DisplayFormat(DataFormatString = "{0:N0}")]
-        public double TotalMonthlyPayment { get; set; }
-
-        [DisplayFormat(DataFormatString = "{0:N0}")]
-        public double TotalPayment { get; set; }
-
-        [DisplayFormat(DataFormatString = "{0:N0}")]
-        public double RemainedValue { get; set; }
-        public string Status { get; set; }
-        public string StatusCode { get; set; }
-    }
-
-    public class RealEstateLiabilityListViewModel
-    {
-        public List<RealEstateLiabilityViewModel> Liabilities { get; set; }
-        public RealEstateLiabilityListViewModel()
-        {
-            Liabilities = new List<RealEstateLiabilityViewModel>();
-        }
-    }
-
-    public class RealEstateLiabilityListCreateViewModel
-    {
-        public List<RealEstateLiabilityCreateViewModel> Liabilities { get; set; }
-        public RealEstateLiabilityListCreateViewModel()
-        {
-            Liabilities = new List<RealEstateLiabilityCreateViewModel>();
-        }
-    }
+    public class RealEstateLiabilityListCreateViewModel: LiabilityListCreateViewModel { }
 }

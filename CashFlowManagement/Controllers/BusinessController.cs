@@ -106,6 +106,42 @@ namespace CashFlowManagement.Controllers
             BusinessLiabilityCreateViewModel model = new BusinessLiabilityCreateViewModel();
             return PartialView(model);
         }
+
+        public ActionResult _LiabilityForm2nd(int id)
+        {
+            BusinessLiabilityCreateViewModel model = new BusinessLiabilityCreateViewModel();
+            model.AssetId = id;
+            return PartialView(model);
+        }
+
+        [HttpPost]
+        public ActionResult _LiabilityForm2nd(BusinessLiabilityCreateViewModel model)
+        {
+            double totalLiabilityValue = GetLiabilityValueOfBusiness(model.AssetId);
+            double BusinessValue = BusinessQueries.GetBusinessValue(model.AssetId);
+            if (BusinessValue < totalLiabilityValue + model.Value && totalLiabilityValue + model.Value > 0)
+            {
+                ModelState.AddModelError("CompareBusinessValueAndLiabilityValue", "Giá trị tổng số nợ không vượt quá giá trị bất động sản");
+            }
+
+            if (ModelState.IsValid)
+            {
+                int result = BusinessLiabilityQueries.AddBusinessLiability(model);
+                if (result > 0)
+                {
+                    return Content("success");
+                }
+                else
+                {
+                    return Content("failed");
+                }
+            }
+            else
+            {
+                return PartialView(model);
+            }
+        }
+
         public ActionResult _LiabilityUpdateForm(int id)
         {
             BusinessLiabilityListCreateViewModel liabilities = (BusinessLiabilityListCreateViewModel)HttpContext.Session["LIABILITIES"];
@@ -339,7 +375,7 @@ namespace CashFlowManagement.Controllers
             }
             else
             {
-                model.IsInDept = false;
+                model.IsInDebt = false;
                 return PartialView("_BusinessForm", model);
             }
         }

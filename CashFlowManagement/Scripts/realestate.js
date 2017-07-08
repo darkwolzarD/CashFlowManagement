@@ -114,7 +114,7 @@ $(document).ready(function () {
         });
     })
 
-    $(document).on("click", "#IsInDept", function () {
+    $(document).on("click", "#IsInDebt", function () {
         if ($(this).prop("checked")) {
             var html = "<button type='button' class='btn btn-default create-liability-info'><span class='glyphicon glyphicon-arrow-right'></span>Tạo các khoản vay</button>";
             $(".modal-footer").html(html);
@@ -164,7 +164,7 @@ $(document).ready(function () {
         $(".modal-dialog").css("width", "400px");
         $("#real-estate-form").removeClass("hidden");
         $("#liability-div").addClass("hidden");
-        if ($("#IsInDept").prop("checked")) {
+        if ($("#IsInDebt").prop("checked")) {
             var html = "<button type='button' class='btn btn-default create-liability-info'><span class='glyphicon glyphicon-arrow-right'></span>Tạo các khoản vay</button>";
             $(".modal-footer").html(html);
         }
@@ -341,6 +341,42 @@ $(document).ready(function () {
                 }
                 else {
                     $("#liability-update-modal").html($(data).html());
+                    MaskInput();
+                }
+            }
+        });
+    })
+
+    $(document).on("click", ".add-real-estate-liability", function () {
+        var id = $(this).data("value");
+        $.ajax({
+            url: Url.LiabilityForm2nd,
+            type: "get",
+            data: { id: id },
+            success: function (data) {
+                $("#modal").html(data);
+                $("#liability-create-modal").modal("show");
+                MaskInput();
+            }
+        });
+    })
+
+    $(document).on("click", ".save-create-real-estate-liability", function () {
+        var model = $("#liability-form").serialize();
+        $.ajax({
+            url: Url.LiabilityForm2nd,
+            type: "post",
+            data: model,
+            success: function (data) {
+                if (data === "success") {
+                    $("#liability-create-modal").modal("hide");
+                    RefreshRealEstateTable();
+                }
+                else if (data === "failed") {
+                    alert("Error!");
+                }
+                else {
+                    $("#liability-create-modal").html($(data).html());
                     MaskInput();
                 }
             }

@@ -81,6 +81,13 @@ namespace CashFlowManagement.Queries
             return viewmodel;
         }
 
+        public static double GetBusinessValue(int id)
+        {
+            Entities entities = new Entities();
+            var business = entities.Assets.Where(x => x.Id == id).FirstOrDefault();
+            return business.Value;
+        }
+
         public static int CreateBusiness(BusinessCreateViewModel model, string username)
         {
             int result = 0;
@@ -113,7 +120,7 @@ namespace CashFlowManagement.Queries
                 business.Incomes1.Add(income);
             }
 
-            if (model.IsInDept)
+            if (model.IsInDebt)
             {
                 if (model.Liabilities != null && model.Liabilities.Liabilities.Count > 0)
                 {

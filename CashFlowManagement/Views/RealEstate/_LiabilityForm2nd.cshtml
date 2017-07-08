@@ -1,24 +1,24 @@
-﻿@model CashFlowManagement.Models.BusinessLiabilityUpdateViewModel
+﻿@model CashFlowManagement.Models.RealEstateLiabilityCreateViewModel
 @using CashFlowManagement.Constants
 @{
     Layout = null;
 }
 
-<div id="liability-update-modal" class="modal fade" role="dialog" data-backdrop="static">
+<div id="liability-create-modal" class="modal fade" role="dialog" data-backdrop="static">
     <div class="modal-dialog" style="width: 400px;">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" style="font-size: 26px !important; color: red !important">&times;</button>
-                <p style="font-size: 16px; margin-bottom: 0px;">Cập nhật khoản nợ</p>
+                <p style="font-size: 16px; margin-bottom: 0px;">Tạo khoản nợ</p>
             </div>
             <div class="modal-body">
                 <div class="row">
                     <div id="liability-form-div" class="col-md-12">
-                        @using (Ajax.BeginForm("_LiabilityUpdateForm", null, new AjaxOptions { HttpMethod = "Post", OnSuccess = "LiabilityUpdateSuccess(data)" }, new { @id = "liability-update-form" }))
+                        @using (Ajax.BeginForm("_LiabilityForm2nd", null, new AjaxOptions { HttpMethod = "Post" }, new { @id = "liability-form" }))
                         {
                             @Html.AntiForgeryToken()
                             <div class="form-group">
-                                @Html.HiddenFor(x => x.Id)
+                                @Html.HiddenFor(x => x.AssetId)
                                 @Html.LabelFor(x => x.Source)
                                 @Html.TextBoxFor(x => x.Source, new { @class = "form-control input-sm" })
                                 @Html.ValidationMessageFor(x => x.Source, null, new { @class = "text-danger" })
@@ -73,16 +73,16 @@
                             </div>
                         }
                     </div>
-
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-success save-update-business-liability">
+                <button type="button" class="btn btn-success save-create-real-estate-liability">
                     <span class="glyphicon glyphicon-ok"></span>
-                    Cập nhật khoản nợ
+                    Tạo khoản nợ
                 </button>
             </div>
         </div>
     </div>
 </div>
+
 

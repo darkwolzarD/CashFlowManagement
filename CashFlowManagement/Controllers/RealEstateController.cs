@@ -105,6 +105,42 @@ namespace CashFlowManagement.Controllers
             RealEstateLiabilityCreateViewModel model = new RealEstateLiabilityCreateViewModel();
             return PartialView(model);
         }
+
+        public ActionResult _LiabilityForm2nd(int id)
+        {
+            RealEstateLiabilityCreateViewModel model = new RealEstateLiabilityCreateViewModel();
+            model.AssetId = id;
+            return PartialView(model);
+        }
+
+        [HttpPost]
+        public ActionResult _LiabilityForm2nd(RealEstateLiabilityCreateViewModel model)
+        {
+            double totalLiabilityValue = GetLiabilityValueOfRealEstate(model.AssetId);
+            double realEstateValue = RealEstateQueries.GetRealEstateValue(model.AssetId);
+            if (realEstateValue < totalLiabilityValue + model.Value && totalLiabilityValue + model.Value > 0)
+            {
+                ModelState.AddModelError("CompareRealEstateValueAndLiabilityValue", "Giá trị tổng số nợ không vượt quá giá trị bất động sản");
+            }
+
+            if (ModelState.IsValid)
+            {
+                int result = RealEstateLiabilityQueries.AddRealEstateLiability(model);
+                if (result > 0)
+                {
+                    return Content("success");
+                }
+                else
+                {
+                    return Content("failed");
+                }
+            }
+            else
+            {
+                return PartialView(model);
+            }
+        }
+
         public ActionResult _LiabilityUpdateForm(int id)
         {
             RealEstateLiabilityListCreateViewModel liabilities = (RealEstateLiabilityListCreateViewModel)HttpContext.Session["LIABILITIES"];
@@ -338,7 +374,7 @@ namespace CashFlowManagement.Controllers
             }
             else
             {
-                model.IsInDept = false;
+                model.IsInDebt = false;
                 return PartialView("_RealEstateForm", model);
             }
         }

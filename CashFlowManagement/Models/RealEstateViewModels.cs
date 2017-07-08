@@ -26,7 +26,7 @@ namespace CashFlowManagement.Models
         public RealEstateLiabilityListCreateViewModel Liabilities { get; set; }
 
         [Display(Name = "Bạn có vay khoản nợ nào để mua bất động sản này không?")]
-        public bool IsInDept { get; set; }
+        public bool IsInDebt { get; set; }
 
         public RealEstateCreateViewModel()
         {

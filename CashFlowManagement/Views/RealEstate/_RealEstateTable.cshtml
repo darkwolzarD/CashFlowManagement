@@ -38,11 +38,14 @@
                 <tr>
                     <td rowspan="@Html.DisplayFor(x => realEstate.RowSpan)" style="vertical-align: top !important;">
                         @Html.DisplayFor(x => realEstate.Name)<br/>
-                        <a href="#">
-                            <span class="glyphicon glyphicon-edit text-success update-real-estate" data-value="@Html.DisplayFor(x => realEstate.Id)" style="font-size: 12px"></span>
+                        <a href="#" title="Cập nhật bất động sản">
+                            <span class="glyphicon glyphicon-edit text-success update-real-estate" data-value="@Html.DisplayFor(x => realEstate.Id)" style="font-size: 14px"></span>
                         </a>
-                        <a href="#">
-                            <span class="glyphicon glyphicon-remove text-danger delete-real-estate" data-value="@Html.DisplayFor(x => realEstate.Id)" style="font-size: 12px"></span>
+                        <a href="#" title="Xóa bất động sản">
+                            <span class="glyphicon glyphicon-remove text-danger delete-real-estate" data-value="@Html.DisplayFor(x => realEstate.Id)" style="font-size: 14px"></span>
+                        </a>
+                        <a href="#" title="Thêm nợ">
+                            <span class="fa fa-money text-primary add-real-estate-liability" data-value="@Html.DisplayFor(x => realEstate.Id)" style="font-size: 14px"></span>
                         </a>
                     </td>
                     <td class="text-right">@Html.DisplayFor(x => realEstate.Value)</td>
@@ -94,10 +97,10 @@
                         <tr>
                             <td>
                                 @Html.DisplayFor(x => liability.Source)<br />
-                                <a href="#">
+                                <a href="#" title="Cập nhật nợ">
                                     <span class="glyphicon glyphicon-edit text-success update-real-estate-liability" data-value="@Html.DisplayFor(x => liability.Id)" style="font-size: 12px"></span>
                                 </a>
-                                <a href="#">
+                                <a href="#" title="Xóa nợ">
                                     <span class="glyphicon glyphicon-remove text-danger delete-real-estate-liability" data-value="@Html.DisplayFor(x => liability.Id)" style="font-size: 12px"></span>
                                 </a>
                             </td>

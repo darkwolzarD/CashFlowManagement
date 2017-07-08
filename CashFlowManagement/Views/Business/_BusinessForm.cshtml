@@ -33,9 +33,9 @@
             @Html.ValidationMessageFor(x => x.Income, null, new { @class = "text-danger" })
         </div>
         <div class="checkbox">
-            <label>
-                @Html.CheckBoxFor(x => x.IsInDept)
-                Bạn có vay khoản nợ nào để kinh doanh không?
+            <label class="text-danger">
+                @Html.CheckBoxFor(x => x.IsInDebt)
+                <strong>Bạn có vay nợ để kinh doanh !!!</strong>
             </label>
         </div>
     }

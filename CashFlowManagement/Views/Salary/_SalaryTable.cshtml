@@ -5,17 +5,15 @@
         <thead>
             <tr>
                 <th>Tên nguồn thu</th>
-                <th class="text-right">Ngày nhận lương hàng tháng</th>
                 <th class="text-right">Thu nhập hàng tháng</th>
                 <th class="text-right">Thu nhập hàng năm</th>
+                <th class="text-right">Ngày nhận lương hàng tháng</th>
                 <th>Ghi chú</th>
-                <th></th>
             </tr>
         </thead>
         <tbody>
             <tr>
                 <td class="text-danger"><strong>Tổng</strong></td>
-                <td></td>
                 <td class="text-danger text-right"><strong>@Html.DisplayFor(x => x.TotalIncome)</strong></td>
                 <td class="text-danger text-right"><strong>@Html.DisplayFor(x => x.TotalAnnualIncome)</strong></td>
                 <td></td>
@@ -24,15 +22,15 @@
             @foreach (var item in Model.Salaries)
             {
                 <tr>
-                    <td>@Html.DisplayFor(x => item.Source)</td>
-                    <td class="text-right">@Html.DisplayFor(x => item.IncomeDay)</td>
+                    <td>
+                        @Html.DisplayFor(x => item.Source)<br/>
+                        <a href="#" title="Cập nhật lương" class="update-salary" data-value="@Html.DisplayFor(x => item.Id)"><span class="glyphicon glyphicon-edit text-success" style="font-size: 14px;"></span></a>
+                        <a href="#" title="Xóa lương" class="delete-salary" data-value="@Html.DisplayFor(x => item.Id)"><span class="glyphicon glyphicon-remove text-danger" style="font-size: 14px;"></span></a>
+                    </td>
                     <td class="text-right">@Html.DisplayFor(x => item.Income)</td>
                     <td class="text-right">@Html.DisplayFor(x => item.AnnualIncome)</td>
+                    <td class="text-right">@Html.DisplayFor(x => item.IncomeDay)</td>
                     <td>@Html.DisplayFor( x => item.Note)</td>
-                    <td>
-                        <a href="#" class="update-salary" data-value="@Html.DisplayFor(x => item.Id)"><span class="glyphicon glyphicon-edit text-success" style="font-size: 16px;"></span></a>
-                        <a href="#" class="delete-salary" data-value="@Html.DisplayFor(x => item.Id)"><span class="glyphicon glyphicon-remove text-danger" style="font-size: 16px;"></span></a>
-                    </td>
                 </tr>
             }
         </tbody>
