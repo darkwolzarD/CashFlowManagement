@@ -1,10 +1,27 @@
-﻿function LiabilityCreateSuccess(data) {
+﻿function MaskInput() {
+    $(".input-mask").mask("000.000.000.000.000", { reverse: true });
+    $(".percentage").mask("000.000.000.000.000,00", { reverse: true });
+    $(".date-picker-with-day").datepicker({
+        format: "dd/mm/yyyy",
+        language: "vi-VN",
+        autoclose: true
+    });
+    $(".date-picker").datepicker({
+        format: "mm/yyyy",
+        minViewMode: 1,
+        language: "vi-VN",
+        autoclose: true
+    });
+}
+
+function LiabilityCreateSuccess(data) {
     if (data === "success") {
         RefreshLiabilityForm();
         RefreshLiabilityTable();
     }
     else {
         $("#liability-form").replaceWith($(data).html());
+        MaskInput();
     }
 }
 
@@ -15,6 +32,7 @@ function LiabilityUpdateSuccess(data) {
     }
     else {
         $("#liability-form").replaceWith($(data).html());
+        MaskInput();
     }
 }
 
@@ -34,6 +52,7 @@ function RefreshLiabilityForm() {
         type: "get",
         success: function (data) {
             $("#liability-form").replaceWith($(data).html());
+            MaskInput();
         }
     })
 }
@@ -44,6 +63,7 @@ function RefreshRealEstateTable() {
         type: "get",
         success: function (data) {
             $("#real-estate-table").html($(data).html());
+            MaskInput();
         }
     })
 }
@@ -65,22 +85,6 @@ $(document).ready(function () {
 
     $.validator.methods.number = function (value, element) {
         return this.optional(element) || /^-?(?:\d+|\d{1,3}(?:\.\d{3})+)(?:,\d+)?$/.test(value);
-    }
-
-    function MaskInput() {
-        $(".input-mask").mask("000.000.000.000.000", { reverse: true });
-        $(".percentage").mask("000.000.000.000.000,00", { reverse: true });
-        $(".date-picker-with-day").datepicker({
-            format: "dd/mm/yyyy",
-            language: "vi-VN",
-            autoclose: true
-        });
-        $(".date-picker").datepicker({
-            format: "mm/yyyy",
-            minViewMode: 1,
-            language: "vi-VN",
-            autoclose: true
-        });
     }
 
     function RemoveMask() {
@@ -150,6 +154,7 @@ $(document).ready(function () {
                 }
                 else {
                     $("#real-estate-div").html($(data).html());
+                    MaskInput();
                 }
             }
         });
@@ -258,6 +263,7 @@ $(document).ready(function () {
                 data: { id: id },
                 success: function (data) {
                     $("#liability-form-div").html($(data).html());
+                    MaskInput();
                 }
             });
         }
@@ -335,6 +341,7 @@ $(document).ready(function () {
                 }
                 else {
                     $("#liability-update-modal").html($(data).html());
+                    MaskInput();
                 }
             }
         });

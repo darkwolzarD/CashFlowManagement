@@ -1,10 +1,10 @@
-﻿@model CashFlowManagement.Models.RealEstateCreateViewModel
+﻿@model CashFlowManagement.Models.BusinessCreateViewModel
 @{
     Layout = null;
 }
 
-<div id="real-estate-div" class="col-md-12">
-    @using (Html.BeginForm("Create", "RealEstate", FormMethod.Post, new { @id = "real-estate-form" }))
+<div id="business-div" class="col-md-12">
+    @using (Html.BeginForm("Create", "Business", FormMethod.Post, new { @id = "business-form" }))
     {
         @Html.AntiForgeryToken()
         <div class="form-group">
@@ -25,7 +25,7 @@
             @Html.LabelFor(x => x.Value)
             @Html.EditorFor(x => x.Value, new { htmlAttributes = new { @class = "form-control input-mask input-sm" } })
             @Html.ValidationMessageFor(x => x.Value, null, new { @class = "text-danger" })
-            @Html.ValidationMessage("CompareRealEstateValueAndLiabilityValue", new { @class = "text-danger" })
+            @Html.ValidationMessage("CompareBusinessValueAndLiabilityValue", new { @class = "text-danger" })
         </div>
         <div class="form-group">
             @Html.LabelFor(x => x.Income)
@@ -35,7 +35,7 @@
         <div class="checkbox">
             <label>
                 @Html.CheckBoxFor(x => x.IsInDept)
-                Bạn có vay khoản nợ nào để mua bất động sản này không?
+                Bạn có vay khoản nợ nào để kinh doanh không?
             </label>
         </div>
     }

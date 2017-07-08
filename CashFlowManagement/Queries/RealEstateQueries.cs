@@ -152,7 +152,7 @@ namespace CashFlowManagement.Queries
             {
                 var income = entities.Incomes.Where(x => x.AssetId == model.Id).FirstOrDefault();
                 income.Value = model.Income.HasValue ? model.Income.Value : 0;
-                income.Name = "Thu nhập từ " + model.Name;
+                income.Name = "Thu nhập cho thuê từ " + model.Name;
                 entities.Incomes.Attach(income);
                 entities.Entry(income).State = System.Data.Entity.EntityState.Modified;
             }

@@ -1,7 +1,90 @@
-﻿$(document).ready(function () {
-    function MaskInput() {
-        $(".input-mask").mask("000,000,000,000,000", { reverse: true });
-        $(".percentage").mask("##0,00%", { reverse: true });
+﻿function MaskInput() {
+    $(".input-mask").mask("000.000.000.000.000", { reverse: true });
+    $(".percentage").mask("000.000.000.000.000,00", { reverse: true });
+    $(".date-picker-with-day").datepicker({
+        format: "dd/mm/yyyy",
+        language: "vi-VN",
+        autoclose: true
+    });
+    $(".date-picker").datepicker({
+        format: "mm/yyyy",
+        minViewMode: 1,
+        language: "vi-VN",
+        autoclose: true
+    });
+}
+
+function LiabilityCreateSuccess(data) {
+    if (data === "success") {
+        RefreshLiabilityForm();
+        RefreshLiabilityTable();
+    }
+    else {
+        $("#liability-form").replaceWith($(data).html());
+        MaskInput();
+    }
+}
+
+function LiabilityUpdateSuccess(data) {
+    if (data === "success") {
+        RefreshLiabilityForm();
+        RefreshLiabilityTable();
+    }
+    else {
+        $("#liability-form").replaceWith($(data).html());
+        MaskInput();
+    }
+}
+
+function RefreshLiabilityTable() {
+    $.ajax({
+        url: Url._LiabilityTable,
+        type: "get",
+        success: function (data) {
+            $("#liability-table-div").html($(data).html());
+        }
+    })
+}
+
+function RefreshLiabilityForm() {
+    $.ajax({
+        url: Url._LiabilityForm,
+        type: "get",
+        success: function (data) {
+            $("#liability-form").replaceWith($(data).html());
+            MaskInput();
+        }
+    })
+}
+
+function RefreshBusinessTable() {
+    $.ajax({
+        url: Url.BusinessTable,
+        type: "get",
+        success: function (data) {
+            $("#business-table").html($(data).html());
+            MaskInput();
+        }
+    })
+}
+
+function LoadLiabilityForm() {
+    $(".modal-dialog").css("width", "1000px");
+    $("#business-form").addClass("hidden");
+    $("#liability-div").removeClass("hidden");
+    var html = "<button type='button' class='btn btn-default return-business-info'><span class='glyphicon glyphicon-arrow-left'></span>Thông tin kinh doanh</button>";
+    html += "<button type='button' class='btn btn-primary business-summary'><span class='glyphicon glyphicon-ok'></span>Xác nhận thông tin kinh doanh</button>";;
+    $(".modal-footer").html(html);
+}
+
+
+$(document).ready(function () {
+    $.validator.methods.date = function (value, element) {
+        return this.optional(element) || moment(value, "MM/YYYY", true).isValid() || moment(value, "dd/MM/YYYY", true).isValid();
+    }
+
+    $.validator.methods.number = function (value, element) {
+        return this.optional(element) || /^-?(?:\d+|\d{1,3}(?:\.\d{3})+)(?:,\d+)?$/.test(value);
     }
 
     function RemoveMask() {
@@ -11,335 +94,256 @@
 
     MaskInput();
 
-    function InitiateDatePicker() {
-        $(".date-picker").datepicker({
-            format: "mm/yyyy",
-            minViewMode: 1,
-            language: "vi-VN"
-        });
-    }
-
-    $(document).on("shown.bs.modal", "#create-new-business-modal, #create-new-loan-modal", function () {
-        MaskInput();
-        InitiateDatePicker();
-    })
-
-    $(document).on("shown.bs.modal", "#update-business-modal, #update-loan-modal", function () {
-        MaskInput();
-        InitiateDatePicker();
-    })
-
-    function isValidDate(dateString) {
-        // First check for the pattern
-        var regex_date = /^\d{2}\/\d{4}$/;
-
-        if (!regex_date.test(dateString)) {
-            return false;
-
-            var parts = dateString.split("/");
-            var month = parseInt(parts[0], 10);
-            var year = parseInt(parts[1], 10);
-
-            if (year < 1000 || year > 3000 || month == 0 || month > 12) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
     $(document).on("click", ".create-business", function () {
-        RemoveMask();
-        var data = $("#create-new-business-modal .form-horizontal").serialize();
+        var model = $("#business-form").serialize();
+        $.ajax({
+            url: Url.SaveBusiness,
+            type: "post",
+            data: model,
+            success: function (data) {
+                if (data === "success") {
+                    $("#business-create-modal").modal("hide");
+                    RefreshBusinessTable();
+                }
+                else {
+                    $("#business-div").html($(data).html());
+                    var html = "<button type='button' class='btn btn-success create-business'><span class='glyphicon glyphicon-ok'></span>Tạo kinh doanh</button>";
+                    $(".modal-footer").html(html);
+                }
+            }
+        });
+    })
 
+    $(document).on("click", "#IsInDept", function () {
+        if ($(this).prop("checked")) {
+            var html = "<button type='button' class='btn btn-default create-liability-info'><span class='glyphicon glyphicon-arrow-right'></span>Tạo các khoản vay</button>";
+            $(".modal-footer").html(html);
+        }
+        else {
+            var html = "<button type='button' class='btn btn-success create-business'><span class='glyphicon glyphicon-ok'></span>Tạo kinh doanh</button>";
+            $(".modal-footer").html(html);
+        }
+    })
+
+    $(document).on("click", ".toggle-modal", function () {
+        $.ajax({
+            url: Url.CreateBusiness,
+            type: "get",
+            success: function (data) {
+                $("#modal").html(data);
+                $("#business-create-modal").modal("show");
+                MaskInput();
+            }
+        });
+    })
+
+    $(document).on("click", ".create-liability-info", function () {
+        var model = $("#business-form").serialize();
         $.ajax({
             url: Url.CreateBusiness,
             type: "post",
-            data: data,
+            data: model,
             success: function (data) {
-                if (data.result > 0) {
-                    $("#create-new-business-modal").modal("hide");
-                    LoadTable();
+                if (data === "success") {
+                    $(".modal-dialog").css("width", "1000px");
+                    $("#business-form").addClass("hidden");
+                    $("#liability-div").removeClass("hidden");
+                    var html = "<button type='button' class='btn btn-default return-business-info'><span class='glyphicon glyphicon-arrow-left'></span>Thông tin kinh doanh</button>";
+                    html += "<button type='button' class='btn btn-primary business-summary'><span class='glyphicon glyphicon-ok'></span>Xác nhận thông tin kinh doanh</button>";;
+                    $(".modal-footer").html(html);
                 }
                 else {
-                    alert("Có lỗi xảy ra");
+                    $("#business-div").html($(data).html());
+                    MaskInput();
                 }
             }
-        })
-        MaskInput();
+        });
     })
 
-    $(document).on("click", ".create-loan", function () {
-        RemoveMask();
-        var data = $("#create-new-loan-modal .form-horizontal").serialize();
-
-        $.ajax({
-            url: Url.CreateLoan,
-            type: "post",
-            data: data,
-            success: function (data) {
-                if (data.result > 0) {
-                    $("#create-new-loan-modal").modal("hide");
-                    LoadTable();
-                }
-                else {
-                    alert("Có lỗi xảy ra");
-                }
-            }
-        })
-        MaskInput();
+    $(document).on("click", ".return-business-info", function () {
+        $(".modal-dialog").css("width", "400px");
+        $("#business-form").removeClass("hidden");
+        $("#liability-div").addClass("hidden");
+        if ($("#IsInDept").prop("checked")) {
+            var html = "<button type='button' class='btn btn-default create-liability-info'><span class='glyphicon glyphicon-arrow-right'></span>Tạo các khoản vay</button>";
+            $(".modal-footer").html(html);
+        }
+        else {
+            var html = "<button type='button' class='btn btn-success create-business'><span class='glyphicon glyphicon-ok'></span>Tạo kinh doanh</button>";
+            $(".modal-footer").html(html);
+        }
     })
 
-    function LoadTable() {
+    $(document).on("click", ".business-summary", function () {
         $.ajax({
-            url: Url.LoadTable,
+            url: Url.Confirm,
             type: "get",
-            dataType: "html",
             success: function (data) {
-                if (data.length > 0) {
-                    $(".business-table").html(data);
-                }
-                else {
-                    alert("Có lỗi xảy ra");
-                }
+                $("#liability-div").addClass("hidden");
+                $("#confirm-business-info").html($(data));
+                $("#confirm-business-info").removeClass("hidden");
+                var html = "<button type='button' class='btn btn-default return-business-liability-info'><span class='glyphicon glyphicon-arrow-left'></span>Thông tin các khoản vay</button>";
+                html += "<button type='button' class='btn btn-success create-business'><span class='glyphicon glyphicon-ok'></span>Tạo kinh doanh</button>";;
+                $(".modal-footer").html(html);
             }
-        })
-    }
-
-    $(document).on("click", ".update-business", function () {
-        var id = $(this).closest("tr").find(".business-id").text();
-
-        $.ajax({
-            url: Url.LoadBusiness,
-            type: "get",
-            data: { id: id },
-            contentType: "html",
-            success: function (data) {
-                if (data.length > 0) {
-                    $(".update-modal").html(data);
-                    $("#update-business-modal").modal("show");
-                }
-                else {
-                    alert("Có lỗi xảy ra");
-                }
-            }
-        })
+        });
     })
 
-    $(document).on("click", ".save-business", function () {
-        RemoveMask();
-        var data = $("#update-business-modal .form-horizontal").serialize();
+    $(document).on("click", ".return-business-liability-info", function () {
+        $("#liability-div").removeClass("hidden");
+        $("#confirm-business-info").addClass("hidden");
+        var html = "<button type='button' class='btn btn-default return-business-info'><span class='glyphicon glyphicon-arrow-left'></span>Thông tin kinh doanh</button>";
+        html += "<button type='button' class='btn btn-success business-summary'><span class='glyphicon glyphicon-ok'></span>Tạo kinh doanh</button>";;
+        $(".modal-footer").html(html);
+    })
 
-        $.ajax({
-            url: Url.UpdateBusiness,
-            type: "post",
-            data: data,
-            success: function (data) {
-                if (data.result > 0) {
-                    $("#update-business-modal").modal("hide");
-                    LoadTable();
+    $(document).on("click", ".remove-business-liability", function () {
+        if (confirm("Bạn có muốn xóa khoản nợ này không")) {
+            var id = $(this).closest("tr").find(".liability-id").val();
+            $.ajax({
+                url: Url.DeleteTempLiability,
+                type: "post",
+                data: { id: id },
+                success: function (data) {
+                    if (data === "success") {
+                        RefreshLiabilityTable();
+                    }
+                    else {
+                        alert("Error!");
+                    }
                 }
-                else {
-                    alert("Có lỗi xảy ra");
+            });
+        }
+    })
+
+    $(document).on("click", ".delete-business-liability", function () {
+        if (confirm("Bạn có muốn xóa khoản nợ này không")) {
+            var id = $(this).data("value");
+            $.ajax({
+                url: Url.DeleteLiability,
+                type: "post",
+                data: { id: id },
+                success: function (data) {
+                    if (data === "success") {
+                        RefreshBusinessTable();
+                    }
+                    else {
+                        alert("Error!");
+                    }
                 }
-            }
-        })
-        MaskInput();
+            });
+        }
     })
 
     $(document).on("click", ".delete-business", function () {
-        var id = $(this).closest("tr").find(".business-id").text();
-        if (confirm("Do you really want to delete this business?") == true) {
+        if (confirm("Bạn có muốn xóa kinh doanh này không")) {
+            var id = $(this).data("value");
             $.ajax({
                 url: Url.DeleteBusiness,
-                type: "POST",
+                type: "post",
                 data: { id: id },
                 success: function (data) {
-                    if (data.result > 0) {
-                        alert("Success!");
-                        LoadTable();
+                    if (data === "success") {
+                        RefreshBusinessTable();
                     }
                     else {
-                        alert("Có lỗi xảy ra");
+                        alert("Error!");
                     }
                 }
-            })
+            });
         }
     })
 
-    $(document).on("click", ".create-new-loan", function () {
-        var id = $(this).data("real-estate-id");
+    $(document).on("click", ".liability-id", function () {
+        if ($(this).prop("checked")) {
+            var id = $(this).closest("tr").find(".liability-id").val();
+            $.ajax({
+                url: Url.LiabilityUpdateForm,
+                type: "get",
+                data: { id: id },
+                success: function (data) {
+                    $("#liability-form-div").html($(data).html());
+                    MaskInput();
+                }
+            });
+        }
+        else {
+            RefreshLiabilityForm();
+        }
+    })
 
+    $(document).on("keyup", "form input", function () {
+        $("form .field-validation-error").text("");
+    })
+
+    $(document).on("click", ".update-business", function () {
+        var id = $(this).data("value");
         $.ajax({
-            url: Url.LoanModal,
+            url: Url.BusinessUpdateForm,
             type: "get",
             data: { id: id },
-            contentType: "html",
             success: function (data) {
-                if (data.length > 0) {
-                    $(".loan-modal").html(data);
-                    $("#create-new-loan-modal").modal("show");
-                }
-                else {
-                    alert("Có lỗi xảy ra");
-                }
-            }
-        })
-    })
-
-    $(document).on("click", ".update-loan", function () {
-        var id = $(this).data("loan-id");
-        var trigger = $(this).data("trigger");
-
-        if (trigger == "edit-no-rate") {
-            $.ajax({
-                url: Url.LoadLoan,
-                type: "get",
-                data: { id: id },
-                contentType: "html",
-                success: function (data) {
-                    if (data.length > 0) {
-                        $(".update-loan-modal-div").html(data);
-                        $("#update-loan-modal").modal("show");
-                    }
-                    else {
-                        alert("Có lỗi xảy ra");
-                    }
-                }
-            })
-        }
-        else {
-            $.ajax({
-                url: Url.LoadLoanWithRate,
-                type: "get",
-                data: { id: id },
-                contentType: "html",
-                success: function (data) {
-                    if (data.length > 0) {
-                        $(".update-loan-modal-div").html(data);
-                        $(".update-loan-modal-div").find("input[name='StartDate']").attr("data-date-start-date", $(".update-loan-modal-div").find("input[name='StartDate']").val());
-                        $(".update-loan-modal-div").find("input[name='EndDate']").attr("data-date-end-date", $(".update-loan-modal-div").find("input[name='EndDate']").val());
-                        $("#update-loan-modal").modal("show");
-                    }
-                    else {
-                        alert("Có lỗi xảy ra");
-                    }
-                }
-            })
-        }
-    })
-
-    $(document).on("click", ".save-loan", function () {
-        RemoveMask();
-        var data = $("#update-loan-modal .form-horizontal").serialize();
-        if ($(this).data("trigger") == "save-no-rate") {
-            if (confirm("Thay đổi kì hạn của khoản vay sẽ hủy bỏ các kì hạn con trước đó. Bạn có muốn tiếp tục?")) {
-                $.ajax({
-                    url: Url.UpdateLoan,
-                    type: "post",
-                    data: data,
-                    success: function (data) {
-                        if (data.result > 0) {
-                            $("#update-loan-modal").modal("hide");
-                            LoadTable();
-                        }
-                        else {
-                            alert("Có lỗi xảy ra");
-                        }
-                    }
-                })
+                $("#modal").html(data);
+                $("#business-update-modal").modal("show");
                 MaskInput();
             }
-            else {
-                alert("Không có dữ liệu nào bị thay đổi");
-            }
-        }
-        else {
-            $.ajax({
-                url: Url.UpdateLoan,
-                type: "post",
-                data: data,
-                success: function (data) {
-                    if (data.result > 0) {
-                        $("#update-loan-modal").modal("hide");
-                        LoadTable();
-                    }
-                    else {
-                        alert("Có lỗi xảy ra");
-                    }
-                }
-            })
-            MaskInput();
-        }
+        });
     })
 
-    $(document).on("click", ".delete-loan", function () {
-        var id = $(this).data("loan-id");
-        if (confirm("Do you really want to delete this loan?") == true) {
-            $.ajax({
-                url: Url.DeleteLoan,
-                type: "POST",
-                data: { id: id },
-                success: function (data) {
-                    if (data.result > 0) {
-                        alert("Success!");
-                        LoadTable();
-                    }
-                    else {
-                        alert("Có lỗi xảy ra");
-                    }
-                }
-            })
-        }
-    })
-
-    $(document).on("click", ".interest-info", function () {
-        var _data = parseInt($(this).data("loan-id"));
-
+    $(document).on("click", ".save-update-business", function () {
+        var model = $("#business-update-form").serialize();
         $.ajax({
-            url: Url.PaymentsPerMonth,
-            type: "get",
-            data: { loanId: _data },
-            dataType: "html",
+            url: Url.BusinessUpdateForm,
+            type: "post",
+            data: model,
             success: function (data) {
-                $(".interest-modal-div").html(data);
-                $("#interest-modal").modal("show");
-            }
-        })
-    })
-
-    $(document).on("show.bs.collapse", "tr[class^='detail-']", function () {
-        var rs_cls = $(this).closest("tr").attr("class").split(' ')[1];
-        var child_cls = $(this).closest("tr").attr("class").split(' ')[2];
-        var current = $(document).find("table tbody ." + rs_cls + ":not(.collapse)").length + 1;
-        var collapse = $(document).find("table tbody ." + child_cls + ".collapse").length;
-        $(document).find("table tbody tr." + rs_cls + ":first td:nth-child(2)").attr("rowspan", current + collapse);
-    })
-
-    $(document).on("hidden.bs.collapse", "tr[class^='detail-']", function () {
-        var rs_cls = $(this).closest("tr").attr("class").split(' ')[1];
-        var child_cls = $(this).closest("tr").attr("class").split(' ')[2];
-        var current = $(document).find("table tbody ." + rs_cls + ":not(.collapse)").length;
-        var collapse = $(document).find("table tbody ." + child_cls + ".collapse").length;
-        $(document).find("table tbody tr." + rs_cls + ":first td:nth-child(2)").attr("rowspan", current - collapse);
-    })
-
-    $(document).on("changeDate", ".with-rate .date-picker", function () {
-        RemoveMask();
-        var startDate = $(this).closest("#update-loan-modal").find("input[name='StartDate']").val();
-        var endDate = $(this).closest("#update-loan-modal").find("input[name='EndDate']").val();
-        if (isValidDate(startDate) && isValidDate(endDate)) {
-            var data = $("#update-loan-modal .form-horizontal").serialize();
-
-            $.ajax({
-                url: Url.PaymentsPerMonth,
-                type: "post",
-                data: data,
-                success: function (data) {
-                    $(".payments-per-month-table").html($(data).find(".modal-body").html());
+                if (data === "success") {
+                    $("#business-update-modal").modal("hide");
+                    RefreshBusinessTable();
                 }
-            })
-        }
-        MaskInput();
+                else if (data === "failed") {
+                    alert("Error!");
+                }
+                else {
+                    $("#business-update-modal").html($(data).html());
+                }
+            }
+        });
+    })
+
+    $(document).on("click", ".update-business-liability", function () {
+        var id = $(this).data("value");
+        $.ajax({
+            url: Url.LiabilityUpdateForm2nd,
+            type: "get",
+            data: { id: id },
+            success: function (data) {
+                $("#modal").html(data);
+                $("#liability-update-modal").modal("show");
+                MaskInput();
+            }
+        });
+    })
+
+    $(document).on("click", ".save-update-business-liability", function () {
+        var model = $("#liability-update-form").serialize();
+        $.ajax({
+            url: Url.LiabilityUpdateForm2nd,
+            type: "post",
+            data: model,
+            success: function (data) {
+                if (data === "success") {
+                    $("#liability-update-modal").modal("hide");
+                    RefreshBusinessTable();
+                }
+                else if (data === "failed") {
+                    alert("Error!");
+                }
+                else {
+                    $("#liability-update-modal").html($(data).html());
+                    MaskInput();
+                }
+            }
+        });
     })
 })

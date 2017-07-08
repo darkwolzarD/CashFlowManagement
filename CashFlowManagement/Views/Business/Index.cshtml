@@ -1,0 +1,55 @@
+﻿@{
+    ViewBag.Title = "Quản lý kinh doanh";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="clear10"></div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="btn-group btn-breadcrumb">
+            <a href="#" class="btn btn-default"><i class="glyphicon glyphicon-home"></i></a>
+            <a href="#" class="btn btn-default">Tài sản</a>
+            <a href="#" class="btn btn-default">Kinh doanh</a>
+            <a href="#" class="btn btn-default">Chi tiết kinh doanh</a>
+        </div>
+    </div>
+</div>
+<div class="clear10"></div>
+<div class="row">
+    <div class="col-md-6">
+        <p style="font-size: 20px;">Quản lý kinh doanh</p>
+    </div>
+    <div class="col-md-6 text-right">
+        <button type="button" class="btn btn-success toggle-modal">
+            <span class="glyphicon glyphicon-home"></span>
+            Tạo kinh doanh
+        </button>
+    </div>
+</div>
+<div class="clear10"></div>
+<div class="row">
+    <div class="col-md-12" id="business-table-div">
+        @{ Html.RenderAction("_BusinessTable", "Business"); }
+    </div>
+</div>
+
+<div id="modal">
+
+</div>
+
+<script type="text/javascript" src="~/Scripts/business.js"></script>
+<script type="text/javascript">
+    var Url = {};
+    Url._LiabilityForm = '@Url.Action("_LiabilityForm", "Business")';
+    Url._LiabilityTable = '@Url.Action("_LiabilityTable", "Business")';
+    Url.CreateBusiness = '@Url.Action("_Create", "Business")';
+    Url.Confirm = '@Url.Action("_Confirm", "Business")';
+    Url.SaveBusiness = '@Url.Action("Save", "Business")';
+    Url.BusinessTable = '@Url.Action("_BusinessTable", "Business")';
+    Url.DeleteTempLiability = '@Url.Action("DeleteTempLiability", "Business")';
+    Url.DeleteLiability = '@Url.Action("DeleteLiability", "Business")';
+    Url.DeleteBusiness = '@Url.Action("DeleteBusiness", "Business")';
+    Url.LiabilityUpdateForm = '@Url.Action("_LiabilityUpdateForm", "Business")';
+    Url.LiabilityUpdateForm2nd = '@Url.Action("_LiabilityUpdateForm2nd", "Business")';
+    Url.BusinessUpdateForm = '@Url.Action("_BusinessUpdateForm", "Business")';
+</script>

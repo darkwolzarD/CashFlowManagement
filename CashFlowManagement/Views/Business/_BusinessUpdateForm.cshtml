@@ -1,19 +1,18 @@
-﻿@model CashFlowManagement.Models.RealEstateUpdateViewModel
+﻿@model CashFlowManagement.Models.BusinessUpdateViewModel
 @{
     Layout = null;
 }
 
-
-<div id="real-estate-update-modal" class="modal fade" role="dialog">
+<div id="business-update-modal" class="modal fade" role="dialog">
     <div class="modal-dialog" style="width: 400px;">
         <div class="modal-content">
             <div class="modal-header">
-                <p style="font-size: 16px; margin-bottom: 0px;">Cập nhật bất động sản</p>
+                <p style="font-size: 16px; margin-bottom: 0px;">Cập nhật kinh doanh</p>
             </div>
             <div class="modal-body">
                 <div class="row">
                     <div id="real-estate-div" class="col-md-12">
-                        @using (Html.BeginForm("_RealEstateUpdateForm", "RealEstate", FormMethod.Post, new { @id = "real-estate-update-form" }))
+                        @using (Html.BeginForm("_BusinessUpdateForm", "Business", FormMethod.Post, new { @id = "business-update-form" }))
                         {
                             @Html.AntiForgeryToken()
                             <div class="form-group">
@@ -38,9 +37,9 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-success save-update-real-estate">
+                <button type="button" class="btn btn-success save-update-business">
                     <span class="glyphicon glyphicon-ok"></span>
-                    Cập nhật bất động sản
+                    Cập nhật kinh doanh
                 </button>
             </div>
         </div>

@@ -1,12 +1,11 @@
-﻿@model CashFlowManagement.Models.RealEstateLiabilityCreateViewModel
+﻿@model CashFlowManagement.Models.BusinessLiabilityCreateViewModel
 @using CashFlowManagement.Constants
 
 <div id="liability-form-div" class="col-md-3">
-    @using (Ajax.BeginForm("_LiabilityUpdateForm", null, new AjaxOptions { HttpMethod = "Post", OnSuccess = "LiabilityUpdateSuccess(data)" }, new { @id = "liability-form" }))
+    @using (Ajax.BeginForm("_LiabilityForm", null, new AjaxOptions { HttpMethod = "Post", OnSuccess = "LiabilityCreateSuccess(data)" }, new { @id = "liability-form" }))
     {
         @Html.AntiForgeryToken()
         <div class="form-group">
-            @Html.HiddenFor(x => x.Id)
             @Html.LabelFor(x => x.Source)
             @Html.TextBoxFor(x => x.Source, new { @class = "form-control input-sm" })
             @Html.ValidationMessageFor(x => x.Source, null, new { @class = "text-danger" })
@@ -15,11 +14,11 @@
             @Html.LabelFor(x => x.Value)
             @Html.EditorFor(x => x.Value, new { htmlAttributes = new { @class = "form-control input-sm input-mask" } })
             @Html.ValidationMessageFor(x => x.Value, null, new { @class = "text-danger" })
-            @Html.ValidationMessage("CompareRealEstateValueAndLiabilityValue", new { @class = "text-danger" })
+            @Html.ValidationMessage("CompareBusinessValueAndLiabilityValue", new { @class = "text-danger" })
         </div>
         <div class="form-group">
             @Html.LabelFor(x => x.InterestType)
-            @Html.DropDownListFor(x => x.InterestType, Constants.InterestType(), new { @class = "form-control input-sm " })
+            @Html.DropDownListFor(x => x.InterestType, Constants.InterestType(), new { @class = "form-control input-sm" })
         </div>
         <div class="form-group">
             <div class="col-md-12" style="padding-left: 0; padding-right: 0;">
@@ -54,17 +53,16 @@
             <div class="input-group input-group-sm">
                 @Html.EditorFor(x => x.EndDate, new { htmlAttributes = new { @class = "form-control input-sm date-picker-with-day" } })
                 <div class="input-group-addon">
-                    <sspan class="glyphicon glyphicon-calendar"></sspan>
+                    <span class="glyphicon glyphicon-calendar"></span>
                 </div>
             </div>
             @Html.ValidationMessageFor(x => x.EndDate, null, new { @class = "text-danger" })
         </div>
         <div class="form-group text-right">
-            <button type="submit" class="btn btn-primary">
+            <button type="submit" class="btn btn-primary create-business-liability">
                 <span class="glyphicon glyphicon-ok"></span>
-                Cập nhật khoản nợ
+                Tạo khoản nợ
             </button>
         </div>
     }
 </div>
-

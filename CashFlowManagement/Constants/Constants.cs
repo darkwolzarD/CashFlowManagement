@@ -35,7 +35,7 @@ namespace CashFlowManagement.Constants
             return list;
         }
 
-        public static List<SelectListItem> RealEstateInterestType()
+        public static List<SelectListItem> InterestType()
         {
             List<SelectListItem> list = new List<SelectListItem>();
             list.Add(new SelectListItem { Text = "Cố định", Value = ((int)Constants.INTEREST_TYPE.FIXED).ToString(), Selected = true });
@@ -43,7 +43,7 @@ namespace CashFlowManagement.Constants
             return list;
         }
 
-        public static List<SelectListItem> RealEstateInterestPerX()
+        public static List<SelectListItem> InterestPerX()
         {
             List<SelectListItem> list = new List<SelectListItem>();
             list.Add(new SelectListItem { Text = "Tháng", Value = ((int)Constants.INTEREST_RATE_PER.MONTH).ToString() });

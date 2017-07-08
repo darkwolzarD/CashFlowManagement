@@ -7,29 +7,29 @@ using System.Web;
 
 namespace CashFlowManagement.Queries
 {
-    public class RealEstateLiabilityQueries
+    public class BusinessLiabilityQueries
     {
-        public static RealEstateLiabilityUpdateViewModel GetViewModelById(int id)
+        public static BusinessLiabilityUpdateViewModel GetViewModelById(int id)
         {
             Entities entities = new Entities();
-            var realEstateLiability = entities.Liabilities.Where(x => x.Id == id).FirstOrDefault();
-            RealEstateLiabilityUpdateViewModel liabilityViewModel = new RealEstateLiabilityUpdateViewModel();
-            liabilityViewModel.Id = realEstateLiability.Id;
-            liabilityViewModel.Source = realEstateLiability.Name;
-            liabilityViewModel.Value = realEstateLiability.Value;
-            liabilityViewModel.InterestType = realEstateLiability.InterestType.Value;
-            liabilityViewModel.InterestRatePerX = realEstateLiability.InterestRatePerX;
-            liabilityViewModel.InterestRate = realEstateLiability.InterestRate;
-            liabilityViewModel.StartDate = realEstateLiability.StartDate.Value;
-            liabilityViewModel.EndDate = realEstateLiability.EndDate.Value;
+            var businessLiability = entities.Liabilities.Where(x => x.Id == id).FirstOrDefault();
+            BusinessLiabilityUpdateViewModel liabilityViewModel = new BusinessLiabilityUpdateViewModel();
+            liabilityViewModel.Id = businessLiability.Id;
+            liabilityViewModel.Source = businessLiability.Name;
+            liabilityViewModel.Value = businessLiability.Value;
+            liabilityViewModel.InterestType = businessLiability.InterestType.Value;
+            liabilityViewModel.InterestRatePerX = businessLiability.InterestRatePerX;
+            liabilityViewModel.InterestRate = businessLiability.InterestRate;
+            liabilityViewModel.StartDate = businessLiability.StartDate.Value;
+            liabilityViewModel.EndDate = businessLiability.EndDate.Value;
             return liabilityViewModel;
         }
 
-        public static RealEstateLiabilityViewModel CreateViewModel(Liabilities liability)
+        public static BusinessLiabilityViewModel CreateViewModel(Liabilities liability)
         {
             DateTime current = DateTime.Now;
 
-            RealEstateLiabilityViewModel liabilityViewModel = new RealEstateLiabilityViewModel();
+            BusinessLiabilityViewModel liabilityViewModel = new BusinessLiabilityViewModel();
             liabilityViewModel.Id = liability.Id;
             liabilityViewModel.Source = liability.Name;
             liabilityViewModel.Value = liability.Value;
@@ -87,43 +87,43 @@ namespace CashFlowManagement.Queries
             return liabilityViewModel;
         }
 
-        public static int UpdateRealEstateLiability(RealEstateLiabilityUpdateViewModel model)
+        public static int UpdateBusinessLiability(BusinessLiabilityUpdateViewModel model)
         {
             Entities entities = new Entities();
-            var realEstateLiability = entities.Liabilities.Where(x => x.Id == model.Id).FirstOrDefault();
-            realEstateLiability.Name = model.Source;
-            realEstateLiability.Value = model.Value.Value;
-            realEstateLiability.InterestType = model.InterestType;
-            realEstateLiability.InterestRatePerX = model.InterestRatePerX;
-            realEstateLiability.InterestRate = model.InterestRate.Value;
-            realEstateLiability.StartDate = model.StartDate.Value;
-            realEstateLiability.EndDate = model.EndDate.Value;
-            entities.Liabilities.Attach(realEstateLiability);
-            entities.Entry(realEstateLiability).State = System.Data.Entity.EntityState.Modified;
+            var businessLiability = entities.Liabilities.Where(x => x.Id == model.Id).FirstOrDefault();
+            businessLiability.Name = model.Source;
+            businessLiability.Value = model.Value.Value;
+            businessLiability.InterestType = model.InterestType;
+            businessLiability.InterestRatePerX = model.InterestRatePerX;
+            businessLiability.InterestRate = model.InterestRate.Value;
+            businessLiability.StartDate = model.StartDate.Value;
+            businessLiability.EndDate = model.EndDate.Value;
+            entities.Liabilities.Attach(businessLiability);
+            entities.Entry(businessLiability).State = System.Data.Entity.EntityState.Modified;
             return entities.SaveChanges();
         }
 
-        public static int DeleteRealEstateLiability(int id)
+        public static int DeleteBusinessLiability(int id)
         {
             DateTime current = DateTime.Now;
             Entities entities = new Entities();
-            var realEstateLiability = entities.Liabilities.Where(x => x.Id == id).FirstOrDefault();
-            realEstateLiability.DisabledDate = current;
-            realEstateLiability.DisabledBy = Constants.Constants.USER;
+            var businessLiability = entities.Liabilities.Where(x => x.Id == id).FirstOrDefault();
+            businessLiability.DisabledDate = current;
+            businessLiability.DisabledBy = Constants.Constants.USER;
             return entities.SaveChanges();
         }
 
-        public static double GetLiabilityValueOfRealEstate(int realEstateId)
+        public static double GetLiabilityValueOfBusiness(int businessId)
         {
             Entities entities = new Entities();
-            return entities.Liabilities.Where(x => x.AssetId == realEstateId && !x.DisabledDate.HasValue).Select(x => x.Value).DefaultIfEmpty(0).Sum();
+            return entities.Liabilities.Where(x => x.AssetId == businessId && !x.DisabledDate.HasValue).Select(x => x.Value).DefaultIfEmpty(0).Sum();
         }
 
         public static double GetTotalLiabilityValueOfLiability(int liabilityid)
         {
             Entities entities = new Entities();
-            int realEstateId = entities.Liabilities.Where(x => x.Id == liabilityid).FirstOrDefault().AssetId.Value;
-            return entities.Liabilities.Where(x => x.AssetId == realEstateId && !x.DisabledDate.HasValue).Select(x => x.Value).DefaultIfEmpty(0).Sum();
+            int businessId = entities.Liabilities.Where(x => x.Id == liabilityid).FirstOrDefault().AssetId.Value;
+            return entities.Liabilities.Where(x => x.AssetId == businessId && !x.DisabledDate.HasValue).Select(x => x.Value).DefaultIfEmpty(0).Sum();
         }
 
         public class Helper

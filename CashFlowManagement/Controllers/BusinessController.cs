@@ -5,40 +5,40 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using static CashFlowManagement.Queries.RealEstateLiabilityQueries;
+using static CashFlowManagement.Queries.BusinessLiabilityQueries;
 
 namespace CashFlowManagement.Controllers
 {
-    public class RealEstateController : Controller
+    public class BusinessController : Controller
     {
-        // GET: RealEstate
+        // GET: Business
         public ActionResult Index()
         {
-            RealEstateListViewModel model = RealEstateQueries.GetRealEstateByUser(UserQueries.GetCurrentUsername());
+            BusinessListViewModel model = BusinessQueries.GetBusinessByUser(UserQueries.GetCurrentUsername());
             return View(model);
         }
 
         public ActionResult _Create()
         {
-            RealEstateCreateViewModel model = new RealEstateCreateViewModel();
+            BusinessCreateViewModel model = new BusinessCreateViewModel();
             HttpContext.Session["LIABILITIES"] = null;
             HttpContext.Session["REAL_ESTATE"] = null;
             return PartialView(model);
         }
 
         [HttpPost]
-        public ActionResult _Create(RealEstateCreateViewModel model)
+        public ActionResult _Create(BusinessCreateViewModel model)
         {
-            RealEstateLiabilityListCreateViewModel liabilities = (RealEstateLiabilityListCreateViewModel)HttpContext.Session["LIABILITIES"];
+            BusinessLiabilityListCreateViewModel liabilities = (BusinessLiabilityListCreateViewModel)HttpContext.Session["LIABILITIES"];
             double totalLiabilityValue = 0;
             if (liabilities != null)
             {
-               totalLiabilityValue = liabilities.Liabilities.Sum(x => x.Value.HasValue ? x.Value.Value : 0);
+                totalLiabilityValue = liabilities.Liabilities.Sum(x => x.Value.HasValue ? x.Value.Value : 0);
             }
 
-            if(model.Value < totalLiabilityValue && totalLiabilityValue > 0)
+            if (model.Value < totalLiabilityValue && totalLiabilityValue > 0)
             {
-                ModelState.AddModelError("CompareRealEstateValueAndLiabilityValue", "Giá trị tổng số nợ không vượt quá giá trị bất động sản");
+                ModelState.AddModelError("CompareBusinessValueAndLiabilityValue", "Giá trị tổng số nợ không vượt quá giá trị góp vốn kinh doanh");
             }
 
             if (ModelState.IsValid)
@@ -48,39 +48,39 @@ namespace CashFlowManagement.Controllers
             }
             else
             {
-                return PartialView("_RealEstateForm", model);
+                return PartialView("_BusinessForm", model);
             }
         }
 
-        public ActionResult _RealEstateForm()
+        public ActionResult _BusinessForm()
         {
-            RealEstateCreateViewModel model = (RealEstateCreateViewModel)HttpContext.Session["REAL_ESTATE"];
+            BusinessCreateViewModel model = (BusinessCreateViewModel)HttpContext.Session["REAL_ESTATE"];
             if (model == null)
             {
-                model = new RealEstateCreateViewModel();
+                model = new BusinessCreateViewModel();
             }
             return PartialView(model);
         }
 
-        public ActionResult _RealEstateUpdateForm(int id)
+        public ActionResult _BusinessUpdateForm(int id)
         {
-            RealEstateUpdateViewModel model = RealEstateQueries.GetRealEstateById(id);
+            BusinessUpdateViewModel model = BusinessQueries.GetBusinessById(id);
             return PartialView(model);
         }
 
         [HttpPost]
-        public ActionResult _RealEstateUpdateForm(RealEstateUpdateViewModel model)
+        public ActionResult _BusinessUpdateForm(BusinessUpdateViewModel model)
         {
-            double totalLiabilityValue = GetLiabilityValueOfRealEstate(model.Id);
+            double totalLiabilityValue = GetLiabilityValueOfBusiness(model.Id);
             if (model.Value < totalLiabilityValue && totalLiabilityValue > 0)
             {
-                ModelState.AddModelError("CompareRealEstateValueAndLiabilityValue", "Giá trị tổng số nợ không vượt quá giá trị bất động sản");
+                ModelState.AddModelError("CompareBusinessValueAndLiabilityValue", "Giá trị tổng số nợ không vượt quá giá trị góp vốn kinh doanh");
             }
 
             if (ModelState.IsValid)
             {
-                int result = RealEstateQueries.UpdateRealEstate(model);
-                if(result > 0)
+                int result = BusinessQueries.UpdateBusiness(model);
+                if (result > 0)
                 {
                     return Content("success");
                 }
@@ -89,47 +89,48 @@ namespace CashFlowManagement.Controllers
                     return Content("failed");
                 }
             }
-            else {
+            else
+            {
                 return PartialView(model);
             }
         }
 
-        public ActionResult _RealEstateTable()
+        public ActionResult _BusinessTable()
         {
-            RealEstateListViewModel model = RealEstateQueries.GetRealEstateByUser(UserQueries.GetCurrentUsername());
+            BusinessListViewModel model = BusinessQueries.GetBusinessByUser(UserQueries.GetCurrentUsername());
             return PartialView(model);
         }
 
         public ActionResult _LiabilityForm()
         {
-            RealEstateLiabilityCreateViewModel model = new RealEstateLiabilityCreateViewModel();
+            BusinessLiabilityCreateViewModel model = new BusinessLiabilityCreateViewModel();
             return PartialView(model);
         }
         public ActionResult _LiabilityUpdateForm(int id)
         {
-            RealEstateLiabilityListCreateViewModel liabilities = (RealEstateLiabilityListCreateViewModel)HttpContext.Session["LIABILITIES"];
-            RealEstateLiabilityCreateViewModel model = liabilities.Liabilities.Where(x => x.Id == id).FirstOrDefault();
+            BusinessLiabilityListCreateViewModel liabilities = (BusinessLiabilityListCreateViewModel)HttpContext.Session["LIABILITIES"];
+            BusinessLiabilityCreateViewModel model = liabilities.Liabilities.Where(x => x.Id == id).FirstOrDefault();
             return PartialView(model);
         }
 
         public ActionResult _LiabilityUpdateForm2nd(int id)
         {
-            RealEstateLiabilityUpdateViewModel model = RealEstateLiabilityQueries.GetViewModelById(id);
+            BusinessLiabilityUpdateViewModel model = BusinessLiabilityQueries.GetViewModelById(id);
             return PartialView(model);
         }
 
         [HttpPost]
-        public ActionResult _LiabilityUpdateForm2nd(RealEstateLiabilityUpdateViewModel model)
+        public ActionResult _LiabilityUpdateForm2nd(BusinessLiabilityUpdateViewModel model)
         {
             double totalLiabilityValue = GetTotalLiabilityValueOfLiability(model.Id);
             if (model.Value < totalLiabilityValue && totalLiabilityValue > 0)
             {
-                ModelState.AddModelError("CompareRealEstateValueAndLiabilityValue", "Giá trị tổng số nợ không vượt quá giá trị bất động sản");
+                ModelState.AddModelError("CompareBusinessValueAndLiabilityValue", "Giá trị tổng số nợ không vượt quá giá trị góp vốn kinh doanh");
             }
 
             if (ModelState.IsValid)
             {
-                int result = RealEstateLiabilityQueries.UpdateRealEstateLiability(model);
+                int result = BusinessLiabilityQueries.UpdateBusinessLiability(model);
                 if (result > 0)
                 {
                     return Content("success");
@@ -146,21 +147,21 @@ namespace CashFlowManagement.Controllers
         }
 
         [HttpPost]
-        public ActionResult _LiabilityUpdateForm(RealEstateLiabilityCreateViewModel model)
+        public ActionResult _LiabilityUpdateForm(BusinessLiabilityCreateViewModel model)
         {
             if (ModelState.IsValid)
             {
-                RealEstateLiabilityListCreateViewModel liabilities = (RealEstateLiabilityListCreateViewModel)HttpContext.Session["LIABILITIES"];
-                RealEstateLiabilityCreateViewModel updateModel = liabilities.Liabilities.Where(x => x.Id == model.Id).FirstOrDefault();
-                
+                BusinessLiabilityListCreateViewModel liabilities = (BusinessLiabilityListCreateViewModel)HttpContext.Session["LIABILITIES"];
+                BusinessLiabilityCreateViewModel updateModel = liabilities.Liabilities.Where(x => x.Id == model.Id).FirstOrDefault();
+
                 updateModel.Value = model.Value;
 
-                RealEstateCreateViewModel realEstate = (RealEstateCreateViewModel)HttpContext.Session["REAL_ESTATE"];
+                BusinessCreateViewModel business = (BusinessCreateViewModel)HttpContext.Session["REAL_ESTATE"];
                 double totalLiabilityValue = liabilities != null ? liabilities.Liabilities.Sum(x => x.Value.HasValue ? x.Value.Value : 0) : 0;
 
-                if (realEstate.Value < totalLiabilityValue && totalLiabilityValue > 0)
+                if (business.Value < totalLiabilityValue && totalLiabilityValue > 0)
                 {
-                    ModelState.AddModelError("CompareRealEstateValueAndLiabilityValue", "Giá trị tổng số nợ không vượt quá giá trị bất động sản");
+                    ModelState.AddModelError("CompareBusinessValueAndLiabilityValue", "Giá trị tổng số nợ không vượt quá giá trị góp vốn kinh doanh");
                     return PartialView(model);
                 }
                 else
@@ -183,15 +184,15 @@ namespace CashFlowManagement.Controllers
 
         public ActionResult _LiabilityTable()
         {
-            RealEstateLiabilityListCreateViewModel liabilities = (RealEstateLiabilityListCreateViewModel)HttpContext.Session["LIABILITIES"];
-            RealEstateLiabilityListViewModel model = new RealEstateLiabilityListViewModel();
+            BusinessLiabilityListCreateViewModel liabilities = (BusinessLiabilityListCreateViewModel)HttpContext.Session["LIABILITIES"];
+            BusinessLiabilityListViewModel model = new BusinessLiabilityListViewModel();
             if (liabilities == null)
             {
-                liabilities = new RealEstateLiabilityListCreateViewModel();
+                liabilities = new BusinessLiabilityListCreateViewModel();
             }
             foreach (var liability in liabilities.Liabilities)
             {
-                RealEstateLiabilityViewModel viewModel = new RealEstateLiabilityViewModel();
+                BusinessLiabilityViewModel viewModel = new BusinessLiabilityViewModel();
                 viewModel.Id = liability.Id;
                 viewModel.Source = liability.Source;
                 viewModel.Value = liability.Value;
@@ -199,7 +200,7 @@ namespace CashFlowManagement.Controllers
                 viewModel.InterestRatePerX = Helper.GetInterestTypePerX(liability.InterestRatePerX);
                 viewModel.StartDate = liability.StartDate;
                 viewModel.EndDate = liability.EndDate;
-                viewModel.InterestType = RealEstateLiabilityQueries.Helper.GetInterestType(liability.InterestType);
+                viewModel.InterestType = BusinessLiabilityQueries.Helper.GetInterestType(liability.InterestType);
                 viewModel.PaymentPeriod = Helper.CalculateTimePeriod(viewModel.StartDate.Value, viewModel.EndDate.Value);
                 model.Liabilities.Add(viewModel);
             }
@@ -208,25 +209,25 @@ namespace CashFlowManagement.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken()]
-        public ActionResult _LiabilityForm(RealEstateLiabilityCreateViewModel model)
+        public ActionResult _LiabilityForm(BusinessLiabilityCreateViewModel model)
         {
             if (ModelState.IsValid)
             {
                 int id = 1;
-                RealEstateLiabilityListCreateViewModel liabilities = (RealEstateLiabilityListCreateViewModel)HttpContext.Session["LIABILITIES"];
-                RealEstateCreateViewModel realEstate = (RealEstateCreateViewModel)HttpContext.Session["REAL_ESTATE"];
+                BusinessLiabilityListCreateViewModel liabilities = (BusinessLiabilityListCreateViewModel)HttpContext.Session["LIABILITIES"];
+                BusinessCreateViewModel business = (BusinessCreateViewModel)HttpContext.Session["REAL_ESTATE"];
                 double totalLiabilityValue = liabilities != null ? liabilities.Liabilities.Sum(x => x.Value.HasValue ? x.Value.Value : 0) : 0;
 
-                if (realEstate.Value < totalLiabilityValue + model.Value && totalLiabilityValue + model.Value > 0)
+                if (business.Value < totalLiabilityValue + model.Value && totalLiabilityValue + model.Value > 0)
                 {
-                    ModelState.AddModelError("CompareRealEstateValueAndLiabilityValue", "Giá trị tổng số nợ không vượt quá giá trị bất động sản");
+                    ModelState.AddModelError("CompareBusinessValueAndLiabilityValue", "Giá trị tổng số nợ không vượt quá giá trị bất động sản");
                     return PartialView(model);
                 }
                 else
                 {
                     if (liabilities == null)
                     {
-                        liabilities = new RealEstateLiabilityListCreateViewModel();
+                        liabilities = new BusinessLiabilityListCreateViewModel();
                     }
                     else
                     {
@@ -248,22 +249,22 @@ namespace CashFlowManagement.Controllers
         {
             DateTime current = DateTime.Now;
 
-            RealEstateCreateViewModel model = (RealEstateCreateViewModel)HttpContext.Session["REAL_ESTATE"];
-            RealEstateViewModel viewModel = new RealEstateViewModel();
+            BusinessCreateViewModel model = (BusinessCreateViewModel)HttpContext.Session["REAL_ESTATE"];
+            BusinessViewModel viewModel = new BusinessViewModel();
             viewModel.Name = model.Name;
             viewModel.Value = model.Value.Value;
             viewModel.Income = model.Income.HasValue ? model.Income.Value : 0;
             viewModel.AnnualIncome = viewModel.Income * 12;
             viewModel.RentYield = viewModel.Income / viewModel.Value;
 
-            RealEstateLiabilityListCreateViewModel liabilities = (RealEstateLiabilityListCreateViewModel)HttpContext.Session["LIABILITIES"];
+            BusinessLiabilityListCreateViewModel liabilities = (BusinessLiabilityListCreateViewModel)HttpContext.Session["LIABILITIES"];
             viewModel.RowSpan = liabilities != null && liabilities.Liabilities.Count > 0 ? liabilities.Liabilities.Count() + 3 : 2;
 
             if (liabilities != null && liabilities.Liabilities.Count > 0)
             {
                 foreach (var liability in liabilities.Liabilities)
                 {
-                    RealEstateLiabilityViewModel liabilityViewModel = new RealEstateLiabilityViewModel();
+                    BusinessLiabilityViewModel liabilityViewModel = new BusinessLiabilityViewModel();
                     liabilityViewModel.Source = liability.Source;
                     liabilityViewModel.Value = liability.Value;
                     liabilityViewModel.InterestType = Helper.GetInterestType(liability.InterestType);
@@ -320,13 +321,13 @@ namespace CashFlowManagement.Controllers
         }
 
         [HttpPost]
-        public ActionResult Save(RealEstateCreateViewModel model)
+        public ActionResult Save(BusinessCreateViewModel model)
         {
             if (ModelState.IsValid)
             {
-                model.Liabilities = (RealEstateLiabilityListCreateViewModel)HttpContext.Session["LIABILITIES"];
+                model.Liabilities = (BusinessLiabilityListCreateViewModel)HttpContext.Session["LIABILITIES"];
                 string user = UserQueries.GetCurrentUsername();
-                int result = RealEstateQueries.CreateRealEstate(model, user);
+                int result = BusinessQueries.CreateBusiness(model, user);
                 if (result > 0)
                 {
                     return Content("success");
@@ -339,14 +340,14 @@ namespace CashFlowManagement.Controllers
             else
             {
                 model.IsInDept = false;
-                return PartialView("_RealEstateForm", model);
+                return PartialView("_BusinessForm", model);
             }
         }
 
         [HttpPost]
         public ActionResult DeleteTempLiability(int id)
         {
-            RealEstateLiabilityListCreateViewModel liabilities = (RealEstateLiabilityListCreateViewModel)HttpContext.Session["LIABILITIES"];
+            BusinessLiabilityListCreateViewModel liabilities = (BusinessLiabilityListCreateViewModel)HttpContext.Session["LIABILITIES"];
             liabilities.Liabilities.Remove(liabilities.Liabilities.Where(x => x.Id == id).FirstOrDefault());
             return Content("success");
         }
@@ -355,7 +356,7 @@ namespace CashFlowManagement.Controllers
         [HttpPost]
         public ActionResult DeleteLiability(int id)
         {
-            int result = RealEstateLiabilityQueries.DeleteRealEstateLiability(id);
+            int result = BusinessLiabilityQueries.DeleteBusinessLiability(id);
             if (result > 0)
             {
                 return Content("success");
@@ -368,9 +369,9 @@ namespace CashFlowManagement.Controllers
 
 
         [HttpPost]
-        public ActionResult DeleteRealEstate(int id)
+        public ActionResult DeleteBusiness(int id)
         {
-            int result = RealEstateQueries.DeleteRealEstate(id);
+            int result = BusinessQueries.DeleteBusiness(id);
             if (result > 0)
             {
                 return Content("success");

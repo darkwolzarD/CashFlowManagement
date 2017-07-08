@@ -14,10 +14,11 @@
             @Html.LabelFor(x => x.Value)
             @Html.EditorFor(x => x.Value, new { htmlAttributes = new { @class = "form-control input-sm input-mask" } })
             @Html.ValidationMessageFor(x => x.Value, null, new { @class = "text-danger" })
+            @Html.ValidationMessage("CompareRealEstateValueAndLiabilityValue", new { @class = "text-danger" })
         </div>
         <div class="form-group">
             @Html.LabelFor(x => x.InterestType)
-            @Html.DropDownListFor(x => x.InterestType, Constants.RealEstateInterestType(), new { @class = "form-control input-sm" })
+            @Html.DropDownListFor(x => x.InterestType, Constants.InterestType(), new { @class = "form-control input-sm" })
         </div>
         <div class="form-group">
             <div class="col-md-12" style="padding-left: 0; padding-right: 0;">
@@ -32,7 +33,7 @@
                 </div>
             </div>
             <div class="col-md-5" style="padding-left: 0px; padding-right: 0; margin-bottom: 15px;">
-                @Html.DropDownListFor(x => x.InterestRatePerX, Constants.RealEstateInterestPerX(), new { @class = "form-control input-sm" })
+                @Html.DropDownListFor(x => x.InterestRatePerX, Constants.InterestPerX(), new { @class = "form-control input-sm" })
             </div>
             @Html.ValidationMessageFor(x => x.InterestRate, null, new { @class = "text-danger" })
             @Html.ValidationMessageFor(x => x.InterestRatePerX, null, new { @class = "text-danger" })
