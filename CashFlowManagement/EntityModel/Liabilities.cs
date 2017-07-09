@@ -48,7 +48,7 @@ namespace CashFlowManagement.EntityModel
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Liabilities> Liabilities1 { get; set; }
         public virtual Liabilities Liabilities2 { get; set; }
-        public virtual Users Users { get; set; }
         public virtual StockTransactions StockTransactions { get; set; }
+        public virtual Users Users { get; set; }
     }
 }

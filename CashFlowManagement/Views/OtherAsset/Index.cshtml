@@ -1,0 +1,56 @@
+﻿@{
+    ViewBag.Title = "Quản lý tài sản khác";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="clear10"></div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="btn-group btn-breadcrumb">
+            <a href="#" class="btn btn-default"><i class="glyphicon glyphicon-home"></i></a>
+            <a href="#" class="btn btn-default">Tài sản</a>
+            <a href="#" class="btn btn-default">Tài sản khác</a>
+            <a href="#" class="btn btn-default">Chi tiết tài sản khác</a>
+        </div>
+    </div>
+</div>
+<div class="clear10"></div>
+<div class="row">
+    <div class="col-md-6">
+        <p style="font-size: 20px;">Quản lý tài sản khác</p>
+    </div>
+    <div class="col-md-6 text-right">
+        <button type="button" class="btn btn-success toggle-modal">
+            <span class="glyphicon glyphicon-home"></span>
+            Tạo tài sản
+        </button>
+    </div>
+</div>
+<div class="clear10"></div>
+<div class="row">
+    <div class="col-md-12" id="other-asset-table-div">
+        @{ Html.RenderAction("_OtherAssetTable", "OtherAsset"); }
+    </div>
+</div>
+
+<div id="modal">
+
+</div>
+
+<script type="text/javascript" src="~/Scripts/otherasset.js"></script>
+<script type="text/javascript">
+    var Url = {};
+    Url._LiabilityForm = '@Url.Action("_LiabilityForm", "OtherAsset")';
+    Url.LiabilityForm2nd = '@Url.Action("_LiabilityForm2nd", "OtherAsset")';
+    Url._LiabilityTable = '@Url.Action("_LiabilityTable", "OtherAsset")';
+    Url.CreateOtherAsset = '@Url.Action("_Create", "OtherAsset")';
+    Url.Confirm = '@Url.Action("_Confirm", "OtherAsset")';
+    Url.SaveOtherAsset = '@Url.Action("Save", "OtherAsset")';
+    Url.OtherAssetTable = '@Url.Action("_OtherAssetTable", "OtherAsset")';
+    Url.DeleteTempLiability = '@Url.Action("DeleteTempLiability", "OtherAsset")';
+    Url.DeleteLiability = '@Url.Action("DeleteLiability", "OtherAsset")';
+    Url.DeleteOtherAsset = '@Url.Action("DeleteOtherAsset", "OtherAsset")';
+    Url.LiabilityUpdateForm = '@Url.Action("_LiabilityUpdateForm", "OtherAsset")';
+    Url.LiabilityUpdateForm2nd = '@Url.Action("_LiabilityUpdateForm2nd", "OtherAsset")';
+    Url.OtherAssetUpdateForm = '@Url.Action("_OtherAssetUpdateForm", "OtherAsset")';
+</script>

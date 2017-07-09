@@ -18,6 +18,7 @@ namespace CashFlowManagement.EntityModel
         public Assets()
         {
             this.Assets1 = new HashSet<Assets>();
+            this.Expenses1 = new HashSet<Expenses>();
             this.History = new HashSet<History>();
             this.Incomes1 = new HashSet<Incomes>();
             this.Liabilities = new HashSet<Liabilities>();
@@ -51,6 +52,8 @@ namespace CashFlowManagement.EntityModel
         public virtual Expenses Expenses { get; set; }
         public virtual Incomes Incomes { get; set; }
         public virtual Users Users { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Expenses> Expenses1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<History> History { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

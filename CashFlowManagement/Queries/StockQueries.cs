@@ -1,0 +1,239 @@
+﻿using CashFlowManagement.EntityModel;
+using CashFlowManagement.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+
+namespace CashFlowManagement.Queries
+{
+    public class StockQueries
+    {
+        public static StockTransactionViewModel CreateViewModel(StockTransactions transaction)
+        {
+            Entities entities = new Entities();
+            StockTransactionViewModel model = new StockTransactionViewModel();
+            model.NumberOfStock = transaction.NumberOfShares;
+            model.SpotRice = transaction.SpotPrice;
+            model.StockValue = transaction.Value;
+            model.ExpectedDividend = transaction.ExpectedDividend;
+
+            var liabilities = entities.Liabilities.Where(x => x.TransactionId == transaction.Id);
+            foreach (var liability in liabilities)
+            {
+                StockLiabilityViewModel liabilityViewModel = new StockLiabilityViewModel();
+                liabilityViewModel.Id = liability.Id;
+                liabilityViewModel.Source = liability.Name;
+                liabilityViewModel.Value = liability.Value;
+                liabilityViewModel.InterestType = StockLiabilityQueries.Helper.GetInterestType(liability.InterestType.Value);
+                liabilityViewModel.InterestRatePerX = StockLiabilityQueries.Helper.GetInterestTypePerX(liability.InterestRatePerX);
+                liabilityViewModel.InterestRate = liability.InterestRate;
+                liabilityViewModel.StartDate = liability.StartDate.Value;
+                liabilityViewModel.EndDate = liability.EndDate.Value;
+                model.Liabilities.Liabilities.Add(liabilityViewModel);
+            }
+
+            return model;
+        }
+
+        public static StockListViewModel GetStockByUser(string username)
+        {
+            Entities entities = new Entities();
+            StockListViewModel result = new StockListViewModel();
+
+            var stocks = entities.Assets.Include("StockTransactions").Include("Liabilities").Where(x => x.Username.Equals(username)
+                                                      && x.AssetType == (int)Constants.Constants.ASSET_TYPE.STOCK
+                                                      && !x.DisabledDate.HasValue);
+
+            foreach (var stock in stocks)
+            {
+                StockViewModel stockViewModel = new StockViewModel();
+                stockViewModel.Id = stock.Id;
+                stockViewModel.Name = stock.AssetName;
+                stockViewModel.Note = stock.Note;
+
+                foreach (var transactions in stock.StockTransactions.Where(x => !x.DisabledDate.HasValue))
+                {
+                    StockTransactionViewModel transactionViewModel = StockQueries.CreateViewModel(transactions);
+                    stockViewModel.Transactions.Transactions.Add(transactionViewModel);
+                }
+
+                stockViewModel.TotalLiabilityValue = stockViewModel.Transactions.Transactions.Select(x => x.Liabilities.Liabilities).Sum(x => x.Sum(y => y.Value.HasValue ? y.Value.Value : 0));
+                stockViewModel.TotalOriginalPayment = stockViewModel.Transactions.Transactions.Select(x => x.Liabilities.Liabilities).Sum(x => x.Sum(y => y.MonthlyOriginalPayment));
+                stockViewModel.TotalInterestPayment = stockViewModel.Transactions.Transactions.Select(x => x.Liabilities.Liabilities).Sum(x => x.Sum(y => y.MonthlyInterestPayment));
+                stockViewModel.TotalMonthlyPayment = stockViewModel.Transactions.Transactions.Select(x => x.Liabilities.Liabilities).Sum(x => x.Sum(y => y.TotalMonthlyPayment));
+                stockViewModel.TotalPayment = stockViewModel.Transactions.Transactions.Select(x => x.Liabilities.Liabilities).Sum(x => x.Sum(y => y.TotalPayment));
+                stockViewModel.TotalRemainedValue = stockViewModel.Transactions.Transactions.Select(x => x.Liabilities.Liabilities).Sum(x => x.Sum(y => y.RemainedValue));
+                stockViewModel.TotalInterestRate = stockViewModel.TotalInterestPayment / stockViewModel.TotalLiabilityValue * 12;
+                stockViewModel.RowSpan = stockViewModel.Transactions.Transactions.Any() ? stockViewModel.Transactions.Transactions.Count() + stockViewModel.Transactions.Transactions.Select(x => x.Liabilities.Liabilities).Count() + 3 : 2;
+
+                result.Stocks.Add(stockViewModel);
+            }
+
+            result.TotalValue = result.Stocks.Select(x => x.Transactions.Transactions).Sum(x => x.Sum(y => y.StockValue.Value));
+
+            return result;
+        }
+
+        public static StockUpdateViewModel GetStockById(int id)
+        {
+            StockUpdateViewModel viewmodel = new StockUpdateViewModel();
+            Entities entities = new Entities();
+            var stock = entities.Assets.Where(x => x.Id == id).FirstOrDefault();
+            viewmodel.Id = stock.Id;
+            viewmodel.Name = stock.AssetName;
+            viewmodel.Note = stock.Note;
+
+            var transaction = entities.StockTransactions.Where(x => x.AssetId == id && !x.DisabledDate.HasValue).FirstOrDefault();
+            viewmodel.NumberOfStock = transaction.NumberOfShares;
+            viewmodel.SpotRice = transaction.SpotPrice;
+            viewmodel.StockValue = transaction.Value;
+            viewmodel.ExpectedDividend = transaction.ExpectedDividend;
+
+            var liability = entities.Liabilities.Where(x => x.TransactionId == transaction.Id && !x.DisabledDate.HasValue).FirstOrDefault();
+            viewmodel.Liabilities.Liabilities.Add(new StockLiabilityCreateViewModel
+            {
+                Id = liability.Id,
+                Value = liability.Value,
+                Source = liability.Name,
+                InterestRate = liability.InterestRate,
+                InterestType = liability.InterestType.Value,
+                InterestRatePerX = liability.InterestRatePerX,
+                StartDate = liability.StartDate,
+                EndDate = liability.EndDate
+            });
+            return viewmodel;
+        }
+
+        public static double GetStockValue(int id)
+        {
+            Entities entities = new Entities();
+            var stock = entities.Assets.Where(x => x.Id == id).FirstOrDefault();
+            return stock.Value;
+        }
+
+        public static int CreateStock(StockCreateViewModel model, string username)
+        {
+            int result = 0;
+            DateTime current = DateTime.Now;
+            Entities entities = new Entities();
+
+            //Create stock
+            Assets stock = new Assets();
+            stock.AssetName = model.Name;
+            stock.Note = model.Note;
+            stock.CreatedDate = current;
+            stock.CreatedBy = Constants.Constants.USER;
+            stock.AssetType = (int)Constants.Constants.ASSET_TYPE.STOCK;
+            stock.ObtainedBy = (int)Constants.Constants.OBTAIN_BY.CREATE;
+            stock.Username = username;
+
+            StockTransactions transaction = new StockTransactions();
+            transaction.Name = "Tạo cổ phiếu " + stock.AssetName;
+            transaction.NumberOfShares = model.NumberOfStock.Value;
+            transaction.SpotPrice = model.SpotRice.Value;
+            transaction.Value = model.StockValue.Value;
+            transaction.ExpectedDividend = model.ExpectedDividend.Value;
+            transaction.Username = username;
+            transaction.TransactionDate = current;
+            transaction.TransactionType = (int)Constants.Constants.TRANSACTION_TYPE.CREATE;
+            transaction.CreatedDate = current;
+            transaction.CreatedBy = Constants.Constants.USER;
+
+            if (model.IsInDebt)
+            {
+                if (model.Liabilities != null && model.Liabilities.Liabilities.Count > 0)
+                {
+                    foreach (var liabilityViewModel in model.Liabilities.Liabilities)
+                    {
+                        Liabilities liability = new Liabilities();
+                        liability.Name = liabilityViewModel.Source;
+                        liability.Value = liabilityViewModel.Value.Value;
+                        liability.InterestType = liabilityViewModel.InterestType;
+                        liability.InterestRate = liabilityViewModel.InterestRate.Value;
+                        liability.InterestRatePerX = liabilityViewModel.InterestRatePerX;
+                        liability.StartDate = liabilityViewModel.StartDate.Value;
+                        liability.EndDate = liabilityViewModel.EndDate.Value;
+                        liability.LiabilityType = (int)Constants.Constants.LIABILITY_TYPE.STOCK;
+                        liability.CreatedDate = current;
+                        liability.CreatedBy = Constants.Constants.USER;
+                        liability.Username = username;
+                        transaction.Liabilities.Add(liability);
+                    }
+                }
+            }
+
+            stock.StockTransactions.Add(transaction);
+
+            entities.Assets.Add(stock);
+            result = entities.SaveChanges();
+            return result;
+        }
+
+        public static int UpdateStock(StockUpdateViewModel model)
+        {
+            Entities entities = new Entities();
+            var stock = entities.Assets.Where(x => x.Id == model.Id).FirstOrDefault();
+
+            stock.AssetName = model.Name;
+            stock.Note = model.Note;
+
+            StockTransactions transaction = new StockTransactions();
+            transaction.Name = "Tạo cổ phiếu " + stock.AssetName;
+            transaction.NumberOfShares = model.NumberOfStock.Value;
+            transaction.SpotPrice = model.SpotRice.Value;
+            transaction.Value = model.StockValue.Value;
+            transaction.ExpectedDividend = model.ExpectedDividend.Value;
+
+            if (model.IsInDebt)
+            {
+                if (model.Liabilities != null && model.Liabilities.Liabilities.Count > 0)
+                {
+                    foreach (var liabilityViewModel in model.Liabilities.Liabilities)
+                    {
+                        Liabilities liability = new Liabilities();
+                        liability.Name = liabilityViewModel.Source;
+                        liability.Value = liabilityViewModel.Value.Value;
+                        liability.InterestType = liabilityViewModel.InterestType;
+                        liability.InterestRate = liabilityViewModel.InterestRate.Value;
+                        liability.InterestRatePerX = liabilityViewModel.InterestRatePerX;
+                        liability.StartDate = liabilityViewModel.StartDate.Value;
+                        liability.EndDate = liabilityViewModel.EndDate.Value;
+                        transaction.Liabilities.Add(liability);
+                    }
+                }
+            }
+
+            return entities.SaveChanges();
+        }
+
+        public static int DeleteStock(int id)
+        {
+            DateTime current = DateTime.Now;
+            Entities entities = new Entities();
+            var stock = entities.Assets.Where(x => x.Id == id).FirstOrDefault();
+            stock.DisabledDate = current;
+            stock.DisabledBy = Constants.Constants.USER;
+            entities.Assets.Attach(stock);
+            entities.Entry(stock).State = System.Data.Entity.EntityState.Modified;
+
+            foreach (var transaction in entities.StockTransactions.Where(x => x.AssetId == id && !x.DisabledDate.HasValue))
+            {
+                transaction.DisabledDate = current;
+                transaction.DisabledBy = Constants.Constants.USER;
+                entities.StockTransactions.Attach(transaction);
+                entities.Entry(transaction).State = System.Data.Entity.EntityState.Modified;
+
+                foreach (var liability in entities.Liabilities.Where(x => x.TransactionId == transaction.Id && !x.DisabledDate.HasValue))
+                {
+                    liability.DisabledDate = current;
+                    liability.DisabledBy = Constants.Constants.USER;
+                    entities.Liabilities.Attach(liability);
+                    entities.Entry(liability).State = System.Data.Entity.EntityState.Modified;
+                }
+            }
+
+            return entities.SaveChanges();
+        }
+    }
+}

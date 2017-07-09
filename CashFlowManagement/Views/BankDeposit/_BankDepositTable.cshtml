@@ -1,0 +1,61 @@
+﻿@model CashFlowManagement.Models.BankDepositListViewModel
+
+<div class="row bank-deposit-table-div">
+    <table class="table table-responsive">
+        <thead>
+            <tr>
+                <th>Tài khoản tiết kiệm</th>
+                <th class="text-right">Ngày gửi tiết kiệm</th>
+                <th class="text-right">Ngày đáo hạn</th>
+                <th class="text-right">Thu nhập tháng</th>
+                <th class="text-right">Thu nhập năm</th>
+                <th class="text-right">Tổng vốn</th>
+                <th class="text-right">Lãi suất tiền gửi</th>
+                <th>Kiểu nhận lãi</th>
+                <th class="text-right">Kỳ hạn</th>
+                <th>Ghi chú</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="text-danger"><strong>Tổng</strong></td>
+                <td></td>
+                <td></td>
+                <td class="text-danger text-right"><strong>@Html.DisplayFor(x => x.TotalIncome)</strong></td>
+                <td class="text-danger text-right"><strong>@Html.DisplayFor(x => x.TotalAnnualIncome)</strong></td>
+                <td class="text-danger text-right"><strong>@Html.DisplayFor(x => x.TotalValue)</strong></td>
+                <td class="text-danger text-right"><strong>@Html.DisplayFor(x => x.TotalInterestRate)</strong></td>
+                <td></td>
+                <td></td>
+            </tr>
+            @if (Model.BankDeposits.Any())
+            {
+                foreach (var item in Model.BankDeposits)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(x => item.Name)<br />
+                            <a href="#" title="Cập nhật tài khoản tiết kiệm" class="update-bank-deposit" data-value="@Html.DisplayFor(x => item.Id)"><span class="glyphicon glyphicon-edit text-success" style="font-size: 14px;"></span></a>
+                            <a href="#" title="Xóa tài khoản tiết kiệm" class="delete-bank-deposit" data-value="@Html.DisplayFor(x => item.Id)"><span class="glyphicon glyphicon-remove text-danger" style="font-size: 14px;"></span></a>
+                        </td>
+                        <td class="text-right">@Html.DisplayFor(x => item.StartDate)</td>
+                        <td class="text-right">@Html.DisplayFor(x => item.EndDate)</td>
+                        <td class="text-right">@Html.DisplayFor(x => item.Income)</td>
+                        <td class="text-right">@Html.DisplayFor(x => item.AnnualIncome)</td>
+                        <td class="text-right">@Html.DisplayFor(x => item.Value)</td>
+                        <td class="text-right">@Html.DisplayFor(x => item.InterestRate)</td>
+                        <td class="text-right">@Html.DisplayFor(x => item.InterestObtainWay)</td>
+                        <td class="text-right">@Html.DisplayFor(x => item.PaymentPeriod)</td>
+                        <td>@Html.DisplayFor(x => item.Note)</td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td class="text-center" colspan="10">Chưa có tài khoản tiết kiệm</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

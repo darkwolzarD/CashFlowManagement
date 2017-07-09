@@ -22,7 +22,7 @@ namespace CashFlowManagement.Controllers
         {
             BusinessCreateViewModel model = new BusinessCreateViewModel();
             HttpContext.Session["LIABILITIES"] = null;
-            HttpContext.Session["REAL_ESTATE"] = null;
+            HttpContext.Session["BUSINESS"] = null;
             return PartialView(model);
         }
 
@@ -43,7 +43,7 @@ namespace CashFlowManagement.Controllers
 
             if (ModelState.IsValid)
             {
-                HttpContext.Session["REAL_ESTATE"] = model;
+                HttpContext.Session["BUSINESS"] = model;
                 return Content("success");
             }
             else
@@ -54,7 +54,7 @@ namespace CashFlowManagement.Controllers
 
         public ActionResult _BusinessForm()
         {
-            BusinessCreateViewModel model = (BusinessCreateViewModel)HttpContext.Session["REAL_ESTATE"];
+            BusinessCreateViewModel model = (BusinessCreateViewModel)HttpContext.Session["BUSINESS"];
             if (model == null)
             {
                 model = new BusinessCreateViewModel();
@@ -118,8 +118,8 @@ namespace CashFlowManagement.Controllers
         public ActionResult _LiabilityForm2nd(BusinessLiabilityCreateViewModel model)
         {
             double totalLiabilityValue = GetLiabilityValueOfBusiness(model.AssetId);
-            double BusinessValue = BusinessQueries.GetBusinessValue(model.AssetId);
-            if (BusinessValue < totalLiabilityValue + model.Value && totalLiabilityValue + model.Value > 0)
+            double businessValue = BusinessQueries.GetBusinessValue(model.AssetId);
+            if (businessValue < totalLiabilityValue + model.Value && totalLiabilityValue + model.Value > 0)
             {
                 ModelState.AddModelError("CompareBusinessValueAndLiabilityValue", "Giá trị tổng số nợ không vượt quá giá trị bất động sản");
             }
@@ -158,8 +158,10 @@ namespace CashFlowManagement.Controllers
         [HttpPost]
         public ActionResult _LiabilityUpdateForm2nd(BusinessLiabilityUpdateViewModel model)
         {
-            double totalLiabilityValue = GetTotalLiabilityValueOfLiability(model.Id);
-            if (model.Value < totalLiabilityValue && totalLiabilityValue > 0)
+            double totalLiabilityValue = GetLiabilityValueOfBusiness(model.AssetId);
+            double liabilityValue = GetLiabilityValue(model.Id);
+            double businessValue = BusinessQueries.GetBusinessValue(model.AssetId);
+            if (businessValue < totalLiabilityValue - liabilityValue + model.Value && totalLiabilityValue - liabilityValue + model.Value > 0)
             {
                 ModelState.AddModelError("CompareBusinessValueAndLiabilityValue", "Giá trị tổng số nợ không vượt quá giá trị góp vốn kinh doanh");
             }
@@ -192,7 +194,7 @@ namespace CashFlowManagement.Controllers
 
                 updateModel.Value = model.Value;
 
-                BusinessCreateViewModel business = (BusinessCreateViewModel)HttpContext.Session["REAL_ESTATE"];
+                BusinessCreateViewModel business = (BusinessCreateViewModel)HttpContext.Session["BUSINESS"];
                 double totalLiabilityValue = liabilities != null ? liabilities.Liabilities.Sum(x => x.Value.HasValue ? x.Value.Value : 0) : 0;
 
                 if (business.Value < totalLiabilityValue && totalLiabilityValue > 0)
@@ -251,7 +253,7 @@ namespace CashFlowManagement.Controllers
             {
                 int id = 1;
                 BusinessLiabilityListCreateViewModel liabilities = (BusinessLiabilityListCreateViewModel)HttpContext.Session["LIABILITIES"];
-                BusinessCreateViewModel business = (BusinessCreateViewModel)HttpContext.Session["REAL_ESTATE"];
+                BusinessCreateViewModel business = (BusinessCreateViewModel)HttpContext.Session["BUSINESS"];
                 double totalLiabilityValue = liabilities != null ? liabilities.Liabilities.Sum(x => x.Value.HasValue ? x.Value.Value : 0) : 0;
 
                 if (business.Value < totalLiabilityValue + model.Value && totalLiabilityValue + model.Value > 0)
@@ -267,7 +269,14 @@ namespace CashFlowManagement.Controllers
                     }
                     else
                     {
-                        id = liabilities.Liabilities.Max(x => x.Id) + 1;
+                        if (liabilities.Liabilities.Count > 0)
+                        {
+                            id = liabilities.Liabilities.Max(x => x.Id) + 1;
+                        }
+                        else
+                        {
+                            id = 1;
+                        }
                     }
                     model.Id = id;
                     liabilities.Liabilities.Add(model);
@@ -285,7 +294,7 @@ namespace CashFlowManagement.Controllers
         {
             DateTime current = DateTime.Now;
 
-            BusinessCreateViewModel model = (BusinessCreateViewModel)HttpContext.Session["REAL_ESTATE"];
+            BusinessCreateViewModel model = (BusinessCreateViewModel)HttpContext.Session["BUSINESS"];
             BusinessViewModel viewModel = new BusinessViewModel();
             viewModel.Name = model.Name;
             viewModel.Value = model.Value.Value;

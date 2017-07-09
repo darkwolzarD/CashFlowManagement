@@ -1,0 +1,27 @@
+﻿<div id="stock-create-modal" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="true">
+    <div class="modal-dialog" style="width: 400px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" style="font-size: 26px !important; color: red !important">&times;</button>
+                <p style="font-size: 16px; margin-bottom: 0px;">Khởi tạo cổ phiếu</p>
+
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    @{ Html.RenderAction("_StockForm"); }
+                    <div id="liability-div" class="col-md-12 hidden">
+                        @{ Html.RenderAction("_LiabilityForm"); }
+                        @{ Html.RenderAction("_LiabilityTable"); }
+                    </div>
+                    <div id="confirm-stock-info" class="col-md-12 hidden"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success create-stock">
+                    <span class="glyphicon glyphicon-ok"></span>
+                    Tạo cổ phiếu
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

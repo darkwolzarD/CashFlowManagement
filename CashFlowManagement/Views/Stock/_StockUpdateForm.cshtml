@@ -1,0 +1,69 @@
+﻿@model CashFlowManagement.Models.StockUpdateViewModel
+@{
+    Layout = null;
+}
+
+
+<div id="stock-update-modal" class="modal fade" role="dialog" data-backdrop="static">
+    <div class="modal-dialog" style="width: 400px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" style="font-size: 26px !important; color: red !important">&times;</button>
+                <p style="font-size: 16px; margin-bottom: 0px;">Cập nhật cổ phiếu</p>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div id="stock-div" class="col-md-12">
+                        @using (Html.BeginForm("_StockUpdateForm", "Stock", FormMethod.Post, new { @id = "stock-update-form" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            <div class="form-group">
+                                @Html.HiddenFor(x => x.Id)
+                                @Html.LabelFor(x => x.Name)
+                                @Html.TextBoxFor(x => x.Name, new { @class = "form-control input-sm" })
+                                @Html.ValidationMessageFor(x => x.Name, null, new { @class = "text-danger" })
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(x => x.NumberOfStock)
+                                @Html.EditorFor(x => x.NumberOfStock, new { htmlAttributes = new { @class = "form-control input-mask input-sm" } })
+                                @Html.ValidationMessageFor(x => x.NumberOfStock, null, new { @class = "text-danger" })
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(x => x.SpotRice)
+                                @Html.EditorFor(x => x.SpotRice, new { htmlAttributes = new { @class = "form-control input-mask input-sm" } })
+                                @Html.ValidationMessageFor(x => x.SpotRice, null, new { @class = "text-danger" })
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(x => x.StockValue)
+                                @Html.EditorFor(x => x.StockValue, new { htmlAttributes = new { @class = "form-control input-mask input-sm" } })
+                                @Html.ValidationMessageFor(x => x.StockValue, null, new { @class = "text-danger" })
+                                @Html.ValidationMessage("CompareStockValueAndLiabilityValue", new { @class = "text-danger" })
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(x => x.ExpectedDividend)
+                                <div class="input-group input-group-sm">
+                                    @Html.EditorFor(x => x.ExpectedDividend, new { htmlAttributes = new { @class = "form-control input-sm percentage" } })
+                                    <div class="input-group-addon">
+                                        <span class="fa fa-percent"></span>
+                                    </div>
+                                </div>
+                                @Html.ValidationMessageFor(x => x.ExpectedDividend, null, new { @class = "text-danger" })
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(x => x.Note)
+                                @Html.EditorFor(x => x.Note, new { htmlAttributes = new { @class = "form-control input-mask" } })
+                                @Html.ValidationMessageFor(x => x.Note, null, new { @class = "text-danger" })
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success save-update-stock">
+                    <span class="glyphicon glyphicon-ok"></span>
+                    Cập nhật cổ phiếu
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,50 @@
+﻿@{
+    ViewBag.Title = "Quản lý tài khoản tiết kiệm";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="clear10"></div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="btn-group btn-breadcrumb">
+            <a href="#" class="btn btn-default"><i class="glyphicon glyphicon-home"></i></a>
+            <a href="#" class="btn btn-default">Tài sản</a>
+            <a href="#" class="btn btn-default">Tài khoản tiết kiệm</a>
+            <a href="#" class="btn btn-default">Chi tiết các tài khoản tiết kiệm</a>
+        </div>
+    </div>
+</div>
+<div class="clear10"></div>
+<div class="row">
+    <div class="col-md-6">
+        <p style="font-size: 20px;">Quản lý tài khoản tiết kiệm</p>
+    </div>
+    <div class="col-md-6 text-right">
+        <button type="button" class="btn btn-success toggle-modal">
+            <span class="glyphicon glyphicon-home"></span>
+            Tạo tài khoản tiết kiệm
+        </button>
+    </div>
+</div>
+<div class="clear10"></div>
+<div class="row">
+    <div class="col-md-12" id="bank-deposit-table-div">
+        @{ Html.RenderAction("_BankDepositTable", "BankDeposit"); }
+    </div>
+</div>
+
+<div id="modal">
+
+</div>
+
+<script type="text/javascript" src="~/Scripts/bankdeposit.js"></script>
+<script type="text/javascript">
+    var Url = {};
+    Url.BankDepositForm = '@Url.Action("_BankDepositForm", "BankDeposit")';
+    Url.BankDepositTable = '@Url.Action("_BankDepositTable", "BankDeposit")';
+    Url.CreateBankDeposit = '@Url.Action("_Create", "BankDeposit")';
+    Url.SaveBankDeposit = '@Url.Action("Save", "BankDeposit")';
+    Url.BankDepositTable = '@Url.Action("_BankDepositTable", "BankDeposit")';
+    Url.DeleteBankDeposit = '@Url.Action("DeleteBankDeposit", "BankDeposit")';
+    Url.BankDepositUpdateForm = '@Url.Action("_BankDepositUpdateForm", "BankDeposit")';
+</script>

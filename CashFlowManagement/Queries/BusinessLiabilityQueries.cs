@@ -22,6 +22,7 @@ namespace CashFlowManagement.Queries
             liabilityViewModel.InterestRate = businessLiability.InterestRate;
             liabilityViewModel.StartDate = businessLiability.StartDate.Value;
             liabilityViewModel.EndDate = businessLiability.EndDate.Value;
+            liabilityViewModel.AssetId = businessLiability.AssetId.Value;
             return liabilityViewModel;
         }
 
@@ -138,6 +139,11 @@ namespace CashFlowManagement.Queries
             return entities.SaveChanges();
         }
 
+        public static double GetLiabilityValue(int liabilityid)
+        {
+            Entities entities = new Entities();
+            return entities.Liabilities.Where(x => x.Id == liabilityid && !x.DisabledDate.HasValue).FirstOrDefault().Value;
+        }
         public static double GetLiabilityValueOfBusiness(int businessId)
         {
             Entities entities = new Entities();

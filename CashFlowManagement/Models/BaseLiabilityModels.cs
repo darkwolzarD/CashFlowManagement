@@ -99,23 +99,5 @@ namespace CashFlowManagement.Models
             public string Status { get; set; }
             public string StatusCode { get; set; }
         }
-
-        public class LiabilityListViewModel
-        {
-            public List<LiabilityViewModel> Liabilities { get; set; }
-            public LiabilityListViewModel()
-            {
-                Liabilities = new List<LiabilityViewModel>();
-            }
-        }
-
-        public class LiabilityListCreateViewModel
-        {
-            public List<LiabilityCreateViewModel> Liabilities { get; set; }
-            public LiabilityListCreateViewModel()
-            {
-                Liabilities = new List<LiabilityCreateViewModel>();
-            }
-        }
     }
 }

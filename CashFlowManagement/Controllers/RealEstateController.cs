@@ -157,8 +157,10 @@ namespace CashFlowManagement.Controllers
         [HttpPost]
         public ActionResult _LiabilityUpdateForm2nd(RealEstateLiabilityUpdateViewModel model)
         {
-            double totalLiabilityValue = GetTotalLiabilityValueOfLiability(model.Id);
-            if (model.Value < totalLiabilityValue && totalLiabilityValue > 0)
+            double totalLiabilityValue = GetLiabilityValueOfRealEstate(model.AssetId);
+            double liabilityValue = GetLiabilityValue(model.Id);
+            double realEstateValue = RealEstateQueries.GetRealEstateValue(model.AssetId);
+            if (realEstateValue < totalLiabilityValue - liabilityValue + model.Value && totalLiabilityValue - liabilityValue + model.Value > 0)
             {
                 ModelState.AddModelError("CompareRealEstateValueAndLiabilityValue", "Giá trị tổng số nợ không vượt quá giá trị bất động sản");
             }
@@ -266,7 +268,14 @@ namespace CashFlowManagement.Controllers
                     }
                     else
                     {
-                        id = liabilities.Liabilities.Max(x => x.Id) + 1;
+                        if (liabilities.Liabilities.Count > 0)
+                        {
+                            id = liabilities.Liabilities.Max(x => x.Id) + 1;
+                        }
+                        else
+                        {
+                            id = 1;
+                        }
                     }
                     model.Id = id;
                     liabilities.Liabilities.Add(model);

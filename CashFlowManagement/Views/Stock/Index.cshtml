@@ -1,0 +1,56 @@
+﻿@{
+    ViewBag.Title = "Quản lý cố phiếu";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="clear10"></div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="btn-group btn-breadcrumb">
+            <a href="#" class="btn btn-default"><i class="glyphicon glyphicon-home"></i></a>
+            <a href="#" class="btn btn-default">Tài sản</a>
+            <a href="#" class="btn btn-default">Cổ phiếu</a>
+            <a href="#" class="btn btn-default">Chi tiết cổ phiếu</a>
+        </div>
+    </div>
+</div>
+<div class="clear10"></div>
+<div class="row">
+    <div class="col-md-6">
+        <p style="font-size: 20px;">Quản lý cổ phiếu</p>
+    </div>
+    <div class="col-md-6 text-right">
+        <button type="button" class="btn btn-success toggle-modal">
+            <span class="glyphicon glyphicon-home"></span>
+            Tạo cổ phiếu
+        </button>
+    </div>
+</div>
+<div class="clear10"></div>
+<div class="row">
+    <div class="col-md-12" id="stock-table-div">
+        @{ Html.RenderAction("_StockTable", "Stock"); }
+    </div>
+</div>
+
+<div id="modal">
+
+</div>
+
+<script type="text/javascript" src="~/Scripts/stock.js"></script>
+<script type="text/javascript">
+    var Url = {};
+    Url._LiabilityForm = '@Url.Action("_LiabilityForm", "Stock")';
+    Url.LiabilityForm2nd = '@Url.Action("_LiabilityForm2nd", "Stock")';
+    Url._LiabilityTable = '@Url.Action("_LiabilityTable", "Stock")';
+    Url.CreateStock = '@Url.Action("_Create", "Stock")';
+    Url.Confirm = '@Url.Action("_Confirm", "Stock")';
+    Url.SaveStock = '@Url.Action("Save", "Stock")';
+    Url.StockTable = '@Url.Action("_StockTable", "Stock")';
+    Url.DeleteTempLiability = '@Url.Action("DeleteTempLiability", "Stock")';
+    Url.DeleteLiability = '@Url.Action("DeleteLiability", "Stock")';
+    Url.DeleteStock = '@Url.Action("DeleteStock", "Stock")';
+    Url.LiabilityUpdateForm = '@Url.Action("_LiabilityUpdateForm", "Stock")';
+    Url.LiabilityUpdateForm2nd = '@Url.Action("_LiabilityUpdateForm2nd", "Stock")';
+    Url.StockUpdateForm = '@Url.Action("_StockUpdateForm", "Stock")';
+</script>

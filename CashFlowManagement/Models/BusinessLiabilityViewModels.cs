@@ -8,13 +8,27 @@ using static CashFlowManagement.Models.BaseLiabilityModels;
 
 namespace CashFlowManagement.Models
 {
-    public class BusinessLiabilityCreateViewModel : LiabilityViewModel { }
+    public class BusinessLiabilityCreateViewModel : LiabilityCreateViewModel { }
 
-    public class BusinessLiabilityUpdateViewModel : LiabilityCreateViewModel { }
+    public class BusinessLiabilityUpdateViewModel : LiabilityUpdateViewModel { }
 
     public class BusinessLiabilityViewModel : LiabilityViewModel { }
 
-    public class BusinessLiabilityListViewModel : LiabilityListViewModel { }
+    public class BusinessLiabilityListViewModel
+    {
+        public List<BusinessLiabilityViewModel> Liabilities { get; set; }
+        public BusinessLiabilityListViewModel()
+        {
+            Liabilities = new List<BusinessLiabilityViewModel>();
+        }
+    }
 
-    public class BusinessLiabilityListCreateViewModel : LiabilityListCreateViewModel { }
+    public class BusinessLiabilityListCreateViewModel
+    {
+        public List<BusinessLiabilityCreateViewModel> Liabilities { get; set; }
+        public BusinessLiabilityListCreateViewModel()
+        {
+            Liabilities = new List<BusinessLiabilityCreateViewModel>();
+        }
+    }
 }

@@ -1,0 +1,33 @@
+﻿@model CashFlowManagement.Models.OtherAssetCreateViewModel
+@{
+    Layout = null;
+}
+
+<div id="business-div" class="col-md-12">
+    @using (Html.BeginForm("Create", "OtherAsset", FormMethod.Post, new { @id = "other-asset-form" }))
+    {
+        @Html.AntiForgeryToken()
+        <div class="form-group">
+            @Html.LabelFor(x => x.Name)
+            @Html.TextBoxFor(x => x.Name, new { @class = "form-control input-sm" })
+            @Html.ValidationMessageFor(x => x.Name, null, new { @class = "text-danger" })
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(x => x.Value)
+            @Html.EditorFor(x => x.Value, new { htmlAttributes = new { @class = "form-control input-mask input-sm" } })
+            @Html.ValidationMessageFor(x => x.Value, null, new { @class = "text-danger" })
+            @Html.ValidationMessage("CompareOtherAssetValueAndLiabilityValue", new { @class = "text-danger" })
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(x => x.Income)
+            @Html.EditorFor(x => x.Income, new { htmlAttributes = new { @class = "form-control input-mask input-sm", placeholder = "Không bắt buộc" } })
+            @Html.ValidationMessageFor(x => x.Income, null, new { @class = "text-danger" })
+        </div>
+        <div class="checkbox">
+            <label class="text-danger">
+                @Html.CheckBoxFor(x => x.IsInDebt)
+                <strong>Bạn có vay nợ để mua tài sản !!!</strong>
+            </label>
+        </div>
+    }
+</div>

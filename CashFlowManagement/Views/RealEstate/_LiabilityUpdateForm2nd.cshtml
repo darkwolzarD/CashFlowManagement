@@ -19,6 +19,7 @@
                             @Html.AntiForgeryToken()
                             <div class="form-group">
                                 @Html.HiddenFor(x => x.Id)
+                                @Html.HiddenFor(x => x.AssetId)
                                 @Html.LabelFor(x => x.Source)
                                 @Html.TextBoxFor(x => x.Source, new { @class = "form-control input-sm" })
                                 @Html.ValidationMessageFor(x => x.Source, null, new { @class = "text-danger" })

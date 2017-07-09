@@ -12,7 +12,7 @@
             </div>
             <div class="modal-body">
                 <div class="row">
-                    <div id="real-estate-div" class="col-md-12">
+                    <div id="business-div" class="col-md-12">
                         @using (Html.BeginForm("_BusinessUpdateForm", "Business", FormMethod.Post, new { @id = "business-update-form" }))
                         {
                             @Html.AntiForgeryToken()
@@ -26,7 +26,7 @@
                                 @Html.LabelFor(x => x.Value)
                                 @Html.EditorFor(x => x.Value, new { htmlAttributes = new { @class = "form-control input-mask input-sm" } })
                                 @Html.ValidationMessageFor(x => x.Value, null, new { @class = "text-danger" })
-                                @Html.ValidationMessage("CompareRealEstateValueAndLiabilityValue", new { @class = "text-danger" })
+                                @Html.ValidationMessage("CompareBusinessValueAndLiabilityValue", new { @class = "text-danger" })
                             </div>
                             <div class="form-group">
                                 @Html.LabelFor(x => x.Income)

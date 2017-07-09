@@ -1,0 +1,150 @@
+﻿@model CashFlowManagement.Models.StockListViewModel
+<table class="table table-condensed table-responsive" id="stock-table">
+    <thead>
+        <tr>
+            <th>Mã cổ phiếu	</th>
+            <th class="text-right">Số lượng cổ phiếu</th>
+            <th class="text-right">Giá cổ phiếu</th>
+            <th class="text-right">Trung bình giá giao dịch</th>
+            <th class="text-right">Tổng giá trị vốn</th>
+            <th class="text-right">Cổ tức mong đợi</th>
+            <th>Ghi chú</th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Stocks.Any())
+        {
+            <tr>
+                <td><strong class="text-danger">Tổng</strong></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td class="text-right"><strong class="text-danger">@Html.DisplayFor(x => x.TotalValue)</strong></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            foreach (var stock in Model.Stocks)
+            {
+                <tr>
+                    <td rowspan="@Html.DisplayFor(x => stock.RowSpan)" style="vertical-align: top !important;">
+                        @Html.DisplayFor(x => stock.Name)<br />
+                        <a href="#" title="Cập nhật cổ phiếu">
+                            <span class="glyphicon glyphicon-edit text-success update-stock" data-value="@Html.DisplayFor(x => stock.Id)" style="font-size: 14px"></span>
+                        </a>
+                        <a href="#" title="Xóa cổ phiếu">
+                            <span class="glyphicon glyphicon-remove text-danger delete-stock" data-value="@Html.DisplayFor(x => stock.Id)" style="font-size: 14px"></span>
+                        </a>
+                        <a href="#" title="Thêm nợ">
+                            <span class="fa fa-money text-primary add-stock-liability" data-value="@Html.DisplayFor(x => stock.Id)" style="font-size: 14px"></span>
+                        </a>
+                    </td>
+                </tr>
+                foreach (var transaction in stock.Transactions.Transactions)
+                    {
+                    <tr>
+                        <td class="text-right">@Html.DisplayFor(x => transaction.NumberOfStock)</td>
+                        <td class="text-right">@Html.DisplayFor(x => transaction.SpotRice)</td>
+                        <td class="text-right"></td>
+                        <td class="text-right">@Html.DisplayFor(x => transaction.StockValue)</td>
+                        <td class="text-right">@Html.DisplayFor(x => transaction.ExpectedDividend)</td>
+                        <td>@Html.DisplayFor(x => stock.Note)</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    if (transaction.Liabilities.Liabilities.Any())
+                    {
+                        <tr>
+                            <th>Nguồn vay nợ</th>
+                            <th>Loại lãi suất</th>
+                            <th class="text-right">Giá trị nợ</th>
+                            <th>Lãi vay</th>
+                            <th class="text-right">Ngày vay</th>
+                            <th class="text-right">Ngày hết nợ</th>
+                            <th class="text-right">Số tháng trả</th>
+                            <th class="text-right">Trả gốc tháng</th>
+                            <th class="text-right">Trả lãi tháng</th>
+                            <th class="text-right">Tổng trả tháng</th>
+                            <th class="text-right">Tổng trả năm</th>
+                            <th class="text-right">Nợ còn phải trả</th>
+                            <th>Trạng thái</th>
+                        </tr>
+                        <tr>
+                            <td><strong class="text-danger">Tổng</strong></td>
+                            <td></td>
+                            <td class="text-right"><strong class="text-danger">@Html.DisplayFor(x => stock.TotalLiabilityValue)</strong></td>
+                            <td class="text-right"><strong class="text-danger">@*@Html.DisplayFor(x => stock.TotalInterestRate)*@</strong></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td class="text-right"><strong class="text-danger">@Html.DisplayFor(x => stock.TotalOriginalPayment)</strong></td>
+                            <td class="text-right"><strong class="text-danger">@Html.DisplayFor(x => stock.TotalInterestPayment)</strong></td>
+                            <td class="text-right"><strong class="text-danger">@Html.DisplayFor(x => stock.TotalMonthlyPayment)</strong></td>
+                            <td class="text-right"><strong class="text-danger">@Html.DisplayFor(x => stock.TotalPayment)</strong></td>
+                            <td class="text-right"><strong class="text-danger">@Html.DisplayFor(x => stock.TotalRemainedValue)</strong></td>
+                            <td></td>
+                        </tr>
+                        foreach (var liability in transaction.Liabilities.Liabilities)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(x => liability.Source)<br />
+                                    <a href="#" title="Cập nhật nợ">
+                                        <span class="glyphicon glyphicon-edit text-success update-stock-liability" data-value="@Html.DisplayFor(x => liability.Id)" style="font-size: 12px"></span>
+                                    </a>
+                                    <a href="#" title="Xóa nợ">
+                                        <span class="glyphicon glyphicon-remove text-danger delete-stock-liability" data-value="@Html.DisplayFor(x => liability.Id)" style="font-size: 12px"></span>
+                                    </a>
+                                </td>
+                                <td>@Html.DisplayFor(x => liability.InterestType)</td>
+                                <td class="text-right">@Html.DisplayFor(x => liability.Value)</td>
+                                <td>@Html.DisplayFor(x => liability.InterestRate) / @Html.DisplayFor(x => liability.InterestRatePerX)</td>
+                                <td class="text-right">@Html.DisplayFor(x => liability.StartDate)</td>
+                                <td class="text-right">@Html.DisplayFor(x => liability.EndDate)</td>
+                                <td class="text-right">@Html.DisplayFor(x => liability.PaymentPeriod)</td>
+                                <td class="text-right">@Html.DisplayFor(x => liability.MonthlyOriginalPayment)</td>
+                                <td class="text-right">@Html.DisplayFor(x => liability.MonthlyInterestPayment)</td>
+                                <td class="text-right">@Html.DisplayFor(x => liability.TotalMonthlyPayment)</td>
+                                <td class="text-right">@Html.DisplayFor(x => liability.TotalPayment)</td>
+                                <td class="text-right">@Html.DisplayFor(x => liability.RemainedValue)</td>
+                                <td>
+                                    <span style="font-size: 10px" class="label @Html.DisplayFor(x => liability.StatusCode)">@Html.DisplayFor(x => liability.Status)</span>
+                                </td>
+                            </tr>
+                        }
+                    }
+                }
+                <tr>
+                    <td colspan="13" style="border-top: none"></td>
+                </tr>
+                <tr>
+                    <td colspan="13" style="border-top: none"></td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="13" class="text-center">Chưa có cổ phiếu</td>
+            </tr>
+        }
+    </tbody>
+</table>
