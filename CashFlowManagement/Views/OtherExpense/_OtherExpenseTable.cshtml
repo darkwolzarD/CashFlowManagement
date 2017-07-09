@@ -1,0 +1,47 @@
+﻿@model CashFlowManagement.Models.OtherExpenseListViewModel
+
+<div class="row other-expense-table-div">
+    <table class="table table-responsive">
+        <thead>
+            <tr>
+                <th>Tên nguồn chi</th>
+                <th class="text-right">Thu nhập hàng tháng</th>
+                <th class="text-right">Thu nhập hàng năm</th>
+                <th class="text-right">Ngày chi tiêu hàng tháng</th>
+                <th>Ghi chú</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="text-danger"><strong>Tổng</strong></td>
+                <td class="text-danger text-right"><strong>@Html.DisplayFor(x => x.TotalExpense)</strong></td>
+                <td class="text-danger text-right"><strong>@Html.DisplayFor(x => x.TotalAnnualExpense)</strong></td>
+                <td></td>
+                <td></td>
+            </tr>
+            @if (Model.Expenses.Any())
+            {
+                foreach (var item in Model.Expenses)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(x => item.Source)<br />
+                            <a href="#" title="Cập nhật chi tiêu" class="update-other-expense" data-value="@Html.DisplayFor(x => item.Id)"><span class="glyphicon glyphicon-edit text-success" style="font-size: 14px;"></span></a>
+                            <a href="#" title="Xóa chi tiêu" class="delete-other-expense" data-value="@Html.DisplayFor(x => item.Id)"><span class="glyphicon glyphicon-remove text-danger" style="font-size: 14px;"></span></a>
+                        </td>
+                        <td class="text-right">@Html.DisplayFor(x => item.Expense)</td>
+                        <td class="text-right">@Html.DisplayFor(x => item.AnnualExpense)</td>
+                        <td class="text-right">@Html.DisplayFor(x => item.ExpenseDay)</td>
+                        <td>@Html.DisplayFor(x => item.Note)</td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td class="text-center" colspan="5">Chưa có chi tiêu khác</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

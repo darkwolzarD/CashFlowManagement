@@ -1,0 +1,50 @@
+﻿@{
+    ViewBag.Title = "Quản lý khoản vay xe hơi và tiêu sản khác";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="clear10"></div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="btn-group btn-breadcrumb">
+            <a href="#" class="btn btn-default"><i class="glyphicon glyphicon-home"></i></a>
+            <a href="#" class="btn btn-default">Các khoản nợ</a>
+            <a href="#" class="btn btn-default">Các khoản vay xe hơi và tiêu sản khác</a>
+            <a href="#" class="btn btn-default">Chi tiết các khoản vay xe hơi và tiêu sản khác</a>
+        </div>
+    </div>
+</div>
+<div class="clear10"></div>
+<div class="row">
+    <div class="col-md-6">
+        <p style="font-size: 20px;">Quản lý các khoản vay xe hơi và tiêu sản khác</p>
+    </div>
+    <div class="col-md-6 text-right">
+        <button type="button" class="btn btn-success toggle-modal">
+            <span class="glyphicon glyphicon-home"></span>
+            Tạo khoản vay
+        </button>
+    </div>
+</div>
+<div class="clear10"></div>
+<div class="row">
+    <div class="col-md-12" id="car-liability-table-div">
+        @{ Html.RenderAction("_CarLiabilityTable", "CarLiability"); }
+    </div>
+</div>
+
+<div id="modal">
+
+</div>
+
+<script type="text/javascript" src="~/Scripts/carliability.js"></script>
+<script type="text/javascript">
+    var Url = {};
+    Url.CarLiabilityForm = '@Url.Action("_CarLiabilityForm", "CarLiability")';
+    Url.CarLiabilityTable = '@Url.Action("_CarLiabilityTable", "CarLiability")';
+    Url.CreateCarLiability = '@Url.Action("_Create", "CarLiability")';
+    Url.SaveCarLiability = '@Url.Action("Save", "CarLiability")';
+    Url.CarLiabilityTable = '@Url.Action("_CarLiabilityTable", "CarLiability")';
+    Url.DeleteCarLiability = '@Url.Action("DeleteCarLiability", "CarLiability")';
+    Url.CarLiabilityUpdateForm = '@Url.Action("_CarLiabilityUpdateForm", "CarLiability")';
+</script>

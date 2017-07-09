@@ -1,0 +1,61 @@
+﻿@model CashFlowManagement.Models.CreditCardLiabilityUpdateViewModel
+@using CashFlowManagement.Constants
+@{
+    Layout = null;
+}
+
+<div id="credit-card-liability-update-modal" class="modal fade" role="dialog">
+    <div class="modal-dialog" style="width: 350px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <p style="font-size: 16px; margin-bottom: 0px;">Cập nhật khoản vay</p>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div id="credit-card-liability-div" class="col-md-12">
+                        @using (Html.BeginForm("_CreditCardLiabilityForm", "CreditCardLiability", FormMethod.Post, new { @id = "credit-card-liability-update-form" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            <div class="form-group">
+                                @Html.HiddenFor(x => x.Id)
+                                @Html.LabelFor(x => x.Source)
+                                @Html.TextBoxFor(x => x.Source, new { @class = "form-control input-sm" })
+                                @Html.ValidationMessageFor(x => x.Source, null, new { @class = "text-danger" })
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(x => x.Value)
+                                @Html.EditorFor(x => x.Value, new { htmlAttributes = new { @class = "form-control input-sm input-mask" } })
+                                @Html.ValidationMessageFor(x => x.Value, null, new { @class = "text-danger" })
+                                @Html.ValidationMessage("CompareCreditCardAssetValueAndLiabilityValue", new { @class = "text-danger" })
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(x => x.InterestRate)
+                                <div class="input-group input-group-sm">
+                                    @Html.EditorFor(x => x.InterestRate, new { htmlAttributes = new { @class = "form-control input-sm percentage" } })
+                                    <div class="input-group-addon">
+                                        <span class="fa fa-percent"></span>
+                                    </div>
+                                </div>
+                                @Html.ValidationMessageFor(x => x.InterestRate, null, new { @class = "text-danger" })
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(x => x.Note)
+                                @Html.TextAreaFor(x => x.Note, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(x => x.Note, null, new { @class = "text-danger" })
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success save-update-credit-card-liability">
+                    <span class="glyphicon glyphicon-ok"></span>
+                    Cập nhật khoản nợ
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

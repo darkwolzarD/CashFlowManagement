@@ -1,0 +1,50 @@
+﻿@{
+    ViewBag.Title = "Quản lý chi tiêu khác";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="clear10"></div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="btn-group btn-breadcrumb">
+            <a href="#" class="btn btn-default"><i class="glyphicon glyphicon-home"></i></a>
+            <a href="#" class="btn btn-default">Thu nhập</a>
+            <a href="#" class="btn btn-default">Chi tiêu khác</a>
+            <a href="#" class="btn btn-default">Chi tiết các khoản chi tiêu khác</a>
+        </div>
+    </div>
+</div>
+<div class="clear10"></div>
+<div class="row">
+    <div class="col-md-6">
+        <p style="font-size: 20px;">Quản lý chi tiêu khác</p>
+    </div>
+    <div class="col-md-6 text-right">
+        <button type="button" class="btn btn-success toggle-modal">
+            <span class="glyphicon glyphicon-home"></span>
+            Tạo chi tiêu
+        </button>
+    </div>
+</div>
+<div class="clear10"></div>
+<div class="row">
+    <div class="col-md-12" id="other-expense-table-div">
+        @{ Html.RenderAction("_OtherExpenseTable", "OtherExpense"); }
+    </div>
+</div>
+
+<div id="modal">
+
+</div>
+
+<script type="text/javascript" src="~/Scripts/otherexpense.js"></script>
+<script type="text/javascript">
+    var Url = {};
+    Url.OtherExpenseForm = '@Url.Action("_OtherExpenseForm", "OtherExpense")';
+    Url.OtherExpenseTable = '@Url.Action("_OtherExpenseTable", "OtherExpense")';
+    Url.CreateOtherExpense = '@Url.Action("_Create", "OtherExpense")';
+    Url.SaveOtherExpense = '@Url.Action("Save", "OtherExpense")';
+    Url.OtherExpenseTable = '@Url.Action("_OtherExpenseTable", "OtherExpense")';
+    Url.DeleteOtherExpense = '@Url.Action("DeleteOtherExpense", "OtherExpense")';
+    Url.OtherExpenseUpdateForm = '@Url.Action("_OtherExpenseUpdateForm", "OtherExpense")';
+</script>

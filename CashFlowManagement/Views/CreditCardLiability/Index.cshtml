@@ -1,0 +1,50 @@
+﻿@{
+    ViewBag.Title = "Quản lý thẻ tín dụng";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="clear10"></div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="btn-group btn-breadcrumb">
+            <a href="#" class="btn btn-default"><i class="glyphicon glyphicon-home"></i></a>
+            <a href="#" class="btn btn-default">Các khoản nợ</a>
+            <a href="#" class="btn btn-default">Vay thẻ tín dụng</a>
+            <a href="#" class="btn btn-default">Chi tiết các khoản vay thẻ tín dụng</a>
+        </div>
+    </div>
+</div>
+<div class="clear10"></div>
+<div class="row">
+    <div class="col-md-6">
+        <p style="font-size: 20px;">Quản lý vay thẻ tín dụng</p>
+    </div>
+    <div class="col-md-6 text-right">
+        <button type="button" class="btn btn-success toggle-modal">
+            <span class="glyphicon glyphicon-home"></span>
+            Tạo vay thẻ tín dụng
+        </button>
+    </div>
+</div>
+<div class="clear10"></div>
+<div class="row">
+    <div class="col-md-12" id="credit-card-liability-table-div">
+        @{ Html.RenderAction("_CreditCardLiabilityTable", "CreditCardLiability"); }
+    </div>
+</div>
+
+<div id="modal">
+
+</div>
+
+<script type="text/javascript" src="~/Scripts/creditcardliability.js"></script>
+<script type="text/javascript">
+    var Url = {};
+    Url.CreditCardLiabilityForm = '@Url.Action("_CreditCardLiabilityForm", "CreditCardLiability")';
+    Url.CreditCardLiabilityTable = '@Url.Action("_CreditCardLiabilityTable", "CreditCardLiability")';
+    Url.CreateCreditCardLiability = '@Url.Action("_Create", "CreditCardLiability")';
+    Url.SaveCreditCardLiability = '@Url.Action("Save", "CreditCardLiability")';
+    Url.CreditCardLiabilityTable = '@Url.Action("_CreditCardLiabilityTable", "CreditCardLiability")';
+    Url.DeleteCreditCardLiability = '@Url.Action("DeleteCreditCardLiability", "CreditCardLiability")';
+    Url.CreditCardLiabilityUpdateForm = '@Url.Action("_CreditCardLiabilityUpdateForm", "CreditCardLiability")';
+</script>

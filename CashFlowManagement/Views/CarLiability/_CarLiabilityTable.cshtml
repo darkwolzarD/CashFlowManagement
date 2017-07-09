@@ -1,0 +1,68 @@
+﻿@model CashFlowManagement.Models.CarLiabilityListViewModel
+
+<div class="row car-liability-table-div">
+    <table id="liability-table" class="table table-condensed table-responsive">
+        <thead>
+            <tr>
+                <th>Nguồn vay nợ</th>
+                <th class="text-right">Tổng giá trị</th>
+                <th class="text-right">Vốn vay</th>
+                <th class="text-right">Lãi suất vay</th>
+                <th class="text-right">Ngày vay</th>
+                <th class="text-right">Ngày trả hết nợ</th>
+                <th class="text-right">Số tháng trả</th>
+                <th class="text-right">Trả lãi vay tháng</th>
+                <th class="text-right">Trả vốn vay tháng</th>
+                <th class="text-right">Tổng phải trả hàng tháng</th>
+                <th class="text-right">Tiền vay còn phải trả</th>
+                <th>Ghi chú</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Liabilities.Any())
+            {
+                <tr>
+                    <td class="text-danger"><strong>Tổng</strong></td>
+                    <td class="text-danger text-right"><strong>@Html.DisplayFor(x => x.TotalOriginalValue)</strong></td>
+                    <td class="text-danger text-right"><strong>@Html.DisplayFor(x => x.TotalLiabilityValue)</strong></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td class="text-danger text-right"><strong>@Html.DisplayFor(x => x.TotalInterestPayment)</strong></td>
+                    <td class="text-danger text-right"><strong>@Html.DisplayFor(x => x.TotalOriginalPayment)</strong></td>
+                    <td class="text-danger text-right"><strong>@Html.DisplayFor(x => x.TotalPayment)</strong></td>
+                    <td class="text-danger text-right"><strong>@Html.DisplayFor(x => x.TotalRemainedValue)</strong></td>
+                    <td></td>
+                </tr>
+                foreach (var liability in Model.Liabilities)
+                {
+                    <tr>
+                        <td>    
+                            @Html.DisplayFor(x => liability.Source)<br />
+                            <a href="#" title="Cập nhật nợ" class="update-car-liability" data-value="@Html.DisplayFor(x => liability.Id)"><span class="glyphicon glyphicon-edit text-success" style="font-size: 14px;"></span></a>
+                            <a href="#" title="Xóa nợ" class="delete-car-liability" data-value="@Html.DisplayFor(x => liability.Id)"><span class="glyphicon glyphicon-remove text-danger" style="font-size: 14px;"></span></a>
+                        </td>
+                        <td class="text-right">@Html.DisplayFor(x => liability.LiabilityValue)</td>
+                        <td class="text-right">@Html.DisplayFor(x => liability.Value)</td>
+                        <td class="text-right">@Html.DisplayFor(x => liability.InterestRate) / @Html.DisplayFor(x => liability.InterestRatePerX)</td>
+                        <td class="text-right">@Html.DisplayFor(x => liability.StartDate)</td>
+                        <td class="text-right">@Html.DisplayFor(x => liability.EndDate)</td>
+                        <td class="text-right">@Html.DisplayFor(x => liability.PaymentPeriod)</td>
+                        <td class="text-right">@Html.DisplayFor(x => liability.MonthlyInterestPayment)</td>
+                        <td class="text-right">@Html.DisplayFor(x => liability.MonthlyOriginalPayment)</td>
+                        <td class="text-right">@Html.DisplayFor(x => liability.TotalMonthlyPayment)</td>
+                        <td class="text-right">@Html.DisplayFor(x => liability.RemainedValue)</td>
+                        <td>@Html.DisplayFor(x => liability.Note)</td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="12" class="text-center">Không có có khoản nợ nào</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,50 @@
+﻿@{
+    ViewBag.Title = "Quản lý chi tiêu gia đình";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="clear10"></div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="btn-group btn-breadcrumb">
+            <a href="#" class="btn btn-default"><i class="glyphicon glyphicon-home"></i></a>
+            <a href="#" class="btn btn-default">Thu nhập</a>
+            <a href="#" class="btn btn-default">Chi tiêu gia đình</a>
+            <a href="#" class="btn btn-default">Chi tiết các khoản chi tiêu gia đình</a>
+        </div>
+    </div>
+</div>
+<div class="clear10"></div>
+<div class="row">
+    <div class="col-md-6">
+        <p style="font-size: 20px;">Quản lý chi tiêu gia đình</p>
+    </div>
+    <div class="col-md-6 text-right">
+        <button type="button" class="btn btn-success toggle-modal">
+            <span class="glyphicon glyphicon-home"></span>
+            Tạo chi tiêu
+        </button>
+    </div>
+</div>
+<div class="clear10"></div>
+<div class="row">
+    <div class="col-md-12" id="family-expense-table-div">
+        @{ Html.RenderAction("_FamilyExpenseTable", "FamilyExpense"); }
+    </div>
+</div>
+
+<div id="modal">
+
+</div>
+
+<script type="text/javascript" src="~/Scripts/familyexpense.js"></script>
+<script type="text/javascript">
+    var Url = {};
+    Url.FamilyExpenseForm = '@Url.Action("_FamilyExpenseForm", "FamilyExpense")';
+    Url.FamilyExpenseTable = '@Url.Action("_FamilyExpenseTable", "FamilyExpense")';
+    Url.CreateFamilyExpense = '@Url.Action("_Create", "FamilyExpense")';
+    Url.SaveFamilyExpense = '@Url.Action("Save", "FamilyExpense")';
+    Url.FamilyExpenseTable = '@Url.Action("_FamilyExpenseTable", "FamilyExpense")';
+    Url.DeleteFamilyExpense = '@Url.Action("DeleteFamilyExpense", "FamilyExpense")';
+    Url.FamilyExpenseUpdateForm = '@Url.Action("_FamilyExpenseUpdateForm", "FamilyExpense")';
+</script>

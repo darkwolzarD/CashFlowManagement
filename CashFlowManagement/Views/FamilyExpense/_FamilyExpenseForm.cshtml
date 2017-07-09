@@ -1,0 +1,53 @@
+﻿@model CashFlowManagement.Models.FamilyExpenseCreateViewModel
+@using CashFlowManagement.Constants
+@{
+    Layout = null;
+}
+
+<div id="family-expense-create-modal" class="modal fade" role="dialog">
+    <div class="modal-dialog" style="width: 350px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <p style="font-size: 16px; margin-bottom: 0px;">Khởi tạo chi tiêu gia đình</p>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div id="salary-div" class="col-md-12">
+                        @using (Html.BeginForm("_FamilyExpenseForm", "FamilyExpense", FormMethod.Post, new { @id = "family-expense-form" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            <div class="form-group">
+                                @Html.LabelFor(x => x.Source)
+                                @Html.TextBoxFor(x => x.Source, new { @class = "form-control input-sm" })
+                                @Html.ValidationMessageFor(x => x.Source, null, new { @class = "text-danger" })
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(x => x.Expense)
+                                @Html.EditorFor(x => x.Expense, new { htmlAttributes = new { @class = "form-control input-mask input-sm" } })
+                                @Html.ValidationMessageFor(x => x.Expense, null, new { @class = "text-danger" })
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(x => x.ExpenseDay)
+                                @Html.DropDownListFor(x => x.ExpenseDay, Constants.IncomeDayList(), new { @class = "form-control input-sm" })
+                                @Html.ValidationMessageFor(x => x.ExpenseDay, null, new { @class = "text-danger" })
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(x => x.Note)
+                                @Html.TextAreaFor(x => x.Note, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(x => x.Note, null, new { @class = "text-danger" })
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success create-family-expense">
+                    <span class="glyphicon glyphicon-ok"></span>
+                    Tạo chi tiêu
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
