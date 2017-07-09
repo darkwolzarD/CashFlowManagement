@@ -1,0 +1,15 @@
+﻿@{
+    ViewBag.Title = "Tiền mặt có sẵn";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div id="modal">
+    @{ Html.RenderAction("_AvailableMoneyForm"); }
+</div>
+
+<script type="text/javascript" src="~/Scripts/availablemoney.js"></script>
+<script type="text/javascript">
+    var Url = {};
+    Url.AvailableMoneyForm = '@Url.Action("_AvailableMoneyForm", "AvailableMoney")';
+    Url.FinancialStatus = '@Url.Action("Index", "FinancialStatus")';
+</script>

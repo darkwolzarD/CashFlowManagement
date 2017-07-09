@@ -93,6 +93,7 @@ namespace CashFlowManagement.Queries
             Entities entities = new Entities();
 
             string username = entities.Assets.Where(x => x.Id == model.AssetId).FirstOrDefault().Username;
+            var transaction = entities.StockTransactions.Where(x => x.AssetId == model.AssetId).FirstOrDefault();
 
             Liabilities liability = new Liabilities();
             liability.Name = model.Source;
@@ -106,7 +107,7 @@ namespace CashFlowManagement.Queries
             liability.CreatedDate = current;
             liability.CreatedBy = Constants.Constants.USER;
             liability.Username = username;
-            liability.AssetId = model.AssetId;
+            liability.TransactionId = transaction.Id;
 
             entities.Liabilities.Add(liability);
             return entities.SaveChanges();

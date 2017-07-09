@@ -9,7 +9,7 @@ namespace CashFlowManagement.Models
     public class BankDepositCreateViewModel
     {
         [Required(ErrorMessage = "Nhập tên tài khoản tiết kiệm")]
-        [Display(Name = "Tên tài khoản tiết kiệm    ")]
+        [Display(Name = "Tên tài khoản tiết kiệm")]
         public string Name { get; set; }
 
         [Required(ErrorMessage = "Nhập tổng vốn")]
@@ -19,7 +19,7 @@ namespace CashFlowManagement.Models
 
         [Required(ErrorMessage = "Chọn ngày gửi")]
         [Display(Name = "Ngày bắt đầu")]
-        [DisplayFormat(DataFormatString = "{0:MM/yyyy}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime? StartDate { get; set; }
 
         [Required(ErrorMessage = "Nhập kỳ hạn")]
@@ -28,7 +28,7 @@ namespace CashFlowManagement.Models
 
         [Required(ErrorMessage = "Chọn ngày đáo hạn")]
         [Display(Name = "Ngày đáo hạn")]
-        [DisplayFormat(DataFormatString = "{0:MM/yyyy}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime? EndDate { get; set; }
 
         [Required(ErrorMessage = "Nhập lãi suất tiền gửi")]
@@ -57,10 +57,10 @@ namespace CashFlowManagement.Models
         [DisplayFormat(DataFormatString = "{0:N0}")]
         public double Value { get; set; }
 
-        [DisplayFormat(DataFormatString = "{0:MM/yyyy}")]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime StartDate { get; set; }
 
-        [DisplayFormat(DataFormatString = "{0:MM/yyyy}")]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime EndDate { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:N0}")]

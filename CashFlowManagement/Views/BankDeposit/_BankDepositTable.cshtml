@@ -7,12 +7,12 @@
                 <th>Tài khoản tiết kiệm</th>
                 <th class="text-right">Ngày gửi tiết kiệm</th>
                 <th class="text-right">Ngày đáo hạn</th>
+                <th class="text-right">Kỳ hạn</th>
                 <th class="text-right">Thu nhập tháng</th>
                 <th class="text-right">Thu nhập năm</th>
                 <th class="text-right">Tổng vốn</th>
                 <th class="text-right">Lãi suất tiền gửi</th>
                 <th>Kiểu nhận lãi</th>
-                <th class="text-right">Kỳ hạn</th>
                 <th>Ghi chú</th>
             </tr>
         </thead>
@@ -21,11 +21,11 @@
                 <td class="text-danger"><strong>Tổng</strong></td>
                 <td></td>
                 <td></td>
+                <td></td>
                 <td class="text-danger text-right"><strong>@Html.DisplayFor(x => x.TotalIncome)</strong></td>
                 <td class="text-danger text-right"><strong>@Html.DisplayFor(x => x.TotalAnnualIncome)</strong></td>
                 <td class="text-danger text-right"><strong>@Html.DisplayFor(x => x.TotalValue)</strong></td>
                 <td class="text-danger text-right"><strong>@Html.DisplayFor(x => x.TotalInterestRate)</strong></td>
-                <td></td>
                 <td></td>
             </tr>
             @if (Model.BankDeposits.Any())
@@ -40,12 +40,12 @@
                         </td>
                         <td class="text-right">@Html.DisplayFor(x => item.StartDate)</td>
                         <td class="text-right">@Html.DisplayFor(x => item.EndDate)</td>
+                        <td class="text-right">@Html.DisplayFor(x => item.PaymentPeriod)</td>
                         <td class="text-right">@Html.DisplayFor(x => item.Income)</td>
                         <td class="text-right">@Html.DisplayFor(x => item.AnnualIncome)</td>
                         <td class="text-right">@Html.DisplayFor(x => item.Value)</td>
                         <td class="text-right">@Html.DisplayFor(x => item.InterestRate)</td>
                         <td class="text-right">@Html.DisplayFor(x => item.InterestObtainWay)</td>
-                        <td class="text-right">@Html.DisplayFor(x => item.PaymentPeriod)</td>
                         <td>@Html.DisplayFor(x => item.Note)</td>
                     </tr>
                 }

@@ -19,17 +19,9 @@ namespace CashFlowManagement.Queries
             model.ExpectedDividend = transaction.ExpectedDividend;
 
             var liabilities = entities.Liabilities.Where(x => x.TransactionId == transaction.Id);
-            foreach (var liability in liabilities)
+            foreach (var liability in liabilities.Where(x => !x.DisabledDate.HasValue))
             {
-                StockLiabilityViewModel liabilityViewModel = new StockLiabilityViewModel();
-                liabilityViewModel.Id = liability.Id;
-                liabilityViewModel.Source = liability.Name;
-                liabilityViewModel.Value = liability.Value;
-                liabilityViewModel.InterestType = StockLiabilityQueries.Helper.GetInterestType(liability.InterestType.Value);
-                liabilityViewModel.InterestRatePerX = StockLiabilityQueries.Helper.GetInterestTypePerX(liability.InterestRatePerX);
-                liabilityViewModel.InterestRate = liability.InterestRate;
-                liabilityViewModel.StartDate = liability.StartDate.Value;
-                liabilityViewModel.EndDate = liability.EndDate.Value;
+                StockLiabilityViewModel liabilityViewModel = StockLiabilityQueries.CreateViewModel(liability);
                 model.Liabilities.Liabilities.Add(liabilityViewModel);
             }
 
@@ -65,7 +57,32 @@ namespace CashFlowManagement.Queries
                 stockViewModel.TotalPayment = stockViewModel.Transactions.Transactions.Select(x => x.Liabilities.Liabilities).Sum(x => x.Sum(y => y.TotalPayment));
                 stockViewModel.TotalRemainedValue = stockViewModel.Transactions.Transactions.Select(x => x.Liabilities.Liabilities).Sum(x => x.Sum(y => y.RemainedValue));
                 stockViewModel.TotalInterestRate = stockViewModel.TotalInterestPayment / stockViewModel.TotalLiabilityValue * 12;
-                stockViewModel.RowSpan = stockViewModel.Transactions.Transactions.Any() ? stockViewModel.Transactions.Transactions.Count() + stockViewModel.Transactions.Transactions.Select(x => x.Liabilities.Liabilities).Count() + 3 : 2;
+                stockViewModel.RowSpan = stockViewModel.Transactions.Transactions.Any() ? stockViewModel.Transactions.Transactions.Count() + stockViewModel.Transactions.Transactions.Select(x => x.Liabilities.Liabilities).Count() + 4 : 4;
+
+                if(stockViewModel.Transactions.Transactions.Any())
+                {
+                    stockViewModel.RowSpan = 4;
+                    bool flag = false;
+                    foreach (var transaction in stockViewModel.Transactions.Transactions)
+                    {
+                        if(transaction.Liabilities.Liabilities.Count() > 0)
+                        {
+                            if (flag == false)
+                            {
+                                flag = true;
+                            }
+                            stockViewModel.RowSpan += transaction.Liabilities.Liabilities.Count();
+                        }
+                    }
+                    if(flag == true)
+                    {
+                        stockViewModel.RowSpan += 1;
+                    }
+                }
+                else
+                {
+                    stockViewModel.RowSpan = 4;
+                }
 
                 result.Stocks.Add(stockViewModel);
             }
@@ -177,32 +194,17 @@ namespace CashFlowManagement.Queries
 
             stock.AssetName = model.Name;
             stock.Note = model.Note;
+            entities.Assets.Attach(stock);
+            entities.Entry(stock).State = System.Data.Entity.EntityState.Modified;
 
-            StockTransactions transaction = new StockTransactions();
+            StockTransactions transaction = entities.StockTransactions.Where(x => x.AssetId == model.Id).FirstOrDefault();
             transaction.Name = "Tạo cổ phiếu " + stock.AssetName;
             transaction.NumberOfShares = model.NumberOfStock.Value;
             transaction.SpotPrice = model.SpotRice.Value;
             transaction.Value = model.StockValue.Value;
             transaction.ExpectedDividend = model.ExpectedDividend.Value;
-
-            if (model.IsInDebt)
-            {
-                if (model.Liabilities != null && model.Liabilities.Liabilities.Count > 0)
-                {
-                    foreach (var liabilityViewModel in model.Liabilities.Liabilities)
-                    {
-                        Liabilities liability = new Liabilities();
-                        liability.Name = liabilityViewModel.Source;
-                        liability.Value = liabilityViewModel.Value.Value;
-                        liability.InterestType = liabilityViewModel.InterestType;
-                        liability.InterestRate = liabilityViewModel.InterestRate.Value;
-                        liability.InterestRatePerX = liabilityViewModel.InterestRatePerX;
-                        liability.StartDate = liabilityViewModel.StartDate.Value;
-                        liability.EndDate = liabilityViewModel.EndDate.Value;
-                        transaction.Liabilities.Add(liability);
-                    }
-                }
-            }
+            entities.StockTransactions.Attach(transaction);
+            entities.Entry(transaction).State = System.Data.Entity.EntityState.Modified;
 
             return entities.SaveChanges();
         }

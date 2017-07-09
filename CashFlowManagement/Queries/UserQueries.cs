@@ -12,7 +12,7 @@ namespace CashFlowManagement.Queries
         public static Users CheckLogin(LoginViewModel model)
         {
             Entities entities = new Entities();
-            Users user = entities.Users.Where(x => x.Username.Equals(model.Username) && x.Password.Equals(model.Password)).FirstOrDefault();
+            Users user = entities.Users.Where(x => x.Email.Equals(model.Email) && x.Password.Equals(model.Password)).FirstOrDefault();
             return user;
         }
 
@@ -46,7 +46,7 @@ namespace CashFlowManagement.Queries
 
             //Create user
             Users user = new Users();
-            user.Username = model.Username;
+            user.Username = model.Email;
             user.FullName = model.FullName;
             user.Email = model.Email;
             user.Password = model.Password;

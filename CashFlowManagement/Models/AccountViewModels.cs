@@ -7,8 +7,8 @@ namespace CashFlowManagement.Models
     public class LoginViewModel
     {
         [Required]
-        [Display(Name = "Tên đăng nhập")]
-        public string Username { get; set; }
+        [Display(Name = "Địa chỉ email")]
+        public string Email { get; set; }
 
         [Required]
         [DataType(DataType.Password)]
@@ -21,11 +21,6 @@ namespace CashFlowManagement.Models
 
     public class RegisterViewModel
     {
-        [Required(ErrorMessage = "Nhập tên đăng nhập")]
-        [StringLength(20, ErrorMessage = "{0} phải dài tối thiểu {2} kí tự.", MinimumLength = 6)]
-        [Display(Name = "Tên tài khoản")]
-        public string Username { get; set; }
-
         [Required(ErrorMessage = "Nhập tên người dùng")]
         [StringLength(50, ErrorMessage = "{0} phải dài tối thiểu {2} kí tự.", MinimumLength = 6)]
         [Display(Name = "Tên người dùng")]

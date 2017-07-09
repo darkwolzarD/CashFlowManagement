@@ -27,6 +27,7 @@ namespace CashFlowManagement.Models
 
             [Required(ErrorMessage = "Nhập lãi suất vay")]
             [Display(Name = "Lãi suất vay")]
+            [DisplayFormat(DataFormatString = "{0:N2}", ApplyFormatInEditMode = true)]
             [Range(1, 100, ErrorMessage = "Lãi suất phải lớn hơn 1 và nhỏ hơn hoặc bằng 100%")]
             public double? InterestRate { get; set; }
 

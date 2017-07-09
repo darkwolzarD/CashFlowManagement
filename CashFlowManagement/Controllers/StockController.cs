@@ -295,71 +295,99 @@ namespace CashFlowManagement.Controllers
 
             StockCreateViewModel model = (StockCreateViewModel)HttpContext.Session["STOCK"];
             StockViewModel viewModel = new StockViewModel();
-            //viewModel.Name = model.Name;
-            //viewModel.Value = model.Value.Value;
-            //viewModel.Income = model.Income.HasValue ? model.Income.Value : 0;
-            //viewModel.AnnualIncome = viewModel.Income * 12;
-            //viewModel.RentYield = viewModel.Income / viewModel.Value;
+            viewModel.Name = model.Name;
+            viewModel.Transactions.Transactions.Add(new StockTransactionViewModel
+            {
+                NumberOfStock = model.NumberOfStock,
+                SpotRice =  model.SpotRice,
+                StockValue = model.StockValue,
+                ExpectedDividend = model.ExpectedDividend
+            });
 
-            //StockLiabilityListCreateViewModel liabilities = (StockLiabilityListCreateViewModel)HttpContext.Session["LIABILITIES"];
-            //viewModel.RowSpan = liabilities != null && liabilities.Liabilities.Count > 0 ? liabilities.Liabilities.Count() + 3 : 2;
+            StockLiabilityListCreateViewModel liabilities = (StockLiabilityListCreateViewModel)HttpContext.Session["LIABILITIES"];
 
-            //if (liabilities != null && liabilities.Liabilities.Count > 0)
-            //{
-            //    foreach (var liability in liabilities.Liabilities)
-            //    {
-            //        StockLiabilityViewModel liabilityViewModel = new StockLiabilityViewModel();
-            //        liabilityViewModel.Source = liability.Source;
-            //        liabilityViewModel.Value = liability.Value;
-            //        liabilityViewModel.InterestType = Helper.GetInterestType(liability.InterestType);
-            //        liabilityViewModel.InterestRatePerX = Helper.GetInterestTypePerX(liability.InterestRatePerX);
-            //        liabilityViewModel.InterestRate = liability.InterestRate / 100;
-            //        liabilityViewModel.StartDate = liability.StartDate.Value;
-            //        liabilityViewModel.EndDate = liability.EndDate.Value;
-            //        liabilityViewModel.PaymentPeriod = Helper.CalculateTimePeriod(liabilityViewModel.StartDate.Value, liabilityViewModel.EndDate.Value);
+            if (liabilities != null && liabilities.Liabilities.Count > 0)
+            {
+                foreach (var liability in liabilities.Liabilities)
+                {
+                    StockLiabilityViewModel liabilityViewModel = new StockLiabilityViewModel();
+                    liabilityViewModel.Source = liability.Source;
+                    liabilityViewModel.Value = liability.Value;
+                    liabilityViewModel.InterestType = StockLiabilityQueries.Helper.GetInterestType(liability.InterestType);
+                    liabilityViewModel.InterestRatePerX = StockLiabilityQueries.Helper.GetInterestTypePerX(liability.InterestRatePerX);
+                    liabilityViewModel.InterestRate = liability.InterestRate / 100;
+                    liabilityViewModel.StartDate = liability.StartDate.Value;
+                    liabilityViewModel.EndDate = liability.EndDate.Value;
+                    liabilityViewModel.PaymentPeriod = StockLiabilityQueries.Helper.CalculateTimePeriod(liabilityViewModel.StartDate.Value, liabilityViewModel.EndDate.Value);
 
-            //        if (liabilityViewModel.StartDate <= current && current <= liabilityViewModel.EndDate)
-            //        {
-            //            int currentPeriod = Helper.CalculateTimePeriod(liabilityViewModel.StartDate.Value, DateTime.Now);
-            //            //Fixed interest type
-            //            if (liability.InterestType == (int)Constants.Constants.INTEREST_TYPE.FIXED)
-            //            {
-            //                liabilityViewModel.MonthlyOriginalPayment = liabilityViewModel.Value.Value / liabilityViewModel.PaymentPeriod;
-            //                liabilityViewModel.MonthlyInterestPayment = liabilityViewModel.Value.Value * liabilityViewModel.InterestRate.Value / 12;
-            //                liabilityViewModel.TotalMonthlyPayment = liabilityViewModel.MonthlyOriginalPayment + liabilityViewModel.MonthlyInterestPayment;
-            //                liabilityViewModel.TotalPayment = liabilityViewModel.TotalMonthlyPayment * currentPeriod;
-            //                liabilityViewModel.RemainedValue = liabilityViewModel.Value.Value - liabilityViewModel.TotalPayment;
-            //            }
-            //            //Reduced interest type
-            //            else
-            //            {
-            //                liabilityViewModel.MonthlyOriginalPayment = liabilityViewModel.Value.Value / liabilityViewModel.PaymentPeriod;
-            //                liabilityViewModel.RemainedValue = liabilityViewModel.Value.Value - liabilityViewModel.MonthlyOriginalPayment * currentPeriod;
-            //                liabilityViewModel.MonthlyInterestPayment = liabilityViewModel.RemainedValue * liabilityViewModel.InterestRate.Value / 12;
-            //                liabilityViewModel.TotalMonthlyPayment = liabilityViewModel.MonthlyOriginalPayment + liabilityViewModel.MonthlyInterestPayment;
-            //                liabilityViewModel.TotalPayment = liabilityViewModel.InterestRate.Value / 12 * (currentPeriod * liabilityViewModel.Value.Value + currentPeriod * (currentPeriod + 1) / 2 * liabilityViewModel.MonthlyOriginalPayment);
-            //            }
-            //        }
-            //        else
-            //        {
-            //            liabilityViewModel.MonthlyOriginalPayment = 0;
-            //            liabilityViewModel.MonthlyInterestPayment = 0;
-            //            liabilityViewModel.TotalMonthlyPayment = 0;
-            //            liabilityViewModel.TotalPayment = 0;
-            //            liabilityViewModel.RemainedValue = 0;
-            //        }
+                    if (liabilityViewModel.StartDate <= current && current <= liabilityViewModel.EndDate)
+                    {
+                        int currentPeriod = StockLiabilityQueries.Helper.CalculateTimePeriod(liabilityViewModel.StartDate.Value, DateTime.Now);
+                        //Fixed interest type
+                        if (liability.InterestType == (int)Constants.Constants.INTEREST_TYPE.FIXED)
+                        {
+                            liabilityViewModel.MonthlyOriginalPayment = liabilityViewModel.Value.Value / liabilityViewModel.PaymentPeriod;
+                            liabilityViewModel.MonthlyInterestPayment = liabilityViewModel.Value.Value * liabilityViewModel.InterestRate.Value / 12;
+                            liabilityViewModel.TotalMonthlyPayment = liabilityViewModel.MonthlyOriginalPayment + liabilityViewModel.MonthlyInterestPayment;
+                            liabilityViewModel.TotalPayment = liabilityViewModel.TotalMonthlyPayment * currentPeriod;
+                            liabilityViewModel.RemainedValue = liabilityViewModel.Value.Value - liabilityViewModel.TotalPayment;
+                        }
+                        //Reduced interest type
+                        else
+                        {
+                            liabilityViewModel.MonthlyOriginalPayment = liabilityViewModel.Value.Value / liabilityViewModel.PaymentPeriod;
+                            liabilityViewModel.RemainedValue = liabilityViewModel.Value.Value - liabilityViewModel.MonthlyOriginalPayment * currentPeriod;
+                            liabilityViewModel.MonthlyInterestPayment = liabilityViewModel.RemainedValue * liabilityViewModel.InterestRate.Value / 12;
+                            liabilityViewModel.TotalMonthlyPayment = liabilityViewModel.MonthlyOriginalPayment + liabilityViewModel.MonthlyInterestPayment;
+                            liabilityViewModel.TotalPayment = liabilityViewModel.InterestRate.Value / 12 * (currentPeriod * liabilityViewModel.Value.Value + currentPeriod * (currentPeriod + 1) / 2 * liabilityViewModel.MonthlyOriginalPayment);
+                        }
+                    }
+                    else
+                    {
+                        liabilityViewModel.MonthlyOriginalPayment = 0;
+                        liabilityViewModel.MonthlyInterestPayment = 0;
+                        liabilityViewModel.TotalMonthlyPayment = 0;
+                        liabilityViewModel.TotalPayment = 0;
+                        liabilityViewModel.RemainedValue = 0;
+                    }
 
-            //        viewModel.Liabilities.Add(liabilityViewModel);
-            //    }
+                    viewModel.Transactions.Transactions.FirstOrDefault().Liabilities.Liabilities.Add(liabilityViewModel);
+                }
 
-            //    viewModel.TotalLiabilityValue = viewModel.Liabilities.Select(x => x.Value.Value).DefaultIfEmpty(0).Sum();
-            //    viewModel.TotalOriginalPayment = viewModel.Liabilities.Select(x => x.MonthlyOriginalPayment).DefaultIfEmpty(0).Sum();
-            //    viewModel.TotalInterestPayment = viewModel.Liabilities.Select(x => x.MonthlyInterestPayment).DefaultIfEmpty(0).Sum();
-            //    viewModel.TotalMonthlyPayment = viewModel.Liabilities.Select(x => x.TotalMonthlyPayment).DefaultIfEmpty(0).Sum();
-            //    viewModel.TotalPayment = viewModel.Liabilities.Select(x => x.TotalPayment).DefaultIfEmpty(0).Sum();
-            //    viewModel.TotalRemainedValue = viewModel.Liabilities.Select(x => x.RemainedValue).DefaultIfEmpty(0).Sum();
-            //    viewModel.TotalInterestRate = viewModel.TotalInterestPayment / viewModel.TotalLiabilityValue * 12;
-            //}
+                viewModel.TotalLiabilityValue = viewModel.Transactions.Transactions.Select(x => x.Liabilities.Liabilities).Sum(x => x.Sum(y => y.Value.HasValue ? y.Value.Value : 0));
+                viewModel.TotalOriginalPayment = viewModel.Transactions.Transactions.Select(x => x.Liabilities.Liabilities).Sum(x => x.Sum(y => y.MonthlyOriginalPayment));
+                viewModel.TotalInterestPayment = viewModel.Transactions.Transactions.Select(x => x.Liabilities.Liabilities).Sum(x => x.Sum(y => y.MonthlyInterestPayment));
+                viewModel.TotalMonthlyPayment = viewModel.Transactions.Transactions.Select(x => x.Liabilities.Liabilities).Sum(x => x.Sum(y => y.TotalMonthlyPayment));
+                viewModel.TotalPayment = viewModel.Transactions.Transactions.Select(x => x.Liabilities.Liabilities).Sum(x => x.Sum(y => y.TotalPayment));
+                viewModel.TotalRemainedValue = viewModel.Transactions.Transactions.Select(x => x.Liabilities.Liabilities).Sum(x => x.Sum(y => y.RemainedValue));
+                viewModel.TotalInterestRate = viewModel.TotalInterestPayment / viewModel.TotalLiabilityValue * 12;
+                viewModel.RowSpan = viewModel.Transactions.Transactions.Any() ? viewModel.Transactions.Transactions.Count() + viewModel.Transactions.Transactions.Select(x => x.Liabilities.Liabilities).Count() + 4 : 4;
+
+                if (viewModel.Transactions.Transactions.Any())
+                {
+                    viewModel.RowSpan = 4;
+                    bool flag = false;
+                    foreach (var transaction in viewModel.Transactions.Transactions)
+                    {
+                        if (transaction.Liabilities.Liabilities.Count() > 0)
+                        {
+                            if (flag == false)
+                            {
+                                flag = true;
+                            }
+                            viewModel.RowSpan += transaction.Liabilities.Liabilities.Count();
+                        }
+                    }
+                    if (flag == true)
+                    {
+                        viewModel.RowSpan += 1;
+                    }
+                }
+                else
+                {
+                    viewModel.RowSpan = 4;
+                }
+            }
 
             return PartialView(viewModel);
         }

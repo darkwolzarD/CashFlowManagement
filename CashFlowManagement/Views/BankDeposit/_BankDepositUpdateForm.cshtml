@@ -30,7 +30,7 @@
                             <div class="form-group">
                                 @Html.LabelFor(x => x.StartDate)
                                 <div class="input-group input-group-sm">
-                                    @Html.EditorFor(x => x.StartDate, new { htmlAttributes = new { @class = "form-control input-sm date-picker" } })
+                                    @Html.EditorFor(x => x.StartDate, new { htmlAttributes = new { @class = "form-control input-sm date-picker-with-day" } })
                                     <div class="input-group-addon">
                                         <span class="glyphicon glyphicon-calendar"></span>
                                     </div>
@@ -45,7 +45,7 @@
                             <div class="form-group">
                                 @Html.LabelFor(x => x.EndDate)
                                 <div class="input-group input-group-sm">
-                                    @Html.EditorFor(x => x.EndDate, new { htmlAttributes = new { @class = "form-control input-sm date-picker" } })
+                                    @Html.EditorFor(x => x.EndDate, new { htmlAttributes = new { @class = "form-control input-sm date-picker-with-day" } })
                                     <div class="input-group-addon">
                                         <span class="glyphicon glyphicon-calendar"></span>
                                     </div>

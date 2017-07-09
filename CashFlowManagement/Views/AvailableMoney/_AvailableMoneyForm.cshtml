@@ -1,0 +1,33 @@
+﻿@model CashFlowManagement.Models.AvailableMoneyCreateViewModel
+
+<div id="available-money-create-modal" class="modal fade in" role="dialog" data-backdrop="static">
+    <div class="modal-dialog" style="width: 400px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" style="font-size: 26px !important; color: red !important">&times;</button>
+                <p style="font-size: 16px; margin-bottom: 0px;">Khởi tạo tiền mặt có sẵn</p>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div id="available-money-div" class="col-md-12">
+                        @using (Html.BeginForm("_AvailableMoneyUpdateForm", "AvailableMoney", FormMethod.Post, new { @id = "available-money-form" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            <div class="form-group">
+                                @Html.LabelFor(x => x.AvailableMoney)
+                                @Html.TextBoxFor(x => x.AvailableMoney, new { @class = "form-control input-sm input-mask" })
+                                @Html.ValidationMessageFor(x => x.AvailableMoney, null, new { @class = "text-danger" })
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success create-available-money">
+                    <span class="glyphicon glyphicon-ok"></span>
+                    Tạo tiền mặt có sẵn
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
