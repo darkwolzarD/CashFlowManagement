@@ -1,0 +1,46 @@
+﻿@model CashFlowManagement.Models.NavigationListViewModel
+@using CashFlowManagement.Constants
+@{
+    Layout = null;
+}
+
+@using (Html.BeginForm("_NavigationForm", "Navigation", FormMethod.Post, new { @id = "navigation-form" }))
+{
+    <div id="navigation-modal" class="modal fade" role="dialog">
+        <div class="modal-dialog" style="width: 400px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <p style="font-size: 16px; margin-bottom: 0px;">Chọn các thông tin tài chính bạn sở hữu</p>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div id="salary-div" class="col-md-12">
+                            @for (int i = 0; i < Model.NavigationList.Count(); i++)
+                            {
+                                <div class="checkbox">
+                                    <label>
+                                        @Html.HiddenFor(x => Model.NavigationList[i].Id)
+                                        @Html.HiddenFor(x => Model.NavigationList[i].Url)
+                                        @Html.HiddenFor(x => Model.NavigationList[i].Display)
+                                        @Html.CheckBoxFor(x => Model.NavigationList[i].Selected, new { @class = "checkbox" })
+                                        @Html.DisplayFor(x => Model.NavigationList[i].Display)
+                                        @Html.HiddenFor(x => Model.NavigationList[i].Current)
+                                    </label>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success finish-initialize-navigation">
+                        <span class="glyphicon glyphicon-ok"></span>
+                        Hoàn tất
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+

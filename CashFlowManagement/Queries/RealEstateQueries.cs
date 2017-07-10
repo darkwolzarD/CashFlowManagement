@@ -151,17 +151,34 @@ namespace CashFlowManagement.Queries
         public static int UpdateRealEstate(RealEstateUpdateViewModel model)
         {
             Entities entities = new Entities();
+            DateTime current = DateTime.Now;
+
             var realEstate = entities.Assets.Where(x => x.Id == model.Id).FirstOrDefault();
             realEstate.AssetName = model.Name;
             realEstate.Value = model.Value.Value;
-            
-            if(entities.Incomes.Where(x => x.AssetId == model.Id).Any())
+            entities.Assets.Attach(realEstate);
+            entities.Entry(realEstate).State = System.Data.Entity.EntityState.Modified;
+
+            if (entities.Incomes.Where(x => x.AssetId == model.Id).Any())
             {
                 var income = entities.Incomes.Where(x => x.AssetId == model.Id).FirstOrDefault();
                 income.Value = model.Income.HasValue ? model.Income.Value : 0;
                 income.Name = "Thu nhập cho thuê từ " + model.Name;
                 entities.Incomes.Attach(income);
                 entities.Entry(income).State = System.Data.Entity.EntityState.Modified;
+            }
+            else
+            {
+                Incomes income = new Incomes();
+                income.Name = "Thu nhập cho thuê từ " + realEstate.AssetName;
+                income.Value = model.Income.Value;
+                income.IncomeDay = 1;
+                income.StartDate = current;
+                income.CreatedDate = current;
+                income.CreatedBy = Constants.Constants.USER;
+                income.IncomeType = (int)Constants.Constants.INCOME_TYPE.REAL_ESTATE_INCOME;
+                income.Username = realEstate.Username;
+                realEstate.Incomes1.Add(income);
             }
 
             return entities.SaveChanges();

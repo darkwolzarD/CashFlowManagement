@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-
+using static CashFlowManagement.Queries.BankDepositQueries;
 
 namespace CashFlowManagement.Queries
 {
@@ -118,33 +118,33 @@ namespace CashFlowManagement.Queries
             return interestRate;
         }
 
-        public static double GetCurrentMonthlyPayment(int parentLoanId)
+        public static double GetCurrentMonthlyPayment(int id)
         {
             DateTime current = DateTime.Now;
             current = new DateTime(current.Year, current.Month, 1);
             Entities entities = new Entities();
-            var parentLiability = entities.Liabilities.Where(x => x.Id == parentLoanId).FirstOrDefault();
-            var queryResult = entities.Liabilities.Where(x => x.ParentLiabilityId.HasValue && x.ParentLiabilityId == parentLoanId && !x.DisabledDate.HasValue && x.StartDate <= current && x.EndDate > current);
-            double interestRate = queryResult.Any() ? queryResult.FirstOrDefault().InterestRate : 0;
+            var liability = entities.Liabilities.Where(x => x.Id == id).FirstOrDefault();
+            double currentMonthlyPayment = 0;
+            double interestRate = liability.InterestRatePerX == (int)Constants.Constants.INTEREST_RATE_PER.MONTH ? liability.InterestRate / 100 : liability.InterestRate / 1200;
+            int currentPeriod = Helper.CalculateTimePeriod(liability.StartDate.Value, DateTime.Now);
+            int paymentPeriod = Helper.CalculateTimePeriod(liability.StartDate.Value, liability.EndDate.Value);
 
-            double remainedValue = parentLiability.Value;
-            double monthlyInterestPayment = 0;
-            int currentPeriod = FormatUtility.CalculateTimePeriod(parentLiability.StartDate.Value, current) + 1;
-            double monthlyOriginalPayment = parentLiability.Value / FormatUtility.CalculateTimePeriod(parentLiability.StartDate.Value, parentLiability.EndDate.Value);
-
-            for (int i = 0; i < currentPeriod; i++)
+            if (liability.InterestType == (int)Constants.Constants.INTEREST_TYPE.FIXED)
             {
-                if(parentLiability.InterestType == (int)Constants.Constants.INTEREST_TYPE.REDUCED)
-                {
-                    monthlyInterestPayment = remainedValue * interestRate / 1200;
-                }
-                else
-                {
-                    monthlyInterestPayment = parentLiability.Value * interestRate / 1200;
-                }
-                remainedValue -= monthlyOriginalPayment;
+                double monthlyOriginalPayment = liability.Value / paymentPeriod;
+                double monthlyInterestPayment = liability.Value * interestRate;
+                double totalMonthlyPayment = monthlyInterestPayment + monthlyOriginalPayment;
+                return totalMonthlyPayment;
             }
-            return monthlyInterestPayment + monthlyOriginalPayment;
+            //Reduced interest type
+            else
+            {
+                double monthlyOriginalPayment = liability.Value / paymentPeriod;
+                double remainedValue = liability.Value - monthlyOriginalPayment * currentPeriod;
+                double monthlyInterestPayment = remainedValue * interestRate;
+                double totalMonthlyPayment = monthlyInterestPayment + monthlyOriginalPayment;
+                return totalMonthlyPayment;
+            }
         }
 
         public static AssetListViewModel GetLiabilityListViewModelByAssetListViewModel(AssetListViewModel assetListViewModel)

@@ -28,57 +28,7 @@ namespace CashFlowManagement.Controllers
             if (user != null)
             {
                 HttpContext.Session["USER"] = user;
-                if (!user.IncomeInitialized)
-                {
-                    return RedirectToAction("Initialize", "Income");
-                }
-                else if (!user.RealEstateInitialized)
-                {
-                    return RedirectToAction("Initialize", "Asset", new { type = (int)Constants.Constants.ASSET_TYPE.REAL_ESTATE });
-                }
-                else if (!user.BusinessInitialized)
-                {
-                    return RedirectToAction("Initialize", "Asset", new { type = (int)Constants.Constants.ASSET_TYPE.BUSINESS });
-                }
-                else if (!user.BankDepositInitialized)
-                {
-                    return RedirectToAction("Initialize", "Asset", new { type = (int)Constants.Constants.ASSET_TYPE.BANK_DEPOSIT });
-                }
-                else if (!user.StockInitialized)
-                {
-                    return RedirectToAction("Initialize", "Asset", new { type = (int)Constants.Constants.ASSET_TYPE.STOCK });
-                }
-                else if (!user.InsuranceInitialized)
-                {
-                    return RedirectToAction("Initialize", "Asset", new { type = (int)Constants.Constants.ASSET_TYPE.INSURANCE });
-                }
-                else if (!user.OtherAssetInitialized)
-                {
-                    return RedirectToAction("Initialize", "Asset", new { type = (int)Constants.Constants.ASSET_TYPE.OTHERS });
-                }
-                else if (!user.CarLiabilityInitialized)
-                {
-                    return RedirectToAction("Initialize", "Liability", new { type = (int)Constants.Constants.LIABILITY_TYPE.CAR });
-                }
-                else if (!user.CreditCardInitialized)
-                {
-                    return RedirectToAction("Initialize", "Liability", new { type = (int)Constants.Constants.LIABILITY_TYPE.CREDIT_CARD });
-                }
-                else if (!user.OtherLiabilityInitialized)
-                {
-                    return RedirectToAction("Initialize", "Liability", new { type = (int)Constants.Constants.LIABILITY_TYPE.OTHERS });
-                }
-                else if (!user.FamilyExpenseInitialized)
-                {
-                    return RedirectToAction("Initialize", "Expense", new { type = (int)Constants.Constants.EXPENSE_TYPE.FAMILY });
-                }
-                else if (!user.OtherExpenseInitialized)
-                {
-                    return RedirectToAction("Initialize", "Expense", new { type = (int)Constants.Constants.EXPENSE_TYPE.OTHERS });
-                }
-                else {
-                    return RedirectToAction("Index", "FinancialStatus");
-                }
+                return RedirectToAction("Index", "Navigation");
             }
             else
             {
@@ -104,7 +54,7 @@ namespace CashFlowManagement.Controllers
             {
                 Users user = UserQueries.Register(model);
                 HttpContext.Session["USER"] = user;
-                return RedirectToAction("Initialize", "Income");
+                return RedirectToAction("Index", "Navigation");
             }
             else return PartialView(model);
         }

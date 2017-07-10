@@ -1,0 +1,16 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div id="modal">
+    @{ Html.RenderAction("_NavigationForm"); }
+</div>
+
+<script type="text/javascript" src="~/Scripts/navigation.js"></script>
+<script type="text/javascript">
+    var Url = {};
+    Url.NavigationForm = '@Url.Action("_NavigationForm", "Navigation")';
+    Url.Next = '@Url.Action("Next", "Navigation")';
+    Url.Previous = '@Url.Action("Previous", "Navigation")';
+</script>

@@ -19,6 +19,8 @@ namespace CashFlowManagement
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             ModelBinders.Binders.Add(typeof(double), new DoubleModelBinder());
             ModelBinders.Binders.Add(typeof(double?), new DoubleModelBinder());
+            ModelBinders.Binders.Add(typeof(int), new IntegerModelBinder());
+            ModelBinders.Binders.Add(typeof(int?), new IntegerModelBinder());
         }
     }
 }
