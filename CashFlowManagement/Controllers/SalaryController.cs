@@ -87,5 +87,11 @@ namespace CashFlowManagement.Controllers
                 return Content("failed");
             }
         }
+
+        public ActionResult _SalarySummary()
+        {
+            SalarySummaryListViewModel model = SalaryQueries.GetSalarySummaryByUser(UserQueries.GetCurrentUsername());
+            return PartialView(model);
+        }
     }
 }

@@ -30,48 +30,18 @@
 <div class="clear10"></div>
 <div class="row">
     <div class="col-md-12" id="other-expense-table-div">
-        @{ Html.RenderAction("_OtherExpenseTable", "OtherExpense"); }
+         @{ Html.RenderAction("_OtherExpenseTable", "OtherExpense"); }
     </div>
 </div>
-
-@{
-    var navList = (List<NavigationViewModel>)HttpContext.Current.Session["NAV_LIST"];
-    var currentId = navList.Where(x => x.Current == true).FirstOrDefault().Id;
-    string previousText = string.Empty;
-    string nextText = string.Empty;
-    if (currentId - 1 > 0)
-    {
-        var previous = navList.Where(x => x.Id == currentId - 1).FirstOrDefault();
-        previousText = previous.Display;
-    }
-
-    if (currentId + 1 < navList.Count() + 1)
-    {
-        var next = navList.Where(x => x.Id == currentId + 1).FirstOrDefault();
-        nextText = next.Display;
-    }
-    else if (currentId + 1 == navList.Count() + 1)
-    {
-        nextText = "Hoàn tất khởi tạo";
-    }
-}
-
-<footer class="col-md-12 text-right">
-    @if (!string.IsNullOrEmpty(previousText))
-    {
-        <a href="@Url.Action("Previous", "Navigation")" class="btn btn-primary " style="font-size: 11px;">
-            <span class="glyphicon glyphicon-arrow-left"></span>
-            @previousText
-        </a>
-    }
-
-    @if (!string.IsNullOrEmpty(nextText))
-    {
-        <a href="@Url.Action("Next", "Navigation")" class="btn btn-primary " style="font-size: 11px;">
-            <span class="glyphicon glyphicon-arrow-right"></span>
-            @nextText
-        </a>
-    }
+<footer class="row text-right">
+    <a href="@Url.Action("Index", "FamilyExpense")" class="btn btn-default " style="font-size: 11px;">
+        <span class="glyphicon glyphicon-arrow-left"></span>
+        Quay lại
+    </a>
+    <a href="#" class="btn btn-primary expense-toggle-summary" style="font-size: 11px;">
+        <span class="glyphicon glyphicon-ok"></span>
+        Hoàn tất khai báo các khoản chi tiêu
+    </a>
 </footer>
 
 <div id="modal">
@@ -88,4 +58,5 @@
     Url.OtherExpenseTable = '@Url.Action("_OtherExpenseTable", "OtherExpense")';
     Url.DeleteOtherExpense = '@Url.Action("DeleteOtherExpense", "OtherExpense")';
     Url.OtherExpenseUpdateForm = '@Url.Action("_OtherExpenseUpdateForm", "OtherExpense")';
+    Url.ExpenseSummary = '@Url.Action("_ExpenseSummary", "OtherExpense")';
 </script>

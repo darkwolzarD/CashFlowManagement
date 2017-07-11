@@ -99,4 +99,77 @@ namespace CashFlowManagement.Models
             Stocks = new List<StockViewModel>();
         }
     }
+
+    public class StockSummaryViewModel
+    {
+        public string Name { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:N0}")]
+        public int NumberOfStock { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:N0}")]
+        public double SpotRice { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:N0}")]
+        public double StockValue { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:P2}")]
+        public double ExpectedDividend { get; set; }
+
+        public string Note { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:N0}")]
+        public double LiabilityValue { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:P2}")]
+        public double InterestRate { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:N0}")]
+        public double MonthlyInterestPayment { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:N0}")]
+        public double MonthlyPayment { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:N0}")]
+        public double AnnualPayment { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:N0}")]
+        public double RemainedValue { get; set; }
+    }
+
+    public class StockSummaryListViewModel
+    {
+        [DisplayFormat(DataFormatString = "{0:N0}")]
+        public int TotalNumberOfStock { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:N0}")]
+        public double TotalStockValue { get; set; }
+        [DisplayFormat(DataFormatString = "{0:N0}")]
+        public double TotalLiabilityValue { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:P2}")]
+        public double TotalInterestRate { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:N2}")]
+        public string TotalInterestRatePerX { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:N0}")]
+        public double TotalMonthlyInterestPayment { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:N0}")]
+        public double TotalMonthlyPayment { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:N0}")]
+        public double TotalAnnualPayment { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:N0}")]
+        public double TotalRemainedValue { get; set; }
+
+        public List<StockSummaryViewModel> StockSummaries { get; set; }
+
+        public StockSummaryListViewModel()
+        {
+            StockSummaries = new List<StockSummaryViewModel>();
+        }
+    }
 }

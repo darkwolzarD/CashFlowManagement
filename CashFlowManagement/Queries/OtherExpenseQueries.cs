@@ -36,6 +36,33 @@ namespace CashFlowManagement.Queries
             return result;
         }
 
+        public static OtherExpenseSummaryListViewModel GetOtherExpenseSummaryByUser(string username)
+        {
+            Entities entities = new Entities();
+            var familyExpenses = entities.Expenses.Where(x => x.Username.Equals(username)
+                                                && x.ExpenseType == (int)Constants.Constants.EXPENSE_TYPE.OTHERS
+                                                && !x.DisabledDate.HasValue).OrderBy(x => x.Name);
+            OtherExpenseSummaryListViewModel result = new OtherExpenseSummaryListViewModel();
+            foreach (var familyExpense in familyExpenses)
+            {
+                OtherExpenseSummaryViewModel viewModel = new OtherExpenseSummaryViewModel
+                {
+                    Id = familyExpense.Id,
+                    Source = familyExpense.Name,
+                    ExpenseDay = familyExpense.ExpenseDay,
+                    Expense = familyExpense.Value,
+                    AnnualExpense = familyExpense.Value * 12,
+                    Note = familyExpense.Note
+                };
+
+                result.Expenses.Add(viewModel);
+            }
+
+            result.TotalExpense = result.Expenses.Sum(x => x.Expense.Value);
+            result.TotalAnnualExpense = result.TotalExpense * 12;
+            return result;
+        }
+
         public static OtherExpenseUpdateViewModel GetOtherExpenseById(int id)
         {
             Entities entities = new Entities();

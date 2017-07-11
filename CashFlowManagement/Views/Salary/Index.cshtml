@@ -30,11 +30,11 @@
 <div class="clear10"></div>
 <div class="row">
     <div class="col-md-12" id="salary-table-div">
-        @{ Html.RenderAction("_SalaryTable", "Salary"); }
+         @{ Html.RenderAction("_SalaryTable", "Salary"); }
     </div>
 </div>
 <footer class="row text-right">
-    <a href="@Url.Action("Index", "RealEstate")" class="btn btn-primary " style="font-size: 11px;">
+    <a href="#" class="btn btn-primary salary-toggle-summary" style="font-size: 11px;">
         <span class="glyphicon glyphicon-ok"></span>
         Hoàn tất khai báo thu nhập lương
     </a>
@@ -54,4 +54,5 @@
     Url.SalaryTable = '@Url.Action("_SalaryTable", "Salary")';
     Url.DeleteSalary = '@Url.Action("DeleteSalary", "Salary")';
     Url.SalaryUpdateForm = '@Url.Action("_SalaryUpdateForm", "Salary")';
+    Url.SalarySummary = '@Url.Action("_SalarySummary", "Salary")';
 </script>

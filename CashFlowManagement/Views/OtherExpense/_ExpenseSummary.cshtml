@@ -1,0 +1,105 @@
+﻿@model CashFlowManagement.Models.ExpenseSummaryViewModel
+
+<div id="expense-summary-modal" class="modal fade" role="dialog">
+    <div class="modal-dialog" style="width: 700px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <p style="font-size: 16px; margin-bottom: 0px;">Xác nhận thông tin khởi tạo các khoản chi tiêu</p>
+            </div>
+            <div class="modal-body" style="padding: 0 20px 0 20px !important">
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <h4>Chi tiêu gia đình</h4>
+                        <table class="table table-responsive">
+                            <thead>
+                                <tr>
+                                    <th class="text-left">Tên nguồn chi</th>
+                                    <th class="text-right">Thu nhập hàng tháng</th>
+                                    <th class="text-right">Thu nhập hàng năm</th>
+                                    <th class="text-right">Ngày chi tiêu hàng tháng</th>
+                                    <th class="text-left">Ghi chú</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="text-danger text-left"><strong>Tổng</strong></td>
+                                    <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.FamilyExpenses.TotalExpense)</strong></td>
+                                    <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.FamilyExpenses.TotalAnnualExpense)</strong></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                @if (Model.FamilyExpenses.Expenses.Any())
+                                {
+                                    foreach (var item in Model.FamilyExpenses.Expenses)
+                                    {
+                                        <tr>
+                                            <td class="text-left">@Html.DisplayFor(x => item.Source)</td>
+                                            <td class="text-right">@Html.DisplayFor(x => item.Expense)</td>
+                                            <td class="text-right">@Html.DisplayFor(x => item.AnnualExpense)</td>
+                                            <td class="text-right">@Html.DisplayFor(x => item.ExpenseDay)</td>
+                                            <td class="text-left">@Html.DisplayFor(x => item.Note)</td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td class="text-center" colspan="5">Không có chi tiêu gia đình</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-md-12 text-center">
+                        <h4>Chi tiêu khác</h4>
+                        <table class="table table-responsive">
+                            <thead>
+                                <tr>
+                                    <th class="text-left">Tên nguồn chi</th>
+                                    <th class="text-right">Thu nhập hàng tháng</th>
+                                    <th class="text-right">Thu nhập hàng năm</th>
+                                    <th class="text-right">Ngày chi tiêu hàng tháng</th>
+                                    <th class="text-left">Ghi chú</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="text-danger text-left"><strong>Tổng</strong></td>
+                                    <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.OtherExpenses.TotalExpense)</strong></td>
+                                    <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.OtherExpenses.TotalAnnualExpense)</strong></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                @if (Model.OtherExpenses.Expenses.Any())
+                                {
+                                    foreach (var item in Model.OtherExpenses.Expenses)
+                                    {
+                                        <tr>
+                                            <td class="text-left">@Html.DisplayFor(x => item.Source)</td>
+                                            <td class="text-right">@Html.DisplayFor(x => item.Expense)</td>
+                                            <td class="text-right">@Html.DisplayFor(x => item.AnnualExpense)</td>
+                                            <td class="text-right">@Html.DisplayFor(x => item.ExpenseDay)</td>
+                                            <td class="text-left">@Html.DisplayFor(x => item.Note)</td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td class="text-center" colspan="5">Không có chi tiêu khác</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a href="@Url.Action("Index", "FinancialStatus")" class="btn btn-success">
+                    <span class="glyphicon glyphicon-ok"></span>
+                    Xác nhận
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

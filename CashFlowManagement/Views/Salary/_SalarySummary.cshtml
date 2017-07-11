@@ -1,0 +1,62 @@
+﻿@model CashFlowManagement.Models.SalarySummaryListViewModel
+
+<div id="salary-summary-modal" class="modal fade" role="dialog">
+    <div class="modal-dialog" style="width: 700px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <p style="font-size: 16px; margin-bottom: 0px;">Xác nhận thông tin khởi tạo thu nhập lương</p>
+            </div>
+            <div class="modal-body" style="padding: 0 20px 0 20px !important">
+                <div class="row">
+                    <div class="col-md-12">
+                        <table class="table table-responsive">
+                            <thead>
+                                <tr>
+                                    <th>Tên nguồn thu</th>
+                                    <th class="text-right">Thu nhập hàng tháng</th>
+                                    <th class="text-right">Thu nhập hàng năm</th>
+                                    <th class="text-right">Ngày nhận lương hàng tháng</th>
+                                    <th>Ghi chú</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="text-danger"><strong>Tổng</strong></td>
+                                    <td class="text-danger text-right"><strong>@Html.DisplayFor(x => x.TotalIncome)</strong></td>
+                                    <td class="text-danger text-right"><strong>@Html.DisplayFor(x => x.TotalAnnualIncome)</strong></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                @if (Model.Salaries.Any())
+                                {
+                                    foreach (var item in Model.Salaries)
+                                    {
+                                        <tr>
+                                            <td>@Html.DisplayFor(x => item.Source)</td>
+                                            <td class="text-right">@Html.DisplayFor(x => item.Income)</td>
+                                            <td class="text-right">@Html.DisplayFor(x => item.AnnualIncome)</td>
+                                            <td class="text-right">@Html.DisplayFor(x => item.IncomeDay)</td>
+                                            <td>@Html.DisplayFor(x => item.Note)</td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td class="text-center" colspan="5">Không có thu nhập lương</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a href="@Url.Action("Index", "RealEstate")" class="btn btn-success">
+                    <span class="glyphicon glyphicon-ok"></span>
+                    Xác nhận
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

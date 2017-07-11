@@ -1,5 +1,5 @@
 ﻿@using CashFlowManagement.Models
-@{
+
     ViewBag.Title = "Quản lý kinh doanh";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -30,7 +30,7 @@
 <div class="clear10"></div>
 <div class="row">
     <div class="col-md-12" id="business-table-div">
-        @{ Html.RenderAction("_BusinessTable", "Business"); }
+         @{ Html.RenderAction("_BusinessTable", "Business"); }
     </div>
 </div>
 <footer class="row text-right">

@@ -103,4 +103,78 @@ namespace CashFlowManagement.Models
             Assets = new List<Models.OtherAssetViewModel>();
         }
     }
+
+    public class OtherAssetSummaryViewModel
+    {
+        public string Name { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:N0}")]
+        public double Income { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:N0}")]
+        public double AnnualIncome { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:N0}")]
+        public double Value { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:P2}")]
+        public double RentYield { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:N0}")]
+        public double LiabilityValue { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:P2}")]
+        public double InterestRate { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:N2}")]
+        public string InterestRatePerX { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:N0}")]
+        public double MonthlyInterestPayment { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:N0}")]
+        public double MonthlyPayment { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:N0}")]
+        public double AnnualPayment { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:N0}")]
+        public double RemainedValue { get; set; }
+    }
+
+    public class OtherAssetSummaryListViewModel
+    {
+        [DisplayFormat(DataFormatString = "{0:N0}")]
+        public double TotalIncome { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:N0}")]
+        public double TotalAnnualIncome { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:N0}")]
+        public double TotalValue { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:P2}")]
+        public double TotalRentYield { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:N0}")]
+        public double TotalLiabilityValue { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:P2}")]
+        public double TotalInterestRate { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:N0}")]
+        public double TotalMonthlyPayment { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:N0}")]
+        public double TotalAnnualPayment { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:N0}")]
+        public double TotalRemainedValue { get; set; }
+
+        public List<OtherAssetSummaryViewModel> OtherAssetSummaries { get; set; }
+        public OtherAssetSummaryListViewModel()
+        {
+            OtherAssetSummaries = new List<OtherAssetSummaryViewModel>();
+        }
+    }
 }

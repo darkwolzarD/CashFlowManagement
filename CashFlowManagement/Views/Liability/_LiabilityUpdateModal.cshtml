@@ -1,6 +1,6 @@
 ﻿@model CashFlowManagement.EntityModel.Liabilities
 @using CashFlowManagement.Constants
-@{ var length = Model.InterestRate == 0 ? 600 : 800;
+@{  var length = Model.InterestRate == 0 ? 600 : 800;
     var cls = Model.InterestRate > 0 ? "with-rate" : string.Empty;}
 <div id="update-liability-modal" class="modal fade @cls" role="dialog">
     <div class="modal-dialog" style="width: @(length)px">
@@ -162,7 +162,7 @@ Model.LiabilityType != (int)Constants.LIABILITY_TYPE.REAL_ESTATE)
                 }
             </div>
             <div class="modal-footer text-center">
-                @{ var edit = Model.InterestRate == 0 ? "save-no-rate" : "save-rate"; }
+                 var edit = Model.InterestRate == 0 ? "save-no-rate" : "save-rate"; }
                 <button type="button" class="btn btn-success save-liability" data-trigger="@edit">Cập nhật</button>
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Đóng</button>
             </div>

@@ -65,4 +65,41 @@ namespace CashFlowManagement.Models
             Liabilities = new List<CarLiabilityCreateViewModel>();
         }
     }
+
+    public class CarLiabilitySummaryViewModel : CarLiabilityViewModel
+    {
+
+    }
+
+    public class CarLiabilitySummaryListViewModel
+    {
+        [DisplayFormat(DataFormatString = "{0:N0}")]
+        public double TotalOriginalValue { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:N0}")]
+        public double TotalLiabilityValue { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:P2}")]
+        public double TotalInterestRate { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:N0}")]
+        public double TotalOriginalPayment { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:N0}")]
+        public double TotalInterestPayment { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:N0}")]
+        public double TotalMonthlyPayment { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:N0}")]
+        public double TotalPayment { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:N0}")]
+        public double TotalRemainedValue { get; set; }
+        public List<CarLiabilitySummaryViewModel> Liabilities { get; set; }
+        public CarLiabilitySummaryListViewModel()
+        {
+            Liabilities = new List<CarLiabilitySummaryViewModel>();
+        }
+    }
 }

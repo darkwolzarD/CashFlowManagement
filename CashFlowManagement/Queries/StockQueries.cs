@@ -92,6 +92,52 @@ namespace CashFlowManagement.Queries
             return result;
         }
 
+        public static StockSummaryListViewModel GetStockSummaryByUser(string username)
+        {
+            Entities entities = new Entities();
+            StockSummaryListViewModel result = new StockSummaryListViewModel();
+
+            var stocks = entities.Assets.Include("StockTransactions").Include("Liabilities").Where(x => x.Username.Equals(username)
+                                                      && x.AssetType == (int)Constants.Constants.ASSET_TYPE.STOCK
+                                                      && !x.DisabledDate.HasValue);
+
+            foreach (var stock in stocks)
+            {
+                StockSummaryViewModel stockViewModel = new StockSummaryViewModel();
+                stockViewModel.Name = stock.AssetName;
+                stockViewModel.Note = stock.Note;
+
+                foreach (var transactions in stock.StockTransactions.Where(x => !x.DisabledDate.HasValue))
+                {
+                    StockTransactionViewModel transactionViewModel = StockQueries.CreateViewModel(transactions);
+                    stockViewModel.NumberOfStock += (int)transactionViewModel.NumberOfStock.Value;
+                    stockViewModel.SpotRice += transactionViewModel.SpotRice.Value;
+                    stockViewModel.StockValue += transactionViewModel.StockValue.Value;
+                    stockViewModel.ExpectedDividend += transactionViewModel.ExpectedDividend.Value / 100;
+
+                    var liabilites = transactionViewModel.Liabilities.Liabilities;
+                    stockViewModel.LiabilityValue = liabilites.Sum(x => x.Value.Value);
+                    stockViewModel.InterestRate = liabilites.Sum(x => x.InterestRatePerX == "Năm" ? x.InterestRate.Value : x.InterestRate.Value * 12) / 100;
+                    stockViewModel.MonthlyInterestPayment = liabilites.Sum(x => x.MonthlyInterestPayment);
+                    stockViewModel.MonthlyPayment = liabilites.Sum(x => x.TotalMonthlyPayment);
+                    stockViewModel.AnnualPayment = 0;
+                    stockViewModel.RemainedValue = liabilites.Sum(x => x.RemainedValue);
+                }
+
+                result.StockSummaries.Add(stockViewModel);
+            }
+
+            result.TotalNumberOfStock = result.StockSummaries.Sum(x => x.NumberOfStock);
+            result.TotalStockValue = result.StockSummaries.Sum(x => x.StockValue);
+            result.TotalMonthlyInterestPayment = result.StockSummaries.Sum(x => x.MonthlyInterestPayment);
+            result.TotalInterestRate = result.TotalMonthlyInterestPayment / result.TotalLiabilityValue;
+            result.TotalMonthlyPayment = result.StockSummaries.Sum(x => x.MonthlyPayment);
+            result.TotalAnnualPayment = result.StockSummaries.Sum(x => x.AnnualPayment);
+            result.TotalRemainedValue = result.StockSummaries.Sum(x => x.RemainedValue);
+
+            return result;
+        }
+
         public static StockUpdateViewModel GetStockById(int id)
         {
             StockUpdateViewModel viewmodel = new StockUpdateViewModel();

@@ -126,4 +126,16 @@
             });
         }
     })
+
+    $(document).on("click", ".liability-toggle-summary", function () {
+        $.ajax({
+            url: Url.LiabilitySummary,
+            type: "get",
+            success: function (data) {
+                $("#modal").html(data);
+                $("#liability-summary-modal").modal("show");
+                MaskInput();
+            }
+        });
+    })
 })

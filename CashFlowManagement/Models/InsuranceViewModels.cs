@@ -99,4 +99,62 @@ namespace CashFlowManagement.Models
             Insurances = new List<InsuranceViewModel>();
         }
     }
+
+    public class InsuranceSummaryViewModel
+    {
+        public string Name { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:N0}")]
+        public double Value { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:N0}")]
+        public double TotalExpense { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:MM/yyyy}")]
+        public DateTime StartDate { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:MM/yyyy}")]
+        public DateTime EndDate { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:N0}")]
+        public double PaymentPeriod { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:N0}")]
+        public double Expense { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:N0}")]
+        public double AnnualExpense { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:N0}")]
+        public double RemainedValue { get; set; }
+
+        public string Note { get; set; }
+
+        public int RowSpan { get; set; }
+    }
+
+    public class InsuranceSummaryListViewModel
+    {
+        [DisplayFormat(DataFormatString = "{0:N0}")]
+        public double TotalValue { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:N0}")]
+        public double TotalTotalExpense { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:N0}")]
+        public double TotalExpense { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:N0}")]
+        public double TotalAnnualExpense { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:N0}")]
+        public double TotalRemainedValue { get; set; }
+
+        public List<InsuranceSummaryViewModel> InsuranceSummaries { get; set; }
+
+        public InsuranceSummaryListViewModel()
+        {
+            InsuranceSummaries = new List<InsuranceSummaryViewModel>();
+        }
+    }
 }

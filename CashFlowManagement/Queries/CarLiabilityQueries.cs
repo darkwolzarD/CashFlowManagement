@@ -49,11 +49,99 @@ namespace CashFlowManagement.Queries
             return result;
         }
 
+        public static CarLiabilitySummaryListViewModel GetCarLiabilitySummaryByUser(string username)
+        {
+            Entities entities = new Entities();
+            CarLiabilitySummaryListViewModel result = new CarLiabilitySummaryListViewModel();
+            var liabilities = entities.Liabilities.Where(x => x.Username.Equals(username)
+                                                && x.LiabilityType == (int)Constants.Constants.LIABILITY_TYPE.CAR
+                                                && !x.DisabledDate.HasValue).OrderBy(x => x.Name);
+            foreach (var liability in liabilities)
+            {
+                CarLiabilitySummaryViewModel viewModel = CreateSummaryViewModel(liability);
+                result.Liabilities.Add(viewModel);
+            }
+
+            result.TotalOriginalValue = result.Liabilities.Sum(x => x.LiabilityValue);
+            result.TotalLiabilityValue = result.Liabilities.Sum(x => x.Value.Value);
+            result.TotalInterestPayment = result.Liabilities.Sum(x => x.MonthlyInterestPayment);
+            result.TotalOriginalPayment = result.Liabilities.Sum(x => x.MonthlyOriginalPayment);
+            result.TotalPayment = result.Liabilities.Sum(x => x.TotalMonthlyPayment);
+            result.TotalRemainedValue = result.Liabilities.Sum(x => x.RemainedValue);
+            return result;
+        }
+
         public static CarLiabilityViewModel CreateViewModel(Liabilities liability)
         {
             DateTime current = DateTime.Now;
 
             CarLiabilityViewModel liabilityViewModel = new CarLiabilityViewModel();
+            liabilityViewModel.Id = liability.Id;
+            liabilityViewModel.Source = liability.Name;
+            liabilityViewModel.LiabilityValue = liability.OriginalValue.Value;
+            liabilityViewModel.Value = liability.Value;
+            liabilityViewModel.InterestType = Helper.GetInterestType(liability.InterestType.Value);
+            liabilityViewModel.InterestRatePerX = Helper.GetInterestTypePerX(liability.InterestRatePerX);
+            liabilityViewModel.InterestRate = liability.InterestRate / 100;
+            liabilityViewModel.StartDate = liability.StartDate.Value;
+            liabilityViewModel.EndDate = liability.EndDate.Value;
+            liabilityViewModel.Note = liability.Note;
+            liabilityViewModel.PaymentPeriod = Helper.CalculateTimePeriod(liabilityViewModel.StartDate.Value, liabilityViewModel.EndDate.Value);
+
+            if (liabilityViewModel.StartDate <= current && current <= liabilityViewModel.EndDate)
+            {
+                int currentPeriod = Helper.CalculateTimePeriod(liabilityViewModel.StartDate.Value, DateTime.Now);
+                double interestRate = liability.InterestRatePerX == (int)Constants.Constants.INTEREST_RATE_PER.MONTH ? liability.InterestRate / 100 : liability.InterestRate / 1200;
+                //Fixed interest type
+                if (liability.InterestType == (int)Constants.Constants.INTEREST_TYPE.FIXED)
+                {
+                    liabilityViewModel.MonthlyOriginalPayment = liabilityViewModel.Value.Value / liabilityViewModel.PaymentPeriod;
+                    liabilityViewModel.MonthlyInterestPayment = liabilityViewModel.Value.Value * interestRate;
+                    liabilityViewModel.TotalMonthlyPayment = liabilityViewModel.MonthlyOriginalPayment + liabilityViewModel.MonthlyInterestPayment;
+                    liabilityViewModel.TotalPayment = liabilityViewModel.TotalMonthlyPayment * currentPeriod;
+                    liabilityViewModel.RemainedValue = liabilityViewModel.Value.Value - liabilityViewModel.TotalPayment;
+                    liabilityViewModel.Status = "Đang nợ";
+                    liabilityViewModel.StatusCode = "label-success";
+                }
+                //Reduced interest type
+                else
+                {
+                    liabilityViewModel.MonthlyOriginalPayment = liabilityViewModel.Value.Value / liabilityViewModel.PaymentPeriod;
+                    liabilityViewModel.RemainedValue = liabilityViewModel.Value.Value - liabilityViewModel.MonthlyOriginalPayment * currentPeriod;
+                    liabilityViewModel.MonthlyInterestPayment = liabilityViewModel.RemainedValue * interestRate;
+                    liabilityViewModel.TotalMonthlyPayment = liabilityViewModel.MonthlyOriginalPayment + liabilityViewModel.MonthlyInterestPayment;
+                    liabilityViewModel.TotalPayment = interestRate * (currentPeriod * liabilityViewModel.Value.Value + currentPeriod * (currentPeriod + 1) / 2 * liabilityViewModel.MonthlyOriginalPayment);
+                    liabilityViewModel.Status = "Đang nợ";
+                    liabilityViewModel.StatusCode = "label-success";
+                }
+            }
+            else
+            {
+                liabilityViewModel.MonthlyOriginalPayment = 0;
+                liabilityViewModel.MonthlyInterestPayment = 0;
+                liabilityViewModel.TotalMonthlyPayment = 0;
+                liabilityViewModel.TotalPayment = 0;
+                liabilityViewModel.RemainedValue = 0;
+                if (liabilityViewModel.EndDate < current)
+                {
+                    liabilityViewModel.StatusCode = "label-warning";
+                    liabilityViewModel.Status = "Đã trả hết nợ";
+                }
+                else
+                {
+                    liabilityViewModel.StatusCode = "label-danger";
+                    liabilityViewModel.Status = "Chưa tới kì hạn";
+                }
+            }
+
+            return liabilityViewModel;
+        }
+
+        public static CarLiabilitySummaryViewModel CreateSummaryViewModel(Liabilities liability)
+        {
+            DateTime current = DateTime.Now;
+
+            CarLiabilitySummaryViewModel liabilityViewModel = new CarLiabilitySummaryViewModel();
             liabilityViewModel.Id = liability.Id;
             liabilityViewModel.Source = liability.Name;
             liabilityViewModel.LiabilityValue = liability.OriginalValue.Value;

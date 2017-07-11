@@ -59,6 +59,58 @@ namespace CashFlowManagement.Queries
             return result;
         }
 
+        public static OtherAssetSummaryListViewModel GetOtherAssetSummaryByUser(string username)
+        {
+            Entities entities = new Entities();
+            OtherAssetSummaryListViewModel result = new OtherAssetSummaryListViewModel();
+
+            var businesss = entities.Assets.Include("Incomes").Include("Liabilities").Where(x => x.Username.Equals(username)
+                                                      && x.AssetType == (int)Constants.Constants.ASSET_TYPE.OTHERS
+                                                      && !x.DisabledDate.HasValue);
+
+            foreach (var business in businesss)
+            {
+                OtherAssetSummaryViewModel businessViewModel = new OtherAssetSummaryViewModel();
+                businessViewModel.Name = business.AssetName;
+                businessViewModel.Value = business.Value;
+                if (business.Incomes1.Where(x => !x.DisabledDate.HasValue).Any())
+                {
+                    businessViewModel.Income = business.Incomes1.FirstOrDefault().Value;
+                }
+                else
+                {
+                    businessViewModel.Income = 0;
+                }
+                businessViewModel.AnnualIncome = businessViewModel.Income * 12;
+                businessViewModel.RentYield = businessViewModel.Income / businessViewModel.Value;
+
+                foreach (var liability in business.Liabilities.Where(x => !x.DisabledDate.HasValue))
+                {
+                    OtherAssetLiabilityViewModel liabilityViewModel = OtherAssetLiabilityQueries.CreateViewModel(liability);
+                    businessViewModel.LiabilityValue += liabilityViewModel.Value.Value;
+                    businessViewModel.InterestRate += liabilityViewModel.InterestRate.Value;
+                    businessViewModel.InterestRatePerX += liabilityViewModel.InterestRatePerX;
+                    businessViewModel.MonthlyInterestPayment += liabilityViewModel.MonthlyInterestPayment;
+                    businessViewModel.MonthlyPayment += liabilityViewModel.TotalMonthlyPayment;
+                    businessViewModel.AnnualPayment += liabilityViewModel.TotalPayment;
+                    businessViewModel.RemainedValue += liabilityViewModel.RemainedValue;
+                }
+                result.OtherAssetSummaries.Add(businessViewModel);
+            }
+
+            result.TotalIncome = result.OtherAssetSummaries.Sum(x => x.Income);
+            result.TotalAnnualIncome = result.OtherAssetSummaries.Sum(x => x.AnnualIncome);
+            result.TotalValue = result.OtherAssetSummaries.Sum(x => x.Value);
+            result.TotalRentYield = result.OtherAssetSummaries.Sum(x => x.MonthlyInterestPayment) / result.TotalValue;
+            result.TotalLiabilityValue = result.OtherAssetSummaries.Sum(x => x.LiabilityValue);
+            result.TotalInterestRate = result.OtherAssetSummaries.Sum(x => x.Value);
+            result.TotalMonthlyPayment = result.OtherAssetSummaries.Sum(x => x.MonthlyPayment);
+            result.TotalAnnualPayment = result.OtherAssetSummaries.Sum(x => x.AnnualPayment);
+            result.TotalRemainedValue = result.OtherAssetSummaries.Sum(x => x.RemainedValue);
+
+            return result;
+        }
+
         public static OtherAssetUpdateViewModel GetOtherAssetById(int id)
         {
             OtherAssetUpdateViewModel viewmodel = new OtherAssetUpdateViewModel();

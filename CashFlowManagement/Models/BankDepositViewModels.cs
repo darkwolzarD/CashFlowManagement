@@ -101,4 +101,56 @@ namespace CashFlowManagement.Models
             BankDeposits = new List<BankDepositViewModel>();
         }
     }
+
+    public class BankDepositSummaryViewModel
+    {
+        public string Name { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:N0}")]
+        public double Value { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
+        public DateTime StartDate { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
+        public DateTime EndDate { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:N0}")]
+        public double PaymentPeriod { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:N0}")]
+        public double Income { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:N0}")]
+        public double AnnualIncome { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:N2}")]
+        public double InterestRate { get; set; }
+
+        public string InterestObtainWay { get; set; }
+
+        public string Note { get; set; }
+    }
+
+    public class BankDepositSummaryListViewModel
+    {
+        [DisplayFormat(DataFormatString = "{0:N0}")]
+        public double TotalValue { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:N0}")]
+        public double TotalIncome { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:N0}")]
+        public double TotalAnnualIncome { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:N0}")]
+        public double TotalInterestRate { get; set; }
+
+        public List<BankDepositSummaryViewModel> BankDepositSummaries { get; set; }
+
+        public BankDepositSummaryListViewModel()
+        {
+            BankDepositSummaries = new List<BankDepositSummaryViewModel>();
+        }
+    }
 }

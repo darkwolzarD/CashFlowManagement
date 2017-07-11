@@ -51,4 +51,24 @@ namespace CashFlowManagement.Models
             Expenses = new List<OtherExpenseViewModel>();
         }
     }
+
+    public class OtherExpenseSummaryViewModel : OtherExpenseViewModel
+    {
+
+    }
+
+    public class OtherExpenseSummaryListViewModel
+    {
+        [DisplayFormat(DataFormatString = "{0:N0}")]
+        public double TotalExpense { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:N0}")]
+        public double TotalAnnualExpense { get; set; }
+
+        public List<OtherExpenseSummaryViewModel> Expenses { get; set; }
+        public OtherExpenseSummaryListViewModel()
+        {
+            Expenses = new List<OtherExpenseSummaryViewModel>();
+        }
+    }
 }

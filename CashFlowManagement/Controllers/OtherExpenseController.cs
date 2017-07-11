@@ -87,5 +87,14 @@ namespace CashFlowManagement.Controllers
                 return Content("failed");
             }
         }
+
+        public ActionResult _ExpenseSummary()
+        {
+            ExpenseSummaryViewModel model = new ExpenseSummaryViewModel();
+            string username = UserQueries.GetCurrentUsername();
+            model.FamilyExpenses = FamilyExpenseQueries.GetFamilyExpenseSummaryByUser(username);
+            model.OtherExpenses = OtherExpenseQueries.GetOtherExpenseSummaryByUser(username);
+            return PartialView(model);
+        }
     }
 }

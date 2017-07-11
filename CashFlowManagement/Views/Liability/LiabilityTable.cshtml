@@ -173,13 +173,13 @@
                         <td colspan="13" class="text-center">Không có khoản nợ</td>
                     </tr>
                 }
-                @{ rsCount++; }
+                 rsCount++; }
             </tbody>
         </table>
     </div>
 </div>
 <div class="liability-modal">
-    @{ Html.RenderPartial("_LiabilityModal", new Liabilities
+     Html.RenderPartial("_LiabilityModal", new Liabilities
             {
                 LiabilityType = Model.Type
             }); }

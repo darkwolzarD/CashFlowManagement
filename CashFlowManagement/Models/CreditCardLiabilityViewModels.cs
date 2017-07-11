@@ -68,4 +68,29 @@ namespace CashFlowManagement.Models
             Liabilities = new List<CreditCardLiabilityViewModel>();
         }
     }
+
+    public class CreditCardLiabilitySummaryViewModel: CreditCardLiabilityViewModel
+    {
+
+    }
+
+    public class CreditCardLiabilitySummaryListViewModel
+    {
+        [DisplayFormat(DataFormatString = "{0:N0}")]
+        public double TotalValue { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:P2}")]
+        public double TotalInterestRate { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:N0}")]
+        public double TotalMonthlyPayment { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:N0}")]
+        public double TotalAnnualPayment { get; set; }
+        public List<CreditCardLiabilitySummaryViewModel> Liabilities { get; set; }
+        public CreditCardLiabilitySummaryListViewModel()
+        {
+            Liabilities = new List<CreditCardLiabilitySummaryViewModel>();
+        }
+    }
 }

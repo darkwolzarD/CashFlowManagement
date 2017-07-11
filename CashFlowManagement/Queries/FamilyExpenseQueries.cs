@@ -14,11 +14,38 @@ namespace CashFlowManagement.Queries
             Entities entities = new Entities();
             var familyExpenses = entities.Expenses.Where(x => x.Username.Equals(username) 
                                                 && x.ExpenseType == (int)Constants.Constants.EXPENSE_TYPE.FAMILY 
-                                                && !x.DisabledDate.HasValue).OrderBy(x => x.Name).ToList();
+                                                && !x.DisabledDate.HasValue).OrderBy(x => x.Name);
             FamilyExpenseListViewModel result = new FamilyExpenseListViewModel();
             foreach (var familyExpense in familyExpenses)
             {
                 FamilyExpenseViewModel viewModel = new FamilyExpenseViewModel
+                {
+                    Id = familyExpense.Id,
+                    Source = familyExpense.Name,
+                    ExpenseDay = familyExpense.ExpenseDay,
+                    Expense = familyExpense.Value,
+                    AnnualExpense = familyExpense.Value * 12,
+                    Note = familyExpense.Note
+                };
+
+                result.Expenses.Add(viewModel);
+            }
+
+            result.TotalExpense = result.Expenses.Sum(x => x.Expense.Value);
+            result.TotalAnnualExpense = result.TotalExpense * 12;
+            return result;
+        }
+
+        public static FamilyExpenseSummaryListViewModel GetFamilyExpenseSummaryByUser(string username)
+        {
+            Entities entities = new Entities();
+            var familyExpenses = entities.Expenses.Where(x => x.Username.Equals(username)
+                                                && x.ExpenseType == (int)Constants.Constants.EXPENSE_TYPE.FAMILY
+                                                && !x.DisabledDate.HasValue).OrderBy(x => x.Name);
+            FamilyExpenseSummaryListViewModel result = new FamilyExpenseSummaryListViewModel();
+            foreach (var familyExpense in familyExpenses)
+            {
+                FamilyExpenseSummaryViewModel viewModel = new FamilyExpenseSummaryViewModel
                 {
                     Id = familyExpense.Id,
                     Source = familyExpense.Name,

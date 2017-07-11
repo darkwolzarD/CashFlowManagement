@@ -1,0 +1,193 @@
+﻿@model CashFlowManagement.Models.LiabilitySummaryViewModel
+
+<div id="liability-summary-modal" class="modal fade" role="dialog">
+    <div class="modal-dialog" style="width: 1100px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <p style="font-size: 16px; margin-bottom: 0px;">Xác nhận thông tin khởi tạo các khoản nợ</p>
+            </div>
+            <div class="modal-body" style="padding: 0 20px 0 20px !important">
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <h4>Các khoản vay xe hơi và tiêu sản khác</h4>
+                        <table class="table table-condensed table-responsive">
+                            <thead>
+                                <tr>
+                                    <th class="text-left">Nguồn vay nợ</th>
+                                    <th class="text-right">Tổng giá trị</th>
+                                    <th class="text-right">Vốn vay</th>
+                                    <th class="text-right">Lãi suất vay</th>
+                                    <th class="text-right">Ngày vay</th>
+                                    <th class="text-right">Ngày trả hết nợ</th>
+                                    <th class="text-right">Số tháng trả</th>
+                                    <th class="text-right">Trả lãi vay tháng</th>
+                                    <th class="text-right">Trả vốn vay tháng</th>
+                                    <th class="text-right">Tổng phải trả hàng tháng</th>
+                                    <th class="text-right">Tiền vay còn phải trả</th>
+                                    <th class="text-left">Ghi chú</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model.CarLiabilities.Liabilities.Any())
+                                {
+                                    <tr>
+                                        <td class="text-danger"><strong>Tổng</strong></td>
+                                        <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.CarLiabilities.TotalOriginalValue)</strong></td>
+                                        <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.CarLiabilities.TotalLiabilityValue)</strong></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.CarLiabilities.TotalInterestPayment)</strong></td>
+                                        <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.CarLiabilities.TotalOriginalPayment)</strong></td>
+                                        <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.CarLiabilities.TotalPayment)</strong></td>
+                                        <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.CarLiabilities.TotalRemainedValue)</strong></td>
+                                        <td></td>
+                                    </tr>
+                                    foreach (var liability in Model.CarLiabilities.Liabilities)
+                                    {
+                                        <tr>
+                                            <td class="text-left">@Html.DisplayFor(x => liability.Source)</td>
+                                            <td class="text-right">@Html.DisplayFor(x => liability.LiabilityValue)</td>
+                                            <td class="text-right">@Html.DisplayFor(x => liability.Value)</td>
+                                            <td class="text-right">@Html.DisplayFor(x => liability.InterestRate) / @Html.DisplayFor(x => liability.InterestRatePerX)</td>
+                                            <td class="text-right">@Html.DisplayFor(x => liability.StartDate)</td>
+                                            <td class="text-right">@Html.DisplayFor(x => liability.EndDate)</td>
+                                            <td class="text-right">@Html.DisplayFor(x => liability.PaymentPeriod)</td>
+                                            <td class="text-right">@Html.DisplayFor(x => liability.MonthlyInterestPayment)</td>
+                                            <td class="text-right">@Html.DisplayFor(x => liability.MonthlyOriginalPayment)</td>
+                                            <td class="text-right">@Html.DisplayFor(x => liability.TotalMonthlyPayment)</td>
+                                            <td class="text-right">@Html.DisplayFor(x => liability.RemainedValue)</td>
+                                            <td class="text-left">@Html.DisplayFor(x => liability.Note)</td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="12" class="text-center">Không có có khoản nợ nào</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-md-12 text-center">
+                        <h4>Các khoản vay thẻ tín dụng</h4>
+                        <table class="table table-condensed table-responsive">
+                            <thead>
+                                <tr>
+                                    <th class="text-left">Nguồn vay nợ</th>
+                                    <th class="text-right">Giá trị đã dùng</th>
+                                    <th class="text-right">Chi phí lãi</th>
+                                    <th class="text-right">Phải trả hàng tháng</th>
+                                    <th class="text-right">Phải trả hàng năm</th>
+                                    <th class="text-left">Ghi chú</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model.CreditCardLiabilities.Liabilities.Any())
+                                {
+                                    <tr>
+                                        <td class="text-danger"><strong>Tổng</strong></td>
+                                        <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.CreditCardLiabilities.TotalValue)</strong></td>
+                                        <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.CreditCardLiabilities.TotalInterestRate)</strong></td>
+                                        <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.CreditCardLiabilities.TotalMonthlyPayment)</strong></td>
+                                        <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.CreditCardLiabilities.TotalAnnualPayment)</strong></td>
+                                        <td></td>
+                                    </tr>
+                                    foreach (var liability in Model.CreditCardLiabilities.Liabilities)
+                                    {
+                                        <tr>
+                                            <td class="text-left">@Html.DisplayFor(x => liability.Source)</td>
+                                            <td class="text-right">@Html.DisplayFor(x => liability.Value)</td>
+                                            <td class="text-right">@Html.DisplayFor(x => liability.InterestRate) / năm</td>
+                                            <td class="text-right">@Html.DisplayFor(x => liability.MonthlyPayment)</td>
+                                            <td class="text-right">@Html.DisplayFor(x => liability.AnnualPayment)</td>
+                                            <td class="text-left">@Html.DisplayFor(x => liability.Note)</td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="12" class="text-center">Không có có khoản nợ nào</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-md-12 text-center">
+                        <h4>Các khoản vay khác</h4>
+                        <table class="table table-condensed table-responsive">
+                            <thead>
+                                <tr>
+                                    <th class="text-left">Nguồn vay nợ</th>
+                                    <th class="text-left">Mục tiêu sử dụng</th>
+                                    <th class="text-right">Vốn vay</th>
+                                    <th class="text-right">Lãi suất vay</th>
+                                    <th class="text-right">Ngày vay</th>
+                                    <th class="text-right">Ngày trả hết nợ</th>
+                                    <th class="text-right">Số tháng trả</th>
+                                    <th class="text-right">Trả lãi vay tháng</th>
+                                    <th class="text-right">Trả vốn vay tháng</th>
+                                    <th class="text-right">Tổng phải trả hàng tháng</th>
+                                    <th class="text-right">Tiền vay còn phải trả</th>
+                                    <th class="text-left">Ghi chú</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model.OtherLiabilities.Liabilities.Any())
+                                {
+                                    <tr>
+                                        <td class="text-danger"><strong>Tổng</strong></td>
+                                        <td></td>
+                                        <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.OtherLiabilities.TotalLiabilityValue)</strong></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.OtherLiabilities.TotalInterestPayment)</strong></td>
+                                        <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.OtherLiabilities.TotalOriginalPayment)</strong></td>
+                                        <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.OtherLiabilities.TotalPayment)</strong></td>
+                                        <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.OtherLiabilities.TotalRemainedValue)</strong></td>
+                                        <td></td>
+                                    </tr>
+                                    foreach (var liability in Model.OtherLiabilities.Liabilities)
+                                    {
+                                        <tr>
+                                            <td class="text-left">@Html.DisplayFor(x => liability.Source)</td>
+                                            <td class="text-left">@Html.DisplayFor(x => liability.Purpose)</td>
+                                            <td class="text-right">@Html.DisplayFor(x => liability.Value)</td>
+                                            <td class="text-right">@Html.DisplayFor(x => liability.InterestRate) / @Html.DisplayFor(x => liability.InterestRatePerX)</td>
+                                            <td class="text-right">@Html.DisplayFor(x => liability.StartDate)</td>
+                                            <td class="text-right">@Html.DisplayFor(x => liability.EndDate)</td>
+                                            <td class="text-right">@Html.DisplayFor(x => liability.PaymentPeriod)</td>
+                                            <td class="text-right">@Html.DisplayFor(x => liability.MonthlyInterestPayment)</td>
+                                            <td class="text-right">@Html.DisplayFor(x => liability.MonthlyOriginalPayment)</td>
+                                            <td class="text-right">@Html.DisplayFor(x => liability.TotalMonthlyPayment)</td>
+                                            <td class="text-right">@Html.DisplayFor(x => liability.RemainedValue)</td>
+                                            <td class="text-left">@Html.DisplayFor(x => liability.Note)</td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="12" class="text-center">Không có có khoản nợ nào</td>
+                                    </tr>
+                                }
+                            </tbody>    
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a href="@Url.Action("Index", "FamilyExpense")" class="btn btn-success">
+                    <span class="glyphicon glyphicon-ok"></span>
+                    Xác nhận
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+

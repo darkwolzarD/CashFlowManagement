@@ -126,4 +126,16 @@
             });
         }
     })
+
+    $(document).on("click", ".expense-toggle-summary", function () {
+        $.ajax({
+            url: Url.ExpenseSummary,
+            type: "get",
+            success: function (data) {
+                $("#modal").html(data);
+                $("#expense-summary-modal").modal("show");
+                MaskInput();
+            }
+        });
+    })
 })

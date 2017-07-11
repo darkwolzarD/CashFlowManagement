@@ -429,11 +429,11 @@ namespace CashFlowManagement.Queries
             AssetSummaryViewModel model = new AssetSummaryViewModel();
             string username = UserQueries.GetCurrentUsername();
             model.RealEstates = RealEstateQueries.GetRealEstateSummaryByUser(username);
-            model.Businesses = BusinessQueries.GetBusinessByUser(username);
-            model.BankDeposits = BankDepositQueries.GetBankDepositByUser(username);
-            model.Stocks = StockQueries.GetStockByUser(username);
-            model.Insurances = InsuranceQueries.GetInsuranceByUser(username);
-            model.OtherAssets = OtherAssetQueries.GetOtherAssetByUser(username);
+            model.Businesses = BusinessQueries.GetBusinessSummaryByUser(username);
+            model.BankDeposits = BankDepositQueries.GetBankDepositSummaryByUser(username);
+            model.Stocks = StockQueries.GetStockSummaryByUser(username);
+            model.Insurances = InsuranceQueries.GetInsuranceSummaryByUser(username);
+            model.OtherAssets = OtherAssetQueries.GetOtherAssetSummaryByUser(username);
             return PartialView(model);
         }
     }

@@ -37,6 +37,23 @@ namespace CashFlowManagement.Models
         public double AnnualIncome { get; set; }
     }
 
+    public class SalarySummaryViewModel
+    {
+        public string Source { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:N0}")]
+        public int IncomeDay { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:N0}")]
+        public double Income { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:N0}")]
+        public double AnnualIncome { get; set; }
+
+        [Display(Name = "Ghi chú")]
+        public string Note { get; set; }
+    }
+
     public class SalaryListViewModel
     {
         [DisplayFormat(DataFormatString = "{0:N0}")]
@@ -49,6 +66,21 @@ namespace CashFlowManagement.Models
         public SalaryListViewModel()
         {
             Salaries = new List<SalaryViewModel>();
+        }
+    }
+
+    public class SalarySummaryListViewModel
+    {
+        [DisplayFormat(DataFormatString = "{0:N0}")]
+        public double TotalIncome { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:N0}")]
+        public double TotalAnnualIncome { get; set; }
+
+        public List<SalarySummaryViewModel> Salaries { get; set; }
+        public SalarySummaryListViewModel()
+        {
+            Salaries = new List<SalarySummaryViewModel>();
         }
     }
 }

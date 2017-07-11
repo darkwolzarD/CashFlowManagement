@@ -87,5 +87,15 @@ namespace CashFlowManagement.Controllers
                 return Content("failed");
             }
         }
+
+        public ActionResult _LiabilitySummary()
+        {
+            LiabilitySummaryViewModel model = new LiabilitySummaryViewModel();
+            string username = UserQueries.GetCurrentUsername();
+            model.CarLiabilities = CarLiabilityQueries.GetCarLiabilitySummaryByUser(username);
+            model.CreditCardLiabilities = CreditCardLiabilityQueries.GetCreditCardLiabilitySummaryByUser(username);
+            model.OtherLiabilities = OtherLiabilityQueries.GetOtherLiabilitySummaryByUser(username);
+            return PartialView(model);
+        }
     }
 }

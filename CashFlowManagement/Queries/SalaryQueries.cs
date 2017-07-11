@@ -36,6 +36,32 @@ namespace CashFlowManagement.Queries
             return result;
         }
 
+        public static SalarySummaryListViewModel GetSalarySummaryByUser(string username)
+        {
+            Entities entities = new Entities();
+            var salaries = entities.Incomes.Where(x => x.Username.Equals(username)
+                                                && x.IncomeType == (int)Constants.Constants.INCOME_TYPE.SALARY_INCOME
+                                                && !x.DisabledDate.HasValue).OrderBy(x => x.Name).ToList();
+            SalarySummaryListViewModel result = new SalarySummaryListViewModel();
+            foreach (var salary in salaries)
+            {
+                SalarySummaryViewModel viewModel = new SalarySummaryViewModel
+                {
+                    Source = salary.Name,
+                    IncomeDay = salary.IncomeDay.Value,
+                    Income = salary.Value,
+                    AnnualIncome = salary.Value * 12,
+                    Note = salary.Note
+                };
+
+                result.Salaries.Add(viewModel);
+            }
+
+            result.TotalIncome = result.Salaries.Sum(x => x.Income);
+            result.TotalAnnualIncome = result.TotalIncome * 12;
+            return result;
+        }
+
         public static SalaryUpdateViewModel GetSalaryById(int id)
         {
             Entities entities = new Entities();

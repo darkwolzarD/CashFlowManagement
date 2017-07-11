@@ -42,11 +42,46 @@ namespace CashFlowManagement.Queries
             return result;
         }
 
+        public static CreditCardLiabilitySummaryListViewModel GetCreditCardLiabilitySummaryByUser(string username)
+        {
+            Entities entities = new Entities();
+            CreditCardLiabilitySummaryListViewModel result = new CreditCardLiabilitySummaryListViewModel();
+            var liabilities = entities.Liabilities.Where(x => x.Username.Equals(username)
+                                                && x.LiabilityType == (int)Constants.Constants.LIABILITY_TYPE.CREDIT_CARD
+                                                && !x.DisabledDate.HasValue).OrderBy(x => x.Name);
+            foreach (var liability in liabilities)
+            {
+                CreditCardLiabilitySummaryViewModel viewModel = CreateSummaryViewModel(liability);
+                result.Liabilities.Add(viewModel);
+            }
+
+            result.TotalValue = result.Liabilities.Sum(x => x.Value);
+            result.TotalMonthlyPayment = result.Liabilities.Sum(x => x.MonthlyPayment);
+            result.TotalAnnualPayment = result.Liabilities.Sum(x => x.AnnualPayment);
+            result.TotalInterestRate = result.TotalMonthlyPayment / result.TotalValue * 100;
+            return result;
+        }
+
         public static CreditCardLiabilityViewModel CreateViewModel(Liabilities liability)
         {
             DateTime current = DateTime.Now;
 
             CreditCardLiabilityViewModel liabilityViewModel = new CreditCardLiabilityViewModel();
+            liabilityViewModel.Id = liability.Id;
+            liabilityViewModel.Source = liability.Name;
+            liabilityViewModel.Value = liability.Value;
+            liabilityViewModel.InterestRate = liability.InterestRate / 100;
+            liabilityViewModel.Note = liability.Note;
+            liabilityViewModel.MonthlyPayment = liabilityViewModel.Value * liabilityViewModel.InterestRate / 100;
+            liabilityViewModel.AnnualPayment = liabilityViewModel.MonthlyPayment * 12;
+            return liabilityViewModel;
+        }
+
+        public static CreditCardLiabilitySummaryViewModel CreateSummaryViewModel(Liabilities liability)
+        {
+            DateTime current = DateTime.Now;
+
+            CreditCardLiabilitySummaryViewModel liabilityViewModel = new CreditCardLiabilitySummaryViewModel();
             liabilityViewModel.Id = liability.Id;
             liabilityViewModel.Source = liability.Name;
             liabilityViewModel.Value = liability.Value;

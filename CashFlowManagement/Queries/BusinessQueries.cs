@@ -62,6 +62,58 @@ namespace CashFlowManagement.Queries
             return result;
         }
 
+        public static BusinessSummaryListViewModel GetBusinessSummaryByUser(string username)
+        {
+            Entities entities = new Entities();
+            BusinessSummaryListViewModel result = new BusinessSummaryListViewModel();
+
+            var businesss = entities.Assets.Include("Incomes").Include("Liabilities").Where(x => x.Username.Equals(username)
+                                                      && x.AssetType == (int)Constants.Constants.ASSET_TYPE.BUSINESS
+                                                      && !x.DisabledDate.HasValue);
+
+            foreach (var business in businesss)
+            {
+                BusinessSummaryViewModel businessViewModel = new BusinessSummaryViewModel();
+                businessViewModel.Name = business.AssetName;
+                businessViewModel.Value = business.Value;
+                if (business.Incomes1.Where(x => !x.DisabledDate.HasValue).Any())
+                {
+                    businessViewModel.Income = business.Incomes1.FirstOrDefault().Value;
+                }
+                else
+                {
+                    businessViewModel.Income = 0;
+                }
+                businessViewModel.AnnualIncome = businessViewModel.Income * 12;
+                businessViewModel.RentYield = businessViewModel.Income / businessViewModel.Value;
+
+                foreach (var liability in business.Liabilities.Where(x => !x.DisabledDate.HasValue))
+                {
+                    BusinessLiabilityViewModel liabilityViewModel = BusinessLiabilityQueries.CreateViewModel(liability);
+                    businessViewModel.LiabilityValue += liabilityViewModel.Value.Value;
+                    businessViewModel.InterestRate += liabilityViewModel.InterestRate.Value;
+                    businessViewModel.InterestRatePerX += liabilityViewModel.InterestRatePerX;
+                    businessViewModel.MonthlyInterestPayment += liabilityViewModel.MonthlyInterestPayment;
+                    businessViewModel.MonthlyPayment += liabilityViewModel.TotalMonthlyPayment;
+                    businessViewModel.AnnualPayment += liabilityViewModel.TotalPayment;
+                    businessViewModel.RemainedValue += liabilityViewModel.RemainedValue;
+                }
+                result.BusinessSummaries.Add(businessViewModel);
+            }
+
+            result.TotalIncome = result.BusinessSummaries.Sum(x => x.Income);
+            result.TotalAnnualIncome = result.BusinessSummaries.Sum(x => x.AnnualIncome);
+            result.TotalValue = result.BusinessSummaries.Sum(x => x.Value);
+            result.TotalRentYield = result.BusinessSummaries.Sum(x => x.MonthlyInterestPayment) / result.TotalValue;
+            result.TotalLiabilityValue = result.BusinessSummaries.Sum(x => x.LiabilityValue);
+            result.TotalInterestRate = result.BusinessSummaries.Sum(x => x.Value);
+            result.TotalMonthlyPayment = result.BusinessSummaries.Sum(x => x.MonthlyPayment);
+            result.TotalAnnualPayment = result.BusinessSummaries.Sum(x => x.AnnualPayment);
+            result.TotalRemainedValue = result.BusinessSummaries.Sum(x => x.RemainedValue);
+
+            return result;
+        }
+
         public static BusinessUpdateViewModel GetBusinessById(int id)
         {
             BusinessUpdateViewModel viewmodel = new BusinessUpdateViewModel();

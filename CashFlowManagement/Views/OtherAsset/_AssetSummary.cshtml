@@ -6,7 +6,7 @@
             <div class="modal-header">
                 <p style="font-size: 16px; margin-bottom: 0px;">Xác nhận thông tin khởi tạo tài sản</p>
             </div>
-            <div class="modal-body">
+            <div class="modal-body" style="padding: 0 20px 0 20px !important">
                 <div class="row">
                     <div class="col-md-12 text-center">
                         <h4>Bất động sản</h4>
@@ -60,6 +60,290 @@
                                 {
                                     <tr>
                                         <td colspan="10">Không có bất động sản</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-md-12 text-center">
+                        <h4>Kinh doanh</h4>
+                        <table class="table table-responsive table-condensed">
+                            <thead>
+                                <tr>
+                                    <th>Kinh doanh</th>
+                                    <th class="text-right">Thu hàng tháng</th>
+                                    <th class="text-right">Thu hàng năm</th>
+                                    <th class="text-right">Giá trị góp vốn</th>
+                                    <th class="text-right">Tỷ suất lợi nhuận</th>
+                                    <th class="text-right">Giá trị tiền vay</th>
+                                    <th class="text-right">Chi phí lãi vay</th>
+                                    <th class="text-right">Phải trả hàng tháng</th>
+                                    <th class="text-right">Phải trả hàng năm</th>
+                                    <th class="text-right">Số tiền gốc còn phải trả</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model.Businesses.BusinessSummaries.Any())
+                                {
+                                    <tr>
+                                        <td class="text-danger text-left"><strong>Tổng</strong></td>
+                                        <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.Businesses.TotalIncome)</strong></td>
+                                        <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.Businesses.TotalAnnualIncome)</strong></td>
+                                        <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.Businesses.TotalValue)</strong></td>
+                                        <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.Businesses.TotalRentYield)</strong></td>
+                                        <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.Businesses.TotalLiabilityValue)</strong></td>
+                                        <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.Businesses.TotalInterestRate)</strong></td>
+                                        <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.Businesses.TotalMonthlyPayment)</strong></td>
+                                        <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.Businesses.TotalAnnualPayment)</strong></td>
+                                        <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.Businesses.TotalRemainedValue)</strong></td>
+                                    </tr>
+                                    foreach (var business in Model.Businesses.BusinessSummaries)
+                                    {
+                                        <tr>
+                                            <td class="text-left">@Html.DisplayFor(x => business.Name)</td>
+                                            <td class="text-right">@Html.DisplayFor(x => business.Income)</td>
+                                            <td class="text-right">@Html.DisplayFor(x => business.AnnualIncome)</td>
+                                            <td class="text-right">@Html.DisplayFor(x => business.Value)</td>
+                                            <td class="text-right">@Html.DisplayFor(x => business.RentYield)</td>
+                                            <td class="text-right">@Html.DisplayFor(x => business.LiabilityValue)</td>
+                                            <td class="text-right">@Html.DisplayFor(x => business.InterestRate) / @Html.DisplayFor(x => business.InterestRatePerX)</td>
+                                            <td class="text-right">@Html.DisplayFor(x => business.MonthlyPayment)</td>
+                                            <td class="text-right">@Html.DisplayFor(x => business.AnnualPayment)</td>
+                                            <td class="text-right">@Html.DisplayFor(x => business.RemainedValue)</td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="10">Không có bất động sản</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-md-12 text-center">
+                        <h4>Tài khoản tiết kiệm</h4>
+                        <table class="table table-responsive table-condensed">
+                            <thead>
+                                <tr>
+                                    <th class="text-left">Tài khoản tiết kiệm</th>
+                                    <th class="text-right">Ngày gửi tiết kiệm</th>
+                                    <th class="text-right">Ngày đáo hạn</th>
+                                    <th class="text-right">Kỳ hạn</th>
+                                    <th class="text-right">Thu nhập tháng</th>
+                                    <th class="text-right">Thu nhập năm</th>
+                                    <th class="text-right">Tổng vốn</th>
+                                    <th class="text-right">Lãi suất tiền gửi</th>
+                                    <th>Kiểu nhận lãi</th>
+                                    <th>Ghi chú</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="text-danger text-left"><strong>Tổng</strong></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.BankDeposits.TotalIncome)</strong></td>
+                                    <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.BankDeposits.TotalAnnualIncome)</strong></td>
+                                    <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.BankDeposits.TotalValue)</strong></td>
+                                    <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.BankDeposits.TotalInterestRate)</strong></td>
+                                    <td></td>
+                                </tr>
+                                @if (Model.BankDeposits.BankDepositSummaries.Any())
+                                {
+                                    foreach (var bankDeposits in Model.BankDeposits.BankDepositSummaries)
+                                    {
+                                        <tr>
+                                            <td class="text-left">@Html.DisplayFor(x => bankDeposits.Name)</td>
+                                            <td class="text-right">@Html.DisplayFor(x => bankDeposits.StartDate)</td>
+                                            <td class="text-right">@Html.DisplayFor(x => bankDeposits.EndDate)</td>
+                                            <td class="text-right">@Html.DisplayFor(x => bankDeposits.PaymentPeriod)</td>
+                                            <td class="text-right">@Html.DisplayFor(x => bankDeposits.Income)</td>
+                                            <td class="text-right">@Html.DisplayFor(x => bankDeposits.AnnualIncome)</td>
+                                            <td class="text-right">@Html.DisplayFor(x => bankDeposits.Value)</td>
+                                            <td class="text-right">@Html.DisplayFor(x => bankDeposits.InterestRate)</td>
+                                            <td class="text-right">@Html.DisplayFor(x => bankDeposits.InterestObtainWay)</td>
+                                            <td>@Html.DisplayFor(x => bankDeposits.Note)</td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td class="text-center" colspan="10">Không có tài khoản tiết kiệm</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-md-12 text-center">
+                        <h4>Cổ phiếu</h4>
+                        <table class="table table-responsive table-condensed">
+                            <thead>
+                                <tr>
+                                    <th class="text-left">Mã cổ phiếu</th>
+                                    <th class="text-right">Số lượng cổ phiếu</th>
+                                    <th class="text-right">Giá cổ phiếu</th>
+                                    <th class="text-right">Tổng giá trị vốn</th>
+                                    <th class="text-right">Cổ tức mong đợi</th>
+                                    <th class="text-right">Giá trị tiền vay</th>
+                                    <th class="text-right">Chi phí lãi vay</th>
+                                    <th class="text-right">Phải trả hàng tháng</th>
+                                    <th class="text-right">Phải trả hàng năm</th>
+                                    <th class="text-right">Số tiền gốc còn phải trả</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="text-danger text-left"><strong>Tổng</strong></td>
+                                    <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.Stocks.TotalNumberOfStock)</strong></td>
+                                    <td></td>
+                                    <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.Stocks.TotalStockValue)</strong></td>
+                                    <td></td>
+                                    <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.Stocks.TotalLiabilityValue)</strong></td>
+                                    <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.Stocks.TotalInterestRate)</strong></td>
+                                    <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.Stocks.TotalMonthlyPayment)</strong></td>
+                                    <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.Stocks.TotalAnnualPayment)</strong></td>
+                                    <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.Stocks.TotalRemainedValue)</strong></td>
+                                </tr>
+                                @if (Model.Stocks.StockSummaries.Any())
+                                {
+                                    foreach (var stock in Model.Stocks.StockSummaries)
+                                    {
+                                        <tr>
+                                            <td class="text-left">@Html.DisplayFor(x => stock.Name)</td>
+                                            <td class="text-right">@Html.DisplayFor(x => stock.NumberOfStock)</td>
+                                            <td class="text-right">@Html.DisplayFor(x => stock.SpotRice)</td>
+                                            <td class="text-right">@Html.DisplayFor(x => stock.StockValue)</td>
+                                            <td class="text-right">@Html.DisplayFor(x => stock.ExpectedDividend)</td>
+                                            <td class="text-right">@Html.DisplayFor(x => stock.LiabilityValue)</td>
+                                            <td class="text-right">@Html.DisplayFor(x => stock.InterestRate) / năm</td>
+                                            <td class="text-right">@Html.DisplayFor(x => stock.MonthlyPayment)</td>
+                                            <td class="text-right">@Html.DisplayFor(x => stock.AnnualPayment)</td>
+                                            <td class="text-right">@Html.DisplayFor(x => stock.RemainedValue)</td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td class="text-center" colspan="10">Không có cổ phiếu</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-md-12 text-center">
+                        <h4>Bảo hiểm nhân thọ</h4>
+                        <table class="table table-responsive table-condensed">
+                            <thead>
+                                <tr>
+                                    <th>Bảo hiểm nhân thọ</th>
+                                    <th class="text-right">Tổng giá trị thụ hưởng</th>
+                                    <th class="text-right">Tổng phải đóng</th>
+                                    <th class="text-right">Ngày bắt đầu</th>
+                                    <th class="text-right">Ngày kết thúc</th>
+                                    <th class="text-right">Tổng số tháng</th>
+                                    <th class="text-right">Phải đóng hàng tháng</th>
+                                    <th class="text-right">Phải đóng hàng năm</th>
+                                    <th class="text-right">Còn phải đóng</th>
+                                    <th>Ghi chú</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="text-danger"><strong>Tổng</strong></td>
+                                    <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.Insurances.TotalValue)</strong></td>
+                                    <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.Insurances.TotalTotalExpense)</strong></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td class="text-danger"></td>
+                                    <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.Insurances.TotalExpense)</strong></td>
+                                    <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.Insurances.TotalAnnualExpense)</strong></td>
+                                    <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.Insurances.TotalRemainedValue)</strong></td>
+                                    <td></td>
+                                </tr>
+                                @if (Model.Insurances.InsuranceSummaries.Any())
+                                {
+                                    foreach (var item in Model.Insurances.InsuranceSummaries)
+                                    {
+                                        <tr>
+                                            <td>@Html.DisplayFor(x => item.Name)</td>
+                                            <td class="text-right">@Html.DisplayFor(x => item.Value)</td>
+                                            <td class="text-right">@Html.DisplayFor(x => item.TotalExpense)</td>
+                                            <td class="text-right">@Html.DisplayFor(x => item.StartDate)</td>
+                                            <td class="text-right">@Html.DisplayFor(x => item.EndDate)</td>
+                                            <td class="text-right">@Html.DisplayFor(x => item.PaymentPeriod)</td>
+                                            <td class="text-right">@Html.DisplayFor(x => item.Expense)</td>
+                                            <td class="text-right">@Html.DisplayFor(x => item.AnnualExpense)</td>
+                                            <td class="text-right">@Html.DisplayFor(x => item.RemainedValue)</td>
+                                            <td>@Html.DisplayFor(x => item.Note)</td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td class="text-center" colspan="10">Chưa có bảo hiểm</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-md-12 text-center">
+                        <h4>Tài sản khác</h4>
+                        <table class="table table-responsive table-condensed">
+                            <thead>
+                                <tr>
+                                    <th>Tài sản</th>
+                                    <th class="text-right">Thu hàng tháng</th>
+                                    <th class="text-right">Thu hàng năm</th>
+                                    <th class="text-right">Giá trị góp vốn</th>
+                                    <th class="text-right">Tỷ suất lợi nhuận</th>
+                                    <th class="text-right">Giá trị tiền vay</th>
+                                    <th class="text-right">Chi phí lãi vay</th>
+                                    <th class="text-right">Phải trả hàng tháng</th>
+                                    <th class="text-right">Phải trả hàng năm</th>
+                                    <th class="text-right">Số tiền gốc còn phải trả</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model.OtherAssets.OtherAssetSummaries.Any())
+                                {
+                                    <tr>
+                                        <td class="text-danger text-left"><strong>Tổng</strong></td>
+                                        <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.OtherAssets.TotalIncome)</strong></td>
+                                        <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.OtherAssets.TotalAnnualIncome)</strong></td>
+                                        <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.OtherAssets.TotalValue)</strong></td>
+                                        <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.OtherAssets.TotalRentYield)</strong></td>
+                                        <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.OtherAssets.TotalLiabilityValue)</strong></td>
+                                        <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.OtherAssets.TotalInterestRate)</strong></td>
+                                        <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.OtherAssets.TotalMonthlyPayment)</strong></td>
+                                        <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.OtherAssets.TotalAnnualPayment)</strong></td>
+                                        <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.OtherAssets.TotalRemainedValue)</strong></td>
+                                    </tr>
+                                    foreach (var business in Model.OtherAssets.OtherAssetSummaries)
+                                    {
+                                        <tr>
+                                            <td class="text-left">@Html.DisplayFor(x => business.Name)</td>
+                                            <td class="text-right">@Html.DisplayFor(x => business.Income)</td>
+                                            <td class="text-right">@Html.DisplayFor(x => business.AnnualIncome)</td>
+                                            <td class="text-right">@Html.DisplayFor(x => business.Value)</td>
+                                            <td class="text-right">@Html.DisplayFor(x => business.RentYield)</td>
+                                            <td class="text-right">@Html.DisplayFor(x => business.LiabilityValue)</td>
+                                            <td class="text-right">@Html.DisplayFor(x => business.InterestRate) / @Html.DisplayFor(x => business.InterestRatePerX)</td>
+                                            <td class="text-right">@Html.DisplayFor(x => business.MonthlyPayment)</td>
+                                            <td class="text-right">@Html.DisplayFor(x => business.AnnualPayment)</td>
+                                            <td class="text-right">@Html.DisplayFor(x => business.RemainedValue)</td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="10">Không có tài sản khác</td>
                                     </tr>
                                 }
                             </tbody>

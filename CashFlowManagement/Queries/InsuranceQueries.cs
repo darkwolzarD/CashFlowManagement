@@ -49,6 +49,44 @@ namespace CashFlowManagement.Queries
             return result;
         }
 
+        public static InsuranceSummaryListViewModel GetInsuranceSummaryByUser(string username)
+        {
+            Entities entities = new Entities();
+            var insurances = entities.Assets.Include("Expenses").Where(x => x.Username.Equals(username)
+                                                && x.AssetType == (int)Constants.Constants.ASSET_TYPE.INSURANCE
+                                                && !x.DisabledDate.HasValue).OrderBy(x => x.AssetName).ToList();
+            InsuranceSummaryListViewModel result = new InsuranceSummaryListViewModel();
+            foreach (var insurance in insurances)
+            {
+                var expense = insurance.Expenses1.FirstOrDefault();
+                InsuranceSummaryViewModel viewModel = new InsuranceSummaryViewModel
+                {
+                    Name = insurance.AssetName,
+                    Value = insurance.Value,
+                    StartDate = insurance.StartDate.Value,
+                    EndDate = insurance.EndDate.Value,
+                    PaymentPeriod = Helper.CalculateTimePeriod(insurance.StartDate.Value, insurance.EndDate.Value),
+                    Expense = expense.Value,
+                    AnnualExpense = expense.Value * 12,
+                    Note = insurance.Note
+                };
+
+                viewModel.TotalExpense = viewModel.PaymentPeriod * viewModel.Expense;
+                int currentPeriod = Helper.CalculateTimePeriod(viewModel.StartDate, DateTime.Now);
+                viewModel.RemainedValue = viewModel.TotalExpense - viewModel.Expense * currentPeriod;
+
+                result.InsuranceSummaries.Add(viewModel);
+            }
+
+            result.TotalValue = result.InsuranceSummaries.Sum(x => x.Value);
+            result.TotalTotalExpense = result.InsuranceSummaries.Sum(x => x.TotalExpense);
+            result.TotalExpense = result.InsuranceSummaries.Sum(x => x.Expense);
+            result.TotalAnnualExpense = result.InsuranceSummaries.Sum(x => x.AnnualExpense);
+            result.TotalRemainedValue = result.InsuranceSummaries.Sum(x => x.RemainedValue);
+
+            return result;
+        }
+
         public static InsuranceUpdateViewModel GetInsuranceById(int id)
         {
             Entities entities = new Entities();

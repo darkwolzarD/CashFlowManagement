@@ -60,4 +60,38 @@ namespace CashFlowManagement.Models
             Liabilities = new List<OtherLiabilityCreateViewModel>();
         }
     }
+
+    public class OtherLiabilitySummaryViewModel : OtherLiabilityViewModel
+    {
+    }
+
+    public class OtherLiabilitySummaryListViewModel
+    {
+
+        [DisplayFormat(DataFormatString = "{0:N0}")]
+        public double TotalLiabilityValue { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:P2}")]
+        public double TotalInterestRate { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:N0}")]
+        public double TotalOriginalPayment { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:N0}")]
+        public double TotalInterestPayment { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:N0}")]
+        public double TotalMonthlyPayment { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:N0}")]
+        public double TotalPayment { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:N0}")]
+        public double TotalRemainedValue { get; set; }
+        public List<OtherLiabilitySummaryViewModel> Liabilities { get; set; }
+        public OtherLiabilitySummaryListViewModel()
+        {
+            Liabilities = new List<OtherLiabilitySummaryViewModel>();
+        }
+    }
 }

@@ -671,7 +671,7 @@ item.Asset.ObtainedBy.HasValue && item.Asset.ObtainedBy.Value == (int)Constants.
 </div>
 
 <div class="asset-modal">
-    @{ Html.RenderPartial("_AssetModal", new AssetViewModel
+     Html.RenderPartial("_AssetModal", new AssetViewModel
         {
             Asset = new Assets { AssetType = Model.Type },
             Income = new Incomes()
@@ -702,7 +702,7 @@ item.Asset.ObtainedBy.HasValue && item.Asset.ObtainedBy.Value == (int)Constants.
                                                                             || Model.Type == (int)Constants.ASSET_TYPE.BANK_DEPOSIT)
 {
     <div class="buy-asset-modal">
-        @{ Html.RenderPartial("_BuyAssetModal", new AssetViewModel
+         Html.RenderPartial("_BuyAssetModal", new AssetViewModel
             {
                 Asset = new Assets { AssetType = Model.Type },
                 Income = new Incomes(),

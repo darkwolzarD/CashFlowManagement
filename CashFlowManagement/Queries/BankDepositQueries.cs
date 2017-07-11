@@ -63,6 +63,40 @@ namespace CashFlowManagement.Queries
             return model;
         }
 
+        public static BankDepositSummaryListViewModel GetBankDepositSummaryByUser(string username)
+        {
+            Entities entities = new Entities();
+            var bankDeposits = entities.Assets.Where(x => x.Username.Equals(username)
+                                                && x.AssetType == (int)Constants.Constants.ASSET_TYPE.BANK_DEPOSIT
+                                                && !x.DisabledDate.HasValue).OrderBy(x => x.AssetName).ToList();
+            BankDepositSummaryListViewModel result = new BankDepositSummaryListViewModel();
+            foreach (var bankDeposit in bankDeposits)
+            {
+                BankDepositSummaryViewModel viewModel = new BankDepositSummaryViewModel
+                {
+                    Name = bankDeposit.AssetName,
+                    Value = bankDeposit.Value,
+                    StartDate = bankDeposit.StartDate.Value,
+                    EndDate = bankDeposit.EndDate.Value,
+                    Income = bankDeposit.Value * bankDeposit.InterestRate.Value / 1200,
+                    AnnualIncome = (bankDeposit.Value * bankDeposit.InterestRate.Value / 1200) * 12,
+                    InterestRate = bankDeposit.InterestRate.Value,
+                    InterestObtainWay = Helper.GetObtainWay(bankDeposit.ObtainedBy.Value),
+                    PaymentPeriod = Helper.CalculateTimePeriod(bankDeposit.StartDate.Value, bankDeposit.EndDate.Value),
+                    Note = bankDeposit.Note
+                };
+
+                result.BankDepositSummaries.Add(viewModel);
+            }
+
+            result.TotalValue = result.BankDepositSummaries.Sum(x => x.Value);
+            result.TotalIncome = result.BankDepositSummaries.Sum(x => x.Income);
+            result.TotalAnnualIncome = result.BankDepositSummaries.Sum(x => x.AnnualIncome);
+            result.TotalInterestRate = result.TotalIncome / result.TotalValue;
+
+            return result;
+        }
+
         public static int CreateBankDeposit(BankDepositCreateViewModel model, string username)
         {
             Entities entities = new Entities();

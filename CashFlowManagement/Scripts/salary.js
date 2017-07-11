@@ -126,4 +126,16 @@
             });
         }
     })
+
+    $(document).on("click", ".salary-toggle-summary", function () {
+        $.ajax({
+            url: Url.SalarySummary,
+            type: "get",
+            success: function (data) {
+                $("#modal").html(data);
+                $("#salary-summary-modal").modal("show");
+                MaskInput();
+            }
+        });
+    })
 })
