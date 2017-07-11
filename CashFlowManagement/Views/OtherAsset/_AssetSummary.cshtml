@@ -1,0 +1,78 @@
+﻿@model CashFlowManagement.Models.AssetSummaryViewModel
+
+<div id="asset-summary-modal" class="modal fade" role="dialog">
+    <div class="modal-dialog" style="width: 1100px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <p style="font-size: 16px; margin-bottom: 0px;">Xác nhận thông tin khởi tạo tài sản</p>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <h4>Bất động sản</h4>
+                        <table class="table table-responsive table-condensed">
+                            <thead>
+                                <tr>
+                                    <th>Bất động sản</th>
+                                    <th class="text-right">Thu hàng tháng</th>
+                                    <th class="text-right">Thu hàng năm</th>
+                                    <th class="text-right">Giá trị tài sản</th>
+                                    <th class="text-right">Tỷ suất lợi nhuận cho thuê</th>
+                                    <th class="text-right">Giá trị tiền vay</th>
+                                    <th class="text-right">Chi phí lãi vay</th>
+                                    <th class="text-right">Phải trả hàng tháng</th>
+                                    <th class="text-right">Phải trả hàng năm</th>
+                                    <th class="text-right">Số tiền gốc còn phải trả</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model.RealEstates.RealEstateSummaries.Any())
+                                {
+                                    <tr>
+                                        <td class="text-danger text-left"><strong>Tổng</strong></td>
+                                        <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.RealEstates.TotalIncome)</strong></td>
+                                        <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.RealEstates.TotalAnnualIncome)</strong></td>
+                                        <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.RealEstates.TotalValue)</strong></td>
+                                        <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.RealEstates.TotalRentYield)</strong></td>
+                                        <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.RealEstates.TotalLiabilityValue)</strong></td>
+                                        <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.RealEstates.TotalInterestRate)</strong></td>
+                                        <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.RealEstates.TotalMonthlyPayment)</strong></td>
+                                        <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.RealEstates.TotalAnnualPayment)</strong></td>
+                                        <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.RealEstates.TotalRemainedValue)</strong></td>
+                                    </tr>
+                                    foreach (var realEstate in Model.RealEstates.RealEstateSummaries)
+                                    {
+                                        <tr>
+                                            <td class="text-left">@Html.DisplayFor(x => realEstate.Name)</td>
+                                            <td class="text-right">@Html.DisplayFor(x => realEstate.Income)</td>
+                                            <td class="text-right">@Html.DisplayFor(x => realEstate.AnnualIncome)</td>
+                                            <td class="text-right">@Html.DisplayFor(x => realEstate.Value)</td>
+                                            <td class="text-right">@Html.DisplayFor(x => realEstate.RentYield)</td>
+                                            <td class="text-right">@Html.DisplayFor(x => realEstate.LiabilityValue)</td>
+                                            <td class="text-right">@Html.DisplayFor(x => realEstate.InterestRate) / @Html.DisplayFor(x => realEstate.InterestRatePerX)</td>
+                                            <td class="text-right">@Html.DisplayFor(x => realEstate.MonthlyPayment)</td>
+                                            <td class="text-right">@Html.DisplayFor(x => realEstate.AnnualPayment)</td>
+                                            <td class="text-right">@Html.DisplayFor(x => realEstate.RemainedValue)</td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="10">Không có bất động sản</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a href="@Url.Action("Index", "CarLiability")" class="btn btn-success">
+                    <span class="glyphicon glyphicon-ok"></span>
+                    Xác nhận
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

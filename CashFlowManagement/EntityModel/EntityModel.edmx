@@ -47,6 +47,7 @@
           <Property Name="Username" Type="nvarchar" MaxLength="20" />
           <Property Name="Name" Type="nvarchar" MaxLength="50" />
           <Property Name="Note" Type="nvarchar(max)" />
+          <Property Name="AssetId" Type="int" />
         </EntityType>
         <EntityType Name="History">
           <Key>
@@ -95,6 +96,7 @@
           <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Value" Type="float" Nullable="false" />
           <Property Name="InterestRate" Type="float" Nullable="false" />
+          <Property Name="InterestRatePerX" Type="int" Nullable="false" />
           <Property Name="StartDate" Type="date" />
           <Property Name="EndDate" Type="date" />
           <Property Name="LiabilityType" Type="int" Nullable="false" />
@@ -218,6 +220,18 @@
             </Principal>
             <Dependent Role="Assets">
               <PropertyRef Name="Username" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Expenses_Assets">
+          <End Role="Assets" Type="Self.Assets" Multiplicity="0..1" />
+          <End Role="Expenses" Type="Self.Expenses" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Assets">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Expenses">
+              <PropertyRef Name="AssetId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -426,6 +440,10 @@
             <End Role="Users" EntitySet="Users" />
             <End Role="Assets" EntitySet="Assets" />
           </AssociationSet>
+          <AssociationSet Name="FK_Expenses_Assets" Association="Self.FK_Expenses_Assets">
+            <End Role="Assets" EntitySet="Assets" />
+            <End Role="Expenses" EntitySet="Expenses" />
+          </AssociationSet>
           <AssociationSet Name="FK_Expenses_Liabilities" Association="Self.FK_Expenses_Liabilities">
             <End Role="Liabilities" EntitySet="Liabilities" />
             <End Role="Expenses" EntitySet="Expenses" />
@@ -516,6 +534,10 @@
             <End Role="Users" EntitySet="Users" />
             <End Role="Assets" EntitySet="Assets" />
           </AssociationSet>
+          <AssociationSet Name="FK_Expenses_Assets" Association="CFMModel.FK_Expenses_Assets">
+            <End Role="Assets" EntitySet="Assets" />
+            <End Role="Expenses" EntitySet="Expenses" />
+          </AssociationSet>
           <AssociationSet Name="FK_History_Assets" Association="CFMModel.FK_History_Assets">
             <End Role="Assets" EntitySet="Assets" />
             <End Role="History" EntitySet="History" />
@@ -605,6 +627,7 @@
           <NavigationProperty Name="Expenses" Relationship="CFMModel.FK_Assets_Expenses" FromRole="Assets" ToRole="Expenses" />
           <NavigationProperty Name="Incomes" Relationship="CFMModel.FK_Assets_Incomes" FromRole="Assets" ToRole="Incomes" />
           <NavigationProperty Name="Users" Relationship="CFMModel.FK_Assets_Users" FromRole="Assets" ToRole="Users" />
+          <NavigationProperty Name="Expenses1" Relationship="CFMModel.FK_Expenses_Assets" FromRole="Assets" ToRole="Expenses" />
           <NavigationProperty Name="History" Relationship="CFMModel.FK_History_Assets" FromRole="Assets" ToRole="History" />
           <NavigationProperty Name="Incomes1" Relationship="CFMModel.FK_Incomes_Assets" FromRole="Assets" ToRole="Incomes" />
           <NavigationProperty Name="Liabilities" Relationship="CFMModel.FK_Liabilities_Assets" FromRole="Assets" ToRole="Liabilities" />
@@ -629,7 +652,9 @@
           <Property Name="Username" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Note" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="AssetId" Type="Int32" />
           <NavigationProperty Name="Assets" Relationship="CFMModel.FK_Assets_Expenses" FromRole="Expenses" ToRole="Assets" />
+          <NavigationProperty Name="Assets1" Relationship="CFMModel.FK_Expenses_Assets" FromRole="Expenses" ToRole="Assets" />
           <NavigationProperty Name="Liabilities" Relationship="CFMModel.FK_Expenses_Liabilities" FromRole="Expenses" ToRole="Liabilities" />
           <NavigationProperty Name="Users" Relationship="CFMModel.FK_Expenses_Users" FromRole="Expenses" ToRole="Users" />
           <NavigationProperty Name="History" Relationship="CFMModel.FK_History_Expenses" FromRole="Expenses" ToRole="History" />
@@ -690,6 +715,7 @@
           <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Value" Type="Double" Nullable="false" />
           <Property Name="InterestRate" Type="Double" Nullable="false" />
+          <Property Name="InterestRatePerX" Type="Int32" Nullable="false" />
           <Property Name="StartDate" Type="DateTime" Precision="0" />
           <Property Name="EndDate" Type="DateTime" Precision="0" />
           <Property Name="LiabilityType" Type="Int32" Nullable="false" />
@@ -828,6 +854,18 @@
             </Principal>
             <Dependent Role="Assets">
               <PropertyRef Name="Username" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Expenses_Assets">
+          <End Type="CFMModel.Assets" Role="Assets" Multiplicity="0..1" />
+          <End Type="CFMModel.Expenses" Role="Expenses" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Assets">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Expenses">
+              <PropertyRef Name="AssetId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1045,6 +1083,7 @@
           <EntitySetMapping Name="Expenses">
             <EntityTypeMapping TypeName="CFMModel.Expenses">
               <MappingFragment StoreEntitySet="Expenses">
+                <ScalarProperty Name="AssetId" ColumnName="AssetId" />
                 <ScalarProperty Name="Note" ColumnName="Note" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Username" ColumnName="Username" />
@@ -1121,6 +1160,7 @@
                 <ScalarProperty Name="LiabilityType" ColumnName="LiabilityType" />
                 <ScalarProperty Name="EndDate" ColumnName="EndDate" />
                 <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="InterestRatePerX" ColumnName="InterestRatePerX" />
                 <ScalarProperty Name="InterestRate" ColumnName="InterestRate" />
                 <ScalarProperty Name="Value" ColumnName="Value" />
                 <ScalarProperty Name="Name" ColumnName="Name" />

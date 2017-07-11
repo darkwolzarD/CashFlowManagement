@@ -33,47 +33,16 @@
         @{ Html.RenderAction("_BankDepositTable", "BankDeposit"); }
     </div>
 </div>
-
-@{
-    var navList = (List<NavigationViewModel>)HttpContext.Current.Session["NAV_LIST"];
-    var currentId = navList.Where(x => x.Current == true).FirstOrDefault().Id;
-    string previousText = string.Empty;
-    string nextText = string.Empty;
-    if (currentId - 1 > 0)
-    {
-        var previous = navList.Where(x => x.Id == currentId - 1).FirstOrDefault();
-        previousText = previous.Display;
-    }
-
-    if (currentId + 1 < navList.Count() + 1)
-    {
-        var next = navList.Where(x => x.Id == currentId + 1).FirstOrDefault();
-        nextText = next.Display;
-    }
-    else if (currentId + 1 == navList.Count() + 1)
-    {
-        nextText = "Hoàn tất khởi tạo";
-    }
-}
-
-<footer class="col-md-12 text-right">
-    @if (!string.IsNullOrEmpty(previousText))
-    {
-        <a href="@Url.Action("Previous", "Navigation")" class="btn btn-primary " style="font-size: 11px;">
-            <span class="glyphicon glyphicon-arrow-left"></span>
-            @previousText
-        </a>
-    }
-
-    @if (!string.IsNullOrEmpty(nextText))
-    {
-        <a href="@Url.Action("Next", "Navigation")" class="btn btn-primary " style="font-size: 11px;">
-            <span class="glyphicon glyphicon-arrow-right"></span>
-            @nextText
-        </a>
-    }
+<footer class="row text-right">
+    <a href="@Url.Action("Index", "Business")" class="btn btn-default " style="font-size: 11px;">
+        <span class="glyphicon glyphicon-arrow-left"></span>
+        Quay lại
+    </a>
+    <a href="@Url.Action("Index", "Stock")" class="btn btn-default " style="font-size: 11px;">
+        <span class="glyphicon glyphicon-arrow-right"></span>
+        Tiếp tục
+    </a>
 </footer>
-
 <div id="modal">
 
 </div>

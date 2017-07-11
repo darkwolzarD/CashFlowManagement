@@ -423,5 +423,18 @@ namespace CashFlowManagement.Queries
                 return Content("failed");
             }
         }
+
+        public ActionResult _AssetSummary()
+        {
+            AssetSummaryViewModel model = new AssetSummaryViewModel();
+            string username = UserQueries.GetCurrentUsername();
+            model.RealEstates = RealEstateQueries.GetRealEstateSummaryByUser(username);
+            model.Businesses = BusinessQueries.GetBusinessByUser(username);
+            model.BankDeposits = BankDepositQueries.GetBankDepositByUser(username);
+            model.Stocks = StockQueries.GetStockByUser(username);
+            model.Insurances = InsuranceQueries.GetInsuranceByUser(username);
+            model.OtherAssets = OtherAssetQueries.GetOtherAssetByUser(username);
+            return PartialView(model);
+        }
     }
 }

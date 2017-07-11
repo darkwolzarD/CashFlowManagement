@@ -382,4 +382,16 @@ $(document).ready(function () {
             }
         });
     })
+
+    $(document).on("click", ".asset-toggle-summary", function () {
+        $.ajax({
+            url: Url.AssetSummary,
+            type: "get",
+            success: function (data) {
+                $("#modal").html(data);
+                $("#asset-summary-modal").modal("show");
+                MaskInput();
+            }
+        });
+    })
 })

@@ -28,7 +28,7 @@ namespace CashFlowManagement.Controllers
             if (user != null)
             {
                 HttpContext.Session["USER"] = user;
-                return RedirectToAction("Index", "Navigation");
+                return RedirectToAction("Index", "Salary");
             }
             else
             {
@@ -54,7 +54,7 @@ namespace CashFlowManagement.Controllers
             {
                 Users user = UserQueries.Register(model);
                 HttpContext.Session["USER"] = user;
-                return RedirectToAction("Index", "Navigation");
+                return RedirectToAction("Index", "Salary");
             }
             else return PartialView(model);
         }

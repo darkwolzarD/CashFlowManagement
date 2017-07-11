@@ -62,6 +62,58 @@ namespace CashFlowManagement.Queries
             return result;
         }
 
+        public static RealEstateSummaryListViewModel GetRealEstateSummaryByUser(string username)
+        {
+            Entities entities = new Entities();
+            RealEstateSummaryListViewModel result = new RealEstateSummaryListViewModel();
+
+            var realEstates = entities.Assets.Include("Incomes").Include("Liabilities").Where(x => x.Username.Equals(username)
+                                                      && x.AssetType == (int)Constants.Constants.ASSET_TYPE.REAL_ESTATE
+                                                      && !x.DisabledDate.HasValue);
+
+            foreach (var realEstate in realEstates)
+            {
+                RealEstateSummaryViewModel realEstateViewModel = new RealEstateSummaryViewModel();
+                realEstateViewModel.Name = realEstate.AssetName;
+                realEstateViewModel.Value = realEstate.Value;
+                if (realEstate.Incomes1.Where(x => !x.DisabledDate.HasValue).Any())
+                {
+                    realEstateViewModel.Income = realEstate.Incomes1.FirstOrDefault().Value;
+                }
+                else
+                {
+                    realEstateViewModel.Income = 0;
+                }
+                realEstateViewModel.AnnualIncome = realEstateViewModel.Income * 12;
+                realEstateViewModel.RentYield = realEstateViewModel.Income / realEstateViewModel.Value;
+
+                foreach (var liability in realEstate.Liabilities.Where(x => !x.DisabledDate.HasValue))
+                {
+                    RealEstateLiabilityViewModel liabilityViewModel = RealEstateLiabilityQueries.CreateViewModel(liability);
+                    realEstateViewModel.LiabilityValue += liabilityViewModel.Value.Value;
+                    realEstateViewModel.InterestRate += liabilityViewModel.InterestRate.Value;
+                    realEstateViewModel.InterestRatePerX += liabilityViewModel.InterestRatePerX;
+                    realEstateViewModel.MonthlyInterestPayment += liabilityViewModel.MonthlyInterestPayment;
+                    realEstateViewModel.MonthlyPayment += liabilityViewModel.TotalMonthlyPayment;
+                    realEstateViewModel.AnnualPayment += liabilityViewModel.TotalPayment;
+                    realEstateViewModel.RemainedValue += liabilityViewModel.RemainedValue;
+                }
+                result.RealEstateSummaries.Add(realEstateViewModel);
+            }
+
+            result.TotalIncome = result.RealEstateSummaries.Sum(x => x.Income);
+            result.TotalAnnualIncome = result.RealEstateSummaries.Sum(x => x.AnnualIncome);
+            result.TotalValue = result.RealEstateSummaries.Sum(x => x.Value);
+            result.TotalRentYield = result.RealEstateSummaries.Sum(x => x.MonthlyInterestPayment) / result.TotalValue;
+            result.TotalLiabilityValue = result.RealEstateSummaries.Sum(x => x.LiabilityValue);
+            result.TotalInterestRate = result.RealEstateSummaries.Sum(x => x.Value);
+            result.TotalMonthlyPayment = result.RealEstateSummaries.Sum(x => x.MonthlyPayment);
+            result.TotalAnnualPayment = result.RealEstateSummaries.Sum(x => x.AnnualPayment);
+            result.TotalRemainedValue = result.RealEstateSummaries.Sum(x => x.RemainedValue);
+
+            return result;
+        }
+
         public static RealEstateUpdateViewModel GetRealEstateById(int id)
         {
             RealEstateUpdateViewModel viewmodel = new RealEstateUpdateViewModel();
