@@ -17,7 +17,7 @@ namespace CashFlowManagement.Queries
             liabilityViewModel.Id = stockLiability.Id;
             liabilityViewModel.Source = stockLiability.Name;
             liabilityViewModel.Value = stockLiability.Value;
-            liabilityViewModel.InterestType = stockLiability.InterestType.Value;
+            liabilityViewModel.InterestType = stockLiability.InterestType.Value / 100;
             liabilityViewModel.InterestRatePerX = stockLiability.InterestRatePerX;
             liabilityViewModel.InterestRate = stockLiability.InterestRate;
             liabilityViewModel.StartDate = stockLiability.StartDate.Value;
@@ -151,6 +151,12 @@ namespace CashFlowManagement.Queries
             Entities entities = new Entities();
             int stockId = entities.Liabilities.Where(x => x.Id == liabilityid).FirstOrDefault().AssetId.Value;
             return entities.Liabilities.Where(x => x.AssetId == stockId && !x.DisabledDate.HasValue).Select(x => x.Value).DefaultIfEmpty(0).Sum();
+        }
+
+        public static double GetStockValue(int stockId)
+        {
+            Entities entities = new Entities();
+            return entities.Liabilities.Where(x => x.Id == stockId && !x.DisabledDate.HasValue).FirstOrDefault().Value;
         }
 
         public static class Helper

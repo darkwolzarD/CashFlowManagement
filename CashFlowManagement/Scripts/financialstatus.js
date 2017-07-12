@@ -31,6 +31,17 @@
     $("#available-money-create-modal").modal("show");
     MaskInput();
 
+    $(document).on("click", ".toggle-available-money", function () {
+        $.ajax({
+            url: Url.AvailableMoneyForm,
+            type: "get",
+            success: function (data) {
+                $("#modal").html($(data));
+                $("#available-money-create-modal").modal("show");
+            }
+        });
+    })
+
     $(document).on("click", ".create-available-money", function () {
         var model = $("#available-money-form").serialize();
         $.ajax({
@@ -39,14 +50,7 @@
             data: model,
             success: function (data) {
                 if (data === "success") {
-                    $.ajax({
-                        url: Url.AvailableMoneyForm,
-                        type: "get",
-                        success: function (data) {
-                            $("#available-money-create-modal").html($(data).html());
-                        }
-                    });
-                    window.location.replace(Url.FinancialStatus);
+                    location.reload();
                 }
                 else if (data === "failed") {
                     alert("Error!");

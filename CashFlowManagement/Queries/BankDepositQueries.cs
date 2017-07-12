@@ -28,7 +28,7 @@ namespace CashFlowManagement.Queries
                     EndDate = bankDeposit.EndDate.Value,
                     Income = bankDeposit.Value * bankDeposit.InterestRate.Value / 1200,
                     AnnualIncome = (bankDeposit.Value * bankDeposit.InterestRate.Value / 1200) * 12,
-                    InterestRate = bankDeposit.InterestRate.Value,
+                    InterestRate = bankDeposit.InterestRate.Value / 100,
                     InterestObtainWay = Helper.GetObtainWay(bankDeposit.ObtainedBy.Value),
                     PaymentPeriod = Helper.CalculateTimePeriod(bankDeposit.StartDate.Value, bankDeposit.EndDate.Value),
                     Note = bankDeposit.Note
@@ -40,7 +40,7 @@ namespace CashFlowManagement.Queries
             result.TotalValue = result.BankDeposits.Sum(x => x.Value);
             result.TotalIncome = result.BankDeposits.Sum(x => x.Income);
             result.TotalAnnualIncome = result.BankDeposits.Sum(x => x.AnnualIncome);
-            result.TotalInterestRate = result.TotalIncome / result.TotalValue;
+            result.TotalInterestRate = result.TotalIncome / result.TotalValue * 12;
 
             return result;
         }
@@ -80,7 +80,7 @@ namespace CashFlowManagement.Queries
                     EndDate = bankDeposit.EndDate.Value,
                     Income = bankDeposit.Value * bankDeposit.InterestRate.Value / 1200,
                     AnnualIncome = (bankDeposit.Value * bankDeposit.InterestRate.Value / 1200) * 12,
-                    InterestRate = bankDeposit.InterestRate.Value,
+                    InterestRate = bankDeposit.InterestRate.Value / 100,
                     InterestObtainWay = Helper.GetObtainWay(bankDeposit.ObtainedBy.Value),
                     PaymentPeriod = Helper.CalculateTimePeriod(bankDeposit.StartDate.Value, bankDeposit.EndDate.Value),
                     Note = bankDeposit.Note

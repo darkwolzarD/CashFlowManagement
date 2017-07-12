@@ -11,7 +11,7 @@ namespace CashFlowManagement
         public void Configuration(IAppBuilder app)
         {
             ConfigureAuth(app);
-            GlobalConfiguration.Configuration.UseSqlServerStorage("Server=thiennq\\SQLEXPRESS;Database=CashFlowManagement_V2;User Id=sa;Password=zxcvbnm;");
+            GlobalConfiguration.Configuration.UseSqlServerStorage("Server=127.0.0.1;Database=ngansach_cfmgmt; User Id=ngansach_user;Password=Zxcvbnm1@;");
 
             app.UseHangfireDashboard();
             app.UseHangfireServer();

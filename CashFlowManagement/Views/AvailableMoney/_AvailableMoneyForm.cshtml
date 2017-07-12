@@ -23,10 +23,20 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-success create-available-money">
-                    <span class="glyphicon glyphicon-ok"></span>
-                    Tạo tiền mặt có sẵn
-                </button>
+                @if (Model.Editable)
+                {
+                    <button type="button" class="btn btn-warning create-available-money">
+                        <span class="glyphicon glyphicon-ok"></span>
+                        Cập nhật tiền mặt có sẵn
+                    </button>
+                }
+                else
+                {
+                    <button type="button" class="btn btn-success create-available-money">
+                        <span class="glyphicon glyphicon-ok"></span>
+                        Lưu tiền mặt có sẵn
+                    </button>
+                }
             </div>
         </div>
     </div>

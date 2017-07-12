@@ -4,12 +4,15 @@
     <div class="modal-dialog" style="width: 700px;">
         <div class="modal-content">
             <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" style="font-size: 26px !important; color: red !important">&times;</button>
                 <p style="font-size: 16px; margin-bottom: 0px;">Xác nhận thông tin khởi tạo các khoản chi tiêu</p>
             </div>
             <div class="modal-body" style="padding: 0 20px 0 20px !important">
                 <div class="row">
                     <div class="col-md-12 text-center">
-                        <h4>Chi tiêu gia đình</h4>
+                        <a href="@Url.Action("Index", "FamilyExpense")" class="text-success" style="font-size: 18px !important;">
+                            Chi tiêu gia đình  <span class="glyphicon glyphicon-edit" style="font-size: 14px !important"></span>
+                        </a>
                         <table class="table table-responsive">
                             <thead>
                                 <tr>
@@ -50,8 +53,10 @@
                             </tbody>
                         </table>
                     </div>
-                    <div class="col-md-12 text-center">
-                        <h4>Chi tiêu khác</h4>
+                    <div class="col-md-12">
+                        <a href="@Url.Action("Index", "OtherExpense")" class="text-success" style="font-size: 18px !important;">
+                            Chi tiêu khác  <span class="glyphicon glyphicon-edit" style="font-size: 14px !important"></span>
+                        </a>
                         <table class="table table-responsive">
                             <thead>
                                 <tr>
@@ -95,7 +100,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <a href="@Url.Action("Index", "FinancialStatus")" class="btn btn-success">
+                <a href="@Url.Action("Index", "AvailableMoney")" class="btn btn-success">
                     <span class="glyphicon glyphicon-ok"></span>
                     Xác nhận
                 </a>

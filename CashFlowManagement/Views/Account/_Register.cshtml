@@ -1,7 +1,7 @@
 ﻿@model CashFlowManagement.Models.RegisterViewModel
 @using CashFlowManagement.Constants
 
-@using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+@using (Html.BeginForm("_Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
 {
     @Html.AntiForgeryToken()
     <h4>Tạo tài khoản mới</h4>

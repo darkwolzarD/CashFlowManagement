@@ -4,12 +4,15 @@
     <div class="modal-dialog" style="width: 1100px;">
         <div class="modal-content">
             <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" style="font-size: 26px !important; color: red !important">&times;</button>
                 <p style="font-size: 16px; margin-bottom: 0px;">Xác nhận thông tin khởi tạo tài sản</p>
             </div>
             <div class="modal-body" style="padding: 0 20px 0 20px !important">
                 <div class="row">
                     <div class="col-md-12 text-center">
-                        <h4>Bất động sản</h4>
+                        <a href="@Url.Action("Index", "RealEstate")" class="text-success" style="font-size: 18px !important;">
+                            Bất động sản  <span class="glyphicon glyphicon-edit" style="font-size: 14px !important"></span>
+                        </a>
                         <table class="table table-responsive table-condensed">
                             <thead>
                                 <tr>
@@ -66,7 +69,9 @@
                         </table>
                     </div>
                     <div class="col-md-12 text-center">
-                        <h4>Kinh doanh</h4>
+                        <a href="@Url.Action("Index", "Business")" class="text-success" style="font-size: 18px !important;">
+                            Kinh doanh  <span class="glyphicon glyphicon-edit" style="font-size: 14px !important"></span>
+                        </a>
                         <table class="table table-responsive table-condensed">
                             <thead>
                                 <tr>
@@ -123,7 +128,9 @@
                         </table>
                     </div>
                     <div class="col-md-12 text-center">
-                        <h4>Tài khoản tiết kiệm</h4>
+                        <a href="@Url.Action("Index", "BankDeposit")" class="text-success" style="font-size: 18px !important;">
+                            Tài khoản tiết kiệm  <span class="glyphicon glyphicon-edit" style="font-size: 14px !important"></span>
+                        </a>
                         <table class="table table-responsive table-condensed">
                             <thead>
                                 <tr>
@@ -179,7 +186,9 @@
                         </table>
                     </div>
                     <div class="col-md-12 text-center">
-                        <h4>Cổ phiếu</h4>
+                        <a href="@Url.Action("Index", "Stock")" class="text-success" style="font-size: 18px !important;">
+                            Cổ phiếu  <span class="glyphicon glyphicon-edit" style="font-size: 14px !important"></span>
+                        </a>
                         <table class="table table-responsive table-condensed">
                             <thead>
                                 <tr>
@@ -236,7 +245,9 @@
                         </table>
                     </div>
                     <div class="col-md-12 text-center">
-                        <h4>Bảo hiểm nhân thọ</h4>
+                        <a href="@Url.Action("Index", "Insurance")" class="text-success" style="font-size: 18px !important;">
+                            Bảo hiểm nhân thọ  <span class="glyphicon glyphicon-edit" style="font-size: 14px !important"></span>
+                        </a>
                         <table class="table table-responsive table-condensed">
                             <thead>
                                 <tr>
@@ -293,7 +304,9 @@
                         </table>
                     </div>
                     <div class="col-md-12 text-center">
-                        <h4>Tài sản khác</h4>
+                        <a href="@Url.Action("Index", "OtherAsset")" class="text-success" style="font-size: 18px !important;">
+                            Tài sản khác  <span class="glyphicon glyphicon-edit" style="font-size: 14px !important"></span>
+                        </a>
                         <table class="table table-responsive table-condensed">
                             <thead>
                                 <tr>

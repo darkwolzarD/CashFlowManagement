@@ -4,12 +4,15 @@
     <div class="modal-dialog" style="width: 1100px;">
         <div class="modal-content">
             <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" style="font-size: 26px !important; color: red !important">&times;</button>
                 <p style="font-size: 16px; margin-bottom: 0px;">Xác nhận thông tin khởi tạo các khoản nợ</p>
             </div>
             <div class="modal-body" style="padding: 0 20px 0 20px !important">
                 <div class="row">
                     <div class="col-md-12 text-center">
-                        <h4>Các khoản vay xe hơi và tiêu sản khác</h4>
+                        <a href="@Url.Action("Index", "CarLiability")" class="text-success" style="font-size: 18px !important;">
+                            Các khoản vay xe hơi và tiêu sản khác  <span class="glyphicon glyphicon-edit" style="font-size: 14px !important"></span>
+                        </a>
                         <table class="table table-condensed table-responsive">
                             <thead>
                                 <tr>
@@ -72,7 +75,9 @@
                         </table>
                     </div>
                     <div class="col-md-12 text-center">
-                        <h4>Các khoản vay thẻ tín dụng</h4>
+                        <a href="@Url.Action("Index", "CreditCardLiability")" class="text-success" style="font-size: 18px !important;">
+                            Các khoản vay thẻ tín dụng  <span class="glyphicon glyphicon-edit" style="font-size: 14px !important"></span>
+                        </a>
                         <table class="table table-condensed table-responsive">
                             <thead>
                                 <tr>
@@ -117,7 +122,9 @@
                         </table>
                     </div>
                     <div class="col-md-12 text-center">
-                        <h4>Các khoản vay khác</h4>
+                        <a href="@Url.Action("Index", "OtherLiability")" class="text-success" style="font-size: 18px !important;">
+                            Các khoản vay khác  <span class="glyphicon glyphicon-edit" style="font-size: 14px !important"></span>
+                        </a>
                         <table class="table table-condensed table-responsive">
                             <thead>
                                 <tr>

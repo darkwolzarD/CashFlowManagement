@@ -8,6 +8,7 @@
     <div class="modal-dialog" style="width: 350px;">
         <div class="modal-content">
             <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" style="font-size: 26px !important; color: red !important">&times;</button>
                 <p style="font-size: 16px; margin-bottom: 0px;">Cập nhật tài khoản tiết kiệm</p>
             </div>
             <div class="modal-body">
@@ -45,7 +46,7 @@
                             <div class="form-group">
                                 @Html.LabelFor(x => x.EndDate)
                                 <div class="input-group input-group-sm">
-                                    @Html.EditorFor(x => x.EndDate, new { htmlAttributes = new { @class = "form-control input-sm date-picker-with-day" } })
+                                    @Html.EditorFor(x => x.EndDate, new { htmlAttributes = new { @class = "form-control input-sm", @readonly = "true" } })
                                     <div class="input-group-addon">
                                         <span class="glyphicon glyphicon-calendar"></span>
                                     </div>

@@ -244,7 +244,6 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
-    <Compile Include="Models\AssetSummaryViewModels.cs" />
     <Compile Include="Models\AvailableMoneyViewModels.cs" />
     <Compile Include="Models\BankDepositViewModels.cs" />
     <Compile Include="Models\BaseLiabilityModels.cs" />
@@ -265,6 +264,7 @@
     <Compile Include="Models\StockLiabilityViewModels.cs" />
     <Compile Include="Models\StockTransactionViewModels.cs" />
     <Compile Include="Models\StockViewModels.cs" />
+    <Compile Include="Models\SummaryViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Queries\AssetQueries.cs" />
     <Compile Include="Queries\AvailableMoneyQueries.cs" />
@@ -397,6 +397,7 @@
     </Content>
     <Content Include="Models\desktop.ini" />
     <None Include="Properties\PublishProfiles\CF.pubxml" />
+    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\asset.js" />
     <Content Include="Scripts\carliability.js" />
@@ -482,6 +483,7 @@
     <Content Include="Scripts\expense_initialize.js" />
     <Content Include="Scripts\expense.js" />
     <Content Include="Scripts\familyexpense.js" />
+    <Content Include="Scripts\financialstatus.js" />
     <Content Include="Scripts\globalize.js" />
     <Content Include="Scripts\globalize\currency.js" />
     <Content Include="Scripts\globalize\date.js" />
@@ -739,6 +741,9 @@
     <Content Include="Views\Navigation\Index.cshtml" />
     <Content Include="Views\Navigation\_NavigationForm.cshtml" />
     <Content Include="Views\OtherAsset\_AssetSummary.cshtml" />
+    <Content Include="Views\OtherExpense\_ExpenseSummary.cshtml" />
+    <Content Include="Views\OtherLiability\_LiabilitySummary.cshtml" />
+    <Content Include="Views\Salary\_SalarySummary.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

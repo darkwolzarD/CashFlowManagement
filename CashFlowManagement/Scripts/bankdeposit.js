@@ -126,4 +126,16 @@
             });
         }
     })
+
+    $(document).on("keyup", "#StartDate, #PaymentPeriod", function () {
+        RemoveMask();
+        var valid = moment($("#StartDate").val(), "DD/MM/YYYY").isValid();
+        if (valid) {
+            var startDate = moment($("#StartDate").val(), "DD/MM/YYYY");
+            var term = parseInt($("#PaymentPeriod").val());
+            var endDate = startDate.add(term, 'months');
+            $("#EndDate").val(endDate.format("DD/MM/YYYY"));
+            MaskInput();
+        }
+    })
 })

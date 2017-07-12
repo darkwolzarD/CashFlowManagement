@@ -14,11 +14,6 @@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/jqueryval")
     @Scripts.Render("~/bundles/bootstrap")
-    <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
-    @Scripts.Render("https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.10/jquery.mask.min.js")
-    <script src="@Url.Content("~/Scripts/cldr.js")" type="text/javascript"></script>
-    <script src="@Url.Content("~/Scripts/globalize.js")" type="text/javascript"></script>
-    <script src="@Url.Content("~/Scripts/selectize.js")" type="text/javascript"></script>
 </head>
 <body>
     <div class="container-fluid">
@@ -68,7 +63,7 @@
         </div>
     </div>
     <div class="container">
-        <div class="row content">
+        <div class="col-md-12 content">
             @RenderBody()
         </div>
     </div>

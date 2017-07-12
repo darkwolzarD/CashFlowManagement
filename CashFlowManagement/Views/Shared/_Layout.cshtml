@@ -17,12 +17,6 @@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/jqueryval")
     @Scripts.Render("~/bundles/bootstrap")
-    <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
-    @Scripts.Render("https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.10/jquery.mask.min.js")
-    <script src="@Url.Content("~/Scripts/cldr.js")" type="text/javascript"></script>
-    <script src="@Url.Content("~/Scripts/globalize.js")" type="text/javascript"></script>
-    <script src="@Url.Content("~/Scripts/selectize.js")" type="text/javascript"></script>
-    <script src="@Url.Content("~/Scripts/jquery-ui-1.12.1.min.js")" type="text/javascript"></script>
 </head>
 <body>
     <div class="container-fluid">
@@ -41,31 +35,31 @@
             <div class="col-md-7 navigation">
                 <ul class="nav-bar">
                     <li><a href="@Url.Action("Index", "FinancialStatus")">Báo cáo</a></li>
-                    <li><a href="@Url.Action("Index", "Income")">Thu nhập</a></li>
+                    <li><a href="@Url.Action("Index", "Salary")">Thu nhập</a></li>
                     <li>
                         <a href="#">Tài sản</a>
                         <ul class="nav-bar">
-                            <li><a href="@Url.Action("AssetTable", "Asset", new { @type = (int)Constants.ASSET_TYPE.REAL_ESTATE })">Bất động sản</a></li>
-                            <li><a href="@Url.Action("AssetTable", "Asset", new { @type = (int)Constants.ASSET_TYPE.BUSINESS })">Kinh doanh</a></li>
-                            <li><a href="@Url.Action("AssetTable", "Asset", new { @type = (int)Constants.ASSET_TYPE.BANK_DEPOSIT })">Tài khoản tiết kiệm</a></li>
-                            <li><a href="@Url.Action("AssetTable", "Asset", new { @type = (int)Constants.ASSET_TYPE.STOCK })">Chứng khoán</a></li>
-                            <li><a href="@Url.Action("AssetTable", "Asset", new { @type = (int)Constants.ASSET_TYPE.INSURANCE })">Bảo hiểm nhân thọ</a></li>
-                            <li><a href="@Url.Action("AssetTable", "Asset", new { @type = (int)Constants.ASSET_TYPE.OTHERS })">Tài sản khác</a></li>
+                            <li><a href="@Url.Action("Index", "RealEstate")">Bất động sản</a></li>
+                            <li><a href="@Url.Action("Index", "Business")">Kinh doanh</a></li>
+                            <li><a href="@Url.Action("Index", "BankDeposit")">Tài khoản tiết kiệm</a></li>
+                            <li><a href="@Url.Action("Index", "Stock")">Chứng khoán</a></li>
+                            <li><a href="@Url.Action("Index", "Insurance")">Bảo hiểm nhân thọ</a></li>
+                            <li><a href="@Url.Action("Index", "OtherAsset")">Tài sản khác</a></li>
                         </ul>
                     </li>
                     <li style="width: 100px">
                         <a href="#">Các khoản nợ</a>
                         <ul class="nav-bar">
-                            <li><a href="@Url.Action("LiabilityTable", "Liability", new { @type = (int)Constants.LIABILITY_TYPE.CAR })">Xe hơi và tiêu sản khác</a></li>
-                            <li><a href="@Url.Action("LiabilityTable", "Liability", new { @type = (int)Constants.LIABILITY_TYPE.CREDIT_CARD })">Thẻ tín dụng</a></li>
-                            <li><a href="@Url.Action("LiabilityTable", "Liability", new { @type = (int)Constants.LIABILITY_TYPE.OTHERS })">Nợ khác</a></li>
+                            <li><a href="@Url.Action("Index", "CarLiability")">Xe hơi và tiêu sản khác</a></li>
+                            <li><a href="@Url.Action("Index", "CreditCardLiability")">Thẻ tín dụng</a></li>
+                            <li><a href="@Url.Action("Index", "OtherLiability")">Nợ khác</a></li>
                         </ul>
                     </li>
                     <li style="width: 150px">
                         <a href="#">Các khoản chi tiêu</a>
                         <ul class="nav-bar">
-                            <li><a href="@Url.Action("Index", "Expense", new { @type = (int)Constants.EXPENSE_TYPE.FAMILY })">Chi tiêu gia đình</a></li>
-                            <li><a href="@Url.Action("Index", "Expense", new { @type = (int)Constants.EXPENSE_TYPE.OTHERS })">Chi tiêu khác</a></li>
+                            <li><a href="@Url.Action("Index", "FamilyExpense")">Chi tiêu gia đình</a></li>
+                            <li><a href="@Url.Action("Index", "OtherExpense")">Chi tiêu khác</a></li>
                         </ul>
                     </li>
                     <li style="width: 30px;"><a href="@Url.Action("Index", "Log", new { @type = (int)Constants.LOG_FILTER_TYPE.INCOME_EXPENSE })">Log</a></li>

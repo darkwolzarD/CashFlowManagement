@@ -18,7 +18,8 @@ namespace CashFlowManagement.Controllers
 
         public ActionResult _AvailableMoneyForm()
         {
-            return PartialView();
+            AvailableMoneyCreateViewModel model = AvailableMoneyQueries.GetInitializedAvailableMoney(UserQueries.GetCurrentUsername());
+            return PartialView(model);
         }
 
         [HttpPost]
@@ -38,7 +39,7 @@ namespace CashFlowManagement.Controllers
             }
             else
             {
-                return PartialView();
+                return PartialView(model);
             }
         }
     }

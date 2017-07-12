@@ -16,7 +16,7 @@ namespace CashFlowManagement.Queries
             model.NumberOfStock = transaction.NumberOfShares;
             model.SpotRice = transaction.SpotPrice;
             model.StockValue = transaction.Value;
-            model.ExpectedDividend = transaction.ExpectedDividend;
+            model.ExpectedDividend = transaction.ExpectedDividend / 100;
 
             var liabilities = entities.Liabilities.Where(x => x.TransactionId == transaction.Id);
             foreach (var liability in liabilities.Where(x => !x.DisabledDate.HasValue))
@@ -26,6 +26,14 @@ namespace CashFlowManagement.Queries
             }
 
             return model;
+        }
+
+        public static bool CheckExistStock(string username, string stockName)
+        {
+            Entities entities = new Entities();
+            return entities.Assets.Where(x => x.Username.Equals(username) && x.AssetName.Equals(stockName)
+                                        && x.AssetType == (int)Constants.Constants.ASSET_TYPE.STOCK
+                                        && !x.DisabledDate.HasValue).Any();
         }
 
         public static StockListViewModel GetStockByUser(string username)
@@ -159,7 +167,7 @@ namespace CashFlowManagement.Queries
                 Id = liability.Id,
                 Value = liability.Value,
                 Source = liability.Name,
-                InterestRate = liability.InterestRate,
+                InterestRate = liability.InterestRate / 100,
                 InterestType = liability.InterestType.Value,
                 InterestRatePerX = liability.InterestRatePerX,
                 StartDate = liability.StartDate,
@@ -213,7 +221,7 @@ namespace CashFlowManagement.Queries
                         liability.Name = liabilityViewModel.Source;
                         liability.Value = liabilityViewModel.Value.Value;
                         liability.InterestType = liabilityViewModel.InterestType;
-                        liability.InterestRate = liabilityViewModel.InterestRate.Value;
+                        liability.InterestRate = liabilityViewModel.InterestRate.Value / 100;
                         liability.InterestRatePerX = liabilityViewModel.InterestRatePerX;
                         liability.StartDate = liabilityViewModel.StartDate.Value;
                         liability.EndDate = liabilityViewModel.EndDate.Value;

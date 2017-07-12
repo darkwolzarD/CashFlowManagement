@@ -11,5 +11,7 @@ namespace CashFlowManagement.Models
         [Display(Name = "Tiền mặt có sẵn")]
         [Required(ErrorMessage = "Nhập tiền mặt có sẵn")]
         public double? AvailableMoney { get; set; }
+
+        public bool Editable { get; set; }
     }
 }

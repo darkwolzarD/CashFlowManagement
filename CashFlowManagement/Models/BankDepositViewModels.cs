@@ -33,7 +33,7 @@ namespace CashFlowManagement.Models
 
         [Required(ErrorMessage = "Nhập lãi suất tiền gửi")]
         [Display(Name = "Lãi suất tiền gửi")]
-        [DisplayFormat(DataFormatString = "{0:N0}")]
+        [DisplayFormat(DataFormatString = "{0:N2}", ApplyFormatInEditMode = true)]
         public double? InterestRate { get; set; }
 
         [Required(ErrorMessage = "Chọn kiểu nhận lãi")]
@@ -72,7 +72,7 @@ namespace CashFlowManagement.Models
         [DisplayFormat(DataFormatString = "{0:N0}")]
         public double AnnualIncome { get; set; }
 
-        [DisplayFormat(DataFormatString = "{0:N2}")]
+        [DisplayFormat(DataFormatString = "{0:P2}")]
         public double InterestRate { get; set; }
 
         public string InterestObtainWay { get; set; }
@@ -91,7 +91,7 @@ namespace CashFlowManagement.Models
         [DisplayFormat(DataFormatString = "{0:N0}")]
         public double TotalAnnualIncome { get; set; }
 
-        [DisplayFormat(DataFormatString = "{0:N0}")]
+        [DisplayFormat(DataFormatString = "{0:P2}")]
         public double TotalInterestRate { get; set; }
 
         public List<BankDepositViewModel> BankDeposits { get; set; }
@@ -124,7 +124,7 @@ namespace CashFlowManagement.Models
         [DisplayFormat(DataFormatString = "{0:N0}")]
         public double AnnualIncome { get; set; }
 
-        [DisplayFormat(DataFormatString = "{0:N2}")]
+        [DisplayFormat(DataFormatString = "{0:P2}")]
         public double InterestRate { get; set; }
 
         public string InterestObtainWay { get; set; }
@@ -143,7 +143,7 @@ namespace CashFlowManagement.Models
         [DisplayFormat(DataFormatString = "{0:N0}")]
         public double TotalAnnualIncome { get; set; }
 
-        [DisplayFormat(DataFormatString = "{0:N0}")]
+        [DisplayFormat(DataFormatString = "{0:02}")]
         public double TotalInterestRate { get; set; }
 
         public List<BankDepositSummaryViewModel> BankDepositSummaries { get; set; }

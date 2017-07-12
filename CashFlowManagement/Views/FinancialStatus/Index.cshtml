@@ -54,31 +54,31 @@
             <tbody>
                 <tr>
                     <td>
-                        <a href="@Url.Action("Index", "Income")">Thu nhập từ lương</a>
+                        <a href="@Url.Action("Index", "Salary")">Thu nhập từ lương</a>
                     </td>
                     <td>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.SalaryIncome)</td>
                 </tr>
                 <tr>
                     <td>
-                        <a href="@Url.Action("AssetTable", "Asset", new { type = (int)Constants.ASSET_TYPE.REAL_ESTATE })">Thu nhập từ bất động sản</a>
+                        <a href="@Url.Action("Index", "RealEstate")">Thu nhập từ bất động sản</a>
                     </td>
                     <td>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.RealEstateIncome)</td>
                 </tr>
                 <tr>
                     <td>
-                        <a href="@Url.Action("AssetTable", "Asset", new { type = (int)Constants.ASSET_TYPE.BUSINESS })">Thu nhập từ kinh doanh</a>
+                        <a href="@Url.Action("Index", "Business")">Thu nhập từ kinh doanh</a>
                     </td>
                     <td>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.BusinessIncome)</td>
                 </tr>
                 <tr>
                     <td>
-                        <a href="@Url.Action("AssetTable", "Asset", new { type = (int)Constants.ASSET_TYPE.BANK_DEPOSIT })">Thu nhập từ tiền gửi tiết kiệm</a>
+                        <a href="@Url.Action("Index", "BankDeposit")">Thu nhập từ tiền gửi tiết kiệm</a>
                     </td>
                     <td>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.InterestIncome)</td>
                 </tr>
                 <tr>
                     <td>
-                        <a href="@Url.Action("AssetTable", "Asset", new { type = (int)Constants.ASSET_TYPE.STOCK })">Thu nhập từ cổ tức</a>
+                        <a href="@Url.Action("Index", "Stock")">Thu nhập từ cổ tức</a>
                     </td>
                     <td>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.DividendIncome)</td>
                 </tr>
@@ -96,29 +96,29 @@
             </thead>
             <tbody>
                 <tr>
-                    <td>Tiền mặt có sẵn</td>
+                    <td><a href="#" class="toggle-available-money">Tiền mặt có sẵn</a></td>
                     <td>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.AvailableMoney)</td>
                 </tr>
                 <tr>
                     <td>
-                        <a href="@Url.Action("AssetTable", "Asset", new { type = (int)Constants.ASSET_TYPE.REAL_ESTATE })">Tổng giá trị các bất động sản</a>
+                        <a href="@Url.Action("Index", "RealEstate")">Tổng giá trị các bất động sản</a>
                     </td>
                     <td>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.RealEstateValue)</td>
                 </tr>
                 <tr>
-                    <td><a href="@Url.Action("AssetTable", "Asset", new { type = (int)Constants.ASSET_TYPE.BUSINESS })">Tổng giá trị các hoạt động kinh doanh</a></td>
+                    <td><a href="@Url.Action("Index", "Business")">Tổng giá trị các hoạt động kinh doanh</a></td>
                     <td>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.BusinessValue)</td>
                 </tr>
                 <tr>
-                    <td><a href="@Url.Action("AssetTable", "Asset", new { type = (int)Constants.ASSET_TYPE.BANK_DEPOSIT })">Tổng giá trị các khoản gửi tiết kiệm</a></td>
+                    <td><a href="@Url.Action("Index", "BankDeposit")">Tổng giá trị các khoản gửi tiết kiệm</a></td>
                     <td>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.BankDepositValue)</td>
                 </tr>
                 <tr>
-                    <td><a href="@Url.Action("AssetTable", "Asset", new { type = (int)Constants.ASSET_TYPE.STOCK })">Tổng giá trị cổ phiếu</a></td>
+                    <td><a href="@Url.Action("Index", "Stock")">Tổng giá trị cổ phiếu</a></td>
                     <td>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.StockValue)</td>
                 </tr>
                 <tr>
-                    <td><a href="@Url.Action("AssetTable", "Asset", new { type = (int)Constants.ASSET_TYPE.INSURANCE })">Bảo hiểm nhân thọ và tài sản khác</a></td>
+                    <td><a href="@Url.Action("Index", "Insurance")">Bảo hiểm nhân thọ và tài sản khác</a></td>
                     <td>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.InsuranceValue)</td>
                 </tr>
             </tbody>
@@ -135,35 +135,35 @@
             </thead>
             <tbody>
                 <tr>
-                    <td><a href="@Url.Action("AssetTable", "Asset", new { type = (int)Constants.ASSET_TYPE.REAL_ESTATE })">Chi tiêu các bất động sản</a></td>
+                    <td><a href="@Url.Action("Index", "RealEstate")">Chi tiêu các bất động sản</a></td>
                     <td>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.HomeMortgage)</td>
                 </tr>
                 <tr>
-                    <td><a href="@Url.Action("LiabilityTable", "Liability", new { type = (int)Constants.LIABILITY_TYPE.CAR })">Chi tiêu cho xe hơi và tiêu sản khác</a></td>
+                    <td><a href="@Url.Action("Index", "CarLiability")">Chi tiêu cho xe hơi và tiêu sản khác</a></td>
                     <td>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.CarPayment)</td>
                 </tr>
                 <tr>
-                    <td><a href="@Url.Action("LiabilityTable", "Liability", new { type = (int)Constants.LIABILITY_TYPE.CREDIT_CARD })">Chi tiêu cho thẻ tín dụng</a></td>
+                    <td><a href="@Url.Action("Index", "CreditCardLiability")">Chi tiêu cho thẻ tín dụng</a></td>
                     <td>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.CreditCard)</td>
                 </tr>
                 <tr>
-                    <td><a href="@Url.Action("AssetTable", "Asset", new { type = (int)Constants.ASSET_TYPE.BUSINESS })">Chi cho các khoản vay kinh doanh</a></td>
+                    <td><a href="@Url.Action("Index", "Business")">Chi cho các khoản vay kinh doanh</a></td>
                     <td>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.BusinessLoanExpenses)</td>
                 </tr>
                 <tr>
-                    <td><a href="@Url.Action("AssetTable", "Asset", new { type = (int)Constants.ASSET_TYPE.STOCK })">Chi cho các khoản vay chứng khoán</a></td>
+                    <td><a href="@Url.Action("Index", "Stock")">Chi cho các khoản vay chứng khoán</a></td>
                     <td>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.StockExpenses)</td>
                 </tr>
                 <tr>
-                    <td><a href="@Url.Action("LiabilityTable", "Liability", new { type = (int)Constants.LIABILITY_TYPE.OTHERS })">Chi cho các khoản vay khác</a></td>
+                    <td><a href="@Url.Action("Index", "OtherLiability")">Chi cho các khoản vay khác</a></td>
                     <td>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.OtherLoanExpenses)</td>
                 </tr>
                 <tr>
-                    <td><a href="@Url.Action("Index", "Expense", new { type = (int)Constants.EXPENSE_TYPE.FAMILY })">Chi tiêu trong gia đình (và cả bảo hiểm nhân thọ)</a></td>
+                    <td><a href="@Url.Action("Index", "FamilyExpense")">Chi tiêu trong gia đình (và cả bảo hiểm nhân thọ)</a></td>
                     <td>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.FamilyExpenses)</td>
                 </tr>
                 <tr>
-                    <td><a href="@Url.Action("Index", "Expense", new { type = (int)Constants.EXPENSE_TYPE.OTHERS })">Chi tiêu khác</a></td>
+                    <td><a href="@Url.Action("Index", "OtherExpense")">Chi tiêu khác</a></td>
                     <td>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.OtherExpenses)</td>
                 </tr>
             </tbody>
@@ -180,49 +180,39 @@
             </thead>
             <tbody>
                 <tr>
-                    <td><a href="@Url.Action("AssetTable", "Asset", new { type = (int)Constants.ASSET_TYPE.REAL_ESTATE })">Nợ bất động sản</a></td>
+                    <td><a href="@Url.Action("Index", "RealEstate")">Nợ bất động sản</a></td>
                     <td>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.HomeMortgageLiability)</td>
                 </tr>
                 <tr>
-                    <td><a href="@Url.Action("LiabilityTable", "Liability", new { type = (int)Constants.LIABILITY_TYPE.CAR })">Nợ xe hơi và tiêu sản khác</a></td>
+                    <td><a href="@Url.Action("Index", "CarLiability")">Nợ xe hơi và tiêu sản khác</a></td>
                     <td>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.CarLoan)</td>
                 </tr>
                 <tr>
-                    <td><a href="@Url.Action("LiabilityTable", "Liability", new { type = (int)Constants.LIABILITY_TYPE.CREDIT_CARD })">Nợ tín dụng</a></td>
+                    <td><a href="@Url.Action("Index", "CreditCardLiability")">Nợ tín dụng</a></td>
                     <td>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.CreditCard)</td>
                 </tr>
                 <tr>
-                    <td><a href="@Url.Action("AssetTable", "Asset", new { type = (int)Constants.ASSET_TYPE.BUSINESS })">Nợ vay cho kinh doanh</a></td>
+                    <td><a href="@Url.Action("Index", "Business")">Nợ vay cho kinh doanh</a></td>
                     <td>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.BusinessLoan)</td>
                 </tr>
                 <tr>
-                    <td><a href="@Url.Action("AssetTable", "Asset", new { type = (int)Constants.ASSET_TYPE.STOCK })">Vay mua chứng khoán</a></td>
+                    <td><a href="@Url.Action("Index", "Stock")">Vay mua chứng khoán</a></td>
                     <td>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.StockLoan)</td>
                 </tr>
                 <tr>
-                    <td><a href="@Url.Action("LiabilityTable", "Liability", new { type = (int)Constants.LIABILITY_TYPE.OTHERS })">Vay nợ cho các mục đích khác</a></td>
+                    <td><a href="@Url.Action("Index", "OtherLiability")">Vay nợ cho các mục đích khác</a></td>
                     <td>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.OtherLoans)</td>
                 </tr>
             </tbody>
         </table>
     </div>
-    @*<div class="col-md-6 col-md-offset-6">
-            <table class="table table-bordered table-condensed table-striped">
-                <thead>
-                    <tr>
-                        <th class="col-md-6"><strong>Vốn chủ sở hữu</strong></th>
-                        <th class="col-md-6"><strong>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.Equipty)</strong></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Vốn chủ sở hữu</td>
-                        <td>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.Equipty)</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>*@
 </div>
+<div id="modal">
 
-
+</div>
+<script type="text/javascript" src="~/Scripts/financialstatus.js"></script>
+<script type="text/javascript">
+    var Url = {};
+    Url.AvailableMoneyForm = '@Url.Action("_AvailableMoneyForm", "AvailableMoney")';
+</script>
 

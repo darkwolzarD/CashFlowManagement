@@ -30,12 +30,18 @@ namespace CashFlowManagement
                       "~/Content/themes/base/jquery-ui.min.css",
                       "~/Content/site.css"));
 
-            bundles.Add(new StyleBundle("~/bundles/layout").Include(
+            bundles.Add(new ScriptBundle("~/bundles/layout").Include(
                       "~/Scripts/moment.js",
                       "~/Scripts/layout.js",
                       "~/Scripts/moment-range.js",
                       "~/Scripts/bootstrap-datepicker.min.js",
-                      "~/Scripts/locales/bootstrap-datepicker.vi.min.js"));
+                      "~/Scripts/locales/bootstrap-datepicker.vi.min.js",
+                      "~/Scripts/jquery.unobtrusive-ajax.js",
+                      "~/Scripts/jquery.mask.min.js",
+                      "~/Scripts/cldr.js",
+                      "~/Scripts/globalize.js",
+                      "~/Scripts/selectize.js",
+                      "~/Scripts/jquery-ui-1.12.1.min.js"));
         }
     }
 }
