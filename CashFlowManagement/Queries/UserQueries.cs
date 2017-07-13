@@ -49,6 +49,7 @@ namespace CashFlowManagement.Queries
             user.Username = model.Email;
             user.FullName = model.FullName;
             user.Email = model.Email;
+            user.PhoneNumber = model.PhoneNumber;
             user.Password = model.Password;
             user.Sex = model.Sex;
             user.Job = model.Job;

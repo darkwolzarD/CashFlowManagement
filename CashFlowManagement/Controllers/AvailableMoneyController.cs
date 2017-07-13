@@ -16,6 +16,12 @@ namespace CashFlowManagement.Controllers
             return View();
         }
 
+        public ActionResult _AvailableMoneyTable()
+        {
+            AvailableMoneyViewModel model = AvailableMoneyQueries.GetInitializedAvailableMoney(UserQueries.GetCurrentUsername());
+            return PartialView(model);
+        }
+
         public ActionResult _AvailableMoneyForm()
         {
             AvailableMoneyCreateViewModel model = AvailableMoneyQueries.GetInitializedAvailableMoney(UserQueries.GetCurrentUsername());

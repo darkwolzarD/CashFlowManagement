@@ -14,6 +14,7 @@ namespace CashFlowManagement.Queries
             Entities entities = new Entities();
             DateTime current = DateTime.Now;
 
+            Users user = entities.Users.Where(x => x.Username.Equals(username)).FirstOrDefault();
             Assets availableMoney = entities.Assets.Where(x => x.Username.Equals(username)
                                                           && x.AssetType == (int)Constants.Constants.ASSET_TYPE.AVAILABLE_MONEY
                                                           && !x.DisabledDate.HasValue).OrderBy(x => x.CreatedDate).FirstOrDefault();
@@ -26,7 +27,7 @@ namespace CashFlowManagement.Queries
             else
             {
                 availableMoney = new Assets();
-                availableMoney.AssetName = "Tiền mặt có sẵn khởi tạo của " + username;
+                availableMoney.AssetName = "Tiền mặt có sẵn khởi tạo của " + user.FullName;
                 availableMoney.AssetType = (int)Constants.Constants.ASSET_TYPE.AVAILABLE_MONEY;
                 availableMoney.CreatedBy = Constants.Constants.USER;
                 availableMoney.CreatedDate = current;
@@ -43,8 +44,10 @@ namespace CashFlowManagement.Queries
         {
             Entities entities = new Entities();
             AvailableMoneyCreateViewModel viewModel = new AvailableMoneyCreateViewModel();
+            Users user = entities.Users.Where(x => x.Username.Equals(username)).FirstOrDefault();
+
+            viewModel.Name = "Tiền mặt có sẵn khởi tạo của " + user.Username;
             viewModel.AvailableMoney = 0;
-            viewModel.Editable = false;
 
             Assets availableMoney = entities.Assets.Where(x => x.Username.Equals(username)
                                                           && x.AssetType == (int)Constants.Constants.ASSET_TYPE.AVAILABLE_MONEY
@@ -52,7 +55,6 @@ namespace CashFlowManagement.Queries
             if(availableMoney != null)
             {
                 viewModel.AvailableMoney = availableMoney.Value;
-                viewModel.Editable = true;
             }
 
             return viewModel;

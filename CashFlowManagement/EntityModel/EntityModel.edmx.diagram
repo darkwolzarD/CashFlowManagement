@@ -5,13 +5,13 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="b688416c47754623b0d5a9a2d317065f" Name="Diagram1" ZoomLevel="63">
-        <EntityTypeShape EntityType="CFMModel.Assets" Width="1.5" PointX="3" PointY="12.25" />
-        <EntityTypeShape EntityType="CFMModel.Expenses" Width="1.5" PointX="8.25" PointY="13.25" />
-        <EntityTypeShape EntityType="CFMModel.History" Width="1.5" PointX="10.5" PointY="13.5" />
-        <EntityTypeShape EntityType="CFMModel.Incomes" Width="1.5" PointX="5.25" PointY="13.125" />
-        <EntityTypeShape EntityType="CFMModel.Liabilities" Width="1.5" PointX="7.5" PointY="21.25" />
-        <EntityTypeShape EntityType="CFMModel.Log" Width="1.5" PointX="3" PointY="21.75" />
-        <EntityTypeShape EntityType="CFMModel.StockTransactions" Width="1.5" PointX="5.25" PointY="31.25" />
+        <EntityTypeShape EntityType="CFMModel.Assets" Width="1.5" PointX="6" PointY="12.25" />
+        <EntityTypeShape EntityType="CFMModel.Expenses" Width="1.5" PointX="11.25" PointY="13.25" />
+        <EntityTypeShape EntityType="CFMModel.History" Width="1.5" PointX="13.5" PointY="13.5" />
+        <EntityTypeShape EntityType="CFMModel.Incomes" Width="1.5" PointX="8.25" PointY="13.125" />
+        <EntityTypeShape EntityType="CFMModel.Liabilities" Width="1.5" PointX="10.5" PointY="21.25" />
+        <EntityTypeShape EntityType="CFMModel.Log" Width="1.5" PointX="3" PointY="14.125" />
+        <EntityTypeShape EntityType="CFMModel.StockTransactions" Width="1.5" PointX="8.25" PointY="31.25" />
         <EntityTypeShape EntityType="CFMModel.Users" Width="1.5" PointX="0.75" PointY="12.75" />
         <AssociationConnector Association="CFMModel.FK_Assets_Assets" />
         <AssociationConnector Association="CFMModel.FK_Assets_Expenses" />

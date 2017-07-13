@@ -1,0 +1,22 @@
+﻿@model CashFlowManagement.Models.AvailableMoneyViewModel
+
+<div class="row salary-table-div">
+    <table class="table table-responsive">
+        <thead>
+            <tr>
+                <th>Tiền mặt có sẵn</th>
+                <th class="text-right">Giá trị tiền mặt</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    @Html.DisplayFor(x => Model.Name)<br />
+                    <a href="#" title="Cập nhật tiền mặt có sẵn" class="update-available-money"><span class="glyphicon glyphicon-edit text-success" style="font-size: 14px;"></span></a>
+                </td>
+                <td class="text-right">@Html.DisplayFor(x => Model.AvailableMoney)</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+

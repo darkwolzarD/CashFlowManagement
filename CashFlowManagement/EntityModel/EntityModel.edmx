@@ -21,7 +21,7 @@
           <Property Name="ParticipantBank" Type="nvarchar" MaxLength="50" />
           <Property Name="Note" Type="nvarchar" MaxLength="50" />
           <Property Name="AssetType" Type="int" Nullable="false" />
-          <Property Name="Username" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Username" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="ObtainedBy" Type="int" />
           <Property Name="InterestRate" Type="float" />
           <Property Name="Term" Type="int" />
@@ -44,7 +44,7 @@
           <Property Name="CreatedBy" Type="nvarchar" MaxLength="6" Nullable="false" />
           <Property Name="DisabledBy" Type="nvarchar" MaxLength="6" />
           <Property Name="LiabilityId" Type="int" />
-          <Property Name="Username" Type="nvarchar" MaxLength="20" />
+          <Property Name="Username" Type="nvarchar" MaxLength="50" />
           <Property Name="Name" Type="nvarchar" MaxLength="50" />
           <Property Name="Note" Type="nvarchar(max)" />
           <Property Name="AssetId" Type="int" />
@@ -83,7 +83,7 @@
           <Property Name="DisabledBy" Type="nvarchar" MaxLength="6" />
           <Property Name="IncomeType" Type="int" Nullable="false" />
           <Property Name="AssetId" Type="int" />
-          <Property Name="Username" Type="nvarchar" MaxLength="20" />
+          <Property Name="Username" Type="nvarchar" MaxLength="50" />
           <Property Name="Name" Type="nvarchar" MaxLength="50" />
           <Property Name="Note" Type="nvarchar" MaxLength="50" />
           <Property Name="ParentId" Type="int" />
@@ -106,7 +106,7 @@
           <Property Name="DisabledBy" Type="nvarchar" MaxLength="6" />
           <Property Name="AssetId" Type="int" />
           <Property Name="ParentLiabilityId" Type="int" />
-          <Property Name="Username" Type="nvarchar" MaxLength="20" />
+          <Property Name="Username" Type="nvarchar" MaxLength="50" />
           <Property Name="InterestType" Type="int" />
           <Property Name="Note" Type="nvarchar" MaxLength="50" />
           <Property Name="OriginalValue" Type="float" />
@@ -125,7 +125,7 @@
           <Property Name="AvailableMoney" Type="float" Nullable="false" />
           <Property Name="CreatedDate" Type="datetime" Nullable="false" />
           <Property Name="CreatedBy" Type="nvarchar" MaxLength="6" Nullable="false" />
-          <Property Name="Username" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Username" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
         <EntityType Name="StockTransactions">
           <Key>
@@ -154,10 +154,11 @@
           <Key>
             <PropertyRef Name="Username" />
           </Key>
-          <Property Name="Username" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Username" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="FullName" Type="nvarchar" MaxLength="100" Nullable="false" />
           <Property Name="Email" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Password" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="PhoneNumber" Type="nvarchar" MaxLength="11" Nullable="false" />
           <Property Name="Sex" Type="int" Nullable="false" />
           <Property Name="Job" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="NumberOfChildren" Type="int" Nullable="false" />
@@ -615,7 +616,7 @@
           <Property Name="ParticipantBank" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Note" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="AssetType" Type="Int32" Nullable="false" />
-          <Property Name="Username" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Username" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="ObtainedBy" Type="Int32" />
           <Property Name="InterestRate" Type="Double" />
           <Property Name="Term" Type="Int32" />
@@ -649,7 +650,7 @@
           <Property Name="CreatedBy" Type="String" Nullable="false" MaxLength="6" FixedLength="false" Unicode="true" />
           <Property Name="DisabledBy" Type="String" MaxLength="6" FixedLength="false" Unicode="true" />
           <Property Name="LiabilityId" Type="Int32" />
-          <Property Name="Username" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Username" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Note" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="AssetId" Type="Int32" />
@@ -696,7 +697,7 @@
           <Property Name="DisabledBy" Type="String" MaxLength="6" FixedLength="false" Unicode="true" />
           <Property Name="IncomeType" Type="Int32" Nullable="false" />
           <Property Name="AssetId" Type="Int32" />
-          <Property Name="Username" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Username" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Note" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="ParentId" Type="Int32" />
@@ -725,7 +726,7 @@
           <Property Name="DisabledBy" Type="String" MaxLength="6" FixedLength="false" Unicode="true" />
           <Property Name="AssetId" Type="Int32" />
           <Property Name="ParentLiabilityId" Type="Int32" />
-          <Property Name="Username" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Username" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="InterestType" Type="Int32" />
           <Property Name="Note" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="OriginalValue" Type="Double" />
@@ -750,7 +751,7 @@
           <Property Name="AvailableMoney" Type="Double" Nullable="false" />
           <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="CreatedBy" Type="String" Nullable="false" MaxLength="6" FixedLength="false" Unicode="true" />
-          <Property Name="Username" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Username" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Users" Relationship="CFMModel.FK_Log_Users" FromRole="Log" ToRole="Users" />
         </EntityType>
         <EntityType Name="StockTransactions">
@@ -783,7 +784,7 @@
           <Key>
             <PropertyRef Name="Username" />
           </Key>
-          <Property Name="Username" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Username" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="FullName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="Email" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Password" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
@@ -808,6 +809,7 @@
           <NavigationProperty Name="Incomes" Relationship="CFMModel.FK_Incomes_Users" FromRole="Users" ToRole="Incomes" />
           <NavigationProperty Name="Liabilities" Relationship="CFMModel.FK_Liabilities_Users" FromRole="Users" ToRole="Liabilities" />
           <NavigationProperty Name="Log" Relationship="CFMModel.FK_Log_Users" FromRole="Users" ToRole="Log" />
+          <Property Name="PhoneNumber" Type="String" Nullable="false" MaxLength="11" FixedLength="false" Unicode="true" />
         </EntityType>
         <Association Name="FK_Assets_Assets">
           <End Type="CFMModel.Assets" Role="Assets" Multiplicity="0..1" />
@@ -1210,6 +1212,7 @@
           <EntitySetMapping Name="Users">
             <EntityTypeMapping TypeName="CFMModel.Users">
               <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
                 <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
                 <ScalarProperty Name="OtherExpenseInitialized" ColumnName="OtherExpenseInitialized" />
                 <ScalarProperty Name="FamilyExpenseInitialized" ColumnName="FamilyExpenseInitialized" />

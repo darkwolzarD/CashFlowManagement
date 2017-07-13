@@ -28,8 +28,19 @@
         $(".percentage").unmask();
     }
 
-    $("#available-money-create-modal").modal("show");
-    MaskInput();
+    
+
+    $(document).on("click", ".update-available-money", function () {
+        $.ajax({
+            url: Url.AvailableMoneyForm,
+            type: "get",
+            success: function (data) {
+                $("#modal").html($(data));
+                $("#available-money-create-modal").modal("show");
+                MaskInput();
+            }
+        });
+    })
 
     $(document).on("click", ".create-available-money", function () {
         var model = $("#available-money-form").serialize();
@@ -39,14 +50,14 @@
             data: model,
             success: function (data) {
                 if (data === "success") {
+                    $("#available-money-create-modal").modal("hide");
                     $.ajax({
-                        url: Url.AvailableMoneyForm,
+                        url: Url.AvailableMoneyTable,
                         type: "get",
                         success: function (data) {
-                            $("#available-money-create-modal").html($(data).html());
+                            $("#available-money-table-div").html($(data).html());
                         }
                     });
-                    window.location.replace(Url.FinancialStatus);
                 }
                 else if (data === "failed") {
                     alert("Error!");

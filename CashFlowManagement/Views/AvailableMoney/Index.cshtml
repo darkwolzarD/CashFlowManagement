@@ -3,6 +3,38 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<div class="clear10"></div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="btn-group btn-breadcrumb">
+            <a href="#" class="btn btn-default"><i class="glyphicon glyphicon-home"></i></a>
+            <a href="#" class="btn btn-default">Tiền mặt có sẵn</a>
+        </div>
+    </div>
+</div>
+<div class="clear10"></div>
+<div class="row">
+    <div class="col-md-6">
+        <p style="font-size: 20px;">Quản lý tiền mặt có sẵn</p>
+    </div>
+</div>
+<div class="clear10"></div>
+<div class="row">
+    <div class="col-md-12" id="available-money-table-div">
+         @{ Html.RenderAction("_AvailableMoneyTable", "AvailableMoney"); }
+    </div>
+</div>
+<footer class="row text-right">
+    <a href="@Url.Action("Index", "FinancialStatus")" class="btn btn-primary available-money-toggle-summary" style="font-size: 11px;">
+        <span class="glyphicon glyphicon-ok"></span>
+        Hoàn tất khai báo tiền mặt có sẵn
+    </a>
+</footer>
+
+<div id="modal">
+
+</div>
+
 <div id="modal">
      @{ Html.RenderAction("_AvailableMoneyForm"); }
 </div>
@@ -10,6 +42,7 @@
 <script type="text/javascript" src="~/Scripts/availablemoney.js"></script>
 <script type="text/javascript">
     var Url = {};
+    Url.AvailableMoneyTable = '@Url.Action("_AvailableMoneyTable", "AvailableMoney")';
     Url.AvailableMoneyForm = '@Url.Action("_AvailableMoneyForm", "AvailableMoney")';
     Url.FinancialStatus = '@Url.Action("Index", "FinancialStatus")';
 </script>

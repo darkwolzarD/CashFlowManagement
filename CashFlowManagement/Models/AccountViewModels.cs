@@ -31,6 +31,10 @@ namespace CashFlowManagement.Models
         [Display(Name = "Email")]
         public string Email { get; set; }
 
+        [Required(ErrorMessage = "Nhập số điện thoại")]
+        [Display(Name = "Số điện thoại")]
+        public string PhoneNumber { get; set; }
+
         [Required(ErrorMessage = "Nhập mật khẩu")]
         [StringLength(100, ErrorMessage = "{0} phải dài tối thiểu {2} kí tự.", MinimumLength = 6)]
         [DataType(DataType.Password)]
