@@ -137,24 +137,28 @@ button .glyphicon {
 }
 
 .login-page {
-    width: 400px;
+    width: 300px;
     padding: 8% 0 0;
     margin: auto;
+    font-size: 12px !important;
 }
 
     .login-page form {
         position: relative;
         z-index: 1;
         background: #FFFFFF;
-        max-width: 400px;
+        max-width: 300px;
         margin: 0 auto 100px;
-        padding: 45px;
-        text-align: center;
+        padding: 10px 45px 10px 45px;
         box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
     }
 
     .login-page .checkbox {
         text-align: left;
+    }
+
+    .login-page .control-label {
+        margin-bottom: 5px;
     }
 /*Display info on financial status page*/
 .info {

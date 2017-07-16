@@ -32,7 +32,8 @@ namespace CashFlowManagement.Controllers
             }
             else
             {
-                return RedirectToAction("Login", "Account");
+                ModelState.AddModelError("LoginError", "Sai tên đăng nhập hoặc mật khẩu");
+                return View(model);
             }
         }
 

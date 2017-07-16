@@ -1,9 +1,17 @@
-﻿@using CashFlowManagement.Models;
+﻿@using CashFlowManagement.EntityModel;
 @{
     ViewBag.Title = "Quản lý lương";
     Layout = "~/Views/Shared/_IncomeLayout.cshtml";
+    var user = (Users)HttpContext.Current.Session["USER"];
 }
 
+<div class="row">
+    <div class="col-md-12">
+        <h2>Chào mừng đến với ngansach.vn</h2>
+        <h5><strong>@user.FullName</strong> đã hoàn tất khai báo thông tin tài khoản, bạn vui lòng tiến hành khai báo thông tin tài chính cá nhân.</h5>
+    </div>
+</div>
+<hr />
 <div class="clear10"></div>
 <div class="row">
     <div class="col-md-12">
@@ -18,7 +26,8 @@
 <div class="clear10"></div>
 <div class="row">
     <div class="col-md-6">
-        <p style="font-size: 20px;">Quản lý lương</p>
+        <p style="font-size: 20px; margin-bottom: 5px !important">Quản lý lương</p>
+        <p style="font-size: 12px; font-style: italic">(Nếu không có thu nhập từ lương, vui lòng hoàn tất và chuyển sang khai báo tài sản)</p>
     </div>
     <div class="col-md-6 text-right">
         <button type="button" class="btn btn-success toggle-modal">
