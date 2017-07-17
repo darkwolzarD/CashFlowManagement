@@ -41,6 +41,7 @@ namespace CashFlowManagement.EntityModel
         public string Username { get; set; }
         public Nullable<int> ObtainedBy { get; set; }
         public Nullable<double> InterestRate { get; set; }
+        public Nullable<int> InterestRatePerX { get; set; }
         public Nullable<int> Term { get; set; }
         public Nullable<int> CashId { get; set; }
         public Nullable<int> IncomeId { get; set; }

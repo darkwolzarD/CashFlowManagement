@@ -2,6 +2,9 @@
 @using CashFlowManagement.EntityModel
 @using CashFlowManagement.Queries
 @using CashFlowManagement.Utilities
+@{
+    Users user = (Users)HttpContext.Current.Session["USER"];
+}
 <!DOCTYPE html>
 <html>
 <head>
@@ -57,7 +60,19 @@
                         </ul>
                     </li>
                     <li style="width: 30px;"><a href="#"></a></li>
-                    <li style="width: 90px"><a href="#"></a></li>
+                    @if (user == null)
+                    {
+                        <li style="width: 90px"><a href="@Url.Action("Login", "Account")">Đăng nhập</a></li>
+                    }
+                    else
+                    {
+                        <li style="width: 200px">
+                            <a href="#">Xin chào, @user.FullName</a>
+                            <ul class="nav-bar">
+                                <li><a href="@Url.Action("Logout", "Account")">Đăng xuất</a></li>
+                            </ul>
+                        </li>
+                    }
                 </ul>
             </div>
         </div>

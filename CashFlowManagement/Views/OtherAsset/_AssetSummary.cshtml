@@ -170,7 +170,7 @@
                                             <td class="text-right">@Html.DisplayFor(x => bankDeposits.Income)</td>
                                             <td class="text-right">@Html.DisplayFor(x => bankDeposits.AnnualIncome)</td>
                                             <td class="text-right">@Html.DisplayFor(x => bankDeposits.Value)</td>
-                                            <td class="text-right">@Html.DisplayFor(x => bankDeposits.InterestRate)</td>
+                                            <td class="text-right">@Html.DisplayFor(x => bankDeposits.InterestRate) / @Html.DisplayFor(x => bankDeposits.InterestRatePerX)</td>
                                             <td class="text-right">@Html.DisplayFor(x => bankDeposits.InterestObtainWay)</td>
                                             <td>@Html.DisplayFor(x => bankDeposits.Note)</td>
                                         </tr>
@@ -365,7 +365,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <a href="@Url.Action("Index", "CarLiability")" class="btn btn-success">
+                <a href="@Url.Action("OtherAssetInitialize", "Account")" class="btn btn-success">
                     <span class="glyphicon glyphicon-ok"></span>
                     Xác nhận
                 </a>

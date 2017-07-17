@@ -36,6 +36,10 @@ namespace CashFlowManagement.Models
         [DisplayFormat(DataFormatString = "{0:N2}", ApplyFormatInEditMode = true)]
         public double? InterestRate { get; set; }
 
+        [Required(ErrorMessage = "Chọn lãi suất năm hoặc tháng")]
+        [Display(Name = "Lãi suất áp dụng")]
+        public int InterestRatePerX { get; set; }
+
         [Required(ErrorMessage = "Chọn kiểu nhận lãi")]
         [Display(Name = "Kiểu nhận lãi")]
         public int InterestObtainWay { get; set; }
@@ -73,7 +77,9 @@ namespace CashFlowManagement.Models
         public double AnnualIncome { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:P2}")]
-        public double InterestRate { get; set; }
+        public double? InterestRate { get; set; }
+
+        public string InterestRatePerX { get; set; }
 
         public string InterestObtainWay { get; set; }
 
@@ -125,7 +131,9 @@ namespace CashFlowManagement.Models
         public double AnnualIncome { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:P2}")]
-        public double InterestRate { get; set; }
+        public double? InterestRate { get; set; }
+
+        public string InterestRatePerX { get; set; }
 
         public string InterestObtainWay { get; set; }
 

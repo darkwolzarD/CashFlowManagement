@@ -1,17 +1,21 @@
-﻿@using CashFlowManagement.EntityModel;
+﻿@model bool
+@using CashFlowManagement.EntityModel;
 @{
     ViewBag.Title = "Quản lý lương";
     Layout = "~/Views/Shared/_IncomeLayout.cshtml";
     var user = (Users)HttpContext.Current.Session["USER"];
 }
 
-<div class="row">
-    <div class="col-md-12">
-        <h2>Chào mừng đến với ngansach.vn</h2>
-        <h5><strong>@user.FullName</strong> đã hoàn tất khai báo thông tin tài khoản, bạn vui lòng tiến hành khai báo thông tin tài chính cá nhân.</h5>
+@if (!Model)
+{
+    <div class="row">
+        <div class="col-md-12">
+            <h2>Chào mừng đến với ngansach.vn</h2>
+            <h5><strong>@user.FullName</strong> đã hoàn tất khai báo thông tin tài khoản, bạn vui lòng tiến hành khai báo thông tin tài chính cá nhân.</h5>
+        </div>
     </div>
-</div>
-<hr />
+    <hr />
+}
 <div class="clear10"></div>
 <div class="row">
     <div class="col-md-12">
@@ -39,7 +43,7 @@
 <div class="clear10"></div>
 <div class="row">
     <div class="col-md-12" id="salary-table-div">
-         @{ Html.RenderAction("_SalaryTable", "Salary"); }
+        @{ Html.RenderAction("_SalaryTable", "Salary"); }
     </div>
 </div>
 <footer class="row text-right">

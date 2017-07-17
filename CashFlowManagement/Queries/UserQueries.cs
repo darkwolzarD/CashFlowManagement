@@ -66,6 +66,7 @@ namespace CashFlowManagement.Queries
             user.OtherLiabilityInitialized = false;
             user.FamilyExpenseInitialized = false;
             user.OtherExpenseInitialized = false;
+            user.AvailableMoneyInitialized = false;
             user.CreatedDate = DateTime.Now;
 
             //Add user
@@ -74,7 +75,7 @@ namespace CashFlowManagement.Queries
             return user;
         }
 
-        public static Users IncomeInitialize(string username)
+        public static int SalaryInitialize(string username)
         {
             Entities entities = new Entities();
             Users user = entities.Users.Where(x => x.Username.Equals(username)).FirstOrDefault();
@@ -83,11 +84,82 @@ namespace CashFlowManagement.Queries
                 user.IncomeInitialized = true;
                 entities.Users.Attach(user);
                 entities.Entry(user).State = System.Data.Entity.EntityState.Modified;
-                int result = entities.SaveChanges();
+                return entities.SaveChanges();
             }
-            return user;
+            return -1;
         }
-        public static Users OtherAssetInitialize(string username)
+
+        public static int RealEstateInitialize(string username)
+        {
+            Entities entities = new Entities();
+            Users user = entities.Users.Where(x => x.Username.Equals(username)).FirstOrDefault();
+            if (!user.RealEstateInitialized)
+            {
+                user.RealEstateInitialized = true;
+                entities.Users.Attach(user);
+                entities.Entry(user).State = System.Data.Entity.EntityState.Modified;
+                return entities.SaveChanges();
+            }
+            return -1;
+        }
+
+        public static int BusinessInitialize(string username)
+        {
+            Entities entities = new Entities();
+            Users user = entities.Users.Where(x => x.Username.Equals(username)).FirstOrDefault();
+            if (!user.BusinessInitialized)
+            {
+                user.BusinessInitialized = true;
+                entities.Users.Attach(user);
+                entities.Entry(user).State = System.Data.Entity.EntityState.Modified;
+                return entities.SaveChanges();
+            }
+            return -1;
+        }
+
+        public static int BankDepositInitialize(string username)
+        {
+            Entities entities = new Entities();
+            Users user = entities.Users.Where(x => x.Username.Equals(username)).FirstOrDefault();
+            if (!user.BankDepositInitialized)
+            {
+                user.BankDepositInitialized = true;
+                entities.Users.Attach(user);
+                entities.Entry(user).State = System.Data.Entity.EntityState.Modified;
+                return entities.SaveChanges();
+            }
+            return -1;
+        }
+
+        public static int StockInitialize(string username)
+        {
+            Entities entities = new Entities();
+            Users user = entities.Users.Where(x => x.Username.Equals(username)).FirstOrDefault();
+            if (!user.StockInitialized)
+            {
+                user.StockInitialized = true;
+                entities.Users.Attach(user);
+                entities.Entry(user).State = System.Data.Entity.EntityState.Modified;
+                return entities.SaveChanges();
+            }
+            return -1;
+        }
+
+        public static int InsuranceInitialize(string username)
+        {
+            Entities entities = new Entities();
+            Users user = entities.Users.Where(x => x.Username.Equals(username)).FirstOrDefault();
+            if (!user.InsuranceInitialized)
+            {
+                user.InsuranceInitialized = true;
+                entities.Users.Attach(user);
+                entities.Entry(user).State = System.Data.Entity.EntityState.Modified;
+                return entities.SaveChanges();
+            }
+            return -1;
+        }
+
+        public static int OtherAssetInitialize(string username)
         {
             Entities entities = new Entities();
             Users user = entities.Users.Where(x => x.Username.Equals(username)).FirstOrDefault();
@@ -96,12 +168,40 @@ namespace CashFlowManagement.Queries
                 user.OtherAssetInitialized = true;
                 entities.Users.Attach(user);
                 entities.Entry(user).State = System.Data.Entity.EntityState.Modified;
-                int result = entities.SaveChanges();
+                return entities.SaveChanges();
             }
-            return user;
+            return -1;
         }
 
-        public static Users OtherLiabilityInitialize(string username)
+        public static int CarLiabilityInitialize(string username)
+        {
+            Entities entities = new Entities();
+            Users user = entities.Users.Where(x => x.Username.Equals(username)).FirstOrDefault();
+            if (!user.CarLiabilityInitialized)
+            {
+                user.CarLiabilityInitialized = true;
+                entities.Users.Attach(user);
+                entities.Entry(user).State = System.Data.Entity.EntityState.Modified;
+                return entities.SaveChanges();
+            }
+            return -1;
+        }
+
+        public static int CreditCardLiabilityInitialize(string username)
+        {
+            Entities entities = new Entities();
+            Users user = entities.Users.Where(x => x.Username.Equals(username)).FirstOrDefault();
+            if (!user.CreditCardInitialized)
+            {
+                user.CreditCardInitialized = true;
+                entities.Users.Attach(user);
+                entities.Entry(user).State = System.Data.Entity.EntityState.Modified;
+                return entities.SaveChanges();
+            }
+            return -1;
+        }
+
+        public static int OtherLiabilityInitialize(string username)
         {
             Entities entities = new Entities();
             Users user = entities.Users.Where(x => x.Username.Equals(username)).FirstOrDefault();
@@ -110,12 +210,26 @@ namespace CashFlowManagement.Queries
                 user.OtherLiabilityInitialized = true;
                 entities.Users.Attach(user);
                 entities.Entry(user).State = System.Data.Entity.EntityState.Modified;
-                int result = entities.SaveChanges();
+                return entities.SaveChanges();
             }
-            return user;
+            return -1;
         }
 
-        public static Users OtherExpenseInitialize(string username)
+        public static int FamilyExpenseInitialize(string username)
+        {
+            Entities entities = new Entities();
+            Users user = entities.Users.Where(x => x.Username.Equals(username)).FirstOrDefault();
+            if (!user.FamilyExpenseInitialized)
+            {
+                user.FamilyExpenseInitialized = true;
+                entities.Users.Attach(user);
+                entities.Entry(user).State = System.Data.Entity.EntityState.Modified;
+                return entities.SaveChanges();
+            }
+            return -1;
+        }
+
+        public static int OtherExpenseInitialize(string username)
         {
             Entities entities = new Entities();
             Users user = entities.Users.Where(x => x.Username.Equals(username)).FirstOrDefault();
@@ -124,9 +238,29 @@ namespace CashFlowManagement.Queries
                 user.OtherExpenseInitialized = true;
                 entities.Users.Attach(user);
                 entities.Entry(user).State = System.Data.Entity.EntityState.Modified;
-                int result = entities.SaveChanges();
+                return entities.SaveChanges();
             }
-            return user;
+            return -1;
+        }
+
+        public static int AvailableMoneyInitialize(string username)
+        {
+            Entities entities = new Entities();
+            Users user = entities.Users.Where(x => x.Username.Equals(username)).FirstOrDefault();
+            if (!user.AvailableMoneyInitialized)
+            {
+                user.AvailableMoneyInitialized = true;
+                entities.Users.Attach(user);
+                entities.Entry(user).State = System.Data.Entity.EntityState.Modified;
+                return entities.SaveChanges();
+            }
+            return -1;
+        }
+
+        public static bool IsSalaryInitialized(string username)
+        {
+            Entities entities = new Entities();
+            return entities.Users.Where(x => x.Username.Equals(username)).FirstOrDefault().IncomeInitialized;
         }
     }
 }

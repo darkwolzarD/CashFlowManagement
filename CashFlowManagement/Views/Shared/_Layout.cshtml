@@ -69,7 +69,12 @@
                     }
                     else
                     {
-                        <li style="width: 90px"><a href="@Url.Action("Logout", "Account")">Đăng xuất</a></li>
+                        <li style="width: 200px">
+                            <a href="#">Xin chào, @user.FullName</a>
+                            <ul class="nav-bar">
+                                <li><a href="@Url.Action("Logout", "Account")">Đăng xuất</a></li>
+                            </ul>
+                        </li>
                     }
                 </ul>
             </div>

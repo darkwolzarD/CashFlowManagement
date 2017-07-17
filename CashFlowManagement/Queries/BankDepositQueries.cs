@@ -29,6 +29,7 @@ namespace CashFlowManagement.Queries
                     Income = bankDeposit.Value * bankDeposit.InterestRate.Value / 1200,
                     AnnualIncome = (bankDeposit.Value * bankDeposit.InterestRate.Value / 1200) * 12,
                     InterestRate = bankDeposit.InterestRate.Value / 100,
+                    InterestRatePerX = Helper.GetInterestTypePerX(bankDeposit.InterestRatePerX.Value),
                     InterestObtainWay = Helper.GetObtainWay(bankDeposit.ObtainedBy.Value),
                     PaymentPeriod = Helper.CalculateTimePeriod(bankDeposit.StartDate.Value, bankDeposit.EndDate.Value),
                     Note = bankDeposit.Note
@@ -57,6 +58,7 @@ namespace CashFlowManagement.Queries
                 StartDate = bankDeposit.StartDate.Value,
                 EndDate = bankDeposit.EndDate.Value,
                 InterestRate = bankDeposit.InterestRate.Value,
+                InterestRatePerX = bankDeposit.InterestRatePerX.Value,
                 PaymentPeriod = Helper.CalculateTimePeriod(bankDeposit.StartDate.Value, bankDeposit.EndDate.Value),
                 Note = bankDeposit.Note
             };
@@ -81,6 +83,7 @@ namespace CashFlowManagement.Queries
                     Income = bankDeposit.Value * bankDeposit.InterestRate.Value / 1200,
                     AnnualIncome = (bankDeposit.Value * bankDeposit.InterestRate.Value / 1200) * 12,
                     InterestRate = bankDeposit.InterestRate.Value / 100,
+                    InterestRatePerX = Helper.GetInterestTypePerX(bankDeposit.InterestRatePerX.Value),
                     InterestObtainWay = Helper.GetObtainWay(bankDeposit.ObtainedBy.Value),
                     PaymentPeriod = Helper.CalculateTimePeriod(bankDeposit.StartDate.Value, bankDeposit.EndDate.Value),
                     Note = bankDeposit.Note
@@ -109,6 +112,7 @@ namespace CashFlowManagement.Queries
             bankDeposit.StartDate = model.StartDate.Value;
             bankDeposit.EndDate = model.EndDate.Value;
             bankDeposit.InterestRate = model.InterestRate;
+            bankDeposit.InterestRatePerX = model.InterestRatePerX;
             bankDeposit.ObtainedBy = model.InterestObtainWay;
             bankDeposit.CreatedDate = current;
             bankDeposit.CreatedBy = Constants.Constants.USER;
@@ -131,6 +135,7 @@ namespace CashFlowManagement.Queries
             bankDeposit.StartDate = model.StartDate.Value;
             bankDeposit.EndDate = model.EndDate.Value;
             bankDeposit.InterestRate = model.InterestRate;
+            bankDeposit.InterestRatePerX = model.InterestRatePerX;
             bankDeposit.ObtainedBy = model.InterestObtainWay;
 
             entities.Assets.Attach(bankDeposit);
@@ -185,6 +190,19 @@ namespace CashFlowManagement.Queries
                 else if (obtainCode == (int)Constants.Constants.INTEREST_OBTAIN_TYPE.ORIGIN)
                 {
                     return "Lãi nhập gốc";
+                }
+                return string.Empty;
+            }
+
+            public static string GetInterestTypePerX(int interestTypePerX)
+            {
+                if (interestTypePerX == (int)Constants.Constants.INTEREST_RATE_PER.MONTH)
+                {
+                    return "Tháng";
+                }
+                else if (interestTypePerX == (int)Constants.Constants.INTEREST_RATE_PER.YEAR)
+                {
+                    return "Năm";
                 }
                 return string.Empty;
             }

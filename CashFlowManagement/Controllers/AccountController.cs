@@ -60,35 +60,81 @@ namespace CashFlowManagement.Controllers
             else return PartialView(model);
         }
 
-        public ActionResult IncomeInitialize()
+        public ActionResult SalaryInitialize()
         {
-            Users user = (Users)HttpContext.Session["USER"];
-            user = UserQueries.IncomeInitialize(user.Username);
-            HttpContext.Session["USER"] = user;
-            return RedirectToAction("Initialize", "Asset", new { @type = (int)Constants.Constants.ASSET_TYPE.REAL_ESTATE });
+            int result = UserQueries.SalaryInitialize(UserQueries.GetCurrentUsername());
+            return RedirectToAction("Index", "RealEstate");
+        }
+
+        public ActionResult RealEstateInitialize()
+        {
+            int result = UserQueries.RealEstateInitialize(UserQueries.GetCurrentUsername());
+            return RedirectToAction("Index", "Business");
+        }
+
+        public ActionResult BusinessInitialize()
+        {
+            int result = UserQueries.BusinessInitialize(UserQueries.GetCurrentUsername());
+            return RedirectToAction("Index", "BankDeposit");
+        }
+
+        public ActionResult BankDepositInitialize()
+        {
+            int result = UserQueries.BankDepositInitialize(UserQueries.GetCurrentUsername());
+            return RedirectToAction("Index", "Stock");
+        }
+
+        public ActionResult StockInitialize()
+        {
+            int result = UserQueries.StockInitialize(UserQueries.GetCurrentUsername());
+            return RedirectToAction("Index", "Insurance");
+        }
+
+        public ActionResult InsuranceInitialize()
+        {
+            int result = UserQueries.InsuranceInitialize(UserQueries.GetCurrentUsername());
+            return RedirectToAction("Index", "OtherAsset");
         }
 
         public ActionResult OtherAssetInitialize()
         {
-            Users user = (Users)HttpContext.Session["USER"];
-            user = UserQueries.OtherAssetInitialize(user.Username);
-            HttpContext.Session["USER"] = user;
-            return RedirectToAction("Initialize", "Liability", new { @type = (int)Constants.Constants.LIABILITY_TYPE.CAR });
+            int result = UserQueries.OtherAssetInitialize(UserQueries.GetCurrentUsername());
+            return RedirectToAction("Index", "CarLiability");
+        }
+
+        public ActionResult CarLiabilityInitialize()
+        {
+            int result = UserQueries.CarLiabilityInitialize(UserQueries.GetCurrentUsername());
+            return RedirectToAction("Index", "CreditCardLiability");
+        }
+
+        public ActionResult CreditCardLiabilityInitialize()
+        {
+            int result = UserQueries.CreditCardLiabilityInitialize(UserQueries.GetCurrentUsername());
+            return RedirectToAction("Index", "OtherLiability");
         }
 
         public ActionResult OtherLiabilityInitialize()
         {
-            Users user = (Users)HttpContext.Session["USER"];
-            user = UserQueries.OtherLiabilityInitialize(user.Username);
-            HttpContext.Session["USER"] = user;
-            return RedirectToAction("Initialize", "Expense", new { @type = (int)Constants.Constants.EXPENSE_TYPE.FAMILY });
+            int result = UserQueries.OtherLiabilityInitialize(UserQueries.GetCurrentUsername());
+            return RedirectToAction("Index", "FamilyExpense");
+        }
+
+        public ActionResult FamilyExpenseInitialize()
+        {
+            int result = UserQueries.FamilyExpenseInitialize(UserQueries.GetCurrentUsername());
+            return RedirectToAction("Index", "OtherExpense");
         }
 
         public ActionResult OtherExpenseInitialize()
         {
-            Users user = (Users)HttpContext.Session["USER"];
-            user = UserQueries.OtherExpenseInitialize(user.Username);
-            HttpContext.Session["USER"] = user;
+            int result = UserQueries.OtherExpenseInitialize(UserQueries.GetCurrentUsername());
+            return RedirectToAction("Index", "AvailableMoney");
+        }
+
+        public ActionResult AvailableMoneyInitialize()
+        {
+            int result = UserQueries.AvailableMoneyInitialize(UserQueries.GetCurrentUsername());
             return RedirectToAction("Index", "FinancialStatus");
         }
     }

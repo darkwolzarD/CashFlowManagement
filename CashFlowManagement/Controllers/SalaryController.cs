@@ -13,7 +13,8 @@ namespace CashFlowManagement.Controllers
         // GET: Salary
         public ActionResult Index()
         {
-            return View();
+            bool result = UserQueries.IsSalaryInitialized(UserQueries.GetCurrentUsername());
+            return View(result);
         }
 
         public ActionResult _SalaryForm()
@@ -92,6 +93,11 @@ namespace CashFlowManagement.Controllers
         {
             SalarySummaryListViewModel model = SalaryQueries.GetSalarySummaryByUser(UserQueries.GetCurrentUsername());
             return PartialView(model);
+        }
+
+        public ActionResult Finish()
+        {
+            return RedirectToAction("Index", "RealEstate");
         }
     }
 }
