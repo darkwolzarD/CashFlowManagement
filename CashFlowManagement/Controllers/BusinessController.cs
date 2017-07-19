@@ -1,5 +1,6 @@
 ﻿using CashFlowManagement.Models;
 using CashFlowManagement.Queries;
+using CashFlowManagement.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,7 @@ using static CashFlowManagement.Queries.BusinessLiabilityQueries;
 
 namespace CashFlowManagement.Controllers
 {
+    [CheckSessionTimeOutAttribute]
     public class BusinessController : Controller
     {
         // GET: Business

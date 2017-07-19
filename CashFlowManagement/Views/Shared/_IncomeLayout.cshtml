@@ -84,3 +84,12 @@
     @RenderSection("scripts", required: false)
 </body>
 </html>
+<script type="text/javascript">
+    $.ajaxSetup({
+        statusCode: {
+            401: function () {
+                window.location.href = "@Url.Action("Login", "Account")";
+            }
+        }
+    })
+</script>

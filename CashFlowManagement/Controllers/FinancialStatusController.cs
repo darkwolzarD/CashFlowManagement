@@ -1,4 +1,5 @@
 ﻿using CashFlowManagement.Queries;
+using CashFlowManagement.Utilities;
 using CashFlowManagement.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -8,6 +9,7 @@ using System.Web.Mvc;
 
 namespace CashFlowManagement.Controllers
 {
+    [CheckSessionTimeOutAttribute]
     public class FinancialStatusController : Controller
     {
         // GET: FinancialStatus
