@@ -83,7 +83,9 @@ namespace CashFlowManagement.Controllers
                 ModelState.AddModelError("CompareStockValueAndLiabilityValue", "Giá trị tổng số nợ không vượt quá giá trị góp vốn kinh doanh");
             }
 
-            if (StockQueries.CheckExistStock(UserQueries.GetCurrentUsername(), model.Name))
+            StockUpdateViewModel stock = StockQueries.GetStockById(model.Id);
+
+            if (!stock.Name.Equals(model.Name) && StockQueries.CheckExistStock(UserQueries.GetCurrentUsername(), model.Name))
             {
                 ModelState.AddModelError("DuplicateName", "Cổ phiếu này đã tồn tại");
             }

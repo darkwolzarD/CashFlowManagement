@@ -55,11 +55,14 @@ namespace CashFlowManagement.Models
         [DisplayFormat(DataFormatString = "{0:MM/yyyy}")]
         public DateTime StartDate { get; set; }
 
+        [DisplayFormat(DataFormatString = "{0:P2}")]
+        public double YieldRate { get; set; }
+
         [DisplayFormat(DataFormatString = "{0:MM/yyyy}")]
         public DateTime EndDate { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:N0}")]
-        public double PaymentPeriod { get; set; }
+        public string PaymentPeriod { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:N0}")]
         public double Expense { get; set; }

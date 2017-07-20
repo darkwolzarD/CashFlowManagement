@@ -9,6 +9,7 @@
                 <th class="text-right">Tổng phải đóng</th>
                 <th class="text-right">Ngày bắt đầu</th>
                 <th class="text-right">Ngày kết thúc</th>
+                <th class="text-right">Tỉ suất sinh lời</th>
                 <th class="text-right">Tổng số tháng</th>
                 <th class="text-right">Phải đóng hàng tháng</th>
                 <th class="text-right">Phải đóng hàng năm</th>
@@ -23,7 +24,8 @@
                 <td class="text-danger text-right"><strong>@Html.DisplayFor(x => x.TotalTotalExpense)</strong></td>
                 <td></td>
                 <td></td>
-                <td class="text-danger"></td>
+                <td></td>
+                <td></td>
                 <td class="text-danger text-right"><strong>@Html.DisplayFor(x => x.TotalExpense)</strong></td>
                 <td class="text-danger text-right"><strong>@Html.DisplayFor(x => x.TotalAnnualExpense)</strong></td>
                 <td class="text-danger text-right"><strong>@Html.DisplayFor(x => x.TotalRemainedValue)</strong></td>
@@ -43,6 +45,7 @@
                         <td class="text-right">@Html.DisplayFor(x => item.TotalExpense)</td>
                         <td class="text-right">@Html.DisplayFor(x => item.StartDate)</td>
                         <td class="text-right">@Html.DisplayFor(x => item.EndDate)</td>
+                        <td class="text-right">@Html.DisplayFor(x => item.YieldRate)</td>
                         <td class="text-right">@Html.DisplayFor(x => item.PaymentPeriod)</td>
                         <td class="text-right">@Html.DisplayFor(x => item.Expense)</td>
                         <td class="text-right">@Html.DisplayFor(x => item.AnnualExpense)</td>

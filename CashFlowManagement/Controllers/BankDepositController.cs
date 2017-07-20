@@ -67,7 +67,7 @@ namespace CashFlowManagement.Controllers
             }
             else
             {
-                return PartialView();
+                return PartialView(model);
             }
         }
 

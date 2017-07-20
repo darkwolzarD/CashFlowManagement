@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using static CashFlowManagement.Queries.BankDepositQueries;
 
 namespace CashFlowManagement.Controllers
 {
@@ -26,6 +27,11 @@ namespace CashFlowManagement.Controllers
         [HttpPost]
         public ActionResult _InsuranceForm(InsuranceCreateViewModel model)
         {
+            if(model.Expense * Helper.CalculateTimePeriod(model.StartDate.Value, model.EndDate.Value) >= model.Value)
+            {
+                ModelState.AddModelError("CheckValueAndTotalExpenseError", "Tổng số tiền đóng phải nhỏ hơn tiền thụ hưởng");
+            }
+
             if (ModelState.IsValid)
             {
                 int result = InsuranceQueries.CreateInsurance(model, UserQueries.GetCurrentUsername());
@@ -40,7 +46,7 @@ namespace CashFlowManagement.Controllers
             }
             else
             {
-                return PartialView();
+                return PartialView(model);
             }
         }
 
@@ -53,6 +59,11 @@ namespace CashFlowManagement.Controllers
         [HttpPost]
         public ActionResult _InsuranceUpdateForm(InsuranceUpdateViewModel model)
         {
+            if (model.Expense * Helper.CalculateTimePeriod(model.StartDate.Value, model.EndDate.Value) >= model.Value)
+            {
+                ModelState.AddModelError("CheckValueAndTotalExpenseError", "Tổng số tiền đóng phải nhỏ hơn tiền thụ hưởng");
+            }
+
             if (ModelState.IsValid)
             {
                 int result = InsuranceQueries.UpdateInsurance(model);
@@ -67,7 +78,7 @@ namespace CashFlowManagement.Controllers
             }
             else
             {
-                return PartialView();
+                return PartialView(model);
             }
         }
 

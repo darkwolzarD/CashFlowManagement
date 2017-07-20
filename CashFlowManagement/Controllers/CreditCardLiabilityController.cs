@@ -40,7 +40,7 @@ namespace CashFlowManagement.Controllers
             }
             else
             {
-                return PartialView();
+                return PartialView(model);
             }
         }
 
@@ -67,7 +67,7 @@ namespace CashFlowManagement.Controllers
             }
             else
             {
-                return PartialView();
+                return PartialView(model);
             }
         }
 

@@ -27,13 +27,15 @@ namespace CashFlowManagement.Queries
                     Value = insurance.Value,
                     StartDate = insurance.StartDate.Value,
                     EndDate = insurance.EndDate.Value,
-                    PaymentPeriod = Helper.CalculateTimePeriod(insurance.StartDate.Value, insurance.EndDate.Value),
+                    PaymentPeriod = Helper.TimePeriodString(insurance.StartDate.Value, insurance.EndDate.Value),
                     Expense = expense.Value,
                     AnnualExpense = expense.Value * 12,
                     Note = insurance.Note
                 };
 
-                viewModel.TotalExpense = viewModel.PaymentPeriod * viewModel.Expense;
+                int paymentPeriod = Helper.CalculateTimePeriod(insurance.StartDate.Value, insurance.EndDate.Value);
+                viewModel.TotalExpense = paymentPeriod * viewModel.Expense;
+                viewModel.YieldRate = (viewModel.Value - viewModel.TotalExpense) / viewModel.TotalExpense;
                 int currentPeriod = Helper.CalculateTimePeriod(viewModel.StartDate, DateTime.Now);
                 viewModel.RemainedValue = viewModel.TotalExpense - viewModel.Expense * currentPeriod;
 

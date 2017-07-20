@@ -201,6 +201,37 @@ namespace CashFlowManagement.Queries
                     return 0;
                 }
             }
+
+            public static string TimePeriodString(DateTime startDate, DateTime endDate)
+            {
+                if (endDate >= startDate)
+                {
+                    int period = (endDate.Year - startDate.Year) * 12 + endDate.Month - startDate.Month;
+                    if ((endDate.Day - startDate.Day) / 30 >= 0.5)
+                    {
+                        period += 1;
+                    }
+                    if (period >= 12)
+                    {
+                        int years = period / 12;
+                        string dateString = years + " năm ";
+                        int months = period - years * 12;
+                        if(months > 0)
+                        {
+                            dateString = dateString + months + " tháng";
+                        }
+                        return dateString;
+                    }
+                    else
+                    {
+                        return period + " tháng";
+                    }
+                }
+                else
+                {
+                    return string.Empty;
+                }
+            }
         }
     }
 }

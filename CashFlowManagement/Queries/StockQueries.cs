@@ -161,18 +161,18 @@ namespace CashFlowManagement.Queries
             viewmodel.StockValue = transaction.Value;
             viewmodel.ExpectedDividend = transaction.ExpectedDividend;
 
-            var liability = entities.Liabilities.Where(x => x.TransactionId == transaction.Id && !x.DisabledDate.HasValue).FirstOrDefault();
-            viewmodel.Liabilities.Liabilities.Add(new StockLiabilityCreateViewModel
-            {
-                Id = liability.Id,
-                Value = liability.Value,
-                Source = liability.Name,
-                InterestRate = liability.InterestRate / 100,
-                InterestType = liability.InterestType.Value,
-                InterestRatePerX = liability.InterestRatePerX,
-                StartDate = liability.StartDate,
-                EndDate = liability.EndDate
-            });
+            //var liability = entities.Liabilities.Where(x => x.TransactionId == transaction.Id && !x.DisabledDate.HasValue).FirstOrDefault();
+            //viewmodel.Liabilities.Liabilities.Add(new StockLiabilityCreateViewModel
+            //{
+            //    Id = liability.Id,
+            //    Value = liability.Value,
+            //    Source = liability.Name,
+            //    InterestRate = liability.InterestRate / 100,
+            //    InterestType = liability.InterestType.Value,
+            //    InterestRatePerX = liability.InterestRatePerX,
+            //    StartDate = liability.StartDate,
+            //    EndDate = liability.EndDate
+            //});
             return viewmodel;
         }
 
