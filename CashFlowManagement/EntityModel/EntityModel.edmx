@@ -24,6 +24,7 @@
           <Property Name="Username" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="ObtainedBy" Type="int" />
           <Property Name="InterestRate" Type="float" />
+          <Property Name="InterestRatePerX" Type="int" />
           <Property Name="Term" Type="int" />
           <Property Name="CashId" Type="int" />
           <Property Name="IncomeId" Type="int" />
@@ -174,6 +175,8 @@
           <Property Name="OtherLiabilityInitialized" Type="bit" Nullable="false" />
           <Property Name="FamilyExpenseInitialized" Type="bit" Nullable="false" />
           <Property Name="OtherExpenseInitialized" Type="bit" Nullable="false" />
+          <Property Name="AvailableMoneyInitialized" Type="bit" Nullable="false" />
+          <Property Name="CompleteInitialization" Type="bit" Nullable="false" />
           <Property Name="CreatedDate" Type="datetime" Nullable="false" />
         </EntityType>
         <Association Name="FK_Assets_Assets">
@@ -619,6 +622,7 @@
           <Property Name="Username" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="ObtainedBy" Type="Int32" />
           <Property Name="InterestRate" Type="Double" />
+          <Property Name="InterestRatePerX" Type="Int32" />
           <Property Name="Term" Type="Int32" />
           <Property Name="CashId" Type="Int32" />
           <Property Name="IncomeId" Type="Int32" />
@@ -788,6 +792,7 @@
           <Property Name="FullName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="Email" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Password" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="PhoneNumber" Type="String" Nullable="false" MaxLength="11" FixedLength="false" Unicode="true" />
           <Property Name="Sex" Type="Int32" Nullable="false" />
           <Property Name="Job" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="NumberOfChildren" Type="Int32" Nullable="false" />
@@ -803,13 +808,14 @@
           <Property Name="OtherLiabilityInitialized" Type="Boolean" Nullable="false" />
           <Property Name="FamilyExpenseInitialized" Type="Boolean" Nullable="false" />
           <Property Name="OtherExpenseInitialized" Type="Boolean" Nullable="false" />
+          <Property Name="AvailableMoneyInitialized" Type="Boolean" Nullable="false" />
+          <Property Name="CompleteInitialization" Type="Boolean" Nullable="false" />
           <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
           <NavigationProperty Name="Assets" Relationship="CFMModel.FK_Assets_Users" FromRole="Users" ToRole="Assets" />
           <NavigationProperty Name="Expenses" Relationship="CFMModel.FK_Expenses_Users" FromRole="Users" ToRole="Expenses" />
           <NavigationProperty Name="Incomes" Relationship="CFMModel.FK_Incomes_Users" FromRole="Users" ToRole="Incomes" />
           <NavigationProperty Name="Liabilities" Relationship="CFMModel.FK_Liabilities_Users" FromRole="Users" ToRole="Liabilities" />
           <NavigationProperty Name="Log" Relationship="CFMModel.FK_Log_Users" FromRole="Users" ToRole="Log" />
-          <Property Name="PhoneNumber" Type="String" Nullable="false" MaxLength="11" FixedLength="false" Unicode="true" />
         </EntityType>
         <Association Name="FK_Assets_Assets">
           <End Type="CFMModel.Assets" Role="Assets" Multiplicity="0..1" />
@@ -1064,6 +1070,7 @@
                 <ScalarProperty Name="IncomeId" ColumnName="IncomeId" />
                 <ScalarProperty Name="CashId" ColumnName="CashId" />
                 <ScalarProperty Name="Term" ColumnName="Term" />
+                <ScalarProperty Name="InterestRatePerX" ColumnName="InterestRatePerX" />
                 <ScalarProperty Name="InterestRate" ColumnName="InterestRate" />
                 <ScalarProperty Name="ObtainedBy" ColumnName="ObtainedBy" />
                 <ScalarProperty Name="Username" ColumnName="Username" />
@@ -1212,8 +1219,9 @@
           <EntitySetMapping Name="Users">
             <EntityTypeMapping TypeName="CFMModel.Users">
               <MappingFragment StoreEntitySet="Users">
-                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
                 <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="CompleteInitialization" ColumnName="CompleteInitialization" />
+                <ScalarProperty Name="AvailableMoneyInitialized" ColumnName="AvailableMoneyInitialized" />
                 <ScalarProperty Name="OtherExpenseInitialized" ColumnName="OtherExpenseInitialized" />
                 <ScalarProperty Name="FamilyExpenseInitialized" ColumnName="FamilyExpenseInitialized" />
                 <ScalarProperty Name="OtherLiabilityInitialized" ColumnName="OtherLiabilityInitialized" />
@@ -1229,6 +1237,7 @@
                 <ScalarProperty Name="NumberOfChildren" ColumnName="NumberOfChildren" />
                 <ScalarProperty Name="Job" ColumnName="Job" />
                 <ScalarProperty Name="Sex" ColumnName="Sex" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
                 <ScalarProperty Name="Password" ColumnName="Password" />
                 <ScalarProperty Name="Email" ColumnName="Email" />
                 <ScalarProperty Name="FullName" ColumnName="FullName" />

@@ -292,6 +292,7 @@
     <Compile Include="Queries\StockQueries.cs" />
     <Compile Include="Queries\UserQueries.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="Utilities\CheckSessionTimeOutAttribute.cs" />
     <Compile Include="Utilities\DoubleModelBinder.cs" />
     <Compile Include="Utilities\FormatUtility.cs" />
     <Compile Include="Utilities\IntegerModelBinder.cs" />
@@ -744,6 +745,7 @@
     <Content Include="Views\OtherExpense\_ExpenseSummary.cshtml" />
     <Content Include="Views\OtherLiability\_LiabilitySummary.cshtml" />
     <Content Include="Views\Salary\_SalarySummary.cshtml" />
+    <Content Include="Views\AvailableMoney\_AvailableMoneyTable.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -46,8 +46,8 @@ namespace CashFlowManagement.Constants
         public static List<SelectListItem> InterestPerX()
         {
             List<SelectListItem> list = new List<SelectListItem>();
-            list.Add(new SelectListItem { Text = "Tháng", Value = ((int)Constants.INTEREST_RATE_PER.MONTH).ToString() });
             list.Add(new SelectListItem { Text = "Năm", Value = ((int)Constants.INTEREST_RATE_PER.YEAR).ToString(), Selected = true });
+            list.Add(new SelectListItem { Text = "Tháng", Value = ((int)Constants.INTEREST_RATE_PER.MONTH).ToString() });
             return list;
         }
 

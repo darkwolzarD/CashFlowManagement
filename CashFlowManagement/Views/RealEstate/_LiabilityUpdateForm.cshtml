@@ -1,7 +1,7 @@
 ﻿@model CashFlowManagement.Models.RealEstateLiabilityCreateViewModel
 @using CashFlowManagement.Constants
 
-<div id="liability-form-div" class="col-md-3">
+<div id="liability-form-div" class="col-md-4">
     @using (Ajax.BeginForm("_LiabilityUpdateForm", null, new AjaxOptions { HttpMethod = "Post", OnSuccess = "LiabilityUpdateSuccess(data)" }, new { @id = "liability-form" }))
     {
         @Html.AntiForgeryToken()
@@ -63,6 +63,10 @@
             <button type="submit" class="btn btn-primary">
                 <span class="glyphicon glyphicon-ok"></span>
                 Cập nhật khoản nợ
+            </button>
+            <button type="button" class="btn btn-default reset-form">
+                <span class="glyphicon glyphicon-remove"></span>
+                Nhập lại thông tin
             </button>
         </div>
     }

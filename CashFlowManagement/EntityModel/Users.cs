@@ -45,8 +45,8 @@ namespace CashFlowManagement.EntityModel
         public bool FamilyExpenseInitialized { get; set; }
         public bool OtherExpenseInitialized { get; set; }
         public bool AvailableMoneyInitialized { get; set; }
-        public System.DateTime CreatedDate { get; set; }
         public bool CompleteInitialization { get; set; }
+        public System.DateTime CreatedDate { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Assets> Assets { get; set; }

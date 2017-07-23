@@ -1,7 +1,7 @@
 ﻿@model CashFlowManagement.Models.StockLiabilityCreateViewModel
 @using CashFlowManagement.Constants
 
-<div id="liability-form-div" class="col-md-3">
+<div id="liability-form-div" class="col-md-4">
     @using (Ajax.BeginForm("_LiabilityForm", null, new AjaxOptions { HttpMethod = "Post", OnSuccess = "LiabilityCreateSuccess(data)" }, new { @id = "liability-form" }))
     {
         @Html.AntiForgeryToken()
@@ -62,6 +62,10 @@
             <button type="submit" class="btn btn-primary create-stock-liability">
                 <span class="glyphicon glyphicon-ok"></span>
                 Tạo khoản nợ
+            </button>
+            <button type="reset" class="btn btn-default">
+                <span class="glyphicon glyphicon-remove"></span>
+                Nhập lại thông tin
             </button>
         </div>
     }
