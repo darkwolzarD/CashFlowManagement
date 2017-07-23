@@ -15,7 +15,14 @@ namespace CashFlowManagement.Controllers
         // GET: AvailableMoney
         public ActionResult Index()
         {
-            return View();
+            bool result = AvailableMoneyQueries.CheckExistAvailableMoney(UserQueries.GetCurrentUsername());
+            return View(result);
+        }
+
+        public ActionResult CheckExistAvailableMoney()
+        {
+            bool result = AvailableMoneyQueries.CheckExistAvailableMoney(UserQueries.GetCurrentUsername());
+            return Content(result.ToString());
         }
 
         public ActionResult _AvailableMoneyTable()
@@ -49,6 +56,12 @@ namespace CashFlowManagement.Controllers
             {
                 return PartialView(model);
             }
+        }
+
+        public ActionResult _AvailableMoneySummary()
+        {
+            AvailableMoneySummaryViewModel model = AvailableMoneyQueries.GetInitializedAvailableMoneySummary(UserQueries.GetCurrentUsername());
+            return PartialView(model);
         }
     }
 }

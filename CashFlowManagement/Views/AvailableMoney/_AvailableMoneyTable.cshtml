@@ -9,13 +9,22 @@
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td>
-                    @Html.DisplayFor(x => Model.Name)<br />
-                    <a href="#" title="Cập nhật tiền mặt có sẵn" class="update-available-money"><span class="glyphicon glyphicon-edit text-success" style="font-size: 14px;"></span></a>
-                </td>
-                <td class="text-right">@Html.DisplayFor(x => Model.AvailableMoney)</td>
-            </tr>
+            @if (Model != null)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(x => Model.Name)<br />
+                        <a href="#" title="Cập nhật tiền mặt có sẵn" class="update-available-money"><span class="glyphicon glyphicon-edit text-success" style="font-size: 14px;"></span></a>
+                    </td>
+                    <td class="text-right">@Html.DisplayFor(x => Model.AvailableMoney)</td>
+                </tr>
+            }
+            else
+            {
+                <tr>
+                    <td colspan="2" class="text-center">Chưa khai báo tiền mặt có sẵn</td>
+                </tr>
+            }
         </tbody>
     </table>
 </div>

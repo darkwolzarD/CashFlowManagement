@@ -45,5 +45,7 @@ namespace CashFlowManagement.ViewModels
         public double TotalAssets { get; set; }
         public double TotalLiabilities { get; set; }
         public double Equipty { get; set; }
+
+        public bool CompleteInitialization { get; set; }
     }
 }

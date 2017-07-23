@@ -67,6 +67,7 @@ namespace CashFlowManagement.Queries
             user.FamilyExpenseInitialized = false;
             user.OtherExpenseInitialized = false;
             user.AvailableMoneyInitialized = false;
+            user.CompleteInitialization = false;
             user.CreatedDate = DateTime.Now;
 
             //Add user
@@ -262,6 +263,20 @@ namespace CashFlowManagement.Queries
             if (!user.AvailableMoneyInitialized)
             {
                 user.AvailableMoneyInitialized = true;
+                entities.Users.Attach(user);
+                entities.Entry(user).State = System.Data.Entity.EntityState.Modified;
+                return entities.SaveChanges();
+            }
+            return -1;
+        }
+
+        public static int CompleteInitialization(string username)
+        {
+            Entities entities = new Entities();
+            Users user = entities.Users.Where(x => x.Username.Equals(username)).FirstOrDefault();
+            if (!user.CompleteInitialization)
+            {
+                user.CompleteInitialization = true;
                 entities.Users.Attach(user);
                 entities.Entry(user).State = System.Data.Entity.EntityState.Modified;
                 return entities.SaveChanges();

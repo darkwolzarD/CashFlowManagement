@@ -28,7 +28,22 @@
         $(".percentage").unmask();
     }
 
-    
+    $(document).on("click", ".toggle-modal", function () {
+        if (check === 'True') {
+            alert("Tiền mặt có sẵn chỉ khai báo 1 lần duy nhất.\nVui lòng thực hiện chức năng Chỉnh sửa/Cập nhật Tiền mặt có sẵn!!!");
+        }
+        else {
+            $.ajax({
+                url: Url.AvailableMoneyForm,
+                type: "get",
+                success: function (data) {
+                    $("#modal").html($(data));
+                    $("#available-money-create-modal").modal("show");
+                    MaskInput();
+                }
+            });
+        }
+    })
 
     $(document).on("click", ".update-available-money", function () {
         $.ajax({
@@ -56,6 +71,13 @@
                         type: "get",
                         success: function (data) {
                             $("#available-money-table-div").html($(data).html());
+                            $.ajax({
+                                url: Url.CheckExistAvailableMoney,
+                                type: "get",
+                                success: function (data) {
+                                    check = data;
+                                }
+                            });
                         }
                     });
                 }
@@ -67,5 +89,21 @@
                 }
             }
         });
+    })
+
+    $(document).on("click", ".available-money-toggle-summary", function () {
+        if (check === 'False') {
+            alert("Quý khách vui lòng khai báo tiền mặt có sẵn trước khi tiếp tục");
+        }
+        else {
+            $.ajax({
+                url: Url.AvailableMoneySummary,
+                type: "get",
+                success: function (data) {
+                    $("#modal").html($(data));
+                    $("#available-money-summary-modal").modal("show");
+                }
+            });
+        }
     })
 })

@@ -18,5 +18,11 @@ namespace CashFlowManagement.Controllers
             FinancialStatusViewModel model = FinancialStatusQueries.GetFinancialStatusByUser(UserQueries.GetCurrentUsername());
             return View(model);
         }
+
+        public ActionResult CompleteInitialization()
+        {
+            int result = UserQueries.CompleteInitialization(UserQueries.GetCurrentUsername());
+            return RedirectToAction("Index", "FinancialStatus");
+        }
     }
 }

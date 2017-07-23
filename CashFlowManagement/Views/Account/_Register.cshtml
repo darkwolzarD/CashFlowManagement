@@ -1,7 +1,7 @@
 ﻿@model CashFlowManagement.Models.RegisterViewModel
 @using CashFlowManagement.Constants
 
-@using (Html.BeginForm("_Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+@using (Html.BeginForm("_Register", "Account", FormMethod.Post, new { @class = "form-horizontal register-form", role = "form" }))
 {
     @Html.AntiForgeryToken()
     <h4>Tạo tài khoản mới</h4>
@@ -65,7 +65,7 @@
     </div>
     <div class="form-group">
         <div class="col-md-offset-4 col-md-8">
-            <input type="submit" class="btn btn-primary" value="Đăng ký" style="font-size: 14px !important" />
+            <input type="button" class="btn btn-primary register" value="Đăng ký" style="font-size: 14px !important" />
         </div>
     </div>
 }

@@ -1,0 +1,50 @@
+﻿@model CashFlowManagement.Models.AvailableMoneySummaryViewModel
+
+<div id="available-money-summary-modal" class="modal fade" role="dialog">
+    <div class="modal-dialog" style="width: 700px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" style="font-size: 26px !important; color: red !important">&times;</button>
+                <p style="font-size: 16px; margin-bottom: 0px;">Xác nhận thông tin khởi tạo tiền mặt có sẵn</p>
+            </div>
+            <div class="modal-body" style="padding: 0 20px 0 20px !important">
+                <div class="row">
+                    <div class="col-md-12">
+                        <table class="table table-responsive">
+                            <thead>
+                                <tr>
+                                    <th>Tiền mặt có sẵn</th>
+                                    <th class="text-right">Giá trị tiền mặt</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model != null)
+                                {
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(x => Model.Name)<br />
+                                        </td>
+                                        <td class="text-right">@Html.DisplayFor(x => Model.AvailableMoney)</td>
+                                    </tr>
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="2" class="text-center">Chưa khai báo tiền mặt có sẵn</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a href="@Url.Action("AvailableMoneyInitialize", "Account")" class="btn btn-success">
+                    <span class="glyphicon glyphicon-ok"></span>
+                    Xác nhận
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+

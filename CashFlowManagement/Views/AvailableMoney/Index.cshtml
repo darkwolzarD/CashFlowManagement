@@ -1,4 +1,5 @@
-﻿@{
+﻿@model bool
+@{
     ViewBag.Title = "Tiền mặt có sẵn";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -16,17 +17,23 @@
 <div class="row">
     <div class="col-md-6">
         <p style="font-size: 20px; margin-bottom: 5px !important">Quản lý tiền mặt có sẵn</p>
-        <p style="font-size: 12px; font-style: italic">(Nếu không có tiền mặt có sẵn, vui lòng hoàn tất quá trình khởi tạo để xem bản cân đối tài chính)</p>
+        <p style="font-size: 12px; font-style: italic">Vui lòng khai báo tiền mặt có sẵn để hoàn tất quá trình khởi tạo thông tin tài chính</p>
+    </div>
+    <div class="col-md-6 text-right">
+        <button type="button" class="btn btn-success toggle-modal">
+            <span class="glyphicon glyphicon-home"></span>
+            Tạo tiền mặt có sẵn
+        </button>
     </div>
 </div>
 <div class="clear10"></div>
 <div class="row">
     <div class="col-md-12" id="available-money-table-div">
-         @{ Html.RenderAction("_AvailableMoneyTable", "AvailableMoney"); }
+        @{ Html.RenderAction("_AvailableMoneyTable", "AvailableMoney"); }
     </div>
 </div>
 <footer class="row text-right">
-    <a href="@Url.Action("Index", "FinancialStatus")" class="btn btn-primary available-money-toggle-summary" style="font-size: 11px;">
+    <a href="#" class="btn btn-primary available-money-toggle-summary" style="font-size: 11px;">
         <span class="glyphicon glyphicon-ok"></span>
         Hoàn tất khai báo tiền mặt có sẵn
     </a>
@@ -37,7 +44,7 @@
 </div>
 
 <div id="modal">
-     @{ Html.RenderAction("_AvailableMoneyForm"); }
+    @{ Html.RenderAction("_AvailableMoneyForm"); }
 </div>
 
 <script type="text/javascript" src="~/Scripts/availablemoney.js"></script>
@@ -46,4 +53,7 @@
     Url.AvailableMoneyTable = '@Url.Action("_AvailableMoneyTable", "AvailableMoney")';
     Url.AvailableMoneyForm = '@Url.Action("_AvailableMoneyForm", "AvailableMoney")';
     Url.FinancialStatus = '@Url.Action("Index", "FinancialStatus")';
+    Url.CheckExistAvailableMoney = '@Url.Action("CheckExistAvailableMoney", "AvailableMoney")';
+    Url.AvailableMoneySummary = '@Url.Action("_AvailableMoneySummary", "AvailableMoney")';
+    var check = '@Model';
 </script>

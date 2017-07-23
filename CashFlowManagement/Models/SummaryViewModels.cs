@@ -13,6 +13,7 @@ namespace CashFlowManagement.Models
         public StockSummaryListViewModel Stocks { get; set; }
         public InsuranceSummaryListViewModel Insurances { get; set; }
         public OtherAssetSummaryListViewModel OtherAssets { get; set; }
+        public AvailableMoneySummaryViewModel AvailableMoney { get; set; }
 
         public AssetSummaryViewModel()
         {

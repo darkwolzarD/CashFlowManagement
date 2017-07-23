@@ -205,3 +205,27 @@
     @*@RenderSection("scripts", required: false)*@
 </body>
 </html>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(document).on("click", ".register", function () {
+            var model = $(".register-form").serialize();
+            $.ajax({
+                url: '@Url.Action("_Register", "Account")',
+                type: "post",
+                data: model,
+                success: function (data) {
+                    if (data === "success") {
+                        alert("Đăng ký tài khoản thành công");
+                        window.location.href = '@Url.Action("Index", "Salary")';
+                    }
+                    else if (data === "failed") {
+                        alert("Error!");
+                    }
+                    else {
+                        $(".register-form").html($(data).html());
+                    }
+                }
+            });
+        })
+    })
+</script>

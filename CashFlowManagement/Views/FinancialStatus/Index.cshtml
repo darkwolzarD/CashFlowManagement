@@ -11,7 +11,6 @@
     Users user = (Users)HttpContext.Current.Session["USER"];
 }
 
-<div class="clear10"></div>
 <div class="row background text-left">
     <div class="col-md-12">
         <div class="col-md-10">
@@ -20,11 +19,20 @@
         <div class="col-md-2">
             @if (user == null)
             {
-            <a href="@Url.Action("Register", "Account")" class="btn btn-primary" style="font-size: 13px">Mở tài khoản</a>
+                <a href="@Url.Action("Register", "Account")" class="btn btn-primary" style="font-size: 13px">Mở tài khoản</a>
             }
         </div>
         <div class="clear10"></div>
-        <div class="col-md-12"><h4>Báo cáo ngân sách của bạn:</h4></div>
+        <div class="col-md-12">
+            @if (Model.CompleteInitialization)
+            {
+                <h4>Báo cáo ngân sách của bạn:</h4>
+            }
+            else
+            {
+                <h5 class="text-danger">Quý khách vui lòng kiểm tra lại Báo cáo ngân sách hiện thời.<br />Nếu thông tin đã chính xác, hãy chọn Hoàn tất khai báo thông tin tài chính</h5>
+            }
+        </div>
     </div>
     <div class="col-md-3 text-center info">
         <span><strong>Dòng tiền tự do: </strong></span>
@@ -96,7 +104,7 @@
             </thead>
             <tbody>
                 <tr>
-                    <td><a href="#" class="toggle-available-money">Tiền mặt có sẵn</a></td>
+                    <td><a href="@Url.Action("Index", "AvailableMoney")">Tiền mặt có sẵn</a></td>
                     <td>@FormatUtility.DisplayThousandSeparatorsForNumber(Model.AvailableMoney)</td>
                 </tr>
                 <tr>
@@ -207,6 +215,21 @@
         </table>
     </div>
 </div>
+@if (!Model.CompleteInitialization)
+{
+    <footer class="col-md-12 text-right">
+        <div class="col-md-12">
+            <div class="col-md-12">
+                <a href="@Url.Action("CompleteInitialization", "FinancialStatus")" class="btn btn-primary" style="font-size: 11px;">
+                    <span class="glyphicon glyphicon-ok"></span>
+                    Hoàn tất khai báo thông tin tài chính
+                </a>
+
+            </div>
+        </div>
+    </footer>
+}
+
 <div id="modal">
 
 </div>

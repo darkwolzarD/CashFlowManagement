@@ -20,4 +20,9 @@ namespace CashFlowManagement.Models
     {
 
     }
+
+    public class AvailableMoneySummaryViewModel : AvailableMoneyViewModel
+    {
+
+    }
 }

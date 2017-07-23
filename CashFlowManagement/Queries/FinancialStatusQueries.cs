@@ -16,6 +16,8 @@ namespace CashFlowManagement.Queries
             Entities entities = new Entities();
             DateTime current = DateTime.Now;
 
+            result.CompleteInitialization = UserQueries.GetUserByUsername(username).CompleteInitialization;
+
             result.SalaryIncome = entities.Incomes.Where(x => x.Username.Equals(username)
                                                          && x.IncomeType == (int)Constants.Constants.INCOME_TYPE.SALARY_INCOME
                                                          && !x.DisabledDate.HasValue && x.StartDate <= current).Select(x => x.Value).DefaultIfEmpty(0).Sum();

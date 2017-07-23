@@ -9,6 +9,13 @@ namespace CashFlowManagement.Queries
 {
     public class AvailableMoneyQueries
     {
+        public static bool CheckExistAvailableMoney(string username)
+        {
+            Entities entities = new Entities();
+            return entities.Assets.Where(x => x.Username.Equals(username)
+                                                          && x.AssetType == (int)Constants.Constants.ASSET_TYPE.AVAILABLE_MONEY
+                                                          && !x.DisabledDate.HasValue).Any();
+        }
         public static int CreateAvailableMoney(AvailableMoneyCreateViewModel model, string username)
         {
             Entities entities = new Entities();
@@ -46,19 +53,40 @@ namespace CashFlowManagement.Queries
             AvailableMoneyCreateViewModel viewModel = new AvailableMoneyCreateViewModel();
             Users user = entities.Users.Where(x => x.Username.Equals(username)).FirstOrDefault();
 
-            viewModel.Name = "Tiền mặt có sẵn khởi tạo của " + user.Username;
-            viewModel.AvailableMoney = 0;
-
             Assets availableMoney = entities.Assets.Where(x => x.Username.Equals(username)
                                                           && x.AssetType == (int)Constants.Constants.ASSET_TYPE.AVAILABLE_MONEY
                                                           && !x.DisabledDate.HasValue).OrderBy(x => x.CreatedDate).FirstOrDefault();
             if(availableMoney != null)
             {
+                viewModel.Name = "Tiền mặt có sẵn khởi tạo của " + user.FullName;
                 viewModel.AvailableMoney = availableMoney.Value;
+                return viewModel;
             }
-
-            return viewModel;
+            else
+            {
+                return null;
+            }
         }
 
+        public static AvailableMoneySummaryViewModel GetInitializedAvailableMoneySummary(string username)
+        {
+            Entities entities = new Entities();
+            AvailableMoneySummaryViewModel viewModel = new AvailableMoneySummaryViewModel();
+            Users user = entities.Users.Where(x => x.Username.Equals(username)).FirstOrDefault();
+
+            Assets availableMoney = entities.Assets.Where(x => x.Username.Equals(username)
+                                                          && x.AssetType == (int)Constants.Constants.ASSET_TYPE.AVAILABLE_MONEY
+                                                          && !x.DisabledDate.HasValue).OrderBy(x => x.CreatedDate).FirstOrDefault();
+            if (availableMoney != null)
+            {
+                viewModel.Name = "Tiền mặt có sẵn khởi tạo của " + user.FullName;
+                viewModel.AvailableMoney = availableMoney.Value;
+                return viewModel;
+            }
+            else
+            {
+                return null;
+            }
+        }
     }
 }
