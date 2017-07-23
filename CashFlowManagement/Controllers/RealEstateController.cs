@@ -35,12 +35,17 @@ namespace CashFlowManagement.Controllers
             double totalLiabilityValue = 0;
             if (liabilities != null)
             {
-               totalLiabilityValue = liabilities.Liabilities.Sum(x => x.Value.HasValue ? x.Value.Value : 0);
+                totalLiabilityValue = liabilities.Liabilities.Sum(x => x.Value.HasValue ? x.Value.Value : 0);
             }
 
-            if(model.Value < totalLiabilityValue && totalLiabilityValue > 0)
+            if (model.Value < totalLiabilityValue && totalLiabilityValue > 0)
             {
                 ModelState.AddModelError("CompareRealEstateValueAndLiabilityValue", "Giá trị tổng số nợ không vượt quá giá trị bất động sản");
+            }
+
+            if (RealEstateQueries.CheckExistStock(UserQueries.GetCurrentUsername(), model.Name))
+            {
+                ModelState.AddModelError("CheckExistRealEstate", "Bất động sản này đã tồn tại, vui lòng nhập tên khác");
             }
 
             if (ModelState.IsValid)
@@ -78,11 +83,16 @@ namespace CashFlowManagement.Controllers
             {
                 ModelState.AddModelError("CompareRealEstateValueAndLiabilityValue", "Giá trị tổng số nợ không vượt quá giá trị bất động sản");
             }
+            var realEstate = RealEstateQueries.GetRealEstateById(model.Id);
+            if (!realEstate.Name.Equals(model.Name) && RealEstateQueries.CheckExistStock(UserQueries.GetCurrentUsername(), model.Name))
+            {
+                ModelState.AddModelError("CheckExistRealEstate", "Bất động sản này đã tồn tại, vui lòng nhập tên khác");
+            }
 
             if (ModelState.IsValid)
             {
                 int result = RealEstateQueries.UpdateRealEstate(model);
-                if(result > 0)
+                if (result > 0)
                 {
                     return Content("success");
                 }
@@ -91,7 +101,8 @@ namespace CashFlowManagement.Controllers
                     return Content("failed");
                 }
             }
-            else {
+            else
+            {
                 return PartialView(model);
             }
         }
@@ -192,7 +203,7 @@ namespace CashFlowManagement.Controllers
             {
                 RealEstateLiabilityListCreateViewModel liabilities = (RealEstateLiabilityListCreateViewModel)HttpContext.Session["LIABILITIES"];
                 RealEstateLiabilityCreateViewModel updateModel = liabilities.Liabilities.Where(x => x.Id == model.Id).FirstOrDefault();
-                
+
                 updateModel.Value = model.Value;
 
                 RealEstateCreateViewModel realEstate = (RealEstateCreateViewModel)HttpContext.Session["REAL_ESTATE"];

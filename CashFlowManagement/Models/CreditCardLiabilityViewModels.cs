@@ -8,8 +8,8 @@ namespace CashFlowManagement.Models
 {
     public class CreditCardLiabilityCreateViewModel
     {
-        [Required(ErrorMessage = "Nhập nguồn vay nợ")]
-        [Display(Name = "Nguồn vay nợ")]
+        [Required(ErrorMessage = "Nhập tên ngân hàng")]
+        [Display(Name = "Tên ngân hàng")]
         public string Source { get; set; }
 
         [Required(ErrorMessage = "Nhập giá trị đã dùng")]

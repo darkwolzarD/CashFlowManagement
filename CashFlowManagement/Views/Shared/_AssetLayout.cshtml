@@ -23,11 +23,7 @@
         <div class="row header">
             <div class="col-md-4 logo">
                 <img class="logo-image" src="~/images/Generic_Avatar.png" width="40" />
-                <span class="logo-text">Quản lý tài chính</span>
-                @using (Ajax.BeginForm("CheckAvailableMoney", "Asset", null, new AjaxOptions { HttpMethod = "Post", UpdateTargetId = "available-money" }, new { @class = "available-money", @style = "display: inline;" }))
-                {
-                    <span class="logo-text" style="font-size: 12px; margin-left: 20px; padding-top: 70px;"><strong>Tiền mặt có sẵn: </strong> <span id="available-money">@FormatUtility.DisplayThousandSeparatorsForNumber(AssetQueries.CheckAvailableMoney(UserQueries.GetCurrentUsername(), DateTime.Now))</span> đồng</span>
-                }
+                <span class="logo-text">Trang quản lý tài chính của <a href="#">@user.FullName</a></span>
             </div>
             <div class="col-md-7 navigation">
                 <ul class="nav-bar">
@@ -66,12 +62,7 @@
                     }
                     else
                     {
-                        <li style="width: 200px">
-                            <a href="#">Xin chào, @user.FullName</a>
-                            <ul class="nav-bar">
-                                <li><a href="@Url.Action("Logout", "Account")">Đăng xuất</a></li>
-                            </ul>
-                        </li>
+                        <li style="width: 90px"><a href="@Url.Action("Logout", "Account")">Đăng xuất</a></li>
                     }
                 </ul>
             </div>

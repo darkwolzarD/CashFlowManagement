@@ -75,6 +75,18 @@ namespace CashFlowManagement.Queries
             return user;
         }
 
+        public static bool CheckUniqueUser(string username)
+        {
+            Entities entities = new Entities();
+            return entities.Users.Where(x => x.Username.Equals(username)).Any();
+        }
+
+        public static bool CheckUniquePhoneNumber(string phoneNumber)
+        {
+            Entities entities = new Entities();
+            return entities.Users.Where(x => x.PhoneNumber.Equals(phoneNumber)).Any();
+        }
+
         public static int SalaryInitialize(string username)
         {
             Entities entities = new Entities();

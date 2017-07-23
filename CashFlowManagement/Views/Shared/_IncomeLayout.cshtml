@@ -24,7 +24,7 @@
         <div class="row header">
             <div class="col-md-4 logo">
                 <img class="logo-image" src="~/images/Generic_Avatar.png" width="30" />
-                <span class="logo-text">Quản lý tài chính</span>
+                <span class="logo-text">Trang quản lý tài chính của <a href="#">@user.FullName</a></span>
             </div>
             <div class="col-md-7 navigation">
                 <ul class="nav-bar">
@@ -63,12 +63,7 @@
                     }
                     else
                     {
-                        <li style="width: 200px">
-                            <a href="#">Xin chào, @user.FullName</a>
-                            <ul class="nav-bar">
-                                <li><a href="@Url.Action("Logout", "Account")">Đăng xuất</a></li>
-                            </ul>
-                        </li>
+                        <li style="width: 90px"><a href="@Url.Action("Logout", "Account")">Đăng xuất</a></li>
                     }
                 </ul>
             </div>

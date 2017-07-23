@@ -10,6 +10,13 @@ namespace CashFlowManagement.Queries
 {
     public class BusinessQueries
     {
+        public static bool CheckExistBusiness(string username, string businessName)
+        {
+            Entities entities = new Entities();
+            return entities.Assets.Where(x => x.Username.Equals(username) && x.AssetName.Equals(businessName)
+                                        && x.AssetType == (int)Constants.Constants.ASSET_TYPE.BUSINESS
+                                        && !x.DisabledDate.HasValue).Any();
+        }
         public static BusinessListViewModel GetBusinessByUser(string username)
         {
             Entities entities = new Entities();
@@ -57,7 +64,7 @@ namespace CashFlowManagement.Queries
             result.TotalValue = result.Businesses.Select(x => x.Value).DefaultIfEmpty(0).Sum();
             result.TotalMonthlyIncome = result.Businesses.Select(x => x.Income).DefaultIfEmpty(0).Sum();
             result.TotalAnnualIncome = result.TotalMonthlyIncome * 12;
-            result.TotalRentYield = result.TotalMonthlyIncome / result.TotalValue;
+            result.TotalRentYield = result.TotalAnnualIncome / result.TotalValue;
 
             return result;
         }
@@ -85,7 +92,7 @@ namespace CashFlowManagement.Queries
                     businessViewModel.Income = 0;
                 }
                 businessViewModel.AnnualIncome = businessViewModel.Income * 12;
-                businessViewModel.RentYield = businessViewModel.Income / businessViewModel.Value;
+                businessViewModel.RentYield = businessViewModel.AnnualIncome / businessViewModel.Value;
 
                 foreach (var liability in business.Liabilities.Where(x => !x.DisabledDate.HasValue))
                 {
@@ -104,7 +111,7 @@ namespace CashFlowManagement.Queries
             result.TotalIncome = result.BusinessSummaries.Sum(x => x.Income);
             result.TotalAnnualIncome = result.BusinessSummaries.Sum(x => x.AnnualIncome);
             result.TotalValue = result.BusinessSummaries.Sum(x => x.Value);
-            result.TotalRentYield = result.BusinessSummaries.Sum(x => x.MonthlyInterestPayment) / result.TotalValue;
+            result.TotalRentYield = result.BusinessSummaries.Sum(x => x.AnnualIncome) / result.TotalValue;
             result.TotalLiabilityValue = result.BusinessSummaries.Sum(x => x.LiabilityValue);
             result.TotalInterestRate = result.BusinessSummaries.Sum(x => x.Value);
             result.TotalMonthlyPayment = result.BusinessSummaries.Sum(x => x.MonthlyPayment);

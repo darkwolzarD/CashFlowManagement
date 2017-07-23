@@ -108,9 +108,22 @@ namespace CashFlowManagement.Controllers
         {
             if (ModelState.IsValid)
             {
-                Users user = UserQueries.Register(model);
-                HttpContext.Session["USER"] = user;
-                return RedirectToAction("Index", "Salary");
+                if(UserQueries.CheckUniqueUser(model.Email))
+                {
+                    ModelState.AddModelError("CheckUniqueUser", "Email này đã được đăng ký, đề nghị quý khách liên hệ quản trị viên để lấy lại mật khẩu");
+                    return PartialView(model);
+                }
+                else if (UserQueries.CheckUniquePhoneNumber(model.PhoneNumber))
+                {
+                    ModelState.AddModelError("CheckUniquePhoneNumber", "Số điện thoại này đã được đăng ký, đề nghị quý khách liên hệ quản trị viên để lấy lại mật khẩu");
+                    return PartialView(model);
+                }
+                else
+                {
+                    Users user = UserQueries.Register(model);
+                    HttpContext.Session["USER"] = user;
+                    return RedirectToAction("Index", "Salary");
+                }
             }
             else return PartialView(model);
         }

@@ -38,6 +38,11 @@ namespace CashFlowManagement.Controllers
                 totalLiabilityValue = liabilities.Liabilities.Sum(x => x.Value.HasValue ? x.Value.Value : 0);
             }
 
+            if (BusinessQueries.CheckExistBusiness(UserQueries.GetCurrentUsername(), model.Name))
+            {
+                ModelState.AddModelError("CheckExistBusiness", "Kinh doanh này đã tồn tại, vui lòng nhập tên khác");
+            }
+
             if (model.Value < totalLiabilityValue && totalLiabilityValue > 0)
             {
                 ModelState.AddModelError("CompareBusinessValueAndLiabilityValue", "Giá trị tổng số nợ không vượt quá giá trị góp vốn kinh doanh");
@@ -77,6 +82,12 @@ namespace CashFlowManagement.Controllers
             if (model.Value < totalLiabilityValue && totalLiabilityValue > 0)
             {
                 ModelState.AddModelError("CompareBusinessValueAndLiabilityValue", "Giá trị tổng số nợ không vượt quá giá trị góp vốn kinh doanh");
+            }
+
+            var business = BusinessQueries.GetBusinessById(model.Id);
+            if (!business.Name.Equals(model.Name) && BusinessQueries.CheckExistBusiness(UserQueries.GetCurrentUsername(), model.Name))
+            {
+                ModelState.AddModelError("CheckExistBusiness", "Kinh doanh này đã tồn tại, vui lòng nhập tên khác");
             }
 
             if (ModelState.IsValid)

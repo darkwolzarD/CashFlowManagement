@@ -10,6 +10,7 @@
         <div class="col-md-8">
             @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
             @Html.ValidationMessageFor(m => m.Email, null, new { @class = "text-danger" })
+            @Html.ValidationMessage("CheckUniqueUser", new { @class = "text-danger" })
         </div>
     </div>
     <div class="form-group">
@@ -24,6 +25,7 @@
         <div class="col-md-8">
             @Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control" })
             @Html.ValidationMessageFor(m => m.PhoneNumber, null, new { @class = "text-danger" })
+            @Html.ValidationMessage("CheckUniquePhoneNumber", new { @class = "text-danger" })
         </div>
     </div>
     <div class="form-group">

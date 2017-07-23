@@ -10,6 +10,14 @@ namespace CashFlowManagement.Queries
 {
     public class RealEstateQueries
     {
+        public static bool CheckExistStock(string username, string realEstatekName)
+        {
+            Entities entities = new Entities();
+            return entities.Assets.Where(x => x.Username.Equals(username) && x.AssetName.Equals(realEstatekName)
+                                        && x.AssetType == (int)Constants.Constants.ASSET_TYPE.REAL_ESTATE
+                                        && !x.DisabledDate.HasValue).Any();
+        }
+
         public static RealEstateListViewModel GetRealEstateByUser(string username)
         {
             Entities entities = new Entities();
@@ -34,7 +42,7 @@ namespace CashFlowManagement.Queries
                     realEstateViewModel.Income = 0;
                 }
                 realEstateViewModel.AnnualIncome = realEstateViewModel.Income * 12;
-                realEstateViewModel.RentYield = realEstateViewModel.Income / realEstateViewModel.Value;
+                realEstateViewModel.RentYield = realEstateViewModel.AnnualIncome / realEstateViewModel.Value;
 
                 foreach (var liability in realEstate.Liabilities.Where(x => !x.DisabledDate.HasValue))
                 {
@@ -57,7 +65,7 @@ namespace CashFlowManagement.Queries
             result.TotalValue = result.RealEstates.Select(x => x.Value).DefaultIfEmpty(0).Sum();
             result.TotalMonthlyIncome = result.RealEstates.Select(x => x.Income).DefaultIfEmpty(0).Sum();
             result.TotalAnnualIncome = result.TotalMonthlyIncome * 12;
-            result.TotalRentYield = result.TotalMonthlyIncome / result.TotalValue;
+            result.TotalRentYield = result.TotalAnnualIncome / result.TotalValue;
 
             return result;
         }
@@ -85,7 +93,7 @@ namespace CashFlowManagement.Queries
                     realEstateViewModel.Income = 0;
                 }
                 realEstateViewModel.AnnualIncome = realEstateViewModel.Income * 12;
-                realEstateViewModel.RentYield = realEstateViewModel.Income / realEstateViewModel.Value;
+                realEstateViewModel.RentYield = realEstateViewModel.AnnualIncome / realEstateViewModel.Value;
 
                 foreach (var liability in realEstate.Liabilities.Where(x => !x.DisabledDate.HasValue))
                 {
@@ -104,7 +112,7 @@ namespace CashFlowManagement.Queries
             result.TotalIncome = result.RealEstateSummaries.Sum(x => x.Income);
             result.TotalAnnualIncome = result.RealEstateSummaries.Sum(x => x.AnnualIncome);
             result.TotalValue = result.RealEstateSummaries.Sum(x => x.Value);
-            result.TotalRentYield = result.RealEstateSummaries.Sum(x => x.MonthlyInterestPayment) / result.TotalValue;
+            result.TotalRentYield = result.RealEstateSummaries.Sum(x => x.AnnualIncome) / result.TotalValue;
             result.TotalLiabilityValue = result.RealEstateSummaries.Sum(x => x.LiabilityValue);
             result.TotalInterestRate = result.RealEstateSummaries.Sum(x => x.Value);
             result.TotalMonthlyPayment = result.RealEstateSummaries.Sum(x => x.MonthlyPayment);

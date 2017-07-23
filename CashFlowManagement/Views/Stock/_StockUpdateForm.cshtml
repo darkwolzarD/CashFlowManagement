@@ -9,7 +9,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" style="font-size: 26px !important; color: red !important">&times;</button>
-                <p style="font-size: 16px; margin-bottom: 0px;">Cập nhật cổ phiếu</p>
+                <p style="font-size: 16px; margin-bottom: 0px;">Cập nhật cổ phiếu hiện có</p>
             </div>
             <div class="modal-body">
                 <div class="row">
@@ -45,10 +45,11 @@
                                 <div class="input-group input-group-sm">
                                     @Html.EditorFor(x => x.ExpectedDividend, new { htmlAttributes = new { @class = "form-control input-sm percentage" } })
                                     <div class="input-group-addon">
-                                        <span class="fa fa-percent"></span>
+                                        <span>% mệnh giá / năm</span>
                                     </div>
                                 </div>
                                 @Html.ValidationMessageFor(x => x.ExpectedDividend, null, new { @class = "text-danger" })
+                                <span style="font-style: italic">(liên hệ quản trị viên để biết thêm chi tiết)</span>
                             </div>
                             <div class="form-group">
                                 @Html.LabelFor(x => x.Note)

@@ -8,8 +8,8 @@ namespace CashFlowManagement.Models
 {
     public class StockCreateViewModel
     {
-        [Required(ErrorMessage = "Nhập tên cổ phiếu")]
-        [Display(Name = "Tên cổ phiếu")]
+        [Required(ErrorMessage = "Nhập mã cổ phiếu")]
+        [Display(Name = "Mã cổ phiếu")]
         public string Name { get; set; }
 
         [Required(ErrorMessage = "Nhập số lượng cổ phiếu")]
@@ -17,18 +17,18 @@ namespace CashFlowManagement.Models
         [DisplayFormat(DataFormatString = "{0:N0}")]
         public int? NumberOfStock { get; set; }
 
-        [Required(ErrorMessage = "Nhập giá cổ phiếu")]
-        [Display(Name = "Giá cổ phiếu")]
+        [Required(ErrorMessage = "Nhập giá hiện tại")]
+        [Display(Name = "Giá hiện tại")]
         [DisplayFormat(DataFormatString = "{0:N0}")]
         public double? SpotRice { get; set; }
 
-        [Required(ErrorMessage = "Nhập tổng giá trị cổ phiếu")]
-        [Display(Name = "Tổng giá trị")]
+        [Required(ErrorMessage = "Nhập tổng giá trị hiện tại")]
+        [Display(Name = "Tổng giá trị hiện tại")]
         [DisplayFormat(DataFormatString = "{0:N0}")]
         public double? StockValue { get; set; }
 
-        [Required(ErrorMessage = "Nhập cổ tức mong đợi")]
-        [Display(Name = "Cổ tức mong đợi")]
+        [Required(ErrorMessage = "Nhập cổ tức mong đợi năm tới")]
+        [Display(Name = "Cổ tức mong đợi năm tới")]
         [DisplayFormat(DataFormatString = "{0:N2}")]
         [Range(1, Double.MaxValue, ErrorMessage = "Cổ tức phải lớn hơn 1%")]
         public double? ExpectedDividend { get; set; }
