@@ -28,6 +28,7 @@ namespace CashFlowManagement
                       "~/Content/bootstrap-datepicker.min.css",
                       "~/Content/selectize.bootstrap3.css",
                       "~/Content/themes/base/jquery-ui.min.css",
+                      "~/Content/sweetalert.css",
                       "~/Content/site.css"));
 
             bundles.Add(new ScriptBundle("~/bundles/layout").Include(
@@ -41,7 +42,8 @@ namespace CashFlowManagement
                       "~/Scripts/cldr.js",
                       "~/Scripts/globalize.js",
                       "~/Scripts/selectize.js",
-                      "~/Scripts/jquery-ui-1.12.1.min.js"));
+                      "~/Scripts/jquery-ui-1.12.1.min.js",
+                      "~/Scripts/sweetalert.min.js"));
         }
     }
 }

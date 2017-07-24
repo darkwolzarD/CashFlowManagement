@@ -200,13 +200,21 @@
             </div>
         </div>
     </div>
-
+    <div id="loading" class="text-center hidden">
+        <img src="~/images/loading.gif" alt="" width="50" /><br/>
+        <span><b>Đang xử lý</b></span>
+    </div>
     @Scripts.Render("~/bundles/layout")
     @*@RenderSection("scripts", required: false)*@
 </body>
 </html>
 <script type="text/javascript">
     $(document).ready(function () {
+        $(document).ajaxStart(function () {
+            $("#loading").show();
+        }).ajaxStop(function () {
+            $("#loading").hide();
+        });
         $(document).on("click", ".register", function () {
             var model = $(".register-form").serialize();
             $.ajax({
@@ -215,7 +223,7 @@
                 data: model,
                 success: function (data) {
                     if (data === "success") {
-                        alert("Đăng ký tài khoản thành công");
+                        swal("Thành công!", "Bạn đã đăng ký tài khoản thành công!", "success")
                         window.location.href = '@Url.Action("Index", "Salary")';
                     }
                     else if (data === "failed") {
