@@ -23,7 +23,7 @@
     <div class="form-group">
         @Html.LabelFor(m => m.PhoneNumber, new { @class = "col-md-4 control-label" })
         <div class="col-md-8">
-            @Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control" })
+            @Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control", data_mask = "00000000000" })
             @Html.ValidationMessageFor(m => m.PhoneNumber, null, new { @class = "text-danger" })
             @Html.ValidationMessage("CheckUniquePhoneNumber", new { @class = "text-danger" })
         </div>

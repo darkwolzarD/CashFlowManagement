@@ -64,7 +64,7 @@
                     RefreshCarLiabilityTable();
                 }
                 else if (data === "failed"){
-                    alert("Error!");
+                    swal("Thất bại", "Có lỗi xảy ra!", "error");
                 }
                 else {
                     $("#car-liability-create-modal").html($(data).html());
@@ -99,7 +99,7 @@
                     RefreshCarLiabilityTable();
                 }
                 else if (data === "failed") {
-                    alert("Error!");
+                    swal("Thất bại", "Có lỗi xảy ra!", "error");
                 }
                 else {
                     $("#car-liability-update-modal").html($(data).html());
@@ -120,7 +120,7 @@
                         RefreshCarLiabilityTable();
                     }
                     else if (data === "failed") {
-                        alert("Error!");
+                        swal("Thất bại", "Có lỗi xảy ra!", "error");
                     }
                 }
             });

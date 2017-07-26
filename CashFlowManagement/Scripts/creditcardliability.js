@@ -64,7 +64,7 @@
                     RefreshCreditCardLiabilityTable();
                 }
                 else if (data === "failed"){
-                    alert("Error!");
+                    swal("Thất bại", "Có lỗi xảy ra!", "error");
                 }
                 else {
                     $("#credit-card-liability-create-modal").html($(data).html());
@@ -99,7 +99,7 @@
                     RefreshCreditCardLiabilityTable();
                 }
                 else if (data === "failed") {
-                    alert("Error!");
+                    swal("Thất bại", "Có lỗi xảy ra!", "error");
                 }
                 else {
                     $("#credit-card-liability-update-modal").html($(data).html());
@@ -120,7 +120,7 @@
                         RefreshCreditCardLiabilityTable();
                     }
                     else if (data === "failed") {
-                        alert("Error!");
+                        swal("Thất bại", "Có lỗi xảy ra!", "error");
                     }
                 }
             });

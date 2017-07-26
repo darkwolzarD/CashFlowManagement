@@ -64,7 +64,7 @@
                     RefreshSalaryTable();
                 }
                 else if (data === "failed"){
-                    alert("Error!");
+                    swal("Thất bại", "Có lỗi xảy ra!", "error");
                 }
                 else {
                     $("#salary-create-modal").html($(data).html());
@@ -99,7 +99,7 @@
                     RefreshSalaryTable();
                 }
                 else if (data === "failed") {
-                    alert("Error!");
+                    swal("Thất bại", "Có lỗi xảy ra!", "error");
                 }
                 else {
                     $("#salary-update-modal").html($(data).html());
@@ -120,7 +120,7 @@
                         RefreshSalaryTable();
                     }
                     else if (data === "failed") {
-                        alert("Error!");
+                        swal("Thất bại", "Có lỗi xảy ra!", "error");
                     }
                 }
             });

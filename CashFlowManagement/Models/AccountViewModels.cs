@@ -33,6 +33,7 @@ namespace CashFlowManagement.Models
 
         [Required(ErrorMessage = "Nhập số điện thoại")]
         [Display(Name = "Số điện thoại")]
+        [StringLength(11, ErrorMessage = "{0} phải dài tối thiểu {2} kí tự và tối đa 11 kí tự.", MinimumLength = 6)]
         public string PhoneNumber { get; set; }
 
         [Required(ErrorMessage = "Nhập mật khẩu")]

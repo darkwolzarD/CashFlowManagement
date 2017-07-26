@@ -64,7 +64,7 @@
                     RefreshOtherExpenseTable();
                 }
                 else if (data === "failed"){
-                    alert("Error!");
+                    swal("Thất bại", "Có lỗi xảy ra!", "error");
                 }
                 else {
                     $("#other-expense-create-modal").html($(data).html());
@@ -99,7 +99,7 @@
                     RefreshOtherExpenseTable();
                 }
                 else if (data === "failed") {
-                    alert("Error!");
+                    swal("Thất bại", "Có lỗi xảy ra!", "error");
                 }
                 else {
                     $("#other-expense-update-modal").html($(data).html());
@@ -120,7 +120,7 @@
                         RefreshOtherExpenseTable();
                     }
                     else if (data === "failed") {
-                        alert("Error!");
+                        swal("Thất bại", "Có lỗi xảy ra!", "error");
                     }
                 }
             });

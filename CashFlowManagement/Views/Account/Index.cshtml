@@ -210,30 +210,38 @@
 </html>
 <script type="text/javascript">
     $(document).ready(function () {
+        var isRegister = false;
         $(document).ajaxStart(function () {
             $("#loading").show();
         }).ajaxStop(function () {
             $("#loading").hide();
         });
         $(document).on("click", ".register", function () {
-            var model = $(".register-form").serialize();
-            $.ajax({
-                url: '@Url.Action("_Register", "Account")',
-                type: "post",
-                data: model,
-                success: function (data) {
-                    if (data === "success") {
-                        swal("Thành công!", "Bạn đã đăng ký tài khoản thành công!", "success")
-                        window.location.href = '@Url.Action("Index", "Salary")';
+            if (!isRegister) {
+                isRegister = true;
+                var model = $(".register-form").serialize();
+                $.ajax({
+                    url: '@Url.Action("_Register", "Account")',
+                    type: "post",
+                    data: model,
+                    success: function (data) {
+                        if (data === "success") {
+                            swal("Thành công!", "Bạn đã đăng ký tài khoản thành công!", "success")
+                            window.location.href = '@Url.Action("Index", "Salary")';
+                        }
+                        else if (data === "failed") {
+                            swal("Thất bại", "Có lỗi xảy ra!", "error");
+                        }
+                        else {
+                            $(".register-form").html($(data).html());
+                        }
+                        isRegister = false;
+                    },
+                    error: function () {
+                        isRegister = false;
                     }
-                    else if (data === "failed") {
-                        alert("Error!");
-                    }
-                    else {
-                        $(".register-form").html($(data).html());
-                    }
-                }
-            });
+                });
+            }
         })
     })
 </script>

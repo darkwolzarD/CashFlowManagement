@@ -209,7 +209,7 @@ $(document).ready(function () {
                         RefreshLiabilityTable();
                     }
                     else {
-                        alert("Error!");
+                        swal("Thất bại", "Có lỗi xảy ra!", "error");
                     }
                 }
             });
@@ -228,7 +228,7 @@ $(document).ready(function () {
                         RefreshRealEstateTable();
                     }
                     else {
-                        alert("Error!");
+                        swal("Thất bại", "Có lỗi xảy ra!", "error");
                     }
                 }
             });
@@ -247,7 +247,7 @@ $(document).ready(function () {
                         RefreshRealEstateTable();
                     }
                     else {
-                        alert("Error!");
+                        swal("Thất bại", "Có lỗi xảy ra!", "error");
                     }
                 }
             });
@@ -302,7 +302,7 @@ $(document).ready(function () {
                     RefreshRealEstateTable();
                 }
                 else if (data === "failed") {
-                    alert("Error!");
+                    swal("Thất bại", "Có lỗi xảy ra!", "error");
                 }
                 else {
                     $("#real-estate-update-modal").html($(data).html());
@@ -337,7 +337,7 @@ $(document).ready(function () {
                     RefreshRealEstateTable();
                 }
                 else if (data === "failed") {
-                    alert("Error!");
+                    swal("Thất bại", "Có lỗi xảy ra!", "error");
                 }
                 else {
                     $("#liability-update-modal").html($(data).html());
@@ -373,7 +373,7 @@ $(document).ready(function () {
                     RefreshRealEstateTable();
                 }
                 else if (data === "failed") {
-                    alert("Error!");
+                    swal("Thất bại", "Có lỗi xảy ra!", "error");
                 }
                 else {
                     $("#liability-create-modal").html($(data).html());

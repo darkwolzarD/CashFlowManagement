@@ -64,7 +64,7 @@
                     RefreshBankDepositTable();
                 }
                 else if (data === "failed"){
-                    alert("Error!");
+                    swal("Thất bại", "Có lỗi xảy ra!", "error");
                 }
                 else {
                     $("#bank-deposit-create-modal").html($(data).html());
@@ -99,7 +99,7 @@
                     RefreshBankDepositTable();
                 }
                 else if (data === "failed") {
-                    alert("Error!");
+                    swal("Thất bại", "Có lỗi xảy ra!", "error");
                 }
                 else {
                     $("#bank-deposit-update-modal").html($(data).html());
@@ -120,7 +120,7 @@
                         RefreshBankDepositTable();
                     }
                     else if (data === "failed") {
-                        alert("Error!");
+                        swal("Thất bại", "Có lỗi xảy ra!", "error");
                     }
                 }
             });

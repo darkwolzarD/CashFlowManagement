@@ -64,7 +64,7 @@
                     RefreshFamilyExpenseTable();
                 }
                 else if (data === "failed"){
-                    alert("Error!");
+                    swal("Thất bại", "Có lỗi xảy ra!", "error");
                 }
                 else {
                     $("#family-expense-create-modal").html($(data).html());
@@ -99,7 +99,7 @@
                     RefreshFamilyExpenseTable();
                 }
                 else if (data === "failed") {
-                    alert("Error!");
+                    swal("Thất bại", "Có lỗi xảy ra!", "error");
                 }
                 else {
                     $("#family-expense-update-modal").html($(data).html());
@@ -120,7 +120,7 @@
                         RefreshFamilyExpenseTable();
                     }
                     else if (data === "failed") {
-                        alert("Error!");
+                        swal("Thất bại", "Có lỗi xảy ra!", "error");
                     }
                 }
             });

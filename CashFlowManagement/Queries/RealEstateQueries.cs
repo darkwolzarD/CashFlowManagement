@@ -10,10 +10,10 @@ namespace CashFlowManagement.Queries
 {
     public class RealEstateQueries
     {
-        public static bool CheckExistStock(string username, string realEstatekName)
+        public static bool CheckExistStock(string username, string realEstateName)
         {
             Entities entities = new Entities();
-            return entities.Assets.Where(x => x.Username.Equals(username) && x.AssetName.Equals(realEstatekName)
+            return entities.Assets.Where(x => x.Username.Equals(username) && x.AssetName.Equals(realEstateName)
                                         && x.AssetType == (int)Constants.Constants.ASSET_TYPE.REAL_ESTATE
                                         && !x.DisabledDate.HasValue).Any();
         }
