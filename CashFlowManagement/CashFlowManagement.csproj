@@ -375,6 +375,7 @@
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="images\Generic_Avatar.png" />
+    <Content Include="images\loading.gif" />
     <Content Include="Scripts\availablemoney.js" />
     <Content Include="Scripts\bankdeposit.js" />
     <Content Include="Scripts\bootstrap-datepicker.js" />
@@ -594,7 +595,10 @@
     <Content Include="Scripts\salary.js" />
     <Content Include="Scripts\selectize.js" />
     <Content Include="Scripts\stock.js" />
+    <Content Include="Scripts\sweetalert-dev.js" />
+    <Content Include="Scripts\sweetalert.min.js" />
     <Content Include="Scripts\_references.js" />
+    <Content Include="Content\sweetalert.css" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
