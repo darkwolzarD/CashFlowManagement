@@ -38,7 +38,7 @@ namespace CashFlowManagement.Queries
             result.TotalValue = result.Liabilities.Sum(x => x.Value);
             result.TotalMonthlyPayment = result.Liabilities.Sum(x => x.MonthlyPayment);
             result.TotalAnnualPayment = result.Liabilities.Sum(x => x.AnnualPayment);
-            result.TotalInterestRate = result.TotalMonthlyPayment / result.TotalValue * 100;
+            result.TotalInterestRate = result.TotalAnnualPayment / result.TotalValue;
             return result;
         }
 
@@ -58,7 +58,7 @@ namespace CashFlowManagement.Queries
             result.TotalValue = result.Liabilities.Sum(x => x.Value);
             result.TotalMonthlyPayment = result.Liabilities.Sum(x => x.MonthlyPayment);
             result.TotalAnnualPayment = result.Liabilities.Sum(x => x.AnnualPayment);
-            result.TotalInterestRate = result.TotalMonthlyPayment / result.TotalValue * 100;
+            result.TotalInterestRate = result.TotalAnnualPayment / result.TotalValue;
             return result;
         }
 
@@ -72,7 +72,7 @@ namespace CashFlowManagement.Queries
             liabilityViewModel.Value = liability.Value;
             liabilityViewModel.InterestRate = liability.InterestRate / 100;
             liabilityViewModel.Note = liability.Note;
-            liabilityViewModel.MonthlyPayment = liabilityViewModel.Value * liabilityViewModel.InterestRate / 100;
+            liabilityViewModel.MonthlyPayment = liabilityViewModel.Value * liabilityViewModel.InterestRate / 12;
             liabilityViewModel.AnnualPayment = liabilityViewModel.MonthlyPayment * 12;
             return liabilityViewModel;
         }
@@ -87,7 +87,7 @@ namespace CashFlowManagement.Queries
             liabilityViewModel.Value = liability.Value;
             liabilityViewModel.InterestRate = liability.InterestRate / 100;
             liabilityViewModel.Note = liability.Note;
-            liabilityViewModel.MonthlyPayment = liabilityViewModel.Value * liabilityViewModel.InterestRate / 100;
+            liabilityViewModel.MonthlyPayment = liabilityViewModel.Value * liabilityViewModel.InterestRate / 12;
             liabilityViewModel.AnnualPayment = liabilityViewModel.MonthlyPayment * 12;
             return liabilityViewModel;
         }

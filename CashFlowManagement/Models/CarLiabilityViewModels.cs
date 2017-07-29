@@ -12,7 +12,7 @@ namespace CashFlowManagement.Models
         [Display(Name = "Tổng giá trị")]
         [DisplayFormat(DataFormatString = "{0:N0}", ApplyFormatInEditMode = true)]
         public double? LiabilityValue { get; set; }
-
+        [Display(Name = "Ghi chú")]
         public string Note { get; set; }
     }
 

@@ -56,7 +56,7 @@ namespace CashFlowManagement.Queries
                 realEstateViewModel.TotalMonthlyPayment = realEstateViewModel.Liabilities.Select(x => x.TotalMonthlyPayment).DefaultIfEmpty(0).Sum();
                 realEstateViewModel.TotalPayment = realEstateViewModel.Liabilities.Select(x => x.TotalPayment).DefaultIfEmpty(0).Sum();
                 realEstateViewModel.TotalRemainedValue = realEstateViewModel.Liabilities.Select(x => x.RemainedValue).DefaultIfEmpty(0).Sum();
-                realEstateViewModel.TotalInterestRate = realEstateViewModel.TotalInterestPayment / realEstateViewModel.TotalLiabilityValue * 12;
+                realEstateViewModel.TotalInterestRate = realEstateViewModel.Liabilities.Select(x => x.OriginalInterestPayment).DefaultIfEmpty(0).Sum() / realEstateViewModel.TotalLiabilityValue * 12;
                 realEstateViewModel.RowSpan = realEstateViewModel.Liabilities.Any() ? realEstateViewModel.Liabilities.Count() + 3 : 2;
 
                 result.RealEstates.Add(realEstateViewModel);
@@ -99,13 +99,13 @@ namespace CashFlowManagement.Queries
                 {
                     RealEstateLiabilityViewModel liabilityViewModel = RealEstateLiabilityQueries.CreateViewModel(liability);
                     realEstateViewModel.LiabilityValue += liabilityViewModel.Value.Value;
-                    realEstateViewModel.InterestRate += liabilityViewModel.InterestRate.Value;
-                    realEstateViewModel.InterestRatePerX += liabilityViewModel.InterestRatePerX;
+                    realEstateViewModel.OriginalInterestPayment += liabilityViewModel.OriginalInterestPayment;
                     realEstateViewModel.MonthlyInterestPayment += liabilityViewModel.MonthlyInterestPayment;
                     realEstateViewModel.MonthlyPayment += liabilityViewModel.TotalMonthlyPayment;
                     realEstateViewModel.AnnualPayment += liabilityViewModel.TotalPayment;
                     realEstateViewModel.RemainedValue += liabilityViewModel.RemainedValue;
                 }
+                realEstateViewModel.InterestRate = realEstateViewModel.OriginalInterestPayment / realEstateViewModel.LiabilityValue * 12;
                 result.RealEstateSummaries.Add(realEstateViewModel);
             }
 
@@ -114,7 +114,7 @@ namespace CashFlowManagement.Queries
             result.TotalValue = result.RealEstateSummaries.Sum(x => x.Value);
             result.TotalRentYield = result.RealEstateSummaries.Sum(x => x.AnnualIncome) / result.TotalValue;
             result.TotalLiabilityValue = result.RealEstateSummaries.Sum(x => x.LiabilityValue);
-            result.TotalInterestRate = result.RealEstateSummaries.Sum(x => x.Value);
+            result.TotalInterestRate = result.TotalLiabilityValue > 0 ? result.RealEstateSummaries.Sum(x => x.OriginalInterestPayment) / result.TotalLiabilityValue * 12 : 0;
             result.TotalMonthlyPayment = result.RealEstateSummaries.Sum(x => x.MonthlyPayment);
             result.TotalAnnualPayment = result.RealEstateSummaries.Sum(x => x.AnnualPayment);
             result.TotalRemainedValue = result.RealEstateSummaries.Sum(x => x.RemainedValue);

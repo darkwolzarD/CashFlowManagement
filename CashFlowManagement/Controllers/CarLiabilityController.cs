@@ -26,6 +26,10 @@ namespace CashFlowManagement.Controllers
         [HttpPost]
         public ActionResult _CarLiabilityForm(CarLiabilityCreateViewModel model)
         {
+            if(model.Value > model.LiabilityValue)
+            {
+                ModelState.AddModelError("CheckValue", "Giá trị nợ phải nhỏ hơn tổng giá trị tiêu sản");
+            }
             if (ModelState.IsValid)
             {
                 int result = CarLiabilityQueries.AddCarLiability(model, UserQueries.GetCurrentUsername());
@@ -53,6 +57,11 @@ namespace CashFlowManagement.Controllers
         [HttpPost]
         public ActionResult _CarLiabilityUpdateForm(CarLiabilityUpdateViewModel model)
         {
+            if (model.Value > model.LiabilityValue)
+            {
+                ModelState.AddModelError("CheckValue", "Giá trị nợ phải nhỏ hơn tổng giá trị tiêu sản");
+            }
+
             if (ModelState.IsValid)
             {
                 int result = CarLiabilityQueries.UpdateCarLiability(model);

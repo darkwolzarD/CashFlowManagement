@@ -382,4 +382,9 @@ $(document).ready(function () {
             }
         });
     })
+
+    $(document).on("keyup", "#NumberOfStock, #SpotRice", function () {
+        $("#StockValue").val($("#NumberOfStock").cleanVal() * $("#SpotRice").cleanVal()).trigger("input");
+        MaskInput();
+    })
 })

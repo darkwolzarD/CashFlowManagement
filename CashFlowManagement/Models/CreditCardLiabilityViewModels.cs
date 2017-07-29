@@ -22,6 +22,8 @@ namespace CashFlowManagement.Models
         [DisplayFormat(DataFormatString = "{0:N2}", ApplyFormatInEditMode = true)]
         [Range(1, 100, ErrorMessage = "Chi phí lãi phải lớn hơn 1 và nhỏ hơn hoặc bằng 100%")]
         public double? InterestRate { get; set; }
+
+        [Display(Name = "Ghi chú")]
         public string Note { get; set; }
     }
 

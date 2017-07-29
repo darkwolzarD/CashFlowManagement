@@ -64,7 +64,8 @@ namespace CashFlowManagement.Queries
                 stockViewModel.TotalMonthlyPayment = stockViewModel.Transactions.Transactions.Select(x => x.Liabilities.Liabilities).Sum(x => x.Sum(y => y.TotalMonthlyPayment));
                 stockViewModel.TotalPayment = stockViewModel.Transactions.Transactions.Select(x => x.Liabilities.Liabilities).Sum(x => x.Sum(y => y.TotalPayment));
                 stockViewModel.TotalRemainedValue = stockViewModel.Transactions.Transactions.Select(x => x.Liabilities.Liabilities).Sum(x => x.Sum(y => y.RemainedValue));
-                stockViewModel.TotalInterestRate = stockViewModel.TotalInterestPayment / stockViewModel.TotalLiabilityValue * 12;
+                stockViewModel.TotalOriginalInterestPayment = stockViewModel.Transactions.Transactions.Select(x => x.Liabilities.Liabilities).Sum(x => x.Sum(y => y.OriginalInterestPayment));
+                stockViewModel.TotalInterestRate = stockViewModel.TotalOriginalInterestPayment / stockViewModel.TotalLiabilityValue * 12;
                 stockViewModel.RowSpan = stockViewModel.Transactions.Transactions.Any() ? stockViewModel.Transactions.Transactions.Count() + stockViewModel.Transactions.Transactions.Select(x => x.Liabilities.Liabilities).Count() + 4 : 4;
 
                 if(stockViewModel.Transactions.Transactions.Any())
@@ -121,24 +122,26 @@ namespace CashFlowManagement.Queries
                     stockViewModel.NumberOfStock += (int)transactionViewModel.NumberOfStock.Value;
                     stockViewModel.SpotRice += transactionViewModel.SpotRice.Value;
                     stockViewModel.StockValue += transactionViewModel.StockValue.Value;
-                    stockViewModel.ExpectedDividend += transactionViewModel.ExpectedDividend.Value / 100;
+                    stockViewModel.ExpectedDividend += transactionViewModel.ExpectedDividend.Value;
 
                     var liabilites = transactionViewModel.Liabilities.Liabilities;
                     stockViewModel.LiabilityValue = liabilites.Sum(x => x.Value.Value);
-                    stockViewModel.InterestRate = liabilites.Sum(x => x.InterestRatePerX == "Năm" ? x.InterestRate.Value : x.InterestRate.Value * 12) / 100;
                     stockViewModel.MonthlyInterestPayment = liabilites.Sum(x => x.MonthlyInterestPayment);
+                    stockViewModel.OriginalInterestPayment = liabilites.Sum(x => x.OriginalInterestPayment);
                     stockViewModel.MonthlyPayment = liabilites.Sum(x => x.TotalMonthlyPayment);
                     stockViewModel.AnnualPayment = 0;
                     stockViewModel.RemainedValue = liabilites.Sum(x => x.RemainedValue);
                 }
+                stockViewModel.InterestRate = stockViewModel.OriginalInterestPayment / stockViewModel.LiabilityValue * 12;
 
                 result.StockSummaries.Add(stockViewModel);
             }
 
+            result.TotalLiabilityValue = result.StockSummaries.Sum(x => x.LiabilityValue);
             result.TotalNumberOfStock = result.StockSummaries.Sum(x => x.NumberOfStock);
             result.TotalStockValue = result.StockSummaries.Sum(x => x.StockValue);
             result.TotalMonthlyInterestPayment = result.StockSummaries.Sum(x => x.MonthlyInterestPayment);
-            result.TotalInterestRate = result.TotalMonthlyInterestPayment / result.TotalLiabilityValue;
+            result.TotalInterestRate = result.TotalLiabilityValue > 0 ? result.StockSummaries.Sum(x => x.OriginalInterestPayment) / result.TotalLiabilityValue * 12 : 0;
             result.TotalMonthlyPayment = result.StockSummaries.Sum(x => x.MonthlyPayment);
             result.TotalAnnualPayment = result.StockSummaries.Sum(x => x.AnnualPayment);
             result.TotalRemainedValue = result.StockSummaries.Sum(x => x.RemainedValue);
@@ -179,8 +182,8 @@ namespace CashFlowManagement.Queries
         public static double GetStockValue(int id)
         {
             Entities entities = new Entities();
-            var stock = entities.Assets.Where(x => x.Id == id).FirstOrDefault();
-            return stock.Value;
+            var stock = entities.StockTransactions.Where(x => x.AssetId == id && !x.DisabledDate.HasValue).Select(x => x.SpotPrice * x.NumberOfShares).DefaultIfEmpty(0).Sum();
+            return stock;
         }
 
         public static int CreateStock(StockCreateViewModel model, string username)

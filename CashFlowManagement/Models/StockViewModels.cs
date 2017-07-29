@@ -32,6 +32,7 @@ namespace CashFlowManagement.Models
         [DisplayFormat(DataFormatString = "{0:N2}")]
         [Range(1, Double.MaxValue, ErrorMessage = "Cổ tức phải lớn hơn 1%")]
         public double? ExpectedDividend { get; set; }
+        [Display(Name = "Ghi chú")]
         public string Note { get; set; }
 
         public StockLiabilityListCreateViewModel Liabilities { get; set; }
@@ -62,6 +63,8 @@ namespace CashFlowManagement.Models
 
         [DisplayFormat(DataFormatString = "{0:P2}")]
         public double TotalInterestRate { get; set; }
+
+        public double TotalOriginalInterestPayment { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:N0}")]
         public double TotalOriginalPayment { get; set; }
@@ -123,6 +126,8 @@ namespace CashFlowManagement.Models
 
         [DisplayFormat(DataFormatString = "{0:P2}")]
         public double InterestRate { get; set; }
+
+        public double OriginalInterestPayment { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:N0}")]
         public double MonthlyInterestPayment { get; set; }

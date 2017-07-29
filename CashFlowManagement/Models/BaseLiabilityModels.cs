@@ -86,6 +86,8 @@ namespace CashFlowManagement.Models
             [DisplayFormat(DataFormatString = "{0:N0}")]
             public double MonthlyInterestPayment { get; set; }
 
+            public double OriginalInterestPayment { get; set; }
+
             [DisplayFormat(DataFormatString = "{0:N0}")]
             public double MonthlyOriginalPayment { get; set; }
 

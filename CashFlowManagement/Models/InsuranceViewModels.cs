@@ -19,12 +19,12 @@ namespace CashFlowManagement.Models
 
         [Required(ErrorMessage = "Chọn ngày bắt đầu")]
         [Display(Name = "Ngày bắt đầu")]
-        [DisplayFormat(DataFormatString = "{0:MM/yyyy}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime? StartDate { get; set; }
 
         [Required(ErrorMessage = "Chọn ngày kết thúc")]
         [Display(Name = "Ngày kết thúc")]
-        [DisplayFormat(DataFormatString = "{0:MM/yyyy}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime? EndDate { get; set; }
 
         [Required(ErrorMessage = "Nhập chi hàng tháng")]
@@ -52,13 +52,13 @@ namespace CashFlowManagement.Models
         [DisplayFormat(DataFormatString = "{0:N0}")]
         public double TotalExpense { get; set; }
 
-        [DisplayFormat(DataFormatString = "{0:MM/yyyy}")]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime StartDate { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:P2}")]
         public double YieldRate { get; set; }
 
-        [DisplayFormat(DataFormatString = "{0:MM/yyyy}")]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime EndDate { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:N0}")]
@@ -113,14 +113,14 @@ namespace CashFlowManagement.Models
         [DisplayFormat(DataFormatString = "{0:N0}")]
         public double TotalExpense { get; set; }
 
-        [DisplayFormat(DataFormatString = "{0:MM/yyyy}")]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime StartDate { get; set; }
 
-        [DisplayFormat(DataFormatString = "{0:MM/yyyy}")]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime EndDate { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:N0}")]
-        public double PaymentPeriod { get; set; }
+        public string PaymentPeriod { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:N0}")]
         public double Expense { get; set; }

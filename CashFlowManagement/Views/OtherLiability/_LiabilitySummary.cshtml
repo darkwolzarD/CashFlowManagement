@@ -34,10 +34,10 @@
                                 @if (Model.CarLiabilities.Liabilities.Any())
                                 {
                                     <tr>
-                                        <td class="text-danger"><strong>Tổng</strong></td>
+                                        <td class="text-danger text-left"><strong>Tổng</strong></td>
                                         <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.CarLiabilities.TotalOriginalValue)</strong></td>
                                         <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.CarLiabilities.TotalLiabilityValue)</strong></td>
-                                        <td></td>
+                                        <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.CarLiabilities.TotalInterestRate) / năm</strong></td>
                                         <td></td>
                                         <td></td>
                                         <td></td>
@@ -93,9 +93,9 @@
                                 @if (Model.CreditCardLiabilities.Liabilities.Any())
                                 {
                                     <tr>
-                                        <td class="text-danger"><strong>Tổng</strong></td>
+                                        <td class="text-danger text-left"><strong>Tổng</strong></td>
                                         <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.CreditCardLiabilities.TotalValue)</strong></td>
-                                        <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.CreditCardLiabilities.TotalInterestRate)</strong></td>
+                                        <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.CreditCardLiabilities.TotalInterestRate) / năm</strong></td>
                                         <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.CreditCardLiabilities.TotalMonthlyPayment)</strong></td>
                                         <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.CreditCardLiabilities.TotalAnnualPayment)</strong></td>
                                         <td></td>
@@ -146,10 +146,10 @@
                                 @if (Model.OtherLiabilities.Liabilities.Any())
                                 {
                                     <tr>
-                                        <td class="text-danger"><strong>Tổng</strong></td>
+                                        <td class="text-danger text-left"><strong>Tổng</strong></td>
                                         <td></td>
                                         <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.OtherLiabilities.TotalLiabilityValue)</strong></td>
-                                        <td></td>
+                                        <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.OtherLiabilities.TotalInterestRate) / năm</strong></td>
                                         <td></td>
                                         <td></td>
                                         <td></td>

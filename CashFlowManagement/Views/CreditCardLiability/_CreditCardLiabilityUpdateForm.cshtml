@@ -34,7 +34,7 @@
                                 <div class="input-group input-group-sm">
                                     @Html.EditorFor(x => x.InterestRate, new { htmlAttributes = new { @class = "form-control input-sm percentage" } })
                                     <div class="input-group-addon">
-                                        <span class="fa fa-percent"></span>
+                                        % / năm
                                     </div>
                                 </div>
                                 @Html.ValidationMessageFor(x => x.InterestRate, null, new { @class = "text-danger" })

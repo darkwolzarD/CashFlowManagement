@@ -26,22 +26,21 @@ namespace CashFlowManagement.Queries
                     Value = bankDeposit.Value,
                     StartDate = bankDeposit.StartDate.Value,
                     EndDate = bankDeposit.EndDate.Value,
-                    Income = bankDeposit.Value * bankDeposit.InterestRate.Value / 1200,
-                    AnnualIncome = (bankDeposit.Value * bankDeposit.InterestRate.Value / 1200) * 12,
+                    Income = bankDeposit.InterestRatePerX.Value == (int)Constants.Constants.INTEREST_RATE_PER.MONTH ? bankDeposit.Value * bankDeposit.InterestRate.Value / 100 : bankDeposit.Value * bankDeposit.InterestRate.Value / 1200,
                     InterestRate = bankDeposit.InterestRate.Value / 100,
                     InterestRatePerX = Helper.GetInterestTypePerX(bankDeposit.InterestRatePerX.Value),
                     InterestObtainWay = Helper.GetObtainWay(bankDeposit.ObtainedBy.Value),
                     PaymentPeriod = Helper.CalculateTimePeriod(bankDeposit.StartDate.Value, bankDeposit.EndDate.Value),
                     Note = bankDeposit.Note
                 };
-
+                viewModel.AnnualIncome = viewModel.Income * 12;
                 result.BankDeposits.Add(viewModel);
             }
 
             result.TotalValue = result.BankDeposits.Sum(x => x.Value);
             result.TotalIncome = result.BankDeposits.Sum(x => x.Income);
             result.TotalAnnualIncome = result.BankDeposits.Sum(x => x.AnnualIncome);
-            result.TotalInterestRate = result.TotalIncome / result.TotalValue * 12;
+            result.TotalInterestRate = result.TotalAnnualIncome / result.TotalValue;
 
             return result;
         }
@@ -80,22 +79,21 @@ namespace CashFlowManagement.Queries
                     Value = bankDeposit.Value,
                     StartDate = bankDeposit.StartDate.Value,
                     EndDate = bankDeposit.EndDate.Value,
-                    Income = bankDeposit.Value * bankDeposit.InterestRate.Value / 1200,
-                    AnnualIncome = (bankDeposit.Value * bankDeposit.InterestRate.Value / 1200) * 12,
+                    Income = bankDeposit.InterestRatePerX.Value == (int)Constants.Constants.INTEREST_RATE_PER.MONTH ? bankDeposit.Value * bankDeposit.InterestRate.Value / 100 : bankDeposit.Value * bankDeposit.InterestRate.Value / 1200,
                     InterestRate = bankDeposit.InterestRate.Value / 100,
                     InterestRatePerX = Helper.GetInterestTypePerX(bankDeposit.InterestRatePerX.Value),
                     InterestObtainWay = Helper.GetObtainWay(bankDeposit.ObtainedBy.Value),
                     PaymentPeriod = Helper.CalculateTimePeriod(bankDeposit.StartDate.Value, bankDeposit.EndDate.Value),
                     Note = bankDeposit.Note
                 };
-
+                viewModel.AnnualIncome = viewModel.Income * 12;
                 result.BankDepositSummaries.Add(viewModel);
             }
 
             result.TotalValue = result.BankDepositSummaries.Sum(x => x.Value);
             result.TotalIncome = result.BankDepositSummaries.Sum(x => x.Income);
             result.TotalAnnualIncome = result.BankDepositSummaries.Sum(x => x.AnnualIncome);
-            result.TotalInterestRate = result.TotalIncome / result.TotalValue;
+            result.TotalInterestRate = result.TotalAnnualIncome / result.TotalValue;
 
             return result;
         }

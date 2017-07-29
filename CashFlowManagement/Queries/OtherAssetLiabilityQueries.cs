@@ -43,6 +43,7 @@ namespace CashFlowManagement.Queries
             {
                 int currentPeriod = Helper.CalculateTimePeriod(liabilityViewModel.StartDate.Value, DateTime.Now);
                 double interestRate = liability.InterestRatePerX == (int)Constants.Constants.INTEREST_RATE_PER.MONTH ? liability.InterestRate / 100 : liability.InterestRate / 1200;
+                liabilityViewModel.OriginalInterestPayment = liabilityViewModel.Value.Value * interestRate;
                 //Fixed interest type
                 if (liability.InterestType == (int)Constants.Constants.INTEREST_TYPE.FIXED)
                 {

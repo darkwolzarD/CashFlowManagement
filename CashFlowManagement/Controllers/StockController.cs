@@ -39,7 +39,7 @@ namespace CashFlowManagement.Controllers
 
             if (model.StockValue < totalLiabilityValue && totalLiabilityValue > 0)
             {
-                ModelState.AddModelError("CompareStockValueAndLiabilityValue", "Giá trị tổng số nợ không vượt quá giá trị góp vốn kinh doanh");
+                ModelState.AddModelError("CompareStockValueAndLiabilityValue", "Giá trị tổng số nợ không vượt quá giá trị cổ phiếu");
             }
 
             if(StockQueries.CheckExistStock(UserQueries.GetCurrentUsername(), model.Name))
@@ -80,7 +80,7 @@ namespace CashFlowManagement.Controllers
             double totalLiabilityValue = StockLiabilityQueries.GetLiabilityValueOfStock(model.Id);
             if (model.StockValue < totalLiabilityValue && totalLiabilityValue > 0)
             {
-                ModelState.AddModelError("CompareStockValueAndLiabilityValue", "Giá trị tổng số nợ không vượt quá giá trị góp vốn kinh doanh");
+                ModelState.AddModelError("CompareStockValueAndLiabilityValue", "Giá trị tổng số nợ không vượt quá giá trị cổ phiếu");
             }
 
             StockUpdateViewModel stock = StockQueries.GetStockById(model.Id);
@@ -134,7 +134,7 @@ namespace CashFlowManagement.Controllers
             double stockValue = StockQueries.GetStockValue(model.AssetId);
             if (stockValue < totalLiabilityValue + model.Value && totalLiabilityValue + model.Value > 0)
             {
-                ModelState.AddModelError("CompareStockValueAndLiabilityValue", "Giá trị tổng số nợ không vượt quá giá trị bất động sản");
+                ModelState.AddModelError("CompareStockValueAndLiabilityValue", "Giá trị tổng số nợ không vượt quá giá trị cổ phiếu");
             }
 
             if (ModelState.IsValid)
@@ -176,7 +176,7 @@ namespace CashFlowManagement.Controllers
             double stockValue = StockQueries.GetStockValue(model.AssetId);
             if (stockValue < totalLiabilityValue - liabilityValue + model.Value && totalLiabilityValue - liabilityValue + model.Value > 0)
             {
-                ModelState.AddModelError("CompareStockValueAndLiabilityValue", "Giá trị tổng số nợ không vượt quá giá trị góp vốn kinh doanh");
+                ModelState.AddModelError("CompareStockValueAndLiabilityValue", "Giá trị tổng số nợ không vượt quá giá trị cổ phiếu");
             }
 
             if (ModelState.IsValid)
@@ -212,7 +212,7 @@ namespace CashFlowManagement.Controllers
 
                 if (stock.StockValue < totalLiabilityValue && totalLiabilityValue > 0)
                 {
-                    ModelState.AddModelError("CompareStockValueAndLiabilityValue", "Giá trị tổng số nợ không vượt quá giá trị góp vốn kinh doanh");
+                    ModelState.AddModelError("CompareStockValueAndLiabilityValue", "Giá trị tổng số nợ không vượt quá giá trị cổ phiếu");
                     return PartialView(model);
                 }
                 else
@@ -271,7 +271,7 @@ namespace CashFlowManagement.Controllers
 
                 if (stock.StockValue < totalLiabilityValue + model.Value && totalLiabilityValue + model.Value > 0)
                 {
-                    ModelState.AddModelError("CompareStockValueAndLiabilityValue", "Giá trị tổng số nợ không vượt quá giá trị bất động sản");
+                    ModelState.AddModelError("CompareStockValueAndLiabilityValue", "Giá trị tổng số nợ không vượt quá giá trị cổ phiếu");
                     return PartialView(model);
                 }
                 else
@@ -418,7 +418,7 @@ namespace CashFlowManagement.Controllers
 
             if (model.StockValue < totalLiabilityValue && totalLiabilityValue > 0)
             {
-                ModelState.AddModelError("CompareStockValueAndLiabilityValue", "Giá trị tổng số nợ không vượt quá giá trị góp vốn kinh doanh");
+                ModelState.AddModelError("CompareStockValueAndLiabilityValue", "Giá trị tổng số nợ không vượt quá giá trị cổ phiếu");
             }
 
             if (StockQueries.CheckExistStock(UserQueries.GetCurrentUsername(), model.Name))

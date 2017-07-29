@@ -12,6 +12,7 @@ namespace CashFlowManagement.Models
         [Display(Name = "Mục tiêu sử dụng")]
         public string Purpose { get; set; }
 
+        [Display(Name = "Ghi chú")]
         public string Note { get; set; }
     }
 

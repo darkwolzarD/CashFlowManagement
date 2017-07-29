@@ -151,7 +151,7 @@ namespace CashFlowManagement.Models
         [DisplayFormat(DataFormatString = "{0:N0}")]
         public double TotalAnnualIncome { get; set; }
 
-        [DisplayFormat(DataFormatString = "{0:02}")]
+        [DisplayFormat(DataFormatString = "{0:P2}")]
         public double TotalInterestRate { get; set; }
 
         public List<BankDepositSummaryViewModel> BankDepositSummaries { get; set; }
