@@ -270,6 +270,13 @@ $(document).ready(function () {
         else {
             RefreshLiabilityForm();
         }
+        $("#liability-table tr").not($(this).closest("tr")).removeClass("active");
+        if ($(this).closest("tr").hasClass("active")) {
+            $(this).closest("tr").removeClass("active");
+        }
+        else {
+            $(this).closest("tr").addClass("active");
+        }
     })
 
     $(document).on("keyup", "form input", function () {

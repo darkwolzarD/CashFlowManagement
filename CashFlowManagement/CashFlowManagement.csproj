@@ -750,6 +750,7 @@
     <Content Include="Views\OtherLiability\_LiabilitySummary.cshtml" />
     <Content Include="Views\Salary\_SalarySummary.cshtml" />
     <Content Include="Views\AvailableMoney\_AvailableMoneyTable.cshtml" />
+    <Content Include="Views\AvailableMoney\_AvailableMoneySummary.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
