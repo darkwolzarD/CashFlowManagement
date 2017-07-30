@@ -168,7 +168,7 @@ namespace CashFlowManagement.Queries
 
             result.MonthlyCashflow = result.TotalIncomes - result.TotalExpenses;
             result.PassiveIncome = result.BusinessIncome + result.RealEstateIncome + result.InterestIncome + result.DividendIncome;
-            result.FinancialFreedom = result.TotalExpenses > 0 ? result.PassiveIncome / result.TotalExpenses * 100 : 0;
+            result.FinancialFreedom = result.TotalExpenses > 0 && result.TotalIncomes >= result.TotalExpenses ? result.PassiveIncome / result.TotalExpenses * 100 : 0;
 
             return result;
         }

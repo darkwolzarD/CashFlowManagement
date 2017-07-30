@@ -1,7 +1,14 @@
 ﻿@model bool
 @{
     ViewBag.Title = "Quản lý thẻ tín dụng";
-    Layout = "~/Views/Shared/_LiabilityLayout.cshtml";
+    if (Model)
+    {
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_LiabilityLayout.cshtml";
+    }
 }
 
 <div class="clear10"></div>
@@ -41,17 +48,19 @@
     </div>
 </div>
 
-
-<footer class="row text-right">
-    <a href="@Url.Action("Index", "CarLiability")" class="btn btn-default " style="font-size: 11px;">
-        <span class="glyphicon glyphicon-arrow-left"></span>
-        Quay lại
-    </a>
-    <a href="@Url.Action("CreditCardLiabilityInitialize", "Account")" class="btn btn-default " style="font-size: 11px;">
-        <span class="glyphicon glyphicon-arrow-right"></span>
-        Tiếp tục
-    </a>
-</footer>
+@if (!Model)
+{
+    <footer class="row text-right">
+        <a href="@Url.Action("Index", "CarLiability")" class="btn btn-default " style="font-size: 11px;">
+            <span class="glyphicon glyphicon-arrow-left"></span>
+            Quay lại
+        </a>
+        <a href="@Url.Action("CreditCardLiabilityInitialize", "Account")" class="btn btn-default " style="font-size: 11px;">
+            <span class="glyphicon glyphicon-arrow-right"></span>
+            Tiếp tục
+        </a>
+    </footer>
+}
 
 <div id="modal">
 

@@ -68,6 +68,7 @@ namespace CashFlowManagement.Queries
             result.TotalMonthlyIncome = result.RealEstates.Select(x => x.Income).DefaultIfEmpty(0).Sum();
             result.TotalAnnualIncome = result.TotalMonthlyIncome * 12;
             result.TotalRentYield = result.TotalValue > 0 ? result.TotalAnnualIncome / result.TotalValue : 0;
+            result.IsInitialized = UserQueries.IsCompleteInitialized(username);
 
             return result;
         }

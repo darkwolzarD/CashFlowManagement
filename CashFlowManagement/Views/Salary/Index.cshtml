@@ -2,7 +2,14 @@
 @using CashFlowManagement.EntityModel;
 @{
     ViewBag.Title = "Quản lý lương";
-    Layout = "~/Views/Shared/_IncomeLayout.cshtml";
+    if (Model)
+    {
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_IncomeLayout.cshtml";
+    }
     var user = (Users)HttpContext.Current.Session["USER"];
 }
 
@@ -52,12 +59,15 @@
         @{ Html.RenderAction("_SalaryTable", "Salary"); }
     </div>
 </div>
-<footer class="row text-right">
-    <a href="#" class="btn btn-primary salary-toggle-summary" style="font-size: 11px;">
-        <span class="glyphicon glyphicon-ok"></span>
-        Hoàn tất khai báo thu nhập lương
-    </a>
-</footer>
+@if (!Model)
+{
+    <footer class="row text-right">
+        <a href="#" class="btn btn-primary salary-toggle-summary" style="font-size: 11px;">
+            <span class="glyphicon glyphicon-ok"></span>
+            Hoàn tất khai báo thu nhập lương
+        </a>
+    </footer>
+}
 
 <div id="modal">
 

@@ -1,7 +1,14 @@
 ﻿@model bool
 @{
     ViewBag.Title = "Quản lý kinh doanh";
-    Layout = "~/Views/Shared/_AssetLayout.cshtml";
+    if (Model)
+    {
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_AssetLayout.cshtml";
+    }
 }
 
 <div class="clear10"></div>
@@ -40,6 +47,9 @@
         @{ Html.RenderAction("_BusinessTable", "Business"); }
     </div>
 </div>
+
+@if (!Model)
+{
 <footer class="row text-right">
     <a href="@Url.Action("Index", "RealEstate")" class="btn btn-default " style="font-size: 11px;">
         <span class="glyphicon glyphicon-arrow-left"></span>
@@ -50,6 +60,7 @@
         Tiếp tục
     </a>
 </footer>
+}
 
 <div id="modal">
 

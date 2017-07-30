@@ -67,7 +67,7 @@ namespace CashFlowManagement.Queries
                 stockViewModel.TotalPayment = liabilities.Sum(x => x.Sum(y => y.TotalPayment));
                 stockViewModel.TotalRemainedValue = liabilities.Sum(x => x.Sum(y => y.RemainedValue));
                 stockViewModel.TotalOriginalInterestPayment = liabilities.Sum(x => x.Sum(y => y.OriginalInterestPayment));
-                stockViewModel.TotalInterestRate = stockViewModel.TotalOriginalInterestPayment / stockViewModel.TotalLiabilityValue * 12;
+                stockViewModel.TotalInterestRate = stockViewModel.TotalLiabilityValue > 0 ? stockViewModel.TotalOriginalInterestPayment / stockViewModel.TotalLiabilityValue * 12 : 0;
                 stockViewModel.RowSpan = stockViewModel.Transactions.Transactions.Any() ? stockViewModel.Transactions.Transactions.Count() + stockViewModel.Transactions.Transactions.Select(x => x.Liabilities.Liabilities).Count() + 4 : 4;
 
                 if(stockViewModel.Transactions.Transactions.Any())
@@ -136,7 +136,7 @@ namespace CashFlowManagement.Queries
                     stockViewModel.AnnualPayment = stockViewModel.MonthlyPayment * 12;
                     stockViewModel.RemainedValue = liabilites.Sum(x => x.RemainedValue);
                 }
-                stockViewModel.InterestRate = stockViewModel.OriginalInterestPayment / stockViewModel.LiabilityValue * 12;
+                stockViewModel.InterestRate = stockViewModel.LiabilityValue > 0 ? stockViewModel.OriginalInterestPayment / stockViewModel.LiabilityValue * 12 : 0;
 
                 result.StockSummaries.Add(stockViewModel);
             }

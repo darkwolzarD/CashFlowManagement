@@ -310,7 +310,7 @@ namespace CashFlowManagement.Queries
             viewModel.Value = model.Value.Value;
             viewModel.Income = model.Income.HasValue ? model.Income.Value : 0;
             viewModel.AnnualIncome = viewModel.Income * 12;
-            viewModel.RentYield = viewModel.Value > 0 ? viewModel.Income / viewModel.Value : 0;
+            viewModel.RentYield = viewModel.Value > 0 ? viewModel.AnnualIncome / viewModel.Value : 0;
 
             OtherAssetLiabilityListCreateViewModel liabilities = (OtherAssetLiabilityListCreateViewModel)HttpContext.Session["LIABILITIES"];
             viewModel.RowSpan = liabilities != null && liabilities.Liabilities.Count > 0 ? liabilities.Liabilities.Count() + 3 : 2;
@@ -385,6 +385,11 @@ namespace CashFlowManagement.Queries
         [HttpPost]
         public ActionResult Save(OtherAssetCreateViewModel model)
         {
+            if (OtherAssetQueries.CheckExistOtherAsset(UserQueries.GetCurrentUsername(), model.Name))
+            {
+                ModelState.AddModelError("CheckExistAsset", "Tài sản này đã tồn tại, vui lòng nhập tên khác");
+            }
+
             if (ModelState.IsValid)
             {
                 model.Liabilities = (OtherAssetLiabilityListCreateViewModel)HttpContext.Session["LIABILITIES"];

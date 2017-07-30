@@ -37,16 +37,19 @@
             {
                 <tr>
                     <td rowspan="@Html.DisplayFor(x => realEstate.RowSpan)" style="vertical-align: top !important;">
-                        @Html.DisplayFor(x => realEstate.Name)<br/>
-                        <a href="#" title="Cập nhật bất động sản">
-                            <span class="glyphicon glyphicon-edit text-success update-real-estate" data-value="@Html.DisplayFor(x => realEstate.Id)" style="font-size: 14px"></span>
-                        </a>
-                        <a href="#" title="Xóa bất động sản">
-                            <span class="glyphicon glyphicon-remove text-danger delete-real-estate" data-value="@Html.DisplayFor(x => realEstate.Id)" style="font-size: 14px"></span>
-                        </a>
-                        <a href="#" title="Thêm nợ">
-                            <span class="fa fa-money text-primary add-real-estate-liability" data-value="@Html.DisplayFor(x => realEstate.Id)" style="font-size: 14px"></span>
-                        </a>
+                        @Html.DisplayFor(x => realEstate.Name)<br />
+                        @if (!Model.IsInitialized)
+                        {
+                            <a href="#" title="Cập nhật bất động sản">
+                                <span class="glyphicon glyphicon-edit text-success update-real-estate" data-value="@Html.DisplayFor(x => realEstate.Id)" style="font-size: 14px"></span>
+                            </a>
+                            <a href="#" title="Xóa bất động sản">
+                                <span class="glyphicon glyphicon-remove text-danger delete-real-estate" data-value="@Html.DisplayFor(x => realEstate.Id)" style="font-size: 14px"></span>
+                            </a>
+                            <a href="#" title="Thêm nợ">
+                                <span class="fa fa-money text-primary add-real-estate-liability" data-value="@Html.DisplayFor(x => realEstate.Id)" style="font-size: 14px"></span>
+                            </a>
+                        }
                     </td>
                     <td class="text-right">@Html.DisplayFor(x => realEstate.Value)</td>
                     <td class="text-right" colspan="2">@Html.DisplayFor(x => realEstate.Income)</td>
@@ -77,21 +80,21 @@
                         <th class="text-right">Nợ còn phải trả</th>
                         <th>Trạng thái</th>
                     </tr>
-                            <tr>
-                                <td><strong class="text-danger">Tổng</strong></td>
-                                <td></td>
-                                <td class="text-right"><strong class="text-danger">@Html.DisplayFor(x => realEstate.TotalLiabilityValue)</strong></td>
-                                <td class="text-left"><strong class="text-danger">@Html.DisplayFor(x => realEstate.TotalInterestRate) / Năm</strong></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td class="text-right"><strong class="text-danger">@Html.DisplayFor(x => realEstate.TotalOriginalPayment)</strong></td>
-                                <td class="text-right"><strong class="text-danger">@Html.DisplayFor(x => realEstate.TotalInterestPayment)</strong></td>
-                                <td class="text-right"><strong class="text-danger">@Html.DisplayFor(x => realEstate.TotalMonthlyPayment)</strong></td>
-                                <td class="text-right"><strong class="text-danger">@Html.DisplayFor(x => realEstate.TotalPayment)</strong></td>
-                                <td class="text-right"><strong class="text-danger">@Html.DisplayFor(x => realEstate.TotalRemainedValue)</strong></td>
-                                <td></td>
-                            </tr>
+                    <tr>
+                        <td><strong class="text-danger">Tổng</strong></td>
+                        <td></td>
+                        <td class="text-right"><strong class="text-danger">@Html.DisplayFor(x => realEstate.TotalLiabilityValue)</strong></td>
+                        <td class="text-left"><strong class="text-danger">@Html.DisplayFor(x => realEstate.TotalInterestRate) / Năm</strong></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td class="text-right"><strong class="text-danger">@Html.DisplayFor(x => realEstate.TotalOriginalPayment)</strong></td>
+                        <td class="text-right"><strong class="text-danger">@Html.DisplayFor(x => realEstate.TotalInterestPayment)</strong></td>
+                        <td class="text-right"><strong class="text-danger">@Html.DisplayFor(x => realEstate.TotalMonthlyPayment)</strong></td>
+                        <td class="text-right"><strong class="text-danger">@Html.DisplayFor(x => realEstate.TotalPayment)</strong></td>
+                        <td class="text-right"><strong class="text-danger">@Html.DisplayFor(x => realEstate.TotalRemainedValue)</strong></td>
+                        <td></td>
+                    </tr>
                     foreach (var liability in realEstate.Liabilities)
                     {
                         <tr>

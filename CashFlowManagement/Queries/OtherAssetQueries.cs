@@ -40,7 +40,7 @@ namespace CashFlowManagement.Queries
                     otherAssetViewModel.Income = 0;
                 }
                 otherAssetViewModel.AnnualIncome = otherAssetViewModel.Income * 12;
-                otherAssetViewModel.RentYield = otherAssetViewModel.Income / otherAssetViewModel.Value;
+                otherAssetViewModel.RentYield = otherAssetViewModel.AnnualIncome / otherAssetViewModel.Value;
 
                 foreach (var liability in otherAsset.Liabilities.Where(x => !x.DisabledDate.HasValue))
                 {
@@ -94,7 +94,7 @@ namespace CashFlowManagement.Queries
                     otherAssetViewModel.Income = 0;
                 }
                 otherAssetViewModel.AnnualIncome = otherAssetViewModel.Income * 12;
-                otherAssetViewModel.RentYield = otherAssetViewModel.Income / otherAssetViewModel.Value;
+                otherAssetViewModel.RentYield = otherAssetViewModel.AnnualIncome / otherAssetViewModel.Value;
 
                 foreach (var liability in otherAsset.Liabilities.Where(x => !x.DisabledDate.HasValue))
                 {

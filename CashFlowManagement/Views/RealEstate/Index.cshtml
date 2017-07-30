@@ -1,7 +1,14 @@
-﻿@using CashFlowManagement.Models
+﻿@model bool
 @{
     ViewBag.Title = "Quản lý bất động sản";
-    Layout = "~/Views/Shared/_AssetLayout.cshtml";
+    if (Model)
+    {
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_AssetLayout.cshtml";
+    }
 }
 
 <div class="clear10"></div>
@@ -19,28 +26,37 @@
 <div class="row">
     <div class="col-md-6">
         <p style="font-size: 20px; margin-bottom: 5px !important">Quản lý bất động sản</p>
-        <p style="font-size: 12px; font-style: italic">(Nếu không có bất động sản, vui lòng chọn Tiếp tục)</p>
+        @if (!Model)
+        {
+            <p style="font-size: 12px; font-style: italic">(Nếu không có bất động sản, vui lòng chọn Tiếp tục)</p>
+        }
     </div>
-    <div class="col-md-6 text-right">
-        <button type="button" class="btn btn-success toggle-modal">
-            <span class="glyphicon glyphicon-home"></span>
-            Tạo bất động sản
-        </button>
-    </div>
+    @if (!Model)
+    {
+        <div class="col-md-6 text-right">
+            <button type="button" class="btn btn-success toggle-modal">
+                <span class="glyphicon glyphicon-home"></span>
+                Tạo bất động sản
+            </button>
+        </div>
+    }
 </div>
 <div class="clear10"></div>
 <div class="row">
     <div class="col-md-12" id="real-estate-table-div">
-         @{ Html.RenderAction("_RealEstateTable", "RealEstate"); }
+        @{ Html.RenderAction("_RealEstateTable", "RealEstate"); }
     </div>
 </div>
 
-<footer class="row text-right">
-    <a href="@Url.Action("RealEstateInitialize", "Account")" class="btn btn-default " style="font-size: 11px;">
-        <span class="glyphicon glyphicon-arrow-right"></span>
-        Tiếp tục
-    </a>
-</footer>
+@if (!Model)
+{
+    <footer class="row text-right">
+        <a href="@Url.Action("RealEstateInitialize", "Account")" class="btn btn-default " style="font-size: 11px;">
+            <span class="glyphicon glyphicon-arrow-right"></span>
+            Tiếp tục
+        </a>
+    </footer>
+}
 
 <div id="modal">
 

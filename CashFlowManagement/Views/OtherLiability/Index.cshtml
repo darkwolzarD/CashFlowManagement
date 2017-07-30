@@ -1,7 +1,14 @@
 ﻿@model bool
 @{
     ViewBag.Title = "Quản lý khoản vay khác";
-    Layout = "~/Views/Shared/_LiabilityLayout.cshtml";
+    if (Model)
+    {
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_LiabilityLayout.cshtml";
+    }
 }
 
 <div class="clear10"></div>
@@ -40,16 +47,20 @@
         @{ Html.RenderAction("_OtherLiabilityTable", "OtherLiability"); }
     </div>
 </div>
-<footer class="row text-right">
-    <a href="@Url.Action("Index", "CreditCardLiability")" class="btn btn-default " style="font-size: 11px;">
-        <span class="glyphicon glyphicon-arrow-left"></span>
-        Quay lại
-    </a>
-    <a href="#" class="btn btn-primary liability-toggle-summary" style="font-size: 11px;">
-        <span class="glyphicon glyphicon-ok"></span>
-        Hoàn tất khai báo các khoản nợ
-    </a>
-</footer>
+
+@if (!Model)
+{
+    <footer class="row text-right">
+        <a href="@Url.Action("Index", "CreditCardLiability")" class="btn btn-default " style="font-size: 11px;">
+            <span class="glyphicon glyphicon-arrow-left"></span>
+            Quay lại
+        </a>
+        <a href="#" class="btn btn-primary liability-toggle-summary" style="font-size: 11px;">
+            <span class="glyphicon glyphicon-ok"></span>
+            Hoàn tất khai báo các khoản nợ
+        </a>
+    </footer>
+}
 
 <div id="modal">
 

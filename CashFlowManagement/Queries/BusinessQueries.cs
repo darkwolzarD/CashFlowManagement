@@ -43,7 +43,7 @@ namespace CashFlowManagement.Queries
                     businessViewModel.Income = 0;
                 }
                 businessViewModel.AnnualIncome = businessViewModel.Income * 12;
-                businessViewModel.RentYield = businessViewModel.Value > 0 ? businessViewModel.Income / businessViewModel.Value : 0;
+                businessViewModel.RentYield = businessViewModel.Value > 0 ? businessViewModel.AnnualIncome / businessViewModel.Value : 0;
 
                 foreach (var liability in business.Liabilities.Where(x => !x.DisabledDate.HasValue))
                 {
@@ -97,7 +97,7 @@ namespace CashFlowManagement.Queries
                     businessViewModel.Income = 0;
                 }
                 businessViewModel.AnnualIncome = businessViewModel.Income * 12;
-                businessViewModel.RentYield = businessViewModel.Value > 0 ? businessViewModel.Income / businessViewModel.Value : 0;
+                businessViewModel.RentYield = businessViewModel.Value > 0 ? businessViewModel.AnnualIncome / businessViewModel.Value : 0;
 
                 foreach (var liability in business.Liabilities.Where(x => !x.DisabledDate.HasValue))
                 {

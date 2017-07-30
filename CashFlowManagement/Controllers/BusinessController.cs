@@ -134,7 +134,7 @@ namespace CashFlowManagement.Controllers
             double businessValue = BusinessQueries.GetBusinessValue(model.AssetId);
             if (businessValue < totalLiabilityValue + model.Value && totalLiabilityValue + model.Value > 0)
             {
-                ModelState.AddModelError("CompareBusinessValueAndLiabilityValue", "Giá trị tổng số nợ không vượt quá giá trị bất động sản");
+                ModelState.AddModelError("CompareBusinessValueAndLiabilityValue", "Giá trị tổng số nợ không vượt quá giá trị góp vốn kinh doanh");
             }
 
             if (ModelState.IsValid)
@@ -271,7 +271,7 @@ namespace CashFlowManagement.Controllers
 
                 if (business.Value < totalLiabilityValue + model.Value && totalLiabilityValue + model.Value > 0)
                 {
-                    ModelState.AddModelError("CompareBusinessValueAndLiabilityValue", "Giá trị tổng số nợ không vượt quá giá trị bất động sản");
+                    ModelState.AddModelError("CompareBusinessValueAndLiabilityValue", "Giá trị tổng số nợ không vượt quá giá trị góp vốn kinh doanh");
                     return PartialView(model);
                 }
                 else
@@ -313,7 +313,7 @@ namespace CashFlowManagement.Controllers
             viewModel.Value = model.Value.Value;
             viewModel.Income = model.Income.HasValue ? model.Income.Value : 0;
             viewModel.AnnualIncome = viewModel.Income * 12;
-            viewModel.RentYield = viewModel.Income / viewModel.Value;
+            viewModel.RentYield = viewModel.AnnualIncome / viewModel.Value;
 
             BusinessLiabilityListCreateViewModel liabilities = (BusinessLiabilityListCreateViewModel)HttpContext.Session["LIABILITIES"];
             viewModel.RowSpan = liabilities != null && liabilities.Liabilities.Count > 0 ? liabilities.Liabilities.Count() + 3 : 2;
@@ -388,6 +388,11 @@ namespace CashFlowManagement.Controllers
         [HttpPost]
         public ActionResult Save(BusinessCreateViewModel model)
         {
+            if (BusinessQueries.CheckExistBusiness(UserQueries.GetCurrentUsername(), model.Name))
+            {
+                ModelState.AddModelError("CheckExistBusiness", "Kinh doanh này đã tồn tại, vui lòng nhập tên khác");
+            }
+
             if (ModelState.IsValid)
             {
                 model.Liabilities = (BusinessLiabilityListCreateViewModel)HttpContext.Session["LIABILITIES"];

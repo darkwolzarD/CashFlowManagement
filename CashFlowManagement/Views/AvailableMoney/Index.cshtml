@@ -38,13 +38,16 @@
         @{ Html.RenderAction("_AvailableMoneyTable", "AvailableMoney"); }
     </div>
 </div>
-<footer class="row text-right">
-    <a href="#" class="btn btn-primary available-money-toggle-summary" style="font-size: 11px;">
-        <span class="glyphicon glyphicon-ok"></span>
-        Hoàn tất khai báo tiền mặt có sẵn
-    </a>
-</footer>
 
+@if (!Model[1])
+{
+    <footer class="row text-right">
+        <a href="#" class="btn btn-primary available-money-toggle-summary" style="font-size: 11px;">
+            <span class="glyphicon glyphicon-ok"></span>
+            Hoàn tất khai báo tiền mặt có sẵn
+        </a>
+    </footer>
+}
 <div id="modal">
 
 </div>

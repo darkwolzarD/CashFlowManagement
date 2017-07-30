@@ -1,7 +1,14 @@
 ﻿@model bool
 @{
     ViewBag.Title = "Quản lý chi tiêu gia đình";
-    Layout = "~/Views/Shared/_ExpenseLayout.cshtml";
+    if (Model)
+    {
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_ExpenseLayout.cshtml";
+    }
 }
 
 <div class="clear10"></div>
@@ -40,13 +47,16 @@
         @{ Html.RenderAction("_FamilyExpenseTable", "FamilyExpense"); }
     </div>
 </div>
-<footer class="row text-right">
-    <a href="@Url.Action("FamilyExpenseInitialize", "Account")" class="btn btn-default " style="font-size: 11px;">
-        <span class="glyphicon glyphicon-arrow-right"></span>
-        Tiếp tục
-    </a>
-</footer>
 
+@if (!Model)
+{
+    <footer class="row text-right">
+        <a href="@Url.Action("FamilyExpenseInitialize", "Account")" class="btn btn-default " style="font-size: 11px;">
+            <span class="glyphicon glyphicon-arrow-right"></span>
+            Tiếp tục
+        </a>
+    </footer>
+}
 <div id="modal">
 
 </div>

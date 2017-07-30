@@ -30,7 +30,7 @@
 
     $(document).on("click", ".toggle-modal", function () {
         if (check === 'True') {
-            swal("Khai báo tiền mặt có sẵn là yêu cầu bắt buộc", "Quý khách vui lòng khai báo tiền mặt để hoàn tất bản thông tin tài chính", "error");
+            swal("Khai báo tiền mặt có sẵn chỉ thực hiện 1 lần", "Quý khách vui lòng thực hiện chức năng chỉnh sửa/cập nhật nếu muốn thay đổi số dư tiền mặt", "error");
         }
         else {
             $.ajax({
@@ -93,7 +93,7 @@
 
     $(document).on("click", ".available-money-toggle-summary", function () {
         if (check === 'False') {
-            swal("Không thể tiếp tục", "Quý khách vui lòng khai báo tiền mặt có sẵn trước khi tiếp tục", "error");
+            swal("Khai báo tiền mặt có sẵn là yêu cầu bắt buộc", "Quý khách vui lòng khai báo tiền mặt để hoàn tất bản thông tin tài chính", "error");
         }
         else {
             $.ajax({

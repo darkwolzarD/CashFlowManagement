@@ -1,7 +1,14 @@
 ﻿@model bool
 @{
     ViewBag.Title = "Quản lý bảo hiểm nhân thọ";
-    Layout = "~/Views/Shared/_AssetLayout.cshtml";
+    if (Model)
+    {
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_AssetLayout.cshtml";
+    }
 }
 
 <div class="clear10"></div>
@@ -40,16 +47,20 @@
         @{ Html.RenderAction("_InsuranceTable", "Insurance"); }
     </div>
 </div>
-<footer class="row text-right">
-    <a href="@Url.Action("Index", "Stock")" class="btn btn-default " style="font-size: 11px;">
-        <span class="glyphicon glyphicon-arrow-left"></span>
-        Quay lại
-    </a>
-    <a href="@Url.Action("InsuranceInitialize", "Account")" class="btn btn-default " style="font-size: 11px;">
-        <span class="glyphicon glyphicon-arrow-right"></span>
-        Tiếp tục
-    </a>
-</footer>
+
+@if (!Model)
+{
+    <footer class="row text-right">
+        <a href="@Url.Action("Index", "Stock")" class="btn btn-default " style="font-size: 11px;">
+            <span class="glyphicon glyphicon-arrow-left"></span>
+            Quay lại
+        </a>
+        <a href="@Url.Action("InsuranceInitialize", "Account")" class="btn btn-default " style="font-size: 11px;">
+            <span class="glyphicon glyphicon-arrow-right"></span>
+            Tiếp tục
+        </a>
+    </footer>
+}
 
 <div id="modal">
 

@@ -16,7 +16,7 @@ namespace CashFlowManagement.Controllers
         // GET: RealEstate
         public ActionResult Index()
         {
-            RealEstateListViewModel model = RealEstateQueries.GetRealEstateByUser(UserQueries.GetCurrentUsername());
+            bool model = UserQueries.IsCompleteInitialized(UserQueries.GetCurrentUsername());
             return View(model);
         }
 
@@ -312,7 +312,7 @@ namespace CashFlowManagement.Controllers
             viewModel.Value = model.Value.Value;
             viewModel.Income = model.Income.HasValue ? model.Income.Value : 0;
             viewModel.AnnualIncome = viewModel.Income * 12;
-            viewModel.RentYield = viewModel.Income / viewModel.Value;
+            viewModel.RentYield = viewModel.AnnualIncome / viewModel.Value;
 
             RealEstateLiabilityListCreateViewModel liabilities = (RealEstateLiabilityListCreateViewModel)HttpContext.Session["LIABILITIES"];
             viewModel.RowSpan = liabilities != null && liabilities.Liabilities.Count > 0 ? liabilities.Liabilities.Count() + 3 : 2;
@@ -387,6 +387,11 @@ namespace CashFlowManagement.Controllers
         [HttpPost]
         public ActionResult Save(RealEstateCreateViewModel model)
         {
+            if (RealEstateQueries.CheckExistRealEstate(UserQueries.GetCurrentUsername(), model.Name))
+            {
+                ModelState.AddModelError("CheckExistRealEstate", "Bất động sản này đã tồn tại, vui lòng nhập tên khác");
+            }
+
             if (ModelState.IsValid)
             {
                 model.Liabilities = (RealEstateLiabilityListCreateViewModel)HttpContext.Session["LIABILITIES"];

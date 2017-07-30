@@ -1,7 +1,14 @@
 ﻿@model bool
 @{
     ViewBag.Title = "Quản lý tài khoản tiết kiệm";
-    Layout = "~/Views/Shared/_AssetLayout.cshtml";
+    if (Model)
+    {
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_AssetLayout.cshtml";
+    }
 }
 
 <div class="clear10"></div>
@@ -37,19 +44,23 @@
 <div class="clear10"></div>
 <div class="row">
     <div class="col-md-12" id="bank-deposit-table-div">
-         @{ Html.RenderAction("_BankDepositTable", "BankDeposit"); }
+        @{ Html.RenderAction("_BankDepositTable", "BankDeposit"); }
     </div>
 </div>
-<footer class="row text-right">
-    <a href="@Url.Action("Index", "Business")" class="btn btn-default " style="font-size: 11px;">
-        <span class="glyphicon glyphicon-arrow-left"></span>
-        Quay lại
-    </a>
-    <a href="@Url.Action("BankDepositInitialize", "Account")" class="btn btn-default " style="font-size: 11px;">
-        <span class="glyphicon glyphicon-arrow-right"></span>
-        Tiếp tục
-    </a>
-</footer>
+
+@if (!Model)
+{
+    <footer class="row text-right">
+        <a href="@Url.Action("Index", "Business")" class="btn btn-default " style="font-size: 11px;">
+            <span class="glyphicon glyphicon-arrow-left"></span>
+            Quay lại
+        </a>
+        <a href="@Url.Action("BankDepositInitialize", "Account")" class="btn btn-default " style="font-size: 11px;">
+            <span class="glyphicon glyphicon-arrow-right"></span>
+            Tiếp tục
+        </a>
+    </footer>
+}
 <div id="modal">
 
 </div>
