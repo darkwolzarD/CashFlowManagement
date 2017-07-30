@@ -40,7 +40,7 @@ namespace CashFlowManagement.Queries
             result.TotalValue = result.BankDeposits.Sum(x => x.Value);
             result.TotalIncome = result.BankDeposits.Sum(x => x.Income);
             result.TotalAnnualIncome = result.BankDeposits.Sum(x => x.AnnualIncome);
-            result.TotalInterestRate = result.TotalAnnualIncome / result.TotalValue;
+            result.TotalInterestRate = result.TotalValue > 0 ? result.TotalAnnualIncome / result.TotalValue : 0;
 
             return result;
         }
@@ -93,7 +93,7 @@ namespace CashFlowManagement.Queries
             result.TotalValue = result.BankDepositSummaries.Sum(x => x.Value);
             result.TotalIncome = result.BankDepositSummaries.Sum(x => x.Income);
             result.TotalAnnualIncome = result.BankDepositSummaries.Sum(x => x.AnnualIncome);
-            result.TotalInterestRate = result.TotalAnnualIncome / result.TotalValue;
+            result.TotalInterestRate = result.TotalValue > 0 ? result.TotalAnnualIncome / result.TotalValue : 0;
 
             return result;
         }

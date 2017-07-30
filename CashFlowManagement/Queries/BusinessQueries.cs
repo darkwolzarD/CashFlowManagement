@@ -22,6 +22,7 @@ namespace CashFlowManagement.Queries
         {
             Entities entities = new Entities();
             BusinessListViewModel result = new BusinessListViewModel();
+            DateTime current = DateTime.Now;
 
             var businesss = entities.Assets.Include("Incomes").Include("Liabilities").Where(x => x.Username.Equals(username)
                                                       && x.AssetType == (int)Constants.Constants.ASSET_TYPE.BUSINESS
@@ -50,13 +51,14 @@ namespace CashFlowManagement.Queries
                     businessViewModel.Liabilities.Add(liabilityViewModel);
                 }
 
-                businessViewModel.TotalLiabilityValue = businessViewModel.Liabilities.Select(x => x.Value.Value).DefaultIfEmpty(0).Sum();
-                businessViewModel.TotalOriginalPayment = businessViewModel.Liabilities.Select(x => x.MonthlyOriginalPayment).DefaultIfEmpty(0).Sum();
-                businessViewModel.TotalInterestPayment = businessViewModel.Liabilities.Select(x => x.MonthlyInterestPayment).DefaultIfEmpty(0).Sum();
-                businessViewModel.TotalMonthlyPayment = businessViewModel.Liabilities.Select(x => x.TotalMonthlyPayment).DefaultIfEmpty(0).Sum();
-                businessViewModel.TotalPayment = businessViewModel.Liabilities.Select(x => x.TotalPayment).DefaultIfEmpty(0).Sum();
-                businessViewModel.TotalRemainedValue = businessViewModel.Liabilities.Select(x => x.RemainedValue).DefaultIfEmpty(0).Sum();
-                businessViewModel.TotalInterestRate = businessViewModel.Liabilities.Select(x => x.OriginalInterestPayment).DefaultIfEmpty(0).Sum() / businessViewModel.TotalLiabilityValue * 12;
+                var liabilities = businessViewModel.Liabilities.Where(x => x.StartDate <= current && x.EndDate >= current);
+                businessViewModel.TotalLiabilityValue = liabilities.Select(x => x.Value.Value).DefaultIfEmpty(0).Sum();
+                businessViewModel.TotalOriginalPayment = liabilities.Select(x => x.MonthlyOriginalPayment).DefaultIfEmpty(0).Sum();
+                businessViewModel.TotalInterestPayment = liabilities.Select(x => x.MonthlyInterestPayment).DefaultIfEmpty(0).Sum();
+                businessViewModel.TotalMonthlyPayment = liabilities.Select(x => x.TotalMonthlyPayment).DefaultIfEmpty(0).Sum();
+                businessViewModel.TotalPayment = liabilities.Select(x => x.TotalPayment).DefaultIfEmpty(0).Sum();
+                businessViewModel.TotalRemainedValue = liabilities.Select(x => x.RemainedValue).DefaultIfEmpty(0).Sum();
+                businessViewModel.TotalInterestRate = liabilities.Select(x => x.OriginalInterestPayment).DefaultIfEmpty(0).Sum() / businessViewModel.TotalLiabilityValue * 12;
                 businessViewModel.RowSpan = businessViewModel.Liabilities.Any() ? businessViewModel.Liabilities.Count() + 3 : 2;
 
                 result.Businesses.Add(businessViewModel);
@@ -74,6 +76,7 @@ namespace CashFlowManagement.Queries
         {
             Entities entities = new Entities();
             BusinessSummaryListViewModel result = new BusinessSummaryListViewModel();
+            DateTime current = DateTime.Now;
 
             var businesss = entities.Assets.Include("Incomes").Include("Liabilities").Where(x => x.Username.Equals(username)
                                                       && x.AssetType == (int)Constants.Constants.ASSET_TYPE.BUSINESS
@@ -98,13 +101,16 @@ namespace CashFlowManagement.Queries
                 foreach (var liability in business.Liabilities.Where(x => !x.DisabledDate.HasValue))
                 {
                     BusinessLiabilityViewModel liabilityViewModel = BusinessLiabilityQueries.CreateViewModel(liability);
-                    businessViewModel.LiabilityValue += liabilityViewModel.Value.Value;
-                    businessViewModel.InterestRate += liabilityViewModel.InterestRate.Value;
-                    businessViewModel.OriginalInterestPayment += liabilityViewModel.OriginalInterestPayment;
-                    businessViewModel.MonthlyInterestPayment += liabilityViewModel.MonthlyInterestPayment;
-                    businessViewModel.MonthlyPayment += liabilityViewModel.TotalMonthlyPayment;
-                    businessViewModel.AnnualPayment += liabilityViewModel.TotalPayment;
-                    businessViewModel.RemainedValue += liabilityViewModel.RemainedValue;
+                    if (liabilityViewModel.StartDate <= current && liabilityViewModel.EndDate >= current)
+                    {
+                        businessViewModel.LiabilityValue += liabilityViewModel.Value.Value;
+                        businessViewModel.InterestRate += liabilityViewModel.InterestRate.Value;
+                        businessViewModel.OriginalInterestPayment += liabilityViewModel.OriginalInterestPayment;
+                        businessViewModel.MonthlyInterestPayment += liabilityViewModel.MonthlyInterestPayment;
+                        businessViewModel.MonthlyPayment += liabilityViewModel.TotalMonthlyPayment;
+                        businessViewModel.AnnualPayment += liabilityViewModel.TotalPayment;
+                        businessViewModel.RemainedValue += liabilityViewModel.RemainedValue;
+                    }   
                 }
                 result.BusinessSummaries.Add(businessViewModel);
             }

@@ -31,6 +31,7 @@ namespace CashFlowManagement.Queries
         {
             Entities entities = new Entities();
             OtherLiabilityListViewModel result = new OtherLiabilityListViewModel();
+            DateTime current = DateTime.Now;
             var liabilities = entities.Liabilities.Where(x => x.Username.Equals(username)
                                                 && x.LiabilityType == (int)Constants.Constants.LIABILITY_TYPE.OTHERS
                                                 && !x.DisabledDate.HasValue).OrderBy(x => x.Name);
@@ -40,12 +41,13 @@ namespace CashFlowManagement.Queries
                 result.Liabilities.Add(viewModel);
             }
 
-            result.TotalLiabilityValue = result.Liabilities.Sum(x => x.Value.Value);
-            result.TotalInterestPayment = result.Liabilities.Sum(x => x.MonthlyInterestPayment);
-            result.TotalOriginalPayment = result.Liabilities.Sum(x => x.MonthlyOriginalPayment);
-            result.TotalPayment = result.Liabilities.Sum(x => x.TotalMonthlyPayment);
-            result.TotalRemainedValue = result.Liabilities.Sum(x => x.RemainedValue);
-            result.TotalInterestRate = result.TotalLiabilityValue > 0 ? result.Liabilities.Sum(x => x.OriginalInterestPayment) / result.TotalLiabilityValue * 12 : 0;
+            var lbts = result.Liabilities.Where(x => x.StartDate <= current && x.EndDate >= current);
+            result.TotalLiabilityValue = lbts.Sum(x => x.Value.Value);
+            result.TotalInterestPayment = lbts.Sum(x => x.MonthlyInterestPayment);
+            result.TotalOriginalPayment = lbts.Sum(x => x.MonthlyOriginalPayment);
+            result.TotalPayment = lbts.Sum(x => x.TotalMonthlyPayment);
+            result.TotalRemainedValue = lbts.Sum(x => x.RemainedValue);
+            result.TotalInterestRate = result.TotalLiabilityValue > 0 ? lbts.Sum(x => x.OriginalInterestPayment) / result.TotalLiabilityValue * 12 : 0;
             return result;
         }
 
@@ -53,6 +55,7 @@ namespace CashFlowManagement.Queries
         {
             Entities entities = new Entities();
             OtherLiabilitySummaryListViewModel result = new OtherLiabilitySummaryListViewModel();
+            DateTime current = DateTime.Now;
             var liabilities = entities.Liabilities.Where(x => x.Username.Equals(username)
                                                 && x.LiabilityType == (int)Constants.Constants.LIABILITY_TYPE.OTHERS
                                                 && !x.DisabledDate.HasValue).OrderBy(x => x.Name);
@@ -62,12 +65,13 @@ namespace CashFlowManagement.Queries
                 result.Liabilities.Add(viewModel);
             }
 
-            result.TotalLiabilityValue = result.Liabilities.Sum(x => x.Value.Value);
-            result.TotalInterestPayment = result.Liabilities.Sum(x => x.MonthlyInterestPayment);
-            result.TotalOriginalPayment = result.Liabilities.Sum(x => x.MonthlyOriginalPayment);
-            result.TotalPayment = result.Liabilities.Sum(x => x.TotalMonthlyPayment);
-            result.TotalRemainedValue = result.Liabilities.Sum(x => x.RemainedValue);
-            result.TotalInterestRate = result.TotalLiabilityValue > 0 ? result.Liabilities.Sum(x => x.OriginalInterestPayment) / result.TotalLiabilityValue * 12 : 0;
+            var lbts = result.Liabilities.Where(x => x.StartDate <= current && x.EndDate >= current);
+            result.TotalLiabilityValue = lbts.Sum(x => x.Value.Value);
+            result.TotalInterestPayment = lbts.Sum(x => x.MonthlyInterestPayment);
+            result.TotalOriginalPayment = lbts.Sum(x => x.MonthlyOriginalPayment);
+            result.TotalPayment = lbts.Sum(x => x.TotalMonthlyPayment);
+            result.TotalRemainedValue = lbts.Sum(x => x.RemainedValue);
+            result.TotalInterestRate = result.TotalLiabilityValue > 0 ? lbts.Sum(x => x.OriginalInterestPayment) / result.TotalLiabilityValue * 12 : 0;
             return result;
         }
 

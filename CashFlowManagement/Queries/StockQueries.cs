@@ -40,6 +40,7 @@ namespace CashFlowManagement.Queries
         {
             Entities entities = new Entities();
             StockListViewModel result = new StockListViewModel();
+            DateTime current = DateTime.Now;
 
             var stocks = entities.Assets.Include("StockTransactions").Include("Liabilities").Where(x => x.Username.Equals(username)
                                                       && x.AssetType == (int)Constants.Constants.ASSET_TYPE.STOCK
@@ -58,13 +59,14 @@ namespace CashFlowManagement.Queries
                     stockViewModel.Transactions.Transactions.Add(transactionViewModel);
                 }
 
-                stockViewModel.TotalLiabilityValue = stockViewModel.Transactions.Transactions.Select(x => x.Liabilities.Liabilities).Sum(x => x.Sum(y => y.Value.HasValue ? y.Value.Value : 0));
-                stockViewModel.TotalOriginalPayment = stockViewModel.Transactions.Transactions.Select(x => x.Liabilities.Liabilities).Sum(x => x.Sum(y => y.MonthlyOriginalPayment));
-                stockViewModel.TotalInterestPayment = stockViewModel.Transactions.Transactions.Select(x => x.Liabilities.Liabilities).Sum(x => x.Sum(y => y.MonthlyInterestPayment));
-                stockViewModel.TotalMonthlyPayment = stockViewModel.Transactions.Transactions.Select(x => x.Liabilities.Liabilities).Sum(x => x.Sum(y => y.TotalMonthlyPayment));
-                stockViewModel.TotalPayment = stockViewModel.Transactions.Transactions.Select(x => x.Liabilities.Liabilities).Sum(x => x.Sum(y => y.TotalPayment));
-                stockViewModel.TotalRemainedValue = stockViewModel.Transactions.Transactions.Select(x => x.Liabilities.Liabilities).Sum(x => x.Sum(y => y.RemainedValue));
-                stockViewModel.TotalOriginalInterestPayment = stockViewModel.Transactions.Transactions.Select(x => x.Liabilities.Liabilities).Sum(x => x.Sum(y => y.OriginalInterestPayment));
+                var liabilities = stockViewModel.Transactions.Transactions.Select(x => x.Liabilities.Liabilities.Where(y => y.StartDate <= current && y.EndDate >= current));
+                stockViewModel.TotalLiabilityValue = liabilities.Sum(x => x.Sum(y => y.Value.HasValue ? y.Value.Value : 0));
+                stockViewModel.TotalOriginalPayment = liabilities.Sum(x => x.Sum(y => y.MonthlyOriginalPayment));
+                stockViewModel.TotalInterestPayment = liabilities.Sum(x => x.Sum(y => y.MonthlyInterestPayment));
+                stockViewModel.TotalMonthlyPayment = liabilities.Sum(x => x.Sum(y => y.TotalMonthlyPayment));
+                stockViewModel.TotalPayment = liabilities.Sum(x => x.Sum(y => y.TotalPayment));
+                stockViewModel.TotalRemainedValue = liabilities.Sum(x => x.Sum(y => y.RemainedValue));
+                stockViewModel.TotalOriginalInterestPayment = liabilities.Sum(x => x.Sum(y => y.OriginalInterestPayment));
                 stockViewModel.TotalInterestRate = stockViewModel.TotalOriginalInterestPayment / stockViewModel.TotalLiabilityValue * 12;
                 stockViewModel.RowSpan = stockViewModel.Transactions.Transactions.Any() ? stockViewModel.Transactions.Transactions.Count() + stockViewModel.Transactions.Transactions.Select(x => x.Liabilities.Liabilities).Count() + 4 : 4;
 
@@ -105,6 +107,7 @@ namespace CashFlowManagement.Queries
         {
             Entities entities = new Entities();
             StockSummaryListViewModel result = new StockSummaryListViewModel();
+            DateTime current = DateTime.Now;
 
             var stocks = entities.Assets.Include("StockTransactions").Include("Liabilities").Where(x => x.Username.Equals(username)
                                                       && x.AssetType == (int)Constants.Constants.ASSET_TYPE.STOCK
@@ -124,12 +127,12 @@ namespace CashFlowManagement.Queries
                     stockViewModel.StockValue += transactionViewModel.StockValue.Value;
                     stockViewModel.ExpectedDividend += transactionViewModel.ExpectedDividend.Value;
 
-                    var liabilites = transactionViewModel.Liabilities.Liabilities;
+                    var liabilites = transactionViewModel.Liabilities.Liabilities.Where(x => x.StartDate <= current && x.EndDate >= current);
                     stockViewModel.LiabilityValue = liabilites.Sum(x => x.Value.Value);
                     stockViewModel.MonthlyInterestPayment = liabilites.Sum(x => x.MonthlyInterestPayment);
                     stockViewModel.OriginalInterestPayment = liabilites.Sum(x => x.OriginalInterestPayment);
                     stockViewModel.MonthlyPayment = liabilites.Sum(x => x.TotalMonthlyPayment);
-                    stockViewModel.AnnualPayment = 0;
+                    stockViewModel.AnnualPayment = stockViewModel.MonthlyPayment * 12;
                     stockViewModel.RemainedValue = liabilites.Sum(x => x.RemainedValue);
                 }
                 stockViewModel.InterestRate = stockViewModel.OriginalInterestPayment / stockViewModel.LiabilityValue * 12;

@@ -11,6 +11,7 @@ namespace CashFlowManagement.Queries
         {
             Entities entities = new Entities();
             OtherAssetListViewModel result = new OtherAssetListViewModel();
+            DateTime current = DateTime.Now;
 
             var otherAssets = entities.Assets.Include("Incomes").Include("Liabilities").Where(x => x.Username.Equals(username)
                                                       && x.AssetType == (int)Constants.Constants.ASSET_TYPE.OTHERS
@@ -39,13 +40,14 @@ namespace CashFlowManagement.Queries
                     otherAssetViewModel.Liabilities.Add(liabilityViewModel);
                 }
 
-                otherAssetViewModel.TotalLiabilityValue = otherAssetViewModel.Liabilities.Select(x => x.Value.Value).DefaultIfEmpty(0).Sum();
-                otherAssetViewModel.TotalOriginalPayment = otherAssetViewModel.Liabilities.Select(x => x.MonthlyOriginalPayment).DefaultIfEmpty(0).Sum();
-                otherAssetViewModel.TotalInterestPayment = otherAssetViewModel.Liabilities.Select(x => x.MonthlyInterestPayment).DefaultIfEmpty(0).Sum();
-                otherAssetViewModel.TotalMonthlyPayment = otherAssetViewModel.Liabilities.Select(x => x.TotalMonthlyPayment).DefaultIfEmpty(0).Sum();
-                otherAssetViewModel.TotalPayment = otherAssetViewModel.Liabilities.Select(x => x.TotalPayment).DefaultIfEmpty(0).Sum();
-                otherAssetViewModel.TotalRemainedValue = otherAssetViewModel.Liabilities.Select(x => x.RemainedValue).DefaultIfEmpty(0).Sum();
-                otherAssetViewModel.TotalInterestRate = otherAssetViewModel.TotalLiabilityValue > 0 ? otherAssetViewModel.Liabilities.Select(x => x.OriginalInterestPayment).DefaultIfEmpty(0).Sum() / otherAssetViewModel.TotalLiabilityValue * 12 : 0;
+                var liabilities = otherAssetViewModel.Liabilities.Where(x => x.StartDate <= current && x.EndDate >= current);
+                otherAssetViewModel.TotalLiabilityValue = liabilities.Select(x => x.Value.Value).DefaultIfEmpty(0).Sum();
+                otherAssetViewModel.TotalOriginalPayment = liabilities.Select(x => x.MonthlyOriginalPayment).DefaultIfEmpty(0).Sum();
+                otherAssetViewModel.TotalInterestPayment = liabilities.Select(x => x.MonthlyInterestPayment).DefaultIfEmpty(0).Sum();
+                otherAssetViewModel.TotalMonthlyPayment = liabilities.Select(x => x.TotalMonthlyPayment).DefaultIfEmpty(0).Sum();
+                otherAssetViewModel.TotalPayment = liabilities.Select(x => x.TotalPayment).DefaultIfEmpty(0).Sum();
+                otherAssetViewModel.TotalRemainedValue = liabilities.Select(x => x.RemainedValue).DefaultIfEmpty(0).Sum();
+                otherAssetViewModel.TotalInterestRate = otherAssetViewModel.TotalLiabilityValue > 0 ? liabilities.Select(x => x.OriginalInterestPayment).DefaultIfEmpty(0).Sum() / otherAssetViewModel.TotalLiabilityValue * 12 : 0;
                 otherAssetViewModel.RowSpan = otherAssetViewModel.Liabilities.Any() ? otherAssetViewModel.Liabilities.Count() + 3 : 2;
 
                 result.Assets.Add(otherAssetViewModel);
@@ -63,6 +65,7 @@ namespace CashFlowManagement.Queries
         {
             Entities entities = new Entities();
             OtherAssetSummaryListViewModel result = new OtherAssetSummaryListViewModel();
+            DateTime current = DateTime.Now;
 
             var otherAssets = entities.Assets.Include("Incomes").Include("Liabilities").Where(x => x.Username.Equals(username)
                                                       && x.AssetType == (int)Constants.Constants.ASSET_TYPE.OTHERS
@@ -87,13 +90,16 @@ namespace CashFlowManagement.Queries
                 foreach (var liability in otherAsset.Liabilities.Where(x => !x.DisabledDate.HasValue))
                 {
                     OtherAssetLiabilityViewModel liabilityViewModel = OtherAssetLiabilityQueries.CreateViewModel(liability);
-                    otherAssetViewModel.LiabilityValue += liabilityViewModel.Value.Value;
-                    otherAssetViewModel.InterestRatePerX += liabilityViewModel.InterestRatePerX;
-                    otherAssetViewModel.OriginalInterestPayment += liabilityViewModel.OriginalInterestPayment;
-                    otherAssetViewModel.MonthlyInterestPayment += liabilityViewModel.MonthlyInterestPayment;
-                    otherAssetViewModel.MonthlyPayment += liabilityViewModel.TotalMonthlyPayment;
-                    otherAssetViewModel.AnnualPayment += liabilityViewModel.TotalPayment;
-                    otherAssetViewModel.RemainedValue += liabilityViewModel.RemainedValue;
+                    if (liabilityViewModel.StartDate <= current && liabilityViewModel.EndDate >= current)
+                    {
+                        otherAssetViewModel.LiabilityValue += liabilityViewModel.Value.Value;
+                        otherAssetViewModel.InterestRatePerX += liabilityViewModel.InterestRatePerX;
+                        otherAssetViewModel.OriginalInterestPayment += liabilityViewModel.OriginalInterestPayment;
+                        otherAssetViewModel.MonthlyInterestPayment += liabilityViewModel.MonthlyInterestPayment;
+                        otherAssetViewModel.MonthlyPayment += liabilityViewModel.TotalMonthlyPayment;
+                        otherAssetViewModel.AnnualPayment += liabilityViewModel.TotalPayment;
+                        otherAssetViewModel.RemainedValue += liabilityViewModel.RemainedValue;
+                    }
                 }
                 otherAssetViewModel.InterestRate = otherAssetViewModel.LiabilityValue > 0 ? otherAssetViewModel.OriginalInterestPayment / otherAssetViewModel.LiabilityValue * 12: 0;
                 result.OtherAssetSummaries.Add(otherAssetViewModel);
