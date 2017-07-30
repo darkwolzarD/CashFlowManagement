@@ -62,6 +62,8 @@ namespace CashFlowManagement.Models
         [DisplayFormat(DataFormatString = "{0:N0}")]
         public double TotalAnnualIncome { get; set; }
 
+        public bool IsInitialized { get; set; }
+
         public List<SalaryViewModel> Salaries { get; set; }
         public SalaryListViewModel()
         {

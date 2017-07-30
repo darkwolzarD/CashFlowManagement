@@ -1,4 +1,4 @@
-﻿@using CashFlowManagement.Models
+﻿@model bool
 @{
     ViewBag.Title = "Quản lý tài sản khác";
     Layout = "~/Views/Shared/_AssetLayout.cshtml";
@@ -19,20 +19,26 @@
 <div class="row">
     <div class="col-md-6">
         <p style="font-size: 20px; margin-bottom: 5px !important">Quản lý tài sản khác</p>
-        <p style="font-size: 12px; font-style: italic">(Nếu không có tài sản khác, vui lòng hoàn tất khai báo tài sản)</p>
-        <p style="font-size: 12px; font-style: italic">(Trừ vàng, ngoại tệ, và tiền ảo, các tài sản khác phải có khả năng sinh ra dòng tiền thu nhập, nếu không có thu nhập thì là tiêu sản)</p>
+        @if (!Model)
+        {
+            <p style="font-size: 12px; font-style: italic">(Nếu không có tài sản khác, vui lòng hoàn tất khai báo tài sản)</p>
+            <p style="font-size: 12px; font-style: italic">(Trừ vàng, ngoại tệ, và tiền ảo, các tài sản khác phải có khả năng sinh ra dòng tiền thu nhập, nếu không có thu nhập thì là tiêu sản)</p>
+        }
     </div>
-    <div class="col-md-6 text-right">
-        <button type="button" class="btn btn-success toggle-modal">
-            <span class="glyphicon glyphicon-home"></span>
-            Tạo tài sản
-        </button>
-    </div>
+    @if (!Model)
+    {
+        <div class="col-md-6 text-right">
+            <button type="button" class="btn btn-success toggle-modal">
+                <span class="glyphicon glyphicon-home"></span>
+                Tạo tài sản
+            </button>
+        </div>
+    }
 </div>
 <div class="clear10"></div>
 <div class="row">
     <div class="col-md-12" id="other-asset-table-div">
-         @{ Html.RenderAction("_OtherAssetTable", "OtherAsset"); }
+        @{ Html.RenderAction("_OtherAssetTable", "OtherAsset"); }
     </div>
 </div>
 

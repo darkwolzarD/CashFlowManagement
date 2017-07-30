@@ -46,6 +46,7 @@ namespace CashFlowManagement.Models
 
         [DisplayFormat(DataFormatString = "{0:N0}")]
         public double TotalRemainedValue { get; set; }
+        public bool IsInitialized { get; set; }
         public List<OtherLiabilityViewModel> Liabilities { get; set; }
         public OtherLiabilityListViewModel()
         {

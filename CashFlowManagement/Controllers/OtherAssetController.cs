@@ -13,8 +13,8 @@ namespace CashFlowManagement.Queries
         // GET: OtherAsset
         public ActionResult Index()
         {
-            OtherAssetListViewModel model = OtherAssetQueries.GetOtherAssetByUser(UserQueries.GetCurrentUsername());
-            return View(model);
+            bool result = UserQueries.IsCompleteInitialized(UserQueries.GetCurrentUsername());
+            return View(result);
         }
 
         public ActionResult _Create()
@@ -38,6 +38,11 @@ namespace CashFlowManagement.Queries
             if (model.Value < totalLiabilityValue && totalLiabilityValue > 0)
             {
                 ModelState.AddModelError("CompareOtherAssetValueAndLiabilityValue", "Giá trị tổng số nợ không vượt quá giá trị tài sản");
+            }
+
+            if (OtherAssetQueries.CheckExistOtherAsset(UserQueries.GetCurrentUsername(), model.Name))
+            {
+                ModelState.AddModelError("CheckExistAsset", "Tài sản này đã tồn tại, vui lòng nhập tên khác");
             }
 
             if (ModelState.IsValid)
@@ -74,6 +79,12 @@ namespace CashFlowManagement.Queries
             if (model.Value < totalLiabilityValue && totalLiabilityValue > 0)
             {
                 ModelState.AddModelError("CompareOtherAssetValueAndLiabilityValue", "Giá trị tổng số nợ không vượt quá giá trị tài sản");
+            }
+
+            var asset = OtherAssetQueries.GetOtherAssetById(model.Id);
+            if (!asset.Name.Equals(model.Name) && OtherAssetQueries.CheckExistOtherAsset(UserQueries.GetCurrentUsername(), model.Name))
+            {
+                ModelState.AddModelError("CheckExistAsset", "Tài sản này đã tồn tại, vui lòng nhập tên khác");
             }
 
             if (ModelState.IsValid)
@@ -299,7 +310,7 @@ namespace CashFlowManagement.Queries
             viewModel.Value = model.Value.Value;
             viewModel.Income = model.Income.HasValue ? model.Income.Value : 0;
             viewModel.AnnualIncome = viewModel.Income * 12;
-            viewModel.RentYield = viewModel.Income / viewModel.Value;
+            viewModel.RentYield = viewModel.Value > 0 ? viewModel.Income / viewModel.Value : 0;
 
             OtherAssetLiabilityListCreateViewModel liabilities = (OtherAssetLiabilityListCreateViewModel)HttpContext.Session["LIABILITIES"];
             viewModel.RowSpan = liabilities != null && liabilities.Liabilities.Count > 0 ? liabilities.Liabilities.Count() + 3 : 2;
@@ -321,23 +332,29 @@ namespace CashFlowManagement.Queries
                     if (liabilityViewModel.StartDate <= current && current <= liabilityViewModel.EndDate)
                     {
                         int currentPeriod = Helper.CalculateTimePeriod(liabilityViewModel.StartDate.Value, DateTime.Now);
+                        double interestRate = liability.InterestRatePerX == (int)Constants.Constants.INTEREST_RATE_PER.MONTH ? liability.InterestRate.Value / 100 : liability.InterestRate.Value / 1200;
+                        liabilityViewModel.OriginalInterestPayment = liabilityViewModel.Value.Value * interestRate;
                         //Fixed interest type
                         if (liability.InterestType == (int)Constants.Constants.INTEREST_TYPE.FIXED)
                         {
-                            liabilityViewModel.MonthlyOriginalPayment = liabilityViewModel.Value.Value / liabilityViewModel.PaymentPeriod;
-                            liabilityViewModel.MonthlyInterestPayment = liabilityViewModel.Value.Value * liabilityViewModel.InterestRate.Value / 12;
+                            liabilityViewModel.MonthlyOriginalPayment = liabilityViewModel.PaymentPeriod > 0 ? liabilityViewModel.Value.Value / liabilityViewModel.PaymentPeriod : 0;
+                            liabilityViewModel.MonthlyInterestPayment = liabilityViewModel.Value.Value * interestRate;
                             liabilityViewModel.TotalMonthlyPayment = liabilityViewModel.MonthlyOriginalPayment + liabilityViewModel.MonthlyInterestPayment;
                             liabilityViewModel.TotalPayment = liabilityViewModel.TotalMonthlyPayment * currentPeriod;
-                            liabilityViewModel.RemainedValue = liabilityViewModel.Value.Value - liabilityViewModel.TotalPayment;
+                            liabilityViewModel.RemainedValue = liabilityViewModel.Value.Value - liabilityViewModel.MonthlyOriginalPayment * (currentPeriod + 1);
+                            liabilityViewModel.Status = "Đang nợ";
+                            liabilityViewModel.StatusCode = "label-success";
                         }
                         //Reduced interest type
                         else
                         {
-                            liabilityViewModel.MonthlyOriginalPayment = liabilityViewModel.Value.Value / liabilityViewModel.PaymentPeriod;
-                            liabilityViewModel.RemainedValue = liabilityViewModel.Value.Value - liabilityViewModel.MonthlyOriginalPayment * currentPeriod;
-                            liabilityViewModel.MonthlyInterestPayment = liabilityViewModel.RemainedValue * liabilityViewModel.InterestRate.Value / 12;
+                            liabilityViewModel.MonthlyOriginalPayment = liabilityViewModel.PaymentPeriod > 0 ? liabilityViewModel.Value.Value / liabilityViewModel.PaymentPeriod : 0;
+                            liabilityViewModel.RemainedValue = liabilityViewModel.Value.Value - liabilityViewModel.MonthlyOriginalPayment * (currentPeriod + 1);
+                            liabilityViewModel.MonthlyInterestPayment = (liabilityViewModel.Value.Value - liabilityViewModel.MonthlyOriginalPayment * currentPeriod) * interestRate;
                             liabilityViewModel.TotalMonthlyPayment = liabilityViewModel.MonthlyOriginalPayment + liabilityViewModel.MonthlyInterestPayment;
-                            liabilityViewModel.TotalPayment = liabilityViewModel.InterestRate.Value / 12 * (currentPeriod * liabilityViewModel.Value.Value + currentPeriod * (currentPeriod + 1) / 2 * liabilityViewModel.MonthlyOriginalPayment);
+                            liabilityViewModel.TotalPayment = interestRate * (currentPeriod * liabilityViewModel.Value.Value + (currentPeriod * (currentPeriod + 1) / 2) * liabilityViewModel.MonthlyOriginalPayment);
+                            liabilityViewModel.Status = "Đang nợ";
+                            liabilityViewModel.StatusCode = "label-success";
                         }
                     }
                     else
@@ -351,15 +368,16 @@ namespace CashFlowManagement.Queries
 
                     viewModel.Liabilities.Add(liabilityViewModel);
                 }
-
-                viewModel.TotalLiabilityValue = viewModel.Liabilities.Select(x => x.Value.Value).DefaultIfEmpty(0).Sum();
-                viewModel.TotalOriginalPayment = viewModel.Liabilities.Select(x => x.MonthlyOriginalPayment).DefaultIfEmpty(0).Sum();
-                viewModel.TotalInterestPayment = viewModel.Liabilities.Select(x => x.MonthlyInterestPayment).DefaultIfEmpty(0).Sum();
-                viewModel.TotalMonthlyPayment = viewModel.Liabilities.Select(x => x.TotalMonthlyPayment).DefaultIfEmpty(0).Sum();
-                viewModel.TotalPayment = viewModel.Liabilities.Select(x => x.TotalPayment).DefaultIfEmpty(0).Sum();
-                viewModel.TotalRemainedValue = viewModel.Liabilities.Select(x => x.RemainedValue).DefaultIfEmpty(0).Sum();
-                viewModel.TotalInterestRate = viewModel.TotalInterestPayment / viewModel.TotalLiabilityValue * 12;
             }
+
+            var liabilitites = viewModel.Liabilities.Where(x => x.StartDate <= current && x.EndDate >= current);
+            viewModel.TotalLiabilityValue = liabilitites.Select(x => x.Value.Value).DefaultIfEmpty(0).Sum();
+            viewModel.TotalOriginalPayment = liabilitites.Select(x => x.MonthlyOriginalPayment).DefaultIfEmpty(0).Sum();
+            viewModel.TotalInterestPayment = liabilitites.Select(x => x.MonthlyInterestPayment).DefaultIfEmpty(0).Sum();
+            viewModel.TotalMonthlyPayment = liabilitites.Select(x => x.TotalMonthlyPayment).DefaultIfEmpty(0).Sum();
+            viewModel.TotalPayment = liabilitites.Select(x => x.TotalPayment).DefaultIfEmpty(0).Sum();
+            viewModel.TotalRemainedValue = liabilitites.Select(x => x.RemainedValue).DefaultIfEmpty(0).Sum();
+            viewModel.TotalInterestRate = viewModel.TotalLiabilityValue > 0 ? liabilitites.Select(x => x.OriginalInterestPayment).DefaultIfEmpty(0).Sum() / viewModel.TotalLiabilityValue * 12 : 0;
 
             return PartialView(viewModel);
         }

@@ -50,6 +50,7 @@ namespace CashFlowManagement.Models
 
         [DisplayFormat(DataFormatString = "{0:N0}")]
         public double TotalRemainedValue { get; set; }
+        public bool IsInitialized { get; set; }
         public List<CarLiabilityViewModel> Liabilities { get; set; }
         public CarLiabilityListViewModel()
         {

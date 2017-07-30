@@ -39,6 +39,8 @@ namespace CashFlowManagement.Queries
             result.TotalMonthlyPayment = result.Liabilities.Sum(x => x.MonthlyPayment);
             result.TotalAnnualPayment = result.Liabilities.Sum(x => x.AnnualPayment);
             result.TotalInterestRate = result.TotalAnnualPayment / result.TotalValue;
+            result.IsInitialized = UserQueries.IsCompleteInitialized(username);
+
             return result;
         }
 

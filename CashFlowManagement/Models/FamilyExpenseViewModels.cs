@@ -44,7 +44,7 @@ namespace CashFlowManagement.Models
 
         [DisplayFormat(DataFormatString = "{0:N0}")]
         public double TotalAnnualExpense { get; set; }
-
+        public bool IsInitialized { get; set; }
         public List<FamilyExpenseViewModel> Expenses { get; set; }
         public FamilyExpenseListViewModel()
         {

@@ -15,7 +15,8 @@ namespace CashFlowManagement.Controllers
         // GET: BankDeposit
         public ActionResult Index()
         {
-            return View();
+            bool model = UserQueries.IsCompleteInitialized(UserQueries.GetCurrentUsername());
+            return View(model);
         }
 
         public ActionResult _BankDepositForm()

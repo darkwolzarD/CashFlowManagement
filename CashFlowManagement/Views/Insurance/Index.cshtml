@@ -1,4 +1,4 @@
-﻿@using CashFlowManagement.Models
+﻿@model bool
 @{
     ViewBag.Title = "Quản lý bảo hiểm nhân thọ";
     Layout = "~/Views/Shared/_AssetLayout.cshtml";
@@ -19,19 +19,25 @@
 <div class="row">
     <div class="col-md-6">
         <p style="font-size: 20px; margin-bottom: 5px !important">Quản lý bảo hiểm nhân thọ</p>
-        <p style="font-size: 12px; font-style: italic">(Nếu không có bảo hiểm nhân thọ, vui lòng chọn Tiếp tục)</p>
+        @if (!Model)
+        {
+            <p style="font-size: 12px; font-style: italic">(Nếu không có bảo hiểm nhân thọ, vui lòng chọn Tiếp tục)</p>
+        }
     </div>
-    <div class="col-md-6 text-right">
-        <button type="button" class="btn btn-success toggle-modal">
-            <span class="glyphicon glyphicon-home"></span>
-            Tạo bảo hiểm
-        </button>
-    </div>
+    @if (!Model)
+    {
+        <div class="col-md-6 text-right">
+            <button type="button" class="btn btn-success toggle-modal">
+                <span class="glyphicon glyphicon-home"></span>
+                Tạo bảo hiểm
+            </button>
+        </div>
+    }
 </div>
 <div class="clear10"></div>
 <div class="row">
     <div class="col-md-12" id="insurance-table-div">
-         @{ Html.RenderAction("_InsuranceTable", "Insurance"); }
+        @{ Html.RenderAction("_InsuranceTable", "Insurance"); }
     </div>
 </div>
 <footer class="row text-right">

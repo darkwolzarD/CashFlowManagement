@@ -30,7 +30,7 @@
 
     $(document).on("click", ".toggle-modal", function () {
         if (check === 'True') {
-            swal("Không thể tiếp tục", "Tiền mặt có sẵn chỉ khai báo 1 lần duy nhất.\nVui lòng thực hiện chức năng Chỉnh sửa/Cập nhật Tiền mặt có sẵn!!!", "error");
+            swal("Khai báo tiền mặt có sẵn là yêu cầu bắt buộc", "Quý khách vui lòng khai báo tiền mặt để hoàn tất bản thông tin tài chính", "error");
         }
         else {
             $.ajax({

@@ -31,14 +31,20 @@
 <div class="row">
     <div class="col-md-6">
         <p style="font-size: 20px; margin-bottom: 5px !important">Quản lý lương</p>
-        <p style="font-size: 12px; font-style: italic">Nếu không có thu nhập từ lương, vui lòng chọn Hoàn tất</p>
+        @if (!Model)
+        {
+            <p style="font-size: 12px; font-style: italic">Nếu không có thu nhập từ lương, vui lòng chọn Hoàn tất</p>
+        }
     </div>
-    <div class="col-md-6 text-right">
-        <button type="button" class="btn btn-success toggle-modal">
-            <span class="glyphicon glyphicon-home"></span>
-            Tạo lương
-        </button>
-    </div>
+    @if (!Model)
+    {
+        <div class="col-md-6 text-right">
+            <button type="button" class="btn btn-success toggle-modal">
+                <span class="glyphicon glyphicon-home"></span>
+                Tạo lương
+            </button>
+        </div>
+    }
 </div>
 <div class="clear10"></div>
 <div class="row">

@@ -38,8 +38,11 @@
                     <tr>
                         <td>
                             @Html.DisplayFor(x => item.Name)<br />
-                            <a href="#" title="Cập nhật bảo hiểm" class="update-insurance" data-value="@Html.DisplayFor(x => item.Id)"><span class="glyphicon glyphicon-edit text-success" style="font-size: 14px;"></span></a>
-                            <a href="#" title="Xóa bảo hiểm" class="delete-insurance" data-value="@Html.DisplayFor(x => item.Id)"><span class="glyphicon glyphicon-remove text-danger" style="font-size: 14px;"></span></a>
+                            @if (!Model.IsInitialized)
+                            {
+                                <a href="#" title="Cập nhật bảo hiểm" class="update-insurance" data-value="@Html.DisplayFor(x => item.Id)"><span class="glyphicon glyphicon-edit text-success" style="font-size: 14px;"></span></a>
+                                <a href="#" title="Xóa bảo hiểm" class="delete-insurance" data-value="@Html.DisplayFor(x => item.Id)"><span class="glyphicon glyphicon-remove text-danger" style="font-size: 14px;"></span></a>
+                            }
                         </td>
                         <td class="text-right">@Html.DisplayFor(x => item.Value)</td>
                         <td class="text-right">@Html.DisplayFor(x => item.TotalExpense)</td>

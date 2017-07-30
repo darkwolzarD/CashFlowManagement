@@ -7,6 +7,14 @@ namespace CashFlowManagement.Queries
 {
     public class OtherAssetQueries
     {
+        public static bool CheckExistOtherAsset(string username, string assetName)
+        {
+            Entities entities = new Entities();
+            return entities.Assets.Where(x => x.Username.Equals(username) && x.AssetName.Equals(assetName)
+                                        && x.AssetType == (int)Constants.Constants.ASSET_TYPE.OTHERS
+                                        && !x.DisabledDate.HasValue).Any();
+        }
+
         public static OtherAssetListViewModel GetOtherAssetByUser(string username)
         {
             Entities entities = new Entities();
@@ -57,6 +65,7 @@ namespace CashFlowManagement.Queries
             result.TotalMonthlyIncome = result.Assets.Select(x => x.Income).DefaultIfEmpty(0).Sum();
             result.TotalAnnualIncome = result.TotalMonthlyIncome * 12;
             result.TotalRentYield = result.TotalMonthlyIncome / result.TotalValue;
+            result.IsInitialized = UserQueries.IsCompleteInitialized(username);
 
             return result;
         }

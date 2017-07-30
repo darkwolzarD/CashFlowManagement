@@ -1,6 +1,5 @@
-﻿@using CashFlowManagement.Models
-
-@{ 
+﻿@model bool
+@{
     ViewBag.Title = "Quản lý khoản vay khác";
     Layout = "~/Views/Shared/_LiabilityLayout.cshtml";
 }
@@ -20,19 +19,25 @@
 <div class="row">
     <div class="col-md-6">
         <p style="font-size: 20px; margin-bottom: 5px !important">Quản lý các khoản vay khác</p>
-        <p style="font-size: 12px; font-style: italic">(Nếu không có khoản vay khác, vui lòng hoàn tất khai báo các khoản nợ)</p>
+        @if (!Model)
+        {
+            <p style="font-size: 12px; font-style: italic">(Nếu không có khoản vay khác, vui lòng hoàn tất khai báo các khoản nợ)</p>
+        }
     </div>
-    <div class="col-md-6 text-right">
-        <button type="button" class="btn btn-success toggle-modal">
-            <span class="glyphicon glyphicon-home"></span>
-            Tạo khoản vay
-        </button>
-    </div>
+    @if (!Model)
+    {
+        <div class="col-md-6 text-right">
+            <button type="button" class="btn btn-success toggle-modal">
+                <span class="glyphicon glyphicon-home"></span>
+                Tạo khoản vay
+            </button>
+        </div>
+    }
 </div>
 <div class="clear10"></div>
 <div class="row">
     <div class="col-md-12" id="other-liability-table-div">
-         @{ Html.RenderAction("_OtherLiabilityTable", "OtherLiability"); }
+        @{ Html.RenderAction("_OtherLiabilityTable", "OtherLiability"); }
     </div>
 </div>
 <footer class="row text-right">

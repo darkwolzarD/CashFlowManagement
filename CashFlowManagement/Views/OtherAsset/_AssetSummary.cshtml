@@ -256,6 +256,7 @@
                                     <th class="text-right">Tổng phải đóng</th>
                                     <th class="text-right">Ngày bắt đầu</th>
                                     <th class="text-right">Ngày kết thúc</th>
+                                    <th class="text-right">Tỉ suất sinh lờic</th>
                                     <th class="text-right">Tổng số tháng</th>
                                     <th class="text-right">Phải đóng hàng tháng</th>
                                     <th class="text-right">Phải đóng hàng năm</th>
@@ -268,6 +269,7 @@
                                     <td class="text-danger"><strong>Tổng</strong></td>
                                     <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.Insurances.TotalValue)</strong></td>
                                     <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.Insurances.TotalTotalExpense)</strong></td>
+                                    <td></td>
                                     <td></td>
                                     <td></td>
                                     <td class="text-danger"></td>
@@ -286,6 +288,7 @@
                                             <td class="text-right">@Html.DisplayFor(x => item.TotalExpense)</td>
                                             <td class="text-right">@Html.DisplayFor(x => item.StartDate)</td>
                                             <td class="text-right">@Html.DisplayFor(x => item.EndDate)</td>
+                                            <td class="text-right">@Html.DisplayFor(x => item.YieldRate)</td>
                                             <td class="text-right">@Html.DisplayFor(x => item.PaymentPeriod)</td>
                                             <td class="text-right">@Html.DisplayFor(x => item.Expense)</td>
                                             <td class="text-right">@Html.DisplayFor(x => item.AnnualExpense)</td>

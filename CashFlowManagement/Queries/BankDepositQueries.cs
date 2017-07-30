@@ -41,6 +41,7 @@ namespace CashFlowManagement.Queries
             result.TotalIncome = result.BankDeposits.Sum(x => x.Income);
             result.TotalAnnualIncome = result.BankDeposits.Sum(x => x.AnnualIncome);
             result.TotalInterestRate = result.TotalValue > 0 ? result.TotalAnnualIncome / result.TotalValue : 0;
+            result.IsInitialized = UserQueries.IsCompleteInitialized(username);
 
             return result;
         }

@@ -15,7 +15,7 @@ namespace CashFlowManagement.Controllers
         // GET: Salary
         public ActionResult Index()
         {
-            bool result = UserQueries.IsSalaryInitialized(UserQueries.GetCurrentUsername());
+            bool result = UserQueries.IsCompleteInitialized(UserQueries.GetCurrentUsername());
             return View(result);
         }
 

@@ -43,7 +43,7 @@ namespace CashFlowManagement.Queries
                     businessViewModel.Income = 0;
                 }
                 businessViewModel.AnnualIncome = businessViewModel.Income * 12;
-                businessViewModel.RentYield = businessViewModel.Income / businessViewModel.Value;
+                businessViewModel.RentYield = businessViewModel.Value > 0 ? businessViewModel.Income / businessViewModel.Value : 0;
 
                 foreach (var liability in business.Liabilities.Where(x => !x.DisabledDate.HasValue))
                 {
@@ -58,7 +58,7 @@ namespace CashFlowManagement.Queries
                 businessViewModel.TotalMonthlyPayment = liabilities.Select(x => x.TotalMonthlyPayment).DefaultIfEmpty(0).Sum();
                 businessViewModel.TotalPayment = liabilities.Select(x => x.TotalPayment).DefaultIfEmpty(0).Sum();
                 businessViewModel.TotalRemainedValue = liabilities.Select(x => x.RemainedValue).DefaultIfEmpty(0).Sum();
-                businessViewModel.TotalInterestRate = liabilities.Select(x => x.OriginalInterestPayment).DefaultIfEmpty(0).Sum() / businessViewModel.TotalLiabilityValue * 12;
+                businessViewModel.TotalInterestRate = businessViewModel.TotalLiabilityValue > 0 ? liabilities.Select(x => x.OriginalInterestPayment).DefaultIfEmpty(0).Sum() / businessViewModel.TotalLiabilityValue * 12 : 0;
                 businessViewModel.RowSpan = businessViewModel.Liabilities.Any() ? businessViewModel.Liabilities.Count() + 3 : 2;
 
                 result.Businesses.Add(businessViewModel);
@@ -67,7 +67,8 @@ namespace CashFlowManagement.Queries
             result.TotalValue = result.Businesses.Select(x => x.Value).DefaultIfEmpty(0).Sum();
             result.TotalMonthlyIncome = result.Businesses.Select(x => x.Income).DefaultIfEmpty(0).Sum();
             result.TotalAnnualIncome = result.TotalMonthlyIncome * 12;
-            result.TotalRentYield = result.TotalAnnualIncome / result.TotalValue;
+            result.TotalRentYield = result.TotalValue > 0 ? result.TotalAnnualIncome / result.TotalValue : 0;
+            result.IsInitialized = UserQueries.IsCompleteInitialized(username);
 
             return result;
         }
@@ -96,7 +97,7 @@ namespace CashFlowManagement.Queries
                     businessViewModel.Income = 0;
                 }
                 businessViewModel.AnnualIncome = businessViewModel.Income * 12;
-                businessViewModel.RentYield = businessViewModel.AnnualIncome / businessViewModel.Value;
+                businessViewModel.RentYield = businessViewModel.Value > 0 ? businessViewModel.Income / businessViewModel.Value : 0;
 
                 foreach (var liability in business.Liabilities.Where(x => !x.DisabledDate.HasValue))
                 {
@@ -118,7 +119,7 @@ namespace CashFlowManagement.Queries
             result.TotalIncome = result.BusinessSummaries.Sum(x => x.Income);
             result.TotalAnnualIncome = result.BusinessSummaries.Sum(x => x.AnnualIncome);
             result.TotalValue = result.BusinessSummaries.Sum(x => x.Value);
-            result.TotalRentYield = result.BusinessSummaries.Sum(x => x.AnnualIncome) / result.TotalValue;
+            result.TotalRentYield = result.TotalValue > 0 ? result.BusinessSummaries.Sum(x => x.AnnualIncome) / result.TotalValue : 0;
             result.TotalLiabilityValue = result.BusinessSummaries.Sum(x => x.LiabilityValue);
             result.TotalInterestRate = result.TotalLiabilityValue > 0 ? result.BusinessSummaries.Sum(x => x.OriginalInterestPayment) / result.TotalLiabilityValue * 12 : 0;
             result.TotalMonthlyPayment = result.BusinessSummaries.Sum(x => x.MonthlyPayment);

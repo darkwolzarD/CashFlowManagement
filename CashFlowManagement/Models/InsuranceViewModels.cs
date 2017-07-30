@@ -94,6 +94,7 @@ namespace CashFlowManagement.Models
 
         [DisplayFormat(DataFormatString = "{0:N0}")]
         public double TotalRemainedValue { get; set; }
+        public bool IsInitialized { get; set; }
 
         public List<InsuranceViewModel> Insurances { get; set; }
 
@@ -118,6 +119,9 @@ namespace CashFlowManagement.Models
 
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime EndDate { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:P2}")]
+        public double YieldRate { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:N0}")]
         public string PaymentPeriod { get; set; }

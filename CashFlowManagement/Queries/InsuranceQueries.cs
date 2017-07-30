@@ -35,7 +35,7 @@ namespace CashFlowManagement.Queries
 
                 int paymentPeriod = Helper.CalculateTimePeriod(insurance.StartDate.Value, insurance.EndDate.Value);
                 viewModel.TotalExpense = paymentPeriod * viewModel.Expense;
-                viewModel.YieldRate = (viewModel.Value - viewModel.TotalExpense) / viewModel.TotalExpense;
+                viewModel.YieldRate = viewModel.TotalExpense > 0 ? (viewModel.Value - viewModel.TotalExpense) / viewModel.TotalExpense : 0;
                 int currentPeriod = Helper.CalculateTimePeriod(viewModel.StartDate, DateTime.Now);
                 viewModel.RemainedValue = viewModel.TotalExpense - viewModel.Expense * currentPeriod;
 
@@ -47,6 +47,7 @@ namespace CashFlowManagement.Queries
             result.TotalExpense = result.Insurances.Sum(x => x.Expense);
             result.TotalAnnualExpense = result.Insurances.Sum(x => x.AnnualExpense);
             result.TotalRemainedValue = result.Insurances.Sum(x => x.RemainedValue);
+            result.IsInitialized = UserQueries.IsCompleteInitialized(username);
 
             return result;
         }
@@ -75,6 +76,7 @@ namespace CashFlowManagement.Queries
 
                 int paymentPeriod = Helper.CalculateTimePeriod(insurance.StartDate.Value, insurance.EndDate.Value);
                 viewModel.TotalExpense = paymentPeriod * viewModel.Expense;
+                viewModel.YieldRate = viewModel.TotalExpense > 0 ? (viewModel.Value - viewModel.TotalExpense) / viewModel.TotalExpense : 0;
                 int currentPeriod = Helper.CalculateTimePeriod(viewModel.StartDate, DateTime.Now);
                 viewModel.RemainedValue = viewModel.TotalExpense - viewModel.Expense * currentPeriod;
 

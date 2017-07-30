@@ -14,7 +14,10 @@
                 <tr>
                     <td>
                         @Html.DisplayFor(x => Model.Name)<br />
-                        <a href="#" title="Cập nhật tiền mặt có sẵn" class="update-available-money"><span class="glyphicon glyphicon-edit text-success" style="font-size: 14px;"></span></a>
+                        @if (!Model.IsInitialized)
+                        {
+                            <a href="#" title="Cập nhật tiền mặt có sẵn" class="update-available-money"><span class="glyphicon glyphicon-edit text-success" style="font-size: 14px;"></span></a>
+                        }
                     </td>
                     <td class="text-right">@Html.DisplayFor(x => Model.AvailableMoney)</td>
                 </tr>

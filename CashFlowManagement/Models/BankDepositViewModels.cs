@@ -99,6 +99,7 @@ namespace CashFlowManagement.Models
 
         [DisplayFormat(DataFormatString = "{0:P2}")]
         public double TotalInterestRate { get; set; }
+        public bool IsInitialized { get; set; }
 
         public List<BankDepositViewModel> BankDeposits { get; set; }
 

@@ -60,6 +60,7 @@ namespace CashFlowManagement.Queries
             {
                 viewModel.Name = "Tiền mặt có sẵn khởi tạo của " + user.FullName;
                 viewModel.AvailableMoney = availableMoney.Value;
+                viewModel.IsInitialized = UserQueries.IsCompleteInitialized(username);
                 return viewModel;
             }
             else

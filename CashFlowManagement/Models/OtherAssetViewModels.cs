@@ -97,6 +97,7 @@ namespace CashFlowManagement.Models
         [DisplayFormat(DataFormatString = "{0:P2}")]
         public double TotalRentYield { get; set; }
         public List<OtherAssetViewModel> Assets { get; set; }
+        public bool IsInitialized { get; set; }
 
         public OtherAssetListViewModel()
         {

@@ -1,4 +1,4 @@
-﻿@using CashFlowManagement.Models
+﻿@model bool
 @{
     ViewBag.Title = "Quản lý cố phiếu";
     Layout = "~/Views/Shared/_AssetLayout.cshtml";
@@ -19,19 +19,25 @@
 <div class="row">
     <div class="col-md-6">
         <p style="font-size: 20px;">Quản lý cổ phiếu</p>
-        <p style="font-size: 12px; font-style: italic">(Nếu không có cổ phiếu, vui lòng chọn Tiếp tục)</p>
+        @if (!Model)
+        {
+            <p style="font-size: 12px; font-style: italic">(Nếu không có cổ phiếu, vui lòng chọn Tiếp tục)</p>
+        }
     </div>
-    <div class="col-md-6 text-right">
-        <button type="button" class="btn btn-success toggle-modal">
-            <span class="glyphicon glyphicon-home"></span>
-            Tạo cổ phiếu
-        </button>
-    </div>
+    @if (!Model)
+    {
+        <div class="col-md-6 text-right">
+            <button type="button" class="btn btn-success toggle-modal">
+                <span class="glyphicon glyphicon-home"></span>
+                Tạo cổ phiếu
+            </button>
+        </div>
+    }
 </div>
 <div class="clear10"></div>
 <div class="row">
     <div class="col-md-12" id="stock-table-div">
-         @{ Html.RenderAction("_StockTable", "Stock"); }
+        @{ Html.RenderAction("_StockTable", "Stock"); }
     </div>
 </div>
 <footer class="row text-right">

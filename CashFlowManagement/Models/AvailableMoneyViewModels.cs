@@ -14,11 +14,12 @@ namespace CashFlowManagement.Models
         [Required(ErrorMessage = "Nhập tiền mặt có sẵn")]
         [DisplayFormat(DataFormatString = "{0:N0}")]
         public double? AvailableMoney { get; set; }
+        public bool IsInitialized { get; set; }
     }
 
     public class AvailableMoneyCreateViewModel: AvailableMoneyViewModel
     {
-
+        
     }
 
     public class AvailableMoneySummaryViewModel : AvailableMoneyViewModel

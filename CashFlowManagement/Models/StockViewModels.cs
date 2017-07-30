@@ -96,6 +96,7 @@ namespace CashFlowManagement.Models
         public double TotalValue { get; set; }
 
         public List<StockViewModel> Stocks { get; set; }
+        public bool IsInitialized { get; set; }
 
         public StockListViewModel()
         {

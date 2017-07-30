@@ -49,6 +49,8 @@ namespace CashFlowManagement.Queries
             result.TotalPayment = lbts.Sum(x => x.TotalMonthlyPayment);
             result.TotalRemainedValue = lbts.Sum(x => x.RemainedValue);
             result.TotalInterestRate = result.TotalLiabilityValue > 0 ? lbts.Sum(x => x.OriginalInterestPayment) / result.TotalLiabilityValue * 12 : 0;
+            result.IsInitialized = UserQueries.IsCompleteInitialized(username);
+
             return result;
         }
 

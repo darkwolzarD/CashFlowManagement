@@ -10,7 +10,7 @@ namespace CashFlowManagement.Queries
 {
     public class RealEstateQueries
     {
-        public static bool CheckExistStock(string username, string realEstateName)
+        public static bool CheckExistRealEstate(string username, string realEstateName)
         {
             Entities entities = new Entities();
             return entities.Assets.Where(x => x.Username.Equals(username) && x.AssetName.Equals(realEstateName)
@@ -43,7 +43,7 @@ namespace CashFlowManagement.Queries
                     realEstateViewModel.Income = 0;
                 }
                 realEstateViewModel.AnnualIncome = realEstateViewModel.Income * 12;
-                realEstateViewModel.RentYield = realEstateViewModel.AnnualIncome / realEstateViewModel.Value;
+                realEstateViewModel.RentYield = realEstateViewModel.Value > 0 ? realEstateViewModel.AnnualIncome / realEstateViewModel.Value : 0;
 
                 foreach (var liability in realEstate.Liabilities.Where(x => !x.DisabledDate.HasValue))
                 {
@@ -58,7 +58,7 @@ namespace CashFlowManagement.Queries
                 realEstateViewModel.TotalMonthlyPayment = liabilities.Select(x => x.TotalMonthlyPayment).DefaultIfEmpty(0).Sum();
                 realEstateViewModel.TotalPayment = liabilities.Select(x => x.TotalPayment).DefaultIfEmpty(0).Sum();
                 realEstateViewModel.TotalRemainedValue = liabilities.Select(x => x.RemainedValue).DefaultIfEmpty(0).Sum();
-                realEstateViewModel.TotalInterestRate = liabilities.Select(x => x.OriginalInterestPayment).DefaultIfEmpty(0).Sum() / realEstateViewModel.TotalLiabilityValue * 12;
+                realEstateViewModel.TotalInterestRate = realEstateViewModel.TotalLiabilityValue > 0 ? liabilities.Select(x => x.OriginalInterestPayment).DefaultIfEmpty(0).Sum() / realEstateViewModel.TotalLiabilityValue * 12 : 0;
                 realEstateViewModel.RowSpan = realEstateViewModel.Liabilities.Any() ? realEstateViewModel.Liabilities.Count() + 3 : 2;
 
                 result.RealEstates.Add(realEstateViewModel);
@@ -67,7 +67,7 @@ namespace CashFlowManagement.Queries
             result.TotalValue = result.RealEstates.Select(x => x.Value).DefaultIfEmpty(0).Sum();
             result.TotalMonthlyIncome = result.RealEstates.Select(x => x.Income).DefaultIfEmpty(0).Sum();
             result.TotalAnnualIncome = result.TotalMonthlyIncome * 12;
-            result.TotalRentYield = result.TotalAnnualIncome / result.TotalValue;
+            result.TotalRentYield = result.TotalValue > 0 ? result.TotalAnnualIncome / result.TotalValue : 0;
 
             return result;
         }
@@ -96,7 +96,7 @@ namespace CashFlowManagement.Queries
                     realEstateViewModel.Income = 0;
                 }
                 realEstateViewModel.AnnualIncome = realEstateViewModel.Income * 12;
-                realEstateViewModel.RentYield = realEstateViewModel.AnnualIncome / realEstateViewModel.Value;
+                realEstateViewModel.RentYield = realEstateViewModel.Value > 0 ? realEstateViewModel.AnnualIncome / realEstateViewModel.Value : 0;
 
                 foreach (var liability in realEstate.Liabilities.Where(x => !x.DisabledDate.HasValue))
                 {
@@ -111,14 +111,14 @@ namespace CashFlowManagement.Queries
                         realEstateViewModel.RemainedValue += liabilityViewModel.RemainedValue;
                     }
                 }
-                realEstateViewModel.InterestRate = realEstateViewModel.OriginalInterestPayment / realEstateViewModel.LiabilityValue * 12;
+                realEstateViewModel.InterestRate = realEstateViewModel.LiabilityValue > 0 ? realEstateViewModel.OriginalInterestPayment / realEstateViewModel.LiabilityValue * 12 : 0;
                 result.RealEstateSummaries.Add(realEstateViewModel);
             }
 
             result.TotalIncome = result.RealEstateSummaries.Sum(x => x.Income);
             result.TotalAnnualIncome = result.RealEstateSummaries.Sum(x => x.AnnualIncome);
             result.TotalValue = result.RealEstateSummaries.Sum(x => x.Value);
-            result.TotalRentYield = result.RealEstateSummaries.Sum(x => x.AnnualIncome) / result.TotalValue;
+            result.TotalRentYield = result.TotalValue > 0 ? result.RealEstateSummaries.Sum(x => x.AnnualIncome) / result.TotalValue : 0;
             result.TotalLiabilityValue = result.RealEstateSummaries.Sum(x => x.LiabilityValue);
             result.TotalInterestRate = result.TotalLiabilityValue > 0 ? result.RealEstateSummaries.Sum(x => x.OriginalInterestPayment) / result.TotalLiabilityValue * 12 : 0;
             result.TotalMonthlyPayment = result.RealEstateSummaries.Sum(x => x.MonthlyPayment);

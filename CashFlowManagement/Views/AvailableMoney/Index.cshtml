@@ -1,4 +1,4 @@
-﻿@model bool
+﻿@model bool[]
 @{
     ViewBag.Title = "Tiền mặt có sẵn";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -17,14 +17,20 @@
 <div class="row">
     <div class="col-md-6">
         <p style="font-size: 20px; margin-bottom: 5px !important">Quản lý tiền mặt có sẵn</p>
-        <p style="font-size: 12px; font-style: italic">Vui lòng khai báo tiền mặt có sẵn để hoàn tất quá trình khởi tạo thông tin tài chính</p>
+        @if (!Model[1])
+        {
+            <p style="font-size: 12px; font-style: italic">Vui lòng khai báo tiền mặt có sẵn để hoàn tất quá trình khởi tạo thông tin tài chính</p>
+        }
     </div>
-    <div class="col-md-6 text-right">
-        <button type="button" class="btn btn-success toggle-modal">
-            <span class="glyphicon glyphicon-home"></span>
-            Tạo tiền mặt có sẵn
-        </button>
-    </div>
+    @if (!Model[1])
+    {
+        <div class="col-md-6 text-right">
+            <button type="button" class="btn btn-success toggle-modal">
+                <span class="glyphicon glyphicon-home"></span>
+                Tạo tiền mặt có sẵn
+            </button>
+        </div>
+    }
 </div>
 <div class="clear10"></div>
 <div class="row">
@@ -55,5 +61,5 @@
     Url.FinancialStatus = '@Url.Action("Index", "FinancialStatus")';
     Url.CheckExistAvailableMoney = '@Url.Action("CheckExistAvailableMoney", "AvailableMoney")';
     Url.AvailableMoneySummary = '@Url.Action("_AvailableMoneySummary", "AvailableMoney")';
-    var check = '@Model';
+    var check = '@Model[0]';
 </script>

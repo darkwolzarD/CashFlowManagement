@@ -16,7 +16,8 @@ namespace CashFlowManagement.Controllers
         // GET: Insurance
         public ActionResult Index()
         {
-            return View();
+            bool result = UserQueries.IsCompleteInitialized(UserQueries.GetCurrentUsername());
+            return View(result);
         }
 
         public ActionResult _InsuranceForm()

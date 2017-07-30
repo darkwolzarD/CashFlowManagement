@@ -15,7 +15,8 @@ namespace CashFlowManagement.Controllers
         // GET: CarLiability
         public ActionResult Index()
         {
-            return View();
+            bool result = UserQueries.IsCompleteInitialized(UserQueries.GetCurrentUsername());
+            return View(result);
         }
 
         public ActionResult _CarLiabilityForm()

@@ -111,6 +111,7 @@ namespace CashFlowManagement.Queries
             liability.CreatedBy = Constants.Constants.USER;
             liability.Username = username;
             liability.TransactionId = transaction.Id;
+            liability.AssetId = transaction.AssetId;
 
             entities.Liabilities.Add(liability);
             return entities.SaveChanges();

@@ -28,6 +28,7 @@ namespace CashFlowManagement
                       "~/Content/bootstrap-datepicker.min.css",
                       "~/Content/selectize.bootstrap3.css",
                       "~/Content/themes/base/jquery-ui.min.css",
+                      "~/Content/font-awesome.min.css",
                       "~/Content/sweetalert.css",
                       "~/Content/site.css"));
 

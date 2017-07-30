@@ -99,6 +99,7 @@ namespace CashFlowManagement.Queries
             }
 
             result.TotalValue = result.Stocks.Select(x => x.Transactions.Transactions).Sum(x => x.Sum(y => y.StockValue.Value));
+            result.IsInitialized = UserQueries.IsCompleteInitialized(username);
 
             return result;
         }

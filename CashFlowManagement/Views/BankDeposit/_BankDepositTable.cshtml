@@ -35,8 +35,11 @@
                     <tr>
                         <td>
                             @Html.DisplayFor(x => item.Name)<br />
-                            <a href="#" title="Cập nhật tài khoản tiết kiệm" class="update-bank-deposit" data-value="@Html.DisplayFor(x => item.Id)"><span class="glyphicon glyphicon-edit text-success" style="font-size: 14px;"></span></a>
-                            <a href="#" title="Xóa tài khoản tiết kiệm" class="delete-bank-deposit" data-value="@Html.DisplayFor(x => item.Id)"><span class="glyphicon glyphicon-remove text-danger" style="font-size: 14px;"></span></a>
+                            @if (!Model.IsInitialized)
+                            {
+                                <a href="#" title="Cập nhật tài khoản tiết kiệm" class="update-bank-deposit" data-value="@Html.DisplayFor(x => item.Id)"><span class="glyphicon glyphicon-edit text-success" style="font-size: 14px;"></span></a>
+                                <a href="#" title="Xóa tài khoản tiết kiệm" class="delete-bank-deposit" data-value="@Html.DisplayFor(x => item.Id)"><span class="glyphicon glyphicon-remove text-danger" style="font-size: 14px;"></span></a>
+                            }
                         </td>
                         <td class="text-right">@Html.DisplayFor(x => item.StartDate)</td>
                         <td class="text-right">@Html.DisplayFor(x => item.EndDate)</td>

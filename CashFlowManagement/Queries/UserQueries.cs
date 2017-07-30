@@ -284,10 +284,88 @@ namespace CashFlowManagement.Queries
             return -1;
         }
 
-        public static bool IsSalaryInitialized(string username)
+        //public static bool IsSalaryInitialized(string username)
+        //{
+        //    Entities entities = new Entities();
+        //    return entities.Users.Where(x => x.Username.Equals(username)).FirstOrDefault().IncomeInitialized;
+        //}
+
+        //public static bool IsRealEstateInitialized(string username)
+        //{
+        //    Entities entities = new Entities();
+        //    return entities.Users.Where(x => x.Username.Equals(username)).FirstOrDefault().RealEstateInitialized;
+        //}
+
+        //public static bool IsBusinessInitialized(string username)
+        //{
+        //    Entities entities = new Entities();
+        //    return entities.Users.Where(x => x.Username.Equals(username)).FirstOrDefault().BusinessInitialized;
+        //}
+
+        //public static bool IsBankDepositInitialized(string username)
+        //{
+        //    Entities entities = new Entities();
+        //    return entities.Users.Where(x => x.Username.Equals(username)).FirstOrDefault().BankDepositInitialized;
+        //}
+
+        //public static bool IsStockInitialized(string username)
+        //{
+        //    Entities entities = new Entities();
+        //    return entities.Users.Where(x => x.Username.Equals(username)).FirstOrDefault().StockInitialized;
+        //}
+
+        //public static bool IsInsuranceInitialized(string username)
+        //{
+        //    Entities entities = new Entities();
+        //    return entities.Users.Where(x => x.Username.Equals(username)).FirstOrDefault().InsuranceInitialized;
+        //}
+
+        //public static bool IsOtherAssetInitialized(string username)
+        //{
+        //    Entities entities = new Entities();
+        //    return entities.Users.Where(x => x.Username.Equals(username)).FirstOrDefault().OtherAssetInitialized;
+        //}
+
+        //public static bool IsCarLiabilityInitialized(string username)
+        //{
+        //    Entities entities = new Entities();
+        //    return entities.Users.Where(x => x.Username.Equals(username)).FirstOrDefault().CarLiabilityInitialized;
+        //}
+
+        //public static bool IsCreditCardInitialized(string username)
+        //{
+        //    Entities entities = new Entities();
+        //    return entities.Users.Where(x => x.Username.Equals(username)).FirstOrDefault().CreditCardInitialized;
+        //}
+
+        //public static bool IsOtherLiabilityInitialized(string username)
+        //{
+        //    Entities entities = new Entities();
+        //    return entities.Users.Where(x => x.Username.Equals(username)).FirstOrDefault().OtherLiabilityInitialized;
+        //}
+
+        //public static bool IsFamilyExpenseInitialized(string username)
+        //{
+        //    Entities entities = new Entities();
+        //    return entities.Users.Where(x => x.Username.Equals(username)).FirstOrDefault().FamilyExpenseInitialized;
+        //}
+
+        //public static bool IsOtherExpenseInitialized(string username)
+        //{
+        //    Entities entities = new Entities();
+        //    return entities.Users.Where(x => x.Username.Equals(username)).FirstOrDefault().OtherExpenseInitialized;
+        //}
+
+        //public static bool IsAvailableMoneyInitialized(string username)
+        //{
+        //    Entities entities = new Entities();
+        //    return entities.Users.Where(x => x.Username.Equals(username)).FirstOrDefault().AvailableMoneyInitialized;
+        //}
+
+        public static bool IsCompleteInitialized(string username)
         {
             Entities entities = new Entities();
-            return entities.Users.Where(x => x.Username.Equals(username)).FirstOrDefault().IncomeInitialized;
+            return entities.Users.Where(x => x.Username.Equals(username)).FirstOrDefault().CompleteInitialization;
         }
     }
 }

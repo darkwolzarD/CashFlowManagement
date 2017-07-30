@@ -15,7 +15,8 @@ namespace CashFlowManagement.Controllers
         // GET: CreditCard
         public ActionResult Index()
         {
-            return View();
+            bool result = UserQueries.IsCompleteInitialized(UserQueries.GetCurrentUsername());
+            return View(result);
         }
 
         public ActionResult _CreditCardLiabilityForm()

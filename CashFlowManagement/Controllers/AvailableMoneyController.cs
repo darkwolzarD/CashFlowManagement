@@ -15,8 +15,10 @@ namespace CashFlowManagement.Controllers
         // GET: AvailableMoney
         public ActionResult Index()
         {
-            bool result = AvailableMoneyQueries.CheckExistAvailableMoney(UserQueries.GetCurrentUsername());
-            return View(result);
+            bool[] list = new bool[2];
+            list[0] = AvailableMoneyQueries.CheckExistAvailableMoney(UserQueries.GetCurrentUsername());
+            list[1] = UserQueries.IsCompleteInitialized(UserQueries.GetCurrentUsername());
+            return View(list);
         }
 
         public ActionResult CheckExistAvailableMoney()

@@ -33,6 +33,7 @@ namespace CashFlowManagement.Queries
 
             result.TotalIncome = result.Salaries.Sum(x => x.Income.Value);
             result.TotalAnnualIncome = result.TotalIncome * 12;
+            result.IsInitialized = UserQueries.IsCompleteInitialized(username);
             return result;
         }
 

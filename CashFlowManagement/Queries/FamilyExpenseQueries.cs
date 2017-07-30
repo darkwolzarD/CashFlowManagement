@@ -33,6 +33,8 @@ namespace CashFlowManagement.Queries
 
             result.TotalExpense = result.Expenses.Sum(x => x.Expense.Value);
             result.TotalAnnualExpense = result.TotalExpense * 12;
+            result.IsInitialized = UserQueries.IsCompleteInitialized(username);
+
             return result;
         }
 

@@ -5,10 +5,9 @@
     })
 
     $(document).on("click", "#liability-table-div #liability-table td", function () {
-        //$(this).closest("tr").find(".liability-id").trigger("click");
         var row = $(this).closest("tr");
         var id = row.find(".liability-id").val();
-        $("#liability-table tr").not(row).removeClass("active");
+        row.siblings().removeClass("success");
         if (row.hasClass("success")) {
             row.removeClass("success");
         }

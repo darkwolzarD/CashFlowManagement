@@ -37,16 +37,19 @@
             {
                 <tr>
                     <td rowspan="@Html.DisplayFor(x => business.RowSpan)" style="vertical-align: top !important;">
-                        @Html.DisplayFor(x => business.Name)<br/>
-                        <a href="#" title="Cập nhật kinh doanh">
-                            <span class="glyphicon glyphicon-edit text-success update-business" data-value="@Html.DisplayFor(x => business.Id)" style="font-size: 12px"></span>
-                        </a>
-                        <a href="#" title="Xóa kinh doanh">
-                            <span class="glyphicon glyphicon-remove text-danger delete-business" data-value="@Html.DisplayFor(x => business.Id)" style="font-size: 12px"></span>
-                        </a>
-                        <a href="#" title="Thêm nợ">
-                            <span class="fa fa-money text-primary add-business-liability" data-value="@Html.DisplayFor(x => business.Id)" style="font-size: 14px"></span>
-                        </a>
+                        @Html.DisplayFor(x => business.Name)<br />
+                        @if (!Model.IsInitialized)
+                        {
+                            <a href="#" title="Cập nhật kinh doanh">
+                                <span class="glyphicon glyphicon-edit text-success update-business" data-value="@Html.DisplayFor(x => business.Id)" style="font-size: 12px"></span>
+                            </a>
+                            <a href="#" title="Xóa kinh doanh">
+                                <span class="glyphicon glyphicon-remove text-danger delete-business" data-value="@Html.DisplayFor(x => business.Id)" style="font-size: 12px"></span>
+                            </a>
+                            <a href="#" title="Thêm nợ">
+                                <span class="fa fa-money text-primary add-business-liability" data-value="@Html.DisplayFor(x => business.Id)" style="font-size: 14px"></span>
+                            </a>
+                        }
                     </td>
                     <td class="text-right">@Html.DisplayFor(x => business.Value)</td>
                     <td class="text-right" colspan="2">@Html.DisplayFor(x => business.Income)</td>
@@ -77,21 +80,21 @@
                         <th class="text-right">Nợ còn phải trả</th>
                         <th>Trạng thái</th>
                     </tr>
-                            <tr>
-                                <td><strong class="text-danger">Tổng</strong></td>
-                                <td></td>
-                                <td class="text-right"><strong class="text-danger">@Html.DisplayFor(x => business.TotalLiabilityValue)</strong></td>
-                                <td class="text-left"><strong class="text-danger">@Html.DisplayFor(x => business.TotalInterestRate) / Năm</strong></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td class="text-right"><strong class="text-danger">@Html.DisplayFor(x => business.TotalOriginalPayment)</strong></td>
-                                <td class="text-right"><strong class="text-danger">@Html.DisplayFor(x => business.TotalInterestPayment)</strong></td>
-                                <td class="text-right"><strong class="text-danger">@Html.DisplayFor(x => business.TotalMonthlyPayment)</strong></td>
-                                <td class="text-right"><strong class="text-danger">@Html.DisplayFor(x => business.TotalPayment)</strong></td>
-                                <td class="text-right"><strong class="text-danger">@Html.DisplayFor(x => business.TotalRemainedValue)</strong></td>
-                                <td></td>
-                            </tr>
+                    <tr>
+                        <td><strong class="text-danger">Tổng</strong></td>
+                        <td></td>
+                        <td class="text-right"><strong class="text-danger">@Html.DisplayFor(x => business.TotalLiabilityValue)</strong></td>
+                        <td class="text-left"><strong class="text-danger">@Html.DisplayFor(x => business.TotalInterestRate) / Năm</strong></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td class="text-right"><strong class="text-danger">@Html.DisplayFor(x => business.TotalOriginalPayment)</strong></td>
+                        <td class="text-right"><strong class="text-danger">@Html.DisplayFor(x => business.TotalInterestPayment)</strong></td>
+                        <td class="text-right"><strong class="text-danger">@Html.DisplayFor(x => business.TotalMonthlyPayment)</strong></td>
+                        <td class="text-right"><strong class="text-danger">@Html.DisplayFor(x => business.TotalPayment)</strong></td>
+                        <td class="text-right"><strong class="text-danger">@Html.DisplayFor(x => business.TotalRemainedValue)</strong></td>
+                        <td></td>
+                    </tr>
                     foreach (var liability in business.Liabilities)
                     {
                         <tr>

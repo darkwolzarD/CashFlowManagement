@@ -64,6 +64,7 @@ namespace CashFlowManagement.Models
 
         [DisplayFormat(DataFormatString = "{0:N0}")]
         public double TotalAnnualPayment { get; set; }
+        public bool IsInitialized { get; set; }
         public List<CreditCardLiabilityViewModel> Liabilities { get; set; }
         public CreditCardLiabilityListViewModel()
         {

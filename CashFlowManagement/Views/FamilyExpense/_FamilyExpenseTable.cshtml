@@ -26,8 +26,11 @@
                     <tr>
                         <td>
                             @Html.DisplayFor(x => item.Source)<br />
-                            <a href="#" title="Cập nhật chi tiêu" class="update-family-expense" data-value="@Html.DisplayFor(x => item.Id)"><span class="glyphicon glyphicon-edit text-success" style="font-size: 14px;"></span></a>
-                            <a href="#" title="Xóa chi tiêu" class="delete-family-expense" data-value="@Html.DisplayFor(x => item.Id)"><span class="glyphicon glyphicon-remove text-danger" style="font-size: 14px;"></span></a>
+                            @if (!Model.IsInitialized)
+                            {
+                                <a href="#" title="Cập nhật chi tiêu" class="update-family-expense" data-value="@Html.DisplayFor(x => item.Id)"><span class="glyphicon glyphicon-edit text-success" style="font-size: 14px;"></span></a>
+                                <a href="#" title="Xóa chi tiêu" class="delete-family-expense" data-value="@Html.DisplayFor(x => item.Id)"><span class="glyphicon glyphicon-remove text-danger" style="font-size: 14px;"></span></a>
+                            }
                         </td>
                         <td class="text-right">@Html.DisplayFor(x => item.Expense)</td>
                         <td class="text-right">@Html.DisplayFor(x => item.AnnualExpense)</td>
