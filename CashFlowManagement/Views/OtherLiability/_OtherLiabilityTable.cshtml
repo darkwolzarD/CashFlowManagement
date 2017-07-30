@@ -16,6 +16,7 @@
                 <th class="text-right">Tổng phải trả hàng tháng</th>
                 <th class="text-right">Tiền vay còn phải trả</th>
                 <th>Ghi chú</th>
+                <th>Trạng thái</th>
             </tr>
         </thead>
         <tbody>
@@ -33,6 +34,7 @@
                     <td class="text-danger text-right"><strong>@Html.DisplayFor(x => x.TotalOriginalPayment)</strong></td>
                     <td class="text-danger text-right"><strong>@Html.DisplayFor(x => x.TotalPayment)</strong></td>
                     <td class="text-danger text-right"><strong>@Html.DisplayFor(x => x.TotalRemainedValue)</strong></td>
+                    <td></td>
                     <td></td>
                 </tr>
                 foreach (var liability in Model.Liabilities)
@@ -54,6 +56,9 @@
                         <td class="text-right">@Html.DisplayFor(x => liability.TotalMonthlyPayment)</td>
                         <td class="text-right">@Html.DisplayFor(x => liability.RemainedValue)</td>
                         <td>@Html.DisplayFor(x => liability.Note)</td>
+                        <td>
+                            <span style="font-size: 10px" class="label @Html.DisplayFor(x => liability.StatusCode)">@Html.DisplayFor(x => liability.Status)</span>
+                        </td>
                     </tr>
                 }
             }

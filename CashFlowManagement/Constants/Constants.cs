@@ -60,5 +60,14 @@ namespace CashFlowManagement.Constants
             }
             return list;
         }
+
+        public static List<SelectListItem> InterestObtainWay()
+        {
+            List<SelectListItem> list = new List<SelectListItem>();
+            list.Add(new SelectListItem { Text = "Lãi nhập gốc", Value = ((int)Constants.INTEREST_OBTAIN_TYPE.ORIGIN).ToString(), Selected = true });
+            list.Add(new SelectListItem { Text = "Rút lãi đầu kỳ", Value = ((int)Constants.INTEREST_OBTAIN_TYPE.START).ToString() });
+            list.Add(new SelectListItem { Text = "Rút lãi cuối kỳ", Value = ((int)Constants.INTEREST_OBTAIN_TYPE.END).ToString() });
+            return list;
+        }
     }
 }

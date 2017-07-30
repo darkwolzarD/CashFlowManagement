@@ -104,7 +104,7 @@ namespace CashFlowManagement.Queries
             result.TotalValue = result.OtherAssetSummaries.Sum(x => x.Value);
             result.TotalRentYield = result.OtherAssetSummaries.Sum(x => x.Income) / result.TotalValue;
             result.TotalLiabilityValue = result.OtherAssetSummaries.Sum(x => x.LiabilityValue);
-            result.TotalInterestRate = result.OtherAssetSummaries.Sum(x => x.OriginalInterestPayment) / result.TotalLiabilityValue * 12;
+            result.TotalInterestRate = result.TotalLiabilityValue > 0 ? result.OtherAssetSummaries.Sum(x => x.OriginalInterestPayment) / result.TotalLiabilityValue * 12 : 0;
             result.TotalMonthlyPayment = result.OtherAssetSummaries.Sum(x => x.MonthlyPayment);
             result.TotalAnnualPayment = result.OtherAssetSummaries.Sum(x => x.AnnualPayment);
             result.TotalRemainedValue = result.OtherAssetSummaries.Sum(x => x.RemainedValue);

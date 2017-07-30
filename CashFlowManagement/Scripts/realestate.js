@@ -254,31 +254,6 @@ $(document).ready(function () {
         }
     })
 
-    $(document).on("click", ".liability-id", function () {
-        if ($(this).prop("checked")) {
-            var id = $(this).closest("tr").find(".liability-id").val();
-            $.ajax({
-                url: Url.LiabilityUpdateForm,
-                type: "get",
-                data: { id: id },
-                success: function (data) {
-                    $("#liability-form-div").html($(data).html());
-                    MaskInput();
-                }
-            });
-        }
-        else {
-            RefreshLiabilityForm();
-        }
-        $("#liability-table tr").not($(this).closest("tr")).removeClass("active");
-        if ($(this).closest("tr").hasClass("success")) {
-            $(this).closest("tr").removeClass("success");
-        }
-        else {
-            $(this).closest("tr").addClass("success");
-        }
-    })
-
     $(document).on("keyup", "form input", function () {
         $("form .field-validation-error").text("");
     })

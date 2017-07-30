@@ -30,7 +30,7 @@
 
     $(document).on("click", ".toggle-modal", function () {
         if (check === 'True') {
-            alert("Tiền mặt có sẵn chỉ khai báo 1 lần duy nhất.\nVui lòng thực hiện chức năng Chỉnh sửa/Cập nhật Tiền mặt có sẵn!!!");
+            swal("Không thể tiếp tục", "Tiền mặt có sẵn chỉ khai báo 1 lần duy nhất.\nVui lòng thực hiện chức năng Chỉnh sửa/Cập nhật Tiền mặt có sẵn!!!", "error");
         }
         else {
             $.ajax({
@@ -93,7 +93,7 @@
 
     $(document).on("click", ".available-money-toggle-summary", function () {
         if (check === 'False') {
-            alert("Quý khách vui lòng khai báo tiền mặt có sẵn trước khi tiếp tục");
+            swal("Không thể tiếp tục", "Quý khách vui lòng khai báo tiền mặt có sẵn trước khi tiếp tục", "error");
         }
         else {
             $.ajax({

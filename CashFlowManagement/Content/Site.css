@@ -260,7 +260,7 @@ footer {
     color: #ffffff;
 }
 
-#liability-table td:hover {
+#liability-table-div #liability-table td:hover {
     cursor: pointer;
 }
 

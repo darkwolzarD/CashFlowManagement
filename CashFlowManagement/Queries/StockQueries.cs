@@ -182,7 +182,7 @@ namespace CashFlowManagement.Queries
         public static double GetStockValue(int id)
         {
             Entities entities = new Entities();
-            var stock = entities.StockTransactions.Where(x => x.AssetId == id && !x.DisabledDate.HasValue).Select(x => x.SpotPrice * x.NumberOfShares).DefaultIfEmpty(0).Sum();
+            var stock = entities.StockTransactions.Where(x => x.AssetId == id && !x.DisabledDate.HasValue).Select(x => x.Value).DefaultIfEmpty(0).Sum();
             return stock;
         }
 
@@ -224,7 +224,7 @@ namespace CashFlowManagement.Queries
                         liability.Name = liabilityViewModel.Source;
                         liability.Value = liabilityViewModel.Value.Value;
                         liability.InterestType = liabilityViewModel.InterestType;
-                        liability.InterestRate = liabilityViewModel.InterestRate.Value / 100;
+                        liability.InterestRate = liabilityViewModel.InterestRate.Value;
                         liability.InterestRatePerX = liabilityViewModel.InterestRatePerX;
                         liability.StartDate = liabilityViewModel.StartDate.Value;
                         liability.EndDate = liabilityViewModel.EndDate.Value;
@@ -233,6 +233,7 @@ namespace CashFlowManagement.Queries
                         liability.CreatedBy = Constants.Constants.USER;
                         liability.Username = username;
                         transaction.Liabilities.Add(liability);
+                        stock.Liabilities.Add(liability);
                     }
                 }
             }
