@@ -117,7 +117,7 @@ namespace CashFlowManagement.Models
         [DisplayFormat(DataFormatString = "{0:N0}")]
         public double StockValue { get; set; }
 
-        [DisplayFormat(DataFormatString = "{0:P2}")]
+        [DisplayFormat(DataFormatString = "{0:N2}")]
         public double ExpectedDividend { get; set; }
 
         public string Note { get; set; }

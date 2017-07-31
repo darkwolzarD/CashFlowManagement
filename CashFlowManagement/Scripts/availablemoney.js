@@ -93,7 +93,7 @@
 
     $(document).on("click", ".available-money-toggle-summary", function () {
         if (check === 'False') {
-            swal("Khai báo tiền mặt có sẵn là yêu cầu bắt buộc", "Quý khách vui lòng khai báo tiền mặt để hoàn tất bản thông tin tài chính", "error");
+            swal("Khai báo tiền mặt có sẵn là yêu cầu bắt buộc", "Quý khách vui lòng khai báo tiền mặt để hoàn tất bảng thông tin tài chính", "error");
         }
         else {
             $.ajax({

@@ -27,6 +27,16 @@ namespace CashFlowManagement.Controllers
         [HttpPost]
         public ActionResult _BankDepositForm(BankDepositCreateViewModel model)
         {
+            if (model.EndDate < DateTime.Now)
+            {
+                ModelState.AddModelError("CheckEndDate", "Tài khoản tiết kiệm này đã đáo hạn, vui lòng chỉ nhập tài khoản tiết kiệm đang hiệu lực");
+            }
+
+            if (model.StartDate > DateTime.Now)
+            {
+                ModelState.AddModelError("CheckStartDate", "Ngày bắt đầu phải nhỏ hơn ngày hiện tại.");
+            }
+
             if (ModelState.IsValid)
             {
                 int result = BankDepositQueries.CreateBankDeposit(model, UserQueries.GetCurrentUsername());
@@ -54,6 +64,16 @@ namespace CashFlowManagement.Controllers
         [HttpPost]
         public ActionResult _BankDepositUpdateForm(BankDepositUpdateViewModel model)
         {
+            if (model.EndDate < DateTime.Now)
+            {
+                ModelState.AddModelError("CheckEndDate", "Tài khoản tiết kiệm này đã đáo hạn, vui lòng chỉ nhập tài khoản tiết kiệm đang hiệu lực");
+            }
+
+            if (model.StartDate > DateTime.Now)
+            {
+                ModelState.AddModelError("CheckStartDate", "Ngày bắt đầu phải nhỏ hơn ngày hiện tại.");
+            }
+
             if (ModelState.IsValid)
             {
                 int result = BankDepositQueries.UpdateBankDeposit(model);

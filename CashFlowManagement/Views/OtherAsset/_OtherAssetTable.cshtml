@@ -100,12 +100,15 @@
                         <tr>
                             <td>
                                 @Html.DisplayFor(x => liability.Source)<br />
-                                <a href="#" title="Cập nhật nợ">
-                                    <span class="glyphicon glyphicon-edit text-success update-other-asset-liability" data-value="@Html.DisplayFor(x => liability.Id)" style="font-size: 12px"></span>
-                                </a>
-                                <a href="#" title="Xóa">
-                                    <span class="glyphicon glyphicon-remove text-danger delete-other-asset-liability" data-value="@Html.DisplayFor(x => liability.Id)" style="font-size: 12px"></span>
-                                </a>
+                                @if (!Model.IsInitialized)
+                                {
+                                    <a href="#" title="Cập nhật nợ">
+                                        <span class="glyphicon glyphicon-edit text-success update-other-asset-liability" data-value="@Html.DisplayFor(x => liability.Id)" style="font-size: 12px"></span>
+                                    </a>
+                                    <a href="#" title="Xóa">
+                                        <span class="glyphicon glyphicon-remove text-danger delete-other-asset-liability" data-value="@Html.DisplayFor(x => liability.Id)" style="font-size: 12px"></span>
+                                    </a>
+                                }
                             </td>
                             <td>@Html.DisplayFor(x => liability.InterestType)</td>
                             <td class="text-right">@Html.DisplayFor(x => liability.Value)</td>
@@ -140,4 +143,3 @@
         }
     </tbody>
 </table>
-

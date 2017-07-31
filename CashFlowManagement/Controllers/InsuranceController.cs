@@ -28,7 +28,17 @@ namespace CashFlowManagement.Controllers
         [HttpPost]
         public ActionResult _InsuranceForm(InsuranceCreateViewModel model)
         {
-            if(model.Expense * Helper.CalculateTimePeriod(model.StartDate.Value, model.EndDate.Value) >= model.Value)
+            if (model.EndDate < DateTime.Now)
+            {
+                ModelState.AddModelError("CheckEndDate", "Hợp đồng bảo hiểm này đã hết hạn, vui lòng chỉ nhập hợp đồng bảo hiểm đang hiệu lực");
+            }
+
+            if (model.StartDate > DateTime.Now)
+            {
+                ModelState.AddModelError("CheckStartDate", "Ngày bắt đầu phải nhỏ hơn ngày hiện tại.");
+            }
+
+            if (model.Expense * Helper.CalculateTimePeriod(model.StartDate.Value, model.EndDate.Value) >= model.Value)
             {
                 ModelState.AddModelError("CheckValueAndTotalExpenseError", "Tổng số tiền đóng phải nhỏ hơn tiền thụ hưởng");
             }
@@ -60,6 +70,17 @@ namespace CashFlowManagement.Controllers
         [HttpPost]
         public ActionResult _InsuranceUpdateForm(InsuranceUpdateViewModel model)
         {
+
+            if (model.EndDate < DateTime.Now)
+            {
+                ModelState.AddModelError("CheckEndDate", "Hợp đồng bảo hiểm này đã hết hạn, vui lòng chỉ nhập hợp đồng bảo hiểm đang hiệu lực");
+            }
+
+            if (model.StartDate > DateTime.Now)
+            {
+                ModelState.AddModelError("CheckStartDate", "Ngày bắt đầu phải nhỏ hơn ngày hiện tại.");
+            }
+
             if (model.Expense * Helper.CalculateTimePeriod(model.StartDate.Value, model.EndDate.Value) >= model.Value)
             {
                 ModelState.AddModelError("CheckValueAndTotalExpenseError", "Tổng số tiền đóng phải nhỏ hơn tiền thụ hưởng");

@@ -61,7 +61,7 @@
                             <li><a href="@Url.Action("Index", "OtherExpense")">Chi tiêu khác</a></li>
                         </ul>
                     </li>
-                    <li style="width: 30px;"><a href="@Url.Action("Index", "Log", new { @type = (int)Constants.LOG_FILTER_TYPE.INCOME_EXPENSE })">Log</a></li>
+                    @*<li style="width: 30px;"><a href="@Url.Action("Index", "Log", new { @type = (int)Constants.LOG_FILTER_TYPE.INCOME_EXPENSE })">Log</a></li>*@
                     @if (user == null)
                     {
                         <li style="width: 90px"><a href="@Url.Action("Login", "Account")">Đăng nhập</a></li>

@@ -100,8 +100,8 @@ namespace CashFlowManagement.Queries
             }
 
             var creditCardLiabilities = entities.Liabilities.Where(x => x.Username.Equals(username)
-                                                         && x.LiabilityType == (int)Constants.Constants.LIABILITY_TYPE.CREDIT_CARD
-                                                         && !x.DisabledDate.HasValue && x.StartDate <= current && x.EndDate >= current);
+                                                && x.LiabilityType == (int)Constants.Constants.LIABILITY_TYPE.CREDIT_CARD
+                                                && !x.DisabledDate.HasValue);
             foreach (var creditCarLiability in creditCardLiabilities)
             {
                 result.CreditCard += creditCarLiability.Value * creditCarLiability.InterestRate / 1200;
@@ -145,7 +145,7 @@ namespace CashFlowManagement.Queries
 
             result.CreditCardLiability = entities.Liabilities.Where(x => x.Username.Equals(username)
                                                          && x.LiabilityType == (int)Constants.Constants.LIABILITY_TYPE.CREDIT_CARD
-                                                         && !x.DisabledDate.HasValue && x.StartDate <= current && x.EndDate >= current).Select(x => x.Value).DefaultIfEmpty(0).Sum();
+                                                         && !x.DisabledDate.HasValue).Select(x => x.Value).DefaultIfEmpty(0).Sum();
 
             result.CarLoan = entities.Liabilities.Where(x => x.Username.Equals(username)
                                                          && x.LiabilityType == (int)Constants.Constants.LIABILITY_TYPE.CAR

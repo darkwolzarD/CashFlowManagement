@@ -21,7 +21,7 @@
                 foreach (var liability in Model.Liabilities)
                 {
                     <tr>
-                        <td><input type="checkbox" class="checkbox liability-id" value="@liability.Id" /></td>
+                        <td class="hidden"><input type="checkbox" class="checkbox liability-id" value="@liability.Id" /></td>
                         <td>@Html.DisplayFor(x => liability.Source)</td>
                         <td class="text-right">@Html.DisplayFor(x => liability.Value)</td>
                         <td>@Html.DisplayFor(x => liability.InterestType)</td>
