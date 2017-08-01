@@ -311,12 +311,13 @@ namespace CashFlowManagement.Controllers
             StockCreateViewModel model = (StockCreateViewModel)HttpContext.Session["STOCK"];
             StockViewModel viewModel = new StockViewModel();
             viewModel.Name = model.Name;
+            viewModel.Note = model.Note;
             viewModel.Transactions.Transactions.Add(new StockTransactionViewModel
             {
                 NumberOfStock = model.NumberOfStock,
                 SpotRice =  model.SpotRice,
                 StockValue = model.StockValue,
-                ExpectedDividend = model.ExpectedDividend
+                ExpectedDividend = model.ExpectedDividend / 100,
             });
 
             StockLiabilityListCreateViewModel liabilities = (StockLiabilityListCreateViewModel)HttpContext.Session["LIABILITIES"];

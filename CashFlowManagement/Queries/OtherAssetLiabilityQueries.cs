@@ -103,7 +103,7 @@ namespace CashFlowManagement.Queries
             liability.InterestRatePerX = model.InterestRatePerX;
             liability.StartDate = model.StartDate.Value;
             liability.EndDate = model.EndDate.Value;
-            liability.LiabilityType = (int)Constants.Constants.LIABILITY_TYPE.OTHERS;
+            liability.LiabilityType = (int)Constants.Constants.LIABILITY_TYPE.OTHER_ASSET;
             liability.CreatedDate = current;
             liability.CreatedBy = Constants.Constants.USER;
             liability.Username = username;

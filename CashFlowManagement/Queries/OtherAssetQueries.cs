@@ -199,7 +199,7 @@ namespace CashFlowManagement.Queries
                         liability.InterestRatePerX = liabilityViewModel.InterestRatePerX;
                         liability.StartDate = liabilityViewModel.StartDate.Value;
                         liability.EndDate = liabilityViewModel.EndDate.Value;
-                        liability.LiabilityType = (int)Constants.Constants.LIABILITY_TYPE.OTHERS;
+                        liability.LiabilityType = (int)Constants.Constants.LIABILITY_TYPE.OTHER_ASSET;
                         liability.CreatedDate = current;
                         liability.CreatedBy = Constants.Constants.USER;
                         liability.Username = username;
