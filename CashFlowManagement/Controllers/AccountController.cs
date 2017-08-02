@@ -14,12 +14,138 @@ namespace CashFlowManagement.Controllers
     {
         public ActionResult Index()
         {
-            return View();
+            if (HttpContext.Session["USER"] != null)
+            {
+                var user = (Users)HttpContext.Session["USER"];
+                if (!user.IncomeInitialized)
+                {
+                    return RedirectToAction("Index", "Salary");
+                }
+                else if (!user.RealEstateInitialized)
+                {
+                    return RedirectToAction("Index", "RealEstate");
+                }
+                else if (!user.BusinessInitialized)
+                {
+                    return RedirectToAction("Index", "Business");
+                }
+                else if (!user.BankDepositInitialized)
+                {
+                    return RedirectToAction("Index", "BankDeposit");
+                }
+                else if (!user.StockInitialized)
+                {
+                    return RedirectToAction("Index", "Stock");
+                }
+                else if (!user.InsuranceInitialized)
+                {
+                    return RedirectToAction("Index", "Insurance");
+                }
+                else if (!user.OtherAssetInitialized)
+                {
+                    return RedirectToAction("Index", "OtherAsset");
+                }
+                else if (!user.CarLiabilityInitialized)
+                {
+                    return RedirectToAction("Index", "CarLiability");
+                }
+                else if (!user.CreditCardInitialized)
+                {
+                    return RedirectToAction("Index", "CreditCardLiability");
+                }
+                else if (!user.OtherLiabilityInitialized)
+                {
+                    return RedirectToAction("Index", "OtherLiability");
+                }
+                else if (!user.FamilyExpenseInitialized)
+                {
+                    return RedirectToAction("Index", "FamilyExpense");
+                }
+                else if (!user.OtherExpenseInitialized)
+                {
+                    return RedirectToAction("Index", "OtherExpense");
+                }
+                else if (!user.AvailableMoneyInitialized)
+                {
+                    return RedirectToAction("Index", "AvailableMoney");
+                }
+                else
+                {
+                    return RedirectToAction("Index", "FinancialStatus");
+                }
+            }
+            else
+            {
+                return View();
+            }
         }
         // GET: Account
         public ActionResult Login()
         {
-            return View();
+            if (HttpContext.Session["USER"] != null)
+            {
+                var user = (Users)HttpContext.Session["USER"];
+                if (!user.IncomeInitialized)
+                {
+                    return RedirectToAction("Index", "Salary");
+                }
+                else if (!user.RealEstateInitialized)
+                {
+                    return RedirectToAction("Index", "RealEstate");
+                }
+                else if (!user.BusinessInitialized)
+                {
+                    return RedirectToAction("Index", "Business");
+                }
+                else if (!user.BankDepositInitialized)
+                {
+                    return RedirectToAction("Index", "BankDeposit");
+                }
+                else if (!user.StockInitialized)
+                {
+                    return RedirectToAction("Index", "Stock");
+                }
+                else if (!user.InsuranceInitialized)
+                {
+                    return RedirectToAction("Index", "Insurance");
+                }
+                else if (!user.OtherAssetInitialized)
+                {
+                    return RedirectToAction("Index", "OtherAsset");
+                }
+                else if (!user.CarLiabilityInitialized)
+                {
+                    return RedirectToAction("Index", "CarLiability");
+                }
+                else if (!user.CreditCardInitialized)
+                {
+                    return RedirectToAction("Index", "CreditCardLiability");
+                }
+                else if (!user.OtherLiabilityInitialized)
+                {
+                    return RedirectToAction("Index", "OtherLiability");
+                }
+                else if (!user.FamilyExpenseInitialized)
+                {
+                    return RedirectToAction("Index", "FamilyExpense");
+                }
+                else if (!user.OtherExpenseInitialized)
+                {
+                    return RedirectToAction("Index", "OtherExpense");
+                }
+                else if (!user.AvailableMoneyInitialized)
+                {
+                    return RedirectToAction("Index", "AvailableMoney");
+                }
+                else
+                {
+                    return RedirectToAction("Index", "FinancialStatus");
+                }
+            }
+            else
+            {
+                return View();
+            }
         }
 
         [HttpPost]

@@ -273,3 +273,11 @@ footer {
     left: 50%;
     margin: -100px 0 0 -150px;
 }
+
+.note {
+    font-style: italic;
+}
+
+.input-group-addon:hover {
+    cursor: pointer;
+}

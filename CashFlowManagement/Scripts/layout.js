@@ -29,4 +29,10 @@
             RefreshLiabilityForm();
         }
     })
+
+    $(document).on("click", ".input-group-addon", function () {
+        if ($(this).children().hasClass("glyphicon-calendar")) {
+            $(this).siblings().datepicker("show");
+        }
+    })
 })

@@ -41,7 +41,7 @@
                             <div class="form-group">
                                 @Html.LabelFor(x => x.PaymentPeriod)
                                 <div class="input-group input-group-sm">
-                                    @Html.EditorFor(x => x.PaymentPeriod, new { htmlAttributes = new { @class = "form-control input-sm" } })
+                                    @Html.EditorFor(x => x.PaymentPeriod, new { htmlAttributes = new { @class = "form-control input-sm", @type = "text" } })
                                     <div class="input-group-addon">
                                         <span>tháng</span>
                                     </div>
