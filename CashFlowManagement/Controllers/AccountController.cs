@@ -41,10 +41,6 @@ namespace CashFlowManagement.Controllers
                 {
                     return RedirectToAction("Index", "Insurance");
                 }
-                else if (!user.OtherAssetInitialized)
-                {
-                    return RedirectToAction("Index", "OtherAsset");
-                }
                 else if (!user.CarLiabilityInitialized)
                 {
                     return RedirectToAction("Index", "CarLiability");
@@ -108,10 +104,6 @@ namespace CashFlowManagement.Controllers
                 else if (!user.InsuranceInitialized)
                 {
                     return RedirectToAction("Index", "Insurance");
-                }
-                else if (!user.OtherAssetInitialized)
-                {
-                    return RedirectToAction("Index", "OtherAsset");
                 }
                 else if (!user.CarLiabilityInitialized)
                 {
@@ -178,10 +170,6 @@ namespace CashFlowManagement.Controllers
                 else if (!user.InsuranceInitialized)
                 {
                     return RedirectToAction("Index", "Insurance");
-                }
-                else if (!user.OtherAssetInitialized)
-                {
-                    return RedirectToAction("Index", "OtherAsset");
                 }
                 else if (!user.CarLiabilityInitialized)
                 {
@@ -289,13 +277,6 @@ namespace CashFlowManagement.Controllers
         public ActionResult InsuranceInitialize()
         {
             int result = UserQueries.InsuranceInitialize(UserQueries.GetCurrentUsername());
-            return RedirectToAction("Index", "OtherAsset");
-        }
-
-        [CheckSessionTimeOut]
-        public ActionResult OtherAssetInitialize()
-        {
-            int result = UserQueries.OtherAssetInitialize(UserQueries.GetCurrentUsername());
             return RedirectToAction("Index", "CarLiability");
         }
 

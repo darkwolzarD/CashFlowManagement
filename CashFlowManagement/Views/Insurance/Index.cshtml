@@ -34,7 +34,7 @@
     @if (!Model)
     {
         <div class="col-md-6 text-right">
-            <button type="button" class="btn btn-success toggle-modal">
+            <button type="button" class="btn btn-success toggle-insurance-modal">
                 <span class="glyphicon glyphicon-home"></span>
                 Tạo bảo hiểm
             </button>
@@ -48,6 +48,34 @@
     </div>
 </div>
 
+<div class="clear10"></div>
+<div class="clear10"></div>
+<div class="row">
+    <div class="col-md-6">
+        <p style="font-size: 20px; margin-bottom: 5px !important">Quản lý tài sản khác</p>
+        @if (!Model)
+        {
+            <p style="font-size: 12px; font-style: italic">(Nếu không có tài sản khác, vui lòng hoàn tất khai báo tài sản)</p>
+            <p style="font-size: 12px; font-style: italic">(Trừ vàng, ngoại tệ, và tiền ảo, các tài sản khác phải có khả năng sinh ra dòng tiền thu nhập, nếu không có thu nhập thì là tiêu sản)</p>
+        }
+    </div>
+    @if (!Model)
+    {
+        <div class="col-md-6 text-right">
+            <button type="button" class="btn btn-success toggle-asset-modal">
+                <span class="glyphicon glyphicon-home"></span>
+                Tạo tài sản
+            </button>
+        </div>
+    }
+</div>
+<div class="clear10"></div>
+<div class="row">
+    <div class="col-md-12" id="other-asset-table-div">
+        @{ Html.RenderAction("_OtherAssetTable", "Insurance"); }
+    </div>
+</div>
+
 @if (!Model)
 {
     <footer class="row text-right">
@@ -55,12 +83,13 @@
             <span class="glyphicon glyphicon-arrow-left"></span>
             Quay lại
         </a>
-        <a href="@Url.Action("InsuranceInitialize", "Account")" class="btn btn-default " style="font-size: 11px;">
-            <span class="glyphicon glyphicon-arrow-right"></span>
-            Tiếp tục
+        <a href="#" class="btn btn-primary asset-toggle-summary" style="font-size: 11px;">
+            <span class="glyphicon glyphicon-ok"></span>
+            Hoàn tất khai báo tài sản
         </a>
     </footer>
 }
+
 
 <div id="modal">
 
@@ -71,9 +100,17 @@
     var Url = {};
     Url.InsuranceForm = '@Url.Action("_InsuranceForm", "Insurance")';
     Url.InsuranceTable = '@Url.Action("_InsuranceTable", "Insurance")';
-    Url.CreateInsurance = '@Url.Action("_Create", "Insurance")';
-    Url.SaveInsurance = '@Url.Action("Save", "Insurance")';
+    Url.CreateInsurance = '@Url.Action("_CreateInsurance", "Insurance")';
+    Url.SaveInsurance = '@Url.Action("SaveInsurance", "Insurance")';
     Url.InsuranceTable = '@Url.Action("_InsuranceTable", "Insurance")';
     Url.DeleteInsurance = '@Url.Action("DeleteInsurance", "Insurance")';
     Url.InsuranceUpdateForm = '@Url.Action("_InsuranceUpdateForm", "Insurance")';
+    Url.OtherAssetForm = '@Url.Action("_OtherAssetForm", "Insurance")';
+    Url.OtherAssetTable = '@Url.Action("_OtherAssetTable", "Insurance")';
+    Url.CreateOtherAsset = '@Url.Action("_CreateOtherAsset", "Insurance")';
+    Url.SaveOtherAsset = '@Url.Action("SaveOtherAsset", "Insurance")';
+    Url.OtherAssetTable = '@Url.Action("_OtherAssetTable", "Insurance")';
+    Url.DeleteOtherAsset = '@Url.Action("DeleteOtherAsset", "Insurance")';
+    Url.OtherAssetUpdateForm = '@Url.Action("_OtherAssetUpdateForm", "Insurance")';
+    Url.AssetSummary = '@Url.Action("_AssetSummary", "Insurance")';
 </script>

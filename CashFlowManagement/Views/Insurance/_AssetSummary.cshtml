@@ -318,11 +318,6 @@
                                     <th class="text-right">Thu hàng năm</th>
                                     <th class="text-right">Giá trị góp vốn</th>
                                     <th class="text-right">Tỷ suất lợi nhuận</th>
-                                    <th class="text-right">Giá trị tiền vay</th>
-                                    <th class="text-right">Chi phí lãi vay</th>
-                                    <th class="text-right">Phải trả hàng tháng</th>
-                                    <th class="text-right">Phải trả hàng năm</th>
-                                    <th class="text-right">Số tiền gốc còn phải trả</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -334,11 +329,6 @@
                                         <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.OtherAssets.TotalAnnualIncome)</strong></td>
                                         <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.OtherAssets.TotalValue)</strong></td>
                                         <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.OtherAssets.TotalRentYield)</strong></td>
-                                        <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.OtherAssets.TotalLiabilityValue)</strong></td>
-                                        <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.OtherAssets.TotalInterestRate) / Năm</strong></td>
-                                        <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.OtherAssets.TotalMonthlyPayment)</strong></td>
-                                        <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.OtherAssets.TotalAnnualPayment)</strong></td>
-                                        <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.OtherAssets.TotalRemainedValue)</strong></td>
                                     </tr>
                                     foreach (var business in Model.OtherAssets.OtherAssetSummaries)
                                     {
@@ -348,18 +338,13 @@
                                             <td class="text-right">@Html.DisplayFor(x => business.AnnualIncome)</td>
                                             <td class="text-right">@Html.DisplayFor(x => business.Value)</td>
                                             <td class="text-right">@Html.DisplayFor(x => business.RentYield)</td>
-                                            <td class="text-right">@Html.DisplayFor(x => business.LiabilityValue)</td>
-                                            <td class="text-right">@Html.DisplayFor(x => business.InterestRate) / Năm</td>
-                                            <td class="text-right">@Html.DisplayFor(x => business.MonthlyPayment)</td>
-                                            <td class="text-right">@Html.DisplayFor(x => business.AnnualPayment)</td>
-                                            <td class="text-right">@Html.DisplayFor(x => business.RemainedValue)</td>
                                         </tr>
                                     }
                                 }
                                 else
                                 {
                                     <tr>
-                                        <td colspan="10">Không có tài sản khác</td>
+                                        <td colspan="5">Không có tài sản khác</td>
                                     </tr>
                                 }
                             </tbody>
@@ -368,7 +353,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <a href="@Url.Action("OtherAssetInitialize", "Account")" class="btn btn-success">
+                <a href="@Url.Action("InsuranceInitialize", "Account")" class="btn btn-success">
                     <span class="glyphicon glyphicon-ok"></span>
                     Xác nhận
                 </a>

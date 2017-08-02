@@ -7,6 +7,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using static CashFlowManagement.Queries.BankDepositQueries;
+using static CashFlowManagement.Queries.OtherAssetLiabilityQueries;
 
 namespace CashFlowManagement.Controllers
 {
@@ -38,7 +39,7 @@ namespace CashFlowManagement.Controllers
                 ModelState.AddModelError("CheckStartDate", "Ngày bắt đầu phải nhỏ hơn ngày hiện tại.");
             }
 
-            if (model.Expense * Helper.CalculateTimePeriod(model.StartDate.Value, model.EndDate.Value) >= model.Value)
+            if (model.Expense * CarLiabilityQueries.Helper.CalculateTimePeriod(model.StartDate.Value, model.EndDate.Value) >= model.Value)
             {
                 ModelState.AddModelError("CheckValueAndTotalExpenseError", "Tổng số tiền đóng phải nhỏ hơn tiền thụ hưởng");
             }
@@ -81,7 +82,7 @@ namespace CashFlowManagement.Controllers
                 ModelState.AddModelError("CheckStartDate", "Ngày bắt đầu phải nhỏ hơn ngày hiện tại.");
             }
 
-            if (model.Expense * Helper.CalculateTimePeriod(model.StartDate.Value, model.EndDate.Value) >= model.Value)
+            if (model.Expense * CarLiabilityQueries.Helper.CalculateTimePeriod(model.StartDate.Value, model.EndDate.Value) >= model.Value)
             {
                 ModelState.AddModelError("CheckValueAndTotalExpenseError", "Tổng số tiền đóng phải nhỏ hơn tiền thụ hưởng");
             }
@@ -121,6 +122,104 @@ namespace CashFlowManagement.Controllers
             {
                 return Content("failed");
             }
+        }
+
+        public ActionResult _OtherAssetForm()
+        {
+            return PartialView();
+        }
+
+        [HttpPost]
+        public ActionResult _OtherAssetForm(OtherAssetCreateViewModel model)
+        {
+            if (OtherAssetQueries.CheckExistOtherAsset(UserQueries.GetCurrentUsername(), model.Name))
+            {
+                ModelState.AddModelError("CheckExistAsset", "Tài sản này đã tồn tại, vui lòng nhập tên khác");
+            }
+
+            if (ModelState.IsValid)
+            {
+                string user = UserQueries.GetCurrentUsername();
+                int result = OtherAssetQueries.CreateOtherAsset(model, user);
+                if (result > 0)
+                {
+                    return Content("success");
+                }
+                else
+                {
+                    return Content("failed");
+                }
+            }
+            else
+            {
+                model.IsInDebt = false;
+                return PartialView("_OtherAssetForm", model);
+            }
+        }
+
+        public ActionResult _OtherAssetUpdateForm(int id)
+        {
+            OtherAssetUpdateViewModel model = OtherAssetQueries.GetOtherAssetById(id);
+            return PartialView(model);
+        }
+
+        [HttpPost]
+        public ActionResult _OtherAssetUpdateForm(OtherAssetUpdateViewModel model)
+        {
+            var asset = OtherAssetQueries.GetOtherAssetById(model.Id);
+            if (!asset.Name.Equals(model.Name) && OtherAssetQueries.CheckExistOtherAsset(UserQueries.GetCurrentUsername(), model.Name))
+            {
+                ModelState.AddModelError("CheckExistAsset", "Tài sản này đã tồn tại, vui lòng nhập tên khác");
+            }
+
+            if (ModelState.IsValid)
+            {
+                int result = OtherAssetQueries.UpdateOtherAsset(model);
+                if (result > 0)
+                {
+                    return Content("success");
+                }
+                else
+                {
+                    return Content("failed");
+                }
+            }
+            else
+            {
+                return PartialView(model);
+            }
+        }
+
+        public ActionResult _OtherAssetTable()
+        {
+            OtherAssetListViewModel model = OtherAssetQueries.GetOtherAssetByUser(UserQueries.GetCurrentUsername());
+            return PartialView(model);
+        }
+
+        public ActionResult DeleteOtherAsset(int id)
+        {
+            int result = OtherAssetQueries.DeleteOtherAsset(id);
+            if (result > 0)
+            {
+                return Content("success");
+            }
+            else
+            {
+                return Content("failed");
+            }
+        }
+
+        public ActionResult _AssetSummary()
+        {
+            AssetSummaryViewModel model = new AssetSummaryViewModel();
+            string username = UserQueries.GetCurrentUsername();
+            model.RealEstates = RealEstateQueries.GetRealEstateSummaryByUser(username);
+            model.Businesses = BusinessQueries.GetBusinessSummaryByUser(username);
+            model.BankDeposits = BankDepositQueries.GetBankDepositSummaryByUser(username);
+            model.Stocks = StockQueries.GetStockSummaryByUser(username);
+            model.Insurances = InsuranceQueries.GetInsuranceSummaryByUser(username);
+            model.OtherAssets = OtherAssetQueries.GetOtherAssetSummaryByUser(username);
+            return PartialView(model);
         }
     }
 }

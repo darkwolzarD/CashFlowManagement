@@ -40,13 +40,35 @@
         })
     }
 
-    $(document).on("click", ".toggle-modal", function () {
+    function RefreshOtherAssetTable() {
+        $.ajax({
+            url: Url.OtherAssetTable,
+            type: "get",
+            success: function (data) {
+                $("#other-asset-table-div").html($(data).html());
+            }
+        })
+    }
+
+    $(document).on("click", ".toggle-insurance-modal", function () {
         $.ajax({
             url: Url.InsuranceForm,
             type: "get",
             success: function (data) {
                 $("#modal").html(data);
                 $("#insurance-create-modal").modal("show");
+                MaskInput();
+            }
+        });
+    })
+
+    $(document).on("click", ".toggle-asset-modal", function () {
+        $.ajax({
+            url: Url.OtherAssetForm,
+            type: "get",
+            success: function (data) {
+                $("#modal").html(data);
+                $("#other-asset-create-modal").modal("show");
                 MaskInput();
             }
         });
@@ -73,6 +95,27 @@
         });
     })
 
+    $(document).on("click", ".create-other-asset", function () {
+        var model = $("#other-asset-form").serialize();
+        $.ajax({
+            url: Url.OtherAssetForm,
+            type: "post",
+            data: model,
+            success: function (data) {
+                if (data === "success") {
+                    $("#other-asset-create-modal").modal("hide");
+                    RefreshOtherAssetTable();
+                }
+                else if (data === "failed") {
+                    swal("Thất bại", "Có lỗi xảy ra!", "error");
+                }
+                else {
+                    $("#other-asset-create-modal").html($(data).html());
+                }
+            }
+        });
+    })
+
     $(document).on("click", ".update-insurance", function () {
         var id = $(this).data("value");
         $.ajax({
@@ -82,6 +125,20 @@
             success: function (data) {
                 $("#modal").html(data);
                 $("#insurance-update-modal").modal("show");
+                MaskInput();
+            }
+        });
+    })
+
+    $(document).on("click", ".update-other-asset", function () {
+        var id = $(this).data("value");
+        $.ajax({
+            url: Url.OtherAssetUpdateForm,
+            type: "get",
+            data: { id: id },
+            success: function (data) {
+                $("#modal").html(data);
+                $("#other-asset-update-modal").modal("show");
                 MaskInput();
             }
         });
@@ -108,6 +165,27 @@
         });
     })
 
+    $(document).on("click", ".save-update-other-asset", function () {
+        var model = $("#other-asset-update-form").serialize();
+        $.ajax({
+            url: Url.OtherAssetUpdateForm,
+            type: "post",
+            data: model,
+            success: function (data) {
+                if (data === "success") {
+                    $("#other-asset-update-modal").modal("hide");
+                    RefreshOtherAssetTable();
+                }
+                else if (data === "failed") {
+                    swal("Thất bại", "Có lỗi xảy ra!", "error");
+                }
+                else {
+                    $("#other-asset-update-modal").html($(data).html());
+                }
+            }
+        });
+    })
+
     $(document).on("click", ".delete-insurance", function () {
         if (confirm("Bạn có muốn xóa bảo hiểm này?")) {
             var id = $(this).data("value");
@@ -125,5 +203,36 @@
                 }
             });
         }
+    })
+
+    $(document).on("click", ".delete-other-asset", function () {
+        if (confirm("Bạn có muốn xóa tài sản này?")) {
+            var id = $(this).data("value");
+            $.ajax({
+                url: Url.DeleteOtherAsset,
+                type: "get",
+                data: { id: id },
+                success: function (data) {
+                    if (data === "success") {
+                        RefreshOtherAssetTable();
+                    }
+                    else if (data === "failed") {
+                        swal("Thất bại", "Có lỗi xảy ra!", "error");
+                    }
+                }
+            });
+        }
+    })
+
+    $(document).on("click", ".asset-toggle-summary", function () {
+        $.ajax({
+            url: Url.AssetSummary,
+            type: "get",
+            success: function (data) {
+                $("#modal").html(data);
+                $("#asset-summary-modal").modal("show");
+                MaskInput();
+            }
+        });
     })
 })

@@ -124,7 +124,6 @@ namespace CashFlowManagement.Queries
             current = new DateTime(current.Year, current.Month, 1);
             Entities entities = new Entities();
             var liability = entities.Liabilities.Where(x => x.Id == id).FirstOrDefault();
-            double currentMonthlyPayment = 0;
             double interestRate = liability.InterestRatePerX == (int)Constants.Constants.INTEREST_RATE_PER.MONTH ? liability.InterestRate / 100 : liability.InterestRate / 1200;
             int currentPeriod = Helper.CalculateTimePeriod(liability.StartDate.Value, DateTime.Now);
             int paymentPeriod = Helper.CalculateTimePeriod(liability.StartDate.Value, liability.EndDate.Value);

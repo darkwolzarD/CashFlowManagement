@@ -20,15 +20,9 @@ namespace CashFlowManagement.Models
 
         [Display(Name = "Thu nhập hàng tháng")]
         public double? Income { get; set; }
-        public OtherAssetLiabilityListCreateViewModel Liabilities { get; set; }
 
         [Display(Name = "Bạn có vay khoản nợ nào để mua kinh doanh không?")]
         public bool IsInDebt { get; set; }
-
-        public OtherAssetCreateViewModel()
-        {
-            Liabilities = new OtherAssetLiabilityListCreateViewModel();
-        }
     }
 
     public class OtherAssetUpdateViewModel : OtherAssetCreateViewModel
@@ -52,35 +46,6 @@ namespace CashFlowManagement.Models
 
         [DisplayFormat(DataFormatString = "{0:P2}")]
         public double RentYield { get; set; }
-
-        [DisplayFormat(DataFormatString = "{0:N0}")]
-        public double TotalLiabilityValue { get; set; }
-
-        [DisplayFormat(DataFormatString = "{0:P2}")]
-        public double TotalInterestRate { get; set; }
-
-        [DisplayFormat(DataFormatString = "{0:N0}")]
-        public double TotalOriginalPayment { get; set; }
-
-        [DisplayFormat(DataFormatString = "{0:N0}")]
-        public double TotalInterestPayment { get; set; }
-
-        [DisplayFormat(DataFormatString = "{0:N0}")]
-        public double TotalMonthlyPayment { get; set; }
-
-        [DisplayFormat(DataFormatString = "{0:N0}")]
-        public double TotalPayment { get; set; }
-
-        [DisplayFormat(DataFormatString = "{0:N0}")]
-        public double TotalRemainedValue { get; set; }
-
-        public int RowSpan { get; set; }
-        public List<OtherAssetLiabilityViewModel> Liabilities { get; set; }
-
-        public OtherAssetViewModel()
-        {
-            Liabilities = new List<OtherAssetLiabilityViewModel>();
-        }
     }
 
     public class OtherAssetListViewModel
@@ -120,28 +85,6 @@ namespace CashFlowManagement.Models
 
         [DisplayFormat(DataFormatString = "{0:P2}")]
         public double RentYield { get; set; }
-
-        [DisplayFormat(DataFormatString = "{0:N0}")]
-        public double LiabilityValue { get; set; }
-
-        [DisplayFormat(DataFormatString = "{0:P2}")]
-        public double InterestRate { get; set; }
-
-        [DisplayFormat(DataFormatString = "{0:N2}")]
-        public string InterestRatePerX { get; set; }
-
-        public double OriginalInterestPayment { get; set; }
-        [DisplayFormat(DataFormatString = "{0:N0}")]
-        public double MonthlyInterestPayment { get; set; }
-
-        [DisplayFormat(DataFormatString = "{0:N0}")]
-        public double MonthlyPayment { get; set; }
-
-        [DisplayFormat(DataFormatString = "{0:N0}")]
-        public double AnnualPayment { get; set; }
-
-        [DisplayFormat(DataFormatString = "{0:N0}")]
-        public double RemainedValue { get; set; }
     }
 
     public class OtherAssetSummaryListViewModel
@@ -157,21 +100,6 @@ namespace CashFlowManagement.Models
 
         [DisplayFormat(DataFormatString = "{0:P2}")]
         public double TotalRentYield { get; set; }
-
-        [DisplayFormat(DataFormatString = "{0:N0}")]
-        public double TotalLiabilityValue { get; set; }
-
-        [DisplayFormat(DataFormatString = "{0:P2}")]
-        public double TotalInterestRate { get; set; }
-
-        [DisplayFormat(DataFormatString = "{0:N0}")]
-        public double TotalMonthlyPayment { get; set; }
-
-        [DisplayFormat(DataFormatString = "{0:N0}")]
-        public double TotalAnnualPayment { get; set; }
-
-        [DisplayFormat(DataFormatString = "{0:N0}")]
-        public double TotalRemainedValue { get; set; }
 
         public List<OtherAssetSummaryViewModel> OtherAssetSummaries { get; set; }
         public OtherAssetSummaryListViewModel()
