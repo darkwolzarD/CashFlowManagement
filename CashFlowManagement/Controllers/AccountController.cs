@@ -14,6 +14,16 @@ namespace CashFlowManagement.Controllers
     {
         public ActionResult Index()
         {
+            if (Request.Cookies["USER"] != null)
+            {
+                string username = Request.Cookies["USER"].Value;
+                if (!string.IsNullOrEmpty(username))
+                {
+                    var user = UserQueries.GetUserByUsername(username);
+                    HttpContext.Session["USER"] = user;
+                }
+            }
+
             if (HttpContext.Session["USER"] != null)
             {
                 var user = (Users)HttpContext.Session["USER"];
@@ -147,6 +157,10 @@ namespace CashFlowManagement.Controllers
             if (user != null)
             {
                 HttpContext.Session["USER"] = user;
+                HttpCookie userCookie = new HttpCookie("USER");
+                userCookie.Value = user.Username;
+                userCookie.Expires = DateTime.Now.AddDays(30);
+                Response.SetCookie(userCookie);
                 if (!user.IncomeInitialized)
                 {
                     return RedirectToAction("Index", "Salary");
@@ -210,6 +224,13 @@ namespace CashFlowManagement.Controllers
         public ActionResult Logout()
         {
             HttpContext.Session["USER"] = null;
+            if(Request.Cookies["USER"] != null)
+            {
+                HttpCookie userCookie = new HttpCookie("USER");
+                userCookie.Value = null;
+                userCookie.Expires = DateTime.Now.AddDays(-1);
+                Response.SetCookie(userCookie);
+            }
             return RedirectToAction("Login");
         }
 
