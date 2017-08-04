@@ -19,24 +19,27 @@
                             @Html.AntiForgeryToken()
                             <div class="form-group">
                                 @Html.LabelFor(x => x.Source)
-                                @Html.TextBoxFor(x => x.Source, new { @class = "form-control input-sm" })
-                                <p class="note text-danger">VD: Tiền mặt</p>
+                                @Html.TextBoxFor(x => x.Source, new { @class = "form-control input-sm" })                             
                                 @Html.ValidationMessageFor(x => x.Source, null, new { @class = "text-danger" })
+                                <p class="note text-danger">VD1: Tên công ty của bạn, tên công ty của vợ/chồng bạn...</p>
                             </div>
                             <div class="form-group">
                                 @Html.LabelFor(x => x.Income)
                                 @Html.EditorFor(x => x.Income, new { htmlAttributes = new { @class = "form-control input-mask input-sm" } })
                                 @Html.ValidationMessageFor(x => x.Income, null, new { @class = "text-danger" })
+                                <p class="note text-danger">VD2: 7.900.000</p>
                             </div>
                             <div class="form-group">
                                 @Html.LabelFor(x => x.IncomeDay)
                                 @Html.DropDownListFor(x => x.IncomeDay, Constants.IncomeDayList(), new { @class = "form-control input-sm" })
                                 @Html.ValidationMessageFor(x => x.IncomeDay, null, new { @class = "text-danger" })
+                                <p class="note text-danger">VD3: 5</p>
                             </div>
                             <div class="form-group">
                                 @Html.LabelFor(x => x.Note)
                                 @Html.TextAreaFor(x => x.Note, new { @class = "form-control" })
                                 @Html.ValidationMessageFor(x => x.Note, null, new { @class = "text-danger" })
+                                <p class="note text-danger">VD4: Lương chính</p>
                             </div>
                         }
                     </div>

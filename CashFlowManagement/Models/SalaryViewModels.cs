@@ -8,16 +8,16 @@ namespace CashFlowManagement.Models
 {
     public class SalaryCreateViewModel
     {
-        [Required(ErrorMessage = "Nhập tên nguồn thu")]
+        [Required(ErrorMessage = "Vui lòng nhập tên nguồn thu!")]
         [Display(Name = "Tên nguồn thu")]
         public string Source { get; set; }
 
-        [Required(ErrorMessage = "Nhập ngày nhận lương")]
+        [Required(ErrorMessage = "Vui lòng nhập ngày nhận lương!")]
         [Display(Name = "Ngày nhận lương hàng tháng")]
         [DisplayFormat(DataFormatString = "{0:N0}")]
         public int? IncomeDay { get; set; }
 
-        [Required(ErrorMessage = "Nhập thu nhập từ lương")]
+        [Required(ErrorMessage = "Vui lòng nhập thu nhập từ lương!")]
         [Display(Name = "Thu nhập hàng tháng")]
         [DisplayFormat(DataFormatString = "{0:N0}")]
         public double? Income { get; set; }
