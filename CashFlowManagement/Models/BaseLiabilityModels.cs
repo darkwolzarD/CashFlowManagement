@@ -12,32 +12,32 @@ namespace CashFlowManagement.Models
         {
             public int Id { get; set; }
 
-            [Required(ErrorMessage = "Nhập nguồn vay nợ")]
+            [Required(ErrorMessage = "Vui lòng nhập nguồn vay nợ!")]
             [Display(Name = "Nguồn vay nợ")]
             public string Source { get; set; }
 
-            [Required(ErrorMessage = "Nhập giá trị nợ")]
+            [Required(ErrorMessage = "Vui lòng nhập giá trị nợ!")]
             [Display(Name = "Giá trị nợ")]
             [DisplayFormat(DataFormatString = "{0:N0}", ApplyFormatInEditMode = true)]
             public double? Value { get; set; }
 
-            [Required(ErrorMessage = "Chọn loại lãi suất")]
+            [Required(ErrorMessage = "Vui lòng chọn loại lãi suất!")]
             [Display(Name = "Loại lãi suất")]
             public int InterestType { get; set; }
 
-            [Required(ErrorMessage = "Nhập lãi suất vay")]
+            [Required(ErrorMessage = "Vui lòng nhập lãi suất vay!")]
             [Display(Name = "Lãi suất vay")]
             [DisplayFormat(DataFormatString = "{0:N2}", ApplyFormatInEditMode = true)]
-            [Range(0, 100, ErrorMessage = "Lãi suất phải lớn hơn 0 và nhỏ hơn hoặc bằng 100%")]
+            [Range(0, 100, ErrorMessage = "Lãi suất phải nằm trong khoảng 0% - 100%")]
             public double? InterestRate { get; set; }
 
-            [Required(ErrorMessage = "Chọn ngày vay nợ")]
-            [Display(Name = "Ngày vay nợ")]
+            [Required(ErrorMessage = "Vui lòng nhập ngày bắt đầu vay!")]
+            [Display(Name = "Ngày bắt đầu vay")]
             [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
             public DateTime? StartDate { get; set; }
 
-            [Required(ErrorMessage = "Chọn ngày kết thúc nợ")]
-            [Display(Name = "Ngày kết thúc nợ")]
+            [Required(ErrorMessage = "Vui lòng nhập ngày trả hết nợ!")]
+            [Display(Name = "Ngày trả hết nợ")]
             [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
             public DateTime? EndDate { get; set; }
 
@@ -51,7 +51,7 @@ namespace CashFlowManagement.Models
                 if (EndDate < StartDate)
                 {
                     yield return
-                      new ValidationResult(errorMessage: "Ngày bắt đầu phải nhỏ hơn ngày trả hết nợ",
+                      new ValidationResult(errorMessage: "Ngày bắt đầu vay phải nhỏ hơn ngày trả hết nợ",
                                            memberNames: new[] { "EndDate" });
                 }
             }
