@@ -1,4 +1,6 @@
 ﻿$(document).ready(function () {
+    var isModalShowing = false;
+
     $(document).on("click", ".reset-form", function () {
         RefreshLiabilityForm();
         RefreshLiabilityTable()
@@ -34,5 +36,13 @@
         if ($(this).children().hasClass("glyphicon-calendar") && $(this).siblings().attr("readonly") != "readonly") {
             $(this).siblings().datepicker("show");
         }
+    })
+
+    $('.modal').on('show.bs.modal', function (e) {
+        isModalShowing = true;
+    })
+
+    $('.modal').on('hidden.bs.modal', function (e) {
+        isModalShowing = false;
     })
 })
