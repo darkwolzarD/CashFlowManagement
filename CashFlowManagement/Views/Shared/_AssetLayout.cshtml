@@ -20,16 +20,28 @@
 <body>
     <div class="container-fluid">
         <div class="row header">
-            <div class="col-md-4 logo">
+            <div class="col-md-4 logo" style="width: 27%"> 
                 <img class="logo-image" src="~/images/Generic_Avatar.png" width="30" />
-                <span class="logo-text">Trang quản lý tài chính của <a href="#" style="font-size: 15px !important; color: white !important;">@user.FullName</a></span>
+                <div class="navigation" style="position: relative;">
+                    <ul class="nav-bar">
+                        <li style="width: 350px; text-align: left">
+                            <a href="#">Trang quản lý tài chính của @user.FullName</a>
+                            <ul class="nav-bar">
+                                @if (user != null)
+                                {
+                                    <li style="width: 100px"><a href="@Url.Action("Logout", "Account")">Đăng xuất</a></li>
+                                }
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
             </div>
             <div class="col-md-7 navigation">
                 <ul class="nav-bar">
                     <li><a href="#"></a></li>
                     <li><a href="#"></a></li>
                     <li>
-                        <a href="#">Tài sản</a>
+                        <a href="#"></a>
                         <ul class="nav-bar">
                             <li><a href="#"></a></li>
                             <li><a href="#"></a></li>
@@ -55,14 +67,6 @@
                         </ul>
                     </li>
                     <li style="width: 30px;"><a href="#"></a></li>
-                    @if (user == null)
-                    {
-                        <li style="width: 90px"><a href="@Url.Action("Login", "Account")">Đăng nhập</a></li>
-                    }
-                    else
-                    {
-                        <li style="width: 90px"><a href="@Url.Action("Logout", "Account")">Đăng xuất</a></li>
-                    }
                 </ul>
             </div>
         </div>

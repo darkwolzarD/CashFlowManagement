@@ -31,7 +31,7 @@
     })
 
     $(document).on("click", ".input-group-addon", function () {
-        if ($(this).children().hasClass("glyphicon-calendar")) {
+        if ($(this).children().hasClass("glyphicon-calendar") && $(this).siblings().attr("readonly") != "readonly") {
             $(this).siblings().datepicker("show");
         }
     })
