@@ -18,7 +18,6 @@
             <a href="#" class="btn btn-default"><i class="glyphicon glyphicon-home"></i></a>
             <a href="#" class="btn btn-default">Các khoản nợ</a>
             <a href="#" class="btn btn-default">Vay thẻ tín dụng</a>
-            <a href="#" class="btn btn-default">Chi tiết các khoản vay thẻ tín dụng</a>
         </div>
     </div>
 </div>
@@ -33,11 +32,19 @@
     </div>
     @if (!Model)
     {
-        <div class="col-md-6 text-right">
+        <div class="col-md-6 text-right button-div">
             <button type="button" class="btn btn-success toggle-modal">
                 <span class="glyphicon glyphicon-home"></span>
                 Tạo vay thẻ tín dụng
             </button>
+            <a href="@Url.Action("Index", "CarLiability")" class="btn btn-default " style="font-size: 11px;">
+                <span class="glyphicon glyphicon-arrow-left"></span>
+                Quay lại
+            </a>
+            <a href="@Url.Action("CreditCardLiabilityInitialize", "Account")" class="btn btn-default " style="font-size: 11px;">
+                <span class="glyphicon glyphicon-arrow-right"></span>
+                Tiếp tục
+            </a>
         </div>
     }
 </div>
@@ -47,20 +54,6 @@
         @{ Html.RenderAction("_CreditCardLiabilityTable", "CreditCardLiability"); }
     </div>
 </div>
-
-@if (!Model)
-{
-    <footer class="row text-right">
-        <a href="@Url.Action("Index", "CarLiability")" class="btn btn-default " style="font-size: 11px;">
-            <span class="glyphicon glyphicon-arrow-left"></span>
-            Quay lại
-        </a>
-        <a href="@Url.Action("CreditCardLiabilityInitialize", "Account")" class="btn btn-default " style="font-size: 11px;">
-            <span class="glyphicon glyphicon-arrow-right"></span>
-            Tiếp tục
-        </a>
-    </footer>
-}
 
 <div id="modal">
 

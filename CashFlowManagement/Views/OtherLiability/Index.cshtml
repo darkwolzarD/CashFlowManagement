@@ -18,7 +18,6 @@
             <a href="#" class="btn btn-default"><i class="glyphicon glyphicon-home"></i></a>
             <a href="#" class="btn btn-default">Các khoản nợ</a>
             <a href="#" class="btn btn-default">Các khoản vay khác</a>
-            <a href="#" class="btn btn-default">Chi tiết các khoản vay khác</a>
         </div>
     </div>
 </div>
@@ -28,16 +27,24 @@
         <p style="font-size: 20px; margin-bottom: 5px !important">Quản lý các khoản vay khác</p>
         @if (!Model)
         {
-            <p style="font-size: 12px; font-style: italic">(Nếu không có khoản vay khác, vui lòng hoàn tất khai báo các khoản nợ)</p>
+            <p style="font-size: 12px; font-style: italic">(Nếu không có khoản vay khác, vui lòng chọn Hoàn tất)</p>
         }
     </div>
     @if (!Model)
     {
-        <div class="col-md-6 text-right">
+        <div class="col-md-6 text-right button-div">
             <button type="button" class="btn btn-success toggle-modal">
                 <span class="glyphicon glyphicon-home"></span>
                 Tạo khoản vay
             </button>
+            <a href="@Url.Action("Index", "CreditCardLiability")" class="btn btn-default " style="font-size: 11px;">
+                <span class="glyphicon glyphicon-arrow-left"></span>
+                Quay lại
+            </a>
+            <a href="#" class="btn btn-primary liability-toggle-summary" style="font-size: 11px;">
+                <span class="glyphicon glyphicon-ok"></span>
+                Hoàn tất 
+            </a>
         </div>
     }
 </div>
@@ -47,20 +54,6 @@
         @{ Html.RenderAction("_OtherLiabilityTable", "OtherLiability"); }
     </div>
 </div>
-
-@if (!Model)
-{
-    <footer class="row text-right">
-        <a href="@Url.Action("Index", "CreditCardLiability")" class="btn btn-default " style="font-size: 11px;">
-            <span class="glyphicon glyphicon-arrow-left"></span>
-            Quay lại
-        </a>
-        <a href="#" class="btn btn-primary liability-toggle-summary" style="font-size: 11px;">
-            <span class="glyphicon glyphicon-ok"></span>
-            Hoàn tất khai báo các khoản nợ
-        </a>
-    </footer>
-}
 
 <div id="modal">
 

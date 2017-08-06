@@ -20,53 +20,55 @@
 <body>
     <div class="container-fluid">
         <div class="row header">
-            <div class="col-md-4 logo" style="width: 27%">
-                <img class="logo-image" src="~/images/Generic_Avatar.png" width="30" />
-                <div class="navigation" style="position: relative;">
+            <div class="container">
+                <div class="col-md-3 logo">
+                    <img class="logo-image" src="~/images/Generic_Avatar.png" width="30" style="float: left;"/>
+                    <div class="navigation" style="float: left; margin-left: 10px">
+                        <ul class="nav-bar">
+                            <li style="width: 150px; text-align: left">
+                                <a href="#">@user.FullName</a>
+                                <ul class="nav-bar">
+                                    @if (user != null)
+                                    {
+                                        <li style="width: 100px"><a href="@Url.Action("Logout", "Account")">Đăng xuất</a></li>
+                                    }
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-7 navigation" style="margin-left: 100px;">
                     <ul class="nav-bar">
-                        <li style="width: 350px; text-align: left">
-                            <a href="#">Trang quản lý tài chính của @user.FullName</a>
+                        <li><a href="@Url.Action("Index", "FinancialStatus")">Báo cáo</a></li>
+                        <li><a href="@Url.Action("Index", "Salary")">Thu nhập</a></li>
+                        <li>
+                            <a href="#">Tài sản</a>
                             <ul class="nav-bar">
-                                @if (user != null)
-                                {
-                                    <li style="width: 100px"><a href="@Url.Action("Logout", "Account")">Đăng xuất</a></li>
-                                }
+                                <li style="width: 250px"><a href="@Url.Action("Index", "RealEstate")">Bất động sản</a></li>
+                                <li style="width: 250px"><a href="@Url.Action("Index", "Business")">Kinh doanh</a></li>
+                                <li style="width: 250px"><a href="@Url.Action("Index", "BankDeposit")">Tài khoản tiết kiệm</a></li>
+                                <li style="width: 250px"><a href="@Url.Action("Index", "Stock")">Chứng khoán</a></li>
+                                <li style="width: 250px"><a href="@Url.Action("Index", "Insurance")">Bảo hiểm nhân thọ và tài sản khác</a></li>
                             </ul>
                         </li>
+                        <li style="width: 100px">
+                            <a href="#">Các khoản nợ</a>
+                            <ul class="nav-bar">
+                                <li><a href="@Url.Action("Index", "CarLiability")">Xe hơi và tiêu sản khác</a></li>
+                                <li><a href="@Url.Action("Index", "CreditCardLiability")">Thẻ tín dụng</a></li>
+                                <li><a href="@Url.Action("Index", "OtherLiability")">Nợ khác</a></li>
+                            </ul>
+                        </li>
+                        <li style="width: 150px">
+                            <a href="#">Các khoản chi tiêu</a>
+                            <ul class="nav-bar">
+                                <li><a href="@Url.Action("Index", "FamilyExpense")">Chi tiêu gia đình</a></li>
+                                <li><a href="@Url.Action("Index", "OtherExpense")">Chi tiêu khác</a></li>
+                            </ul>
+                        </li>
+                        @*<li style="width: 30px;"><a href="@Url.Action("Index", "Log", new { @type = (int)Constants.LOG_FILTER_TYPE.INCOME_EXPENSE })">Log</a></li>*@
                     </ul>
                 </div>
-            </div>
-            <div class="col-md-7 navigation">
-                <ul class="nav-bar">
-                    <li><a href="@Url.Action("Index", "FinancialStatus")">Báo cáo</a></li>
-                    <li><a href="@Url.Action("Index", "Salary")">Thu nhập</a></li>
-                    <li>
-                        <a href="#">Tài sản</a>
-                        <ul class="nav-bar">
-                            <li style="width: 250px"><a href="@Url.Action("Index", "RealEstate")">Bất động sản</a></li>
-                            <li style="width: 250px"><a href="@Url.Action("Index", "Business")">Kinh doanh</a></li>
-                            <li style="width: 250px"><a href="@Url.Action("Index", "BankDeposit")">Tài khoản tiết kiệm</a></li>
-                            <li style="width: 250px"><a href="@Url.Action("Index", "Stock")">Chứng khoán</a></li>
-                            <li style="width: 250px"><a href="@Url.Action("Index", "Insurance")">Bảo hiểm nhân thọ và tài sản khác</a></li>
-                        </ul>
-                    </li>
-                    <li style="width: 100px">
-                        <a href="#">Các khoản nợ</a>
-                        <ul class="nav-bar">
-                            <li><a href="@Url.Action("Index", "CarLiability")">Xe hơi và tiêu sản khác</a></li>
-                            <li><a href="@Url.Action("Index", "CreditCardLiability")">Thẻ tín dụng</a></li>
-                            <li><a href="@Url.Action("Index", "OtherLiability")">Nợ khác</a></li>
-                        </ul>
-                    </li>
-                    <li style="width: 150px">
-                        <a href="#">Các khoản chi tiêu</a>
-                        <ul class="nav-bar">
-                            <li><a href="@Url.Action("Index", "FamilyExpense")">Chi tiêu gia đình</a></li>
-                            <li><a href="@Url.Action("Index", "OtherExpense")">Chi tiêu khác</a></li>
-                        </ul>
-                    </li>
-                    @*<li style="width: 30px;"><a href="@Url.Action("Index", "Log", new { @type = (int)Constants.LOG_FILTER_TYPE.INCOME_EXPENSE })">Log</a></li>*@
-                </ul>
             </div>
         </div>
     </div>

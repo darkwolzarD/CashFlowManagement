@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CashFlowManagement.Queries;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -11,7 +12,13 @@ namespace CashFlowManagement.Utilities
         public override void OnActionExecuting(System.Web.Mvc.ActionExecutingContext filterContext)
         {
             var context = filterContext.HttpContext;
-            if (context.Session.IsNewSession || context.Session["USER"] == null)
+            if(context.Request.Cookies["USER"] != null)
+            {
+                context.Session["USER"] = UserQueries.GetUserByUsername(context.Request.Cookies["USER"].Value);
+                base.OnActionExecuting(filterContext);
+            }
+            else 
+            if (context.Session.IsNewSession || context.Session["USER"] == null || context.Request.Cookies["USER"] == null)
             {
                 if (context.Request.IsAjaxRequest())
                 {

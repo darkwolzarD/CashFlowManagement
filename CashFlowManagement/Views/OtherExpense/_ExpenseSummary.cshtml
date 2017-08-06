@@ -24,15 +24,15 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td class="text-danger text-left"><strong>Tổng</strong></td>
-                                    <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.FamilyExpenses.TotalExpense)</strong></td>
-                                    <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.FamilyExpenses.TotalAnnualExpense)</strong></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
                                 @if (Model.FamilyExpenses.Expenses.Any())
                                 {
+                                    <tr>
+                                        <td class="text-danger text-left"><strong>Tổng</strong></td>
+                                        <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.FamilyExpenses.TotalExpense)</strong></td>
+                                        <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.FamilyExpenses.TotalAnnualExpense)</strong></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
                                     foreach (var item in Model.FamilyExpenses.Expenses)
                                     {
                                         <tr>
@@ -68,15 +68,15 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td class="text-danger text-left"><strong>Tổng</strong></td>
-                                    <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.OtherExpenses.TotalExpense)</strong></td>
-                                    <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.OtherExpenses.TotalAnnualExpense)</strong></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
                                 @if (Model.OtherExpenses.Expenses.Any())
                                 {
+                                    <tr>
+                                        <td class="text-danger text-left"><strong>Tổng</strong></td>
+                                        <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.OtherExpenses.TotalExpense)</strong></td>
+                                        <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.OtherExpenses.TotalAnnualExpense)</strong></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
                                     foreach (var item in Model.OtherExpenses.Expenses)
                                     {
                                         <tr>

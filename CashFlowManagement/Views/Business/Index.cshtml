@@ -18,7 +18,6 @@
             <a href="#" class="btn btn-default"><i class="glyphicon glyphicon-home"></i></a>
             <a href="#" class="btn btn-default">Tài sản</a>
             <a href="#" class="btn btn-default">Kinh doanh</a>
-            <a href="#" class="btn btn-default">Chi tiết kinh doanh</a>
         </div>
     </div>
 </div>
@@ -29,15 +28,26 @@
         @if (!Model)
         {
             <p style="font-size: 12px; font-style: italic">(Nếu không kinh doanh, vui lòng chọn Tiếp tục)</p>
+            
+            
         }
+
     </div>
     @if (!Model)
     {
-        <div class="col-md-6 text-right">
+        <div class="cold-md-6 text-right" style="padding-top: 25px">
             <button type="button" class="btn btn-success toggle-modal">
                 <span class="glyphicon glyphicon-home"></span>
                 Tạo kinh doanh
             </button>
+            <a href="@Url.Action("Index", "RealEstate")" class="btn btn-default " style="font-size: 11px;">
+                <span class="glyphicon glyphicon-arrow-left"></span>
+                Quay lại
+            </a>
+            <a href="@Url.Action("BusinessInitialize", "Account")" class="btn btn-default " style="font-size: 11px;">
+                <span class="glyphicon glyphicon-arrow-right"></span>
+                Tiếp tục
+            </a>
         </div>
     }
 </div>
@@ -51,14 +61,7 @@
 @if (!Model)
 {
 <footer class="row text-right">
-    <a href="@Url.Action("Index", "RealEstate")" class="btn btn-default " style="font-size: 11px;">
-        <span class="glyphicon glyphicon-arrow-left"></span>
-        Quay lại
-    </a>
-    <a href="@Url.Action("BusinessInitialize", "Account")" class="btn btn-default " style="font-size: 11px;">
-        <span class="glyphicon glyphicon-arrow-right"></span>
-        Tiếp tục
-    </a>
+    
 </footer>
 }
 

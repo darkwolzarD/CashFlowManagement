@@ -30,14 +30,13 @@
             <a href="#" class="btn btn-default"><i class="glyphicon glyphicon-home"></i></a>
             <a href="#" class="btn btn-default">Thu nhập</a>
             <a href="#" class="btn btn-default">Lương</a>
-            <a href="#" class="btn btn-default">Chi tiết các khoản lương</a>
         </div>
     </div>
 </div>
 <div class="clear10"></div>
 <div class="row">
     <div class="col-md-6">
-        <p style="font-size: 20px; margin-bottom: 5px !important">Thu nhập từ lương</p>
+        <span style="font-size: 20px; margin-bottom: 5px !important">Thu nhập từ lương</span>
         @if (!Model)
         {
             <p style="font-size: 12px; font-style: italic">(Nếu không có thu nhập từ lương, vui lòng chọn Hoàn tất)</p>
@@ -45,11 +44,15 @@
     </div>
     @if (!Model)
     {
-        <div class="col-md-6 text-right">
+        <div class="col-md-6 text-right" style="padding-top: 20px;">
             <button type="button" class="btn btn-success toggle-modal">
                 <span class="glyphicon glyphicon-home"></span>
                 Tạo lương
             </button>
+            <a href="#" class="btn btn-primary salary-toggle-summary" style="font-size: 11px;">
+                <span class="glyphicon glyphicon-ok"></span>
+                Hoàn tất
+            </a>
         </div>
     }
 </div>
@@ -59,15 +62,6 @@
         @{ Html.RenderAction("_SalaryTable", "Salary"); }
     </div>
 </div>
-@if (!Model)
-{
-    <footer class="row text-right">
-        <a href="#" class="btn btn-primary salary-toggle-summary" style="font-size: 11px;">
-            <span class="glyphicon glyphicon-ok"></span>
-            Hoàn tất khai báo thu nhập lương
-        </a>
-    </footer>
-}
 
 <div id="modal">
 

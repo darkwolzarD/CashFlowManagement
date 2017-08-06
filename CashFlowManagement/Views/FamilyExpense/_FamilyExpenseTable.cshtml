@@ -12,15 +12,15 @@
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td class="text-danger"><strong>Tổng</strong></td>
-                <td class="text-danger text-right"><strong>@Html.DisplayFor(x => x.TotalExpense)</strong></td>
-                <td class="text-danger text-right"><strong>@Html.DisplayFor(x => x.TotalAnnualExpense)</strong></td>
-                <td></td>
-                <td></td>
-            </tr>
             @if (Model.Expenses.Any())
             {
+                <tr>
+                    <td class="text-danger"><strong>Tổng</strong></td>
+                    <td class="text-danger text-right"><strong>@Html.DisplayFor(x => x.TotalExpense)</strong></td>
+                    <td class="text-danger text-right"><strong>@Html.DisplayFor(x => x.TotalAnnualExpense)</strong></td>
+                    <td></td>
+                    <td></td>
+                </tr>
                 foreach (var item in Model.Expenses)
                 {
                     <tr>

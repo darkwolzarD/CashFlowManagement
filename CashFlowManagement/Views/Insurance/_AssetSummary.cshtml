@@ -75,7 +75,7 @@
                         <table class="table table-responsive table-condensed">
                             <thead>
                                 <tr>
-                                    <th>Kinh doanh</th>
+                                    <th width="100">Kinh doanh</th>
                                     <th class="text-right">Thu hàng tháng</th>
                                     <th class="text-right">Thu hàng năm</th>
                                     <th class="text-right">Giá trị góp vốn</th>
@@ -121,7 +121,7 @@
                                 else
                                 {
                                     <tr>
-                                        <td colspan="10">Không có bất động sản</td>
+                                        <td colspan="10">Không có kinh doanh</td>
                                     </tr>
                                 }
                             </tbody>
@@ -147,19 +147,19 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td class="text-danger text-left"><strong>Tổng</strong></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.BankDeposits.TotalIncome)</strong></td>
-                                    <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.BankDeposits.TotalAnnualIncome)</strong></td>
-                                    <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.BankDeposits.TotalValue)</strong></td>
-                                    <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.BankDeposits.TotalInterestRate) / Năm</strong></td>
-                                    <td></td>
-                                </tr>
                                 @if (Model.BankDeposits.BankDepositSummaries.Any())
                                 {
+                                    <tr>
+                                        <td class="text-danger text-left"><strong>Tổng</strong></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.BankDeposits.TotalIncome)</strong></td>
+                                        <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.BankDeposits.TotalAnnualIncome)</strong></td>
+                                        <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.BankDeposits.TotalValue)</strong></td>
+                                        <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.BankDeposits.TotalInterestRate) / Năm</strong></td>
+                                        <td></td>
+                                    </tr>
                                     foreach (var bankDeposits in Model.BankDeposits.BankDepositSummaries)
                                     {
                                         <tr>
@@ -205,20 +205,20 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td class="text-danger text-left"><strong>Tổng</strong></td>
-                                    <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.Stocks.TotalNumberOfStock)</strong></td>
-                                    <td></td>
-                                    <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.Stocks.TotalStockValue)</strong></td>
-                                    <td></td>
-                                    <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.Stocks.TotalLiabilityValue)</strong></td>
-                                    <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.Stocks.TotalInterestRate) / Năm</strong></td>
-                                    <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.Stocks.TotalMonthlyPayment)</strong></td>
-                                    <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.Stocks.TotalAnnualPayment)</strong></td>
-                                    <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.Stocks.TotalRemainedValue)</strong></td>
-                                </tr>
                                 @if (Model.Stocks.StockSummaries.Any())
                                 {
+                                    <tr>
+                                        <td class="text-danger text-left"><strong>Tổng</strong></td>
+                                        <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.Stocks.TotalNumberOfStock)</strong></td>
+                                        <td></td>
+                                        <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.Stocks.TotalStockValue)</strong></td>
+                                        <td></td>
+                                        <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.Stocks.TotalLiabilityValue)</strong></td>
+                                        <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.Stocks.TotalInterestRate) / Năm</strong></td>
+                                        <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.Stocks.TotalMonthlyPayment)</strong></td>
+                                        <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.Stocks.TotalAnnualPayment)</strong></td>
+                                        <td class="text-danger text-right"><strong>@Html.DisplayFor(x => Model.Stocks.TotalRemainedValue)</strong></td>
+                                    </tr>
                                     foreach (var stock in Model.Stocks.StockSummaries)
                                     {
                                         <tr>
@@ -300,7 +300,7 @@
                                 else
                                 {
                                     <tr>
-                                        <td class="text-center" colspan="10">Chưa có bảo hiểm</td>
+                                        <td class="text-center" colspan="11">Không có bảo hiểm</td>
                                     </tr>
                                 }
                             </tbody>

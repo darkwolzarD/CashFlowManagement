@@ -32,11 +32,15 @@
     </div>
     @if (!Model)
     {
-        <div class="col-md-6 text-right">
+        <div class="col-md-6 text-right" style="padding-top: 25px;">
             <button type="button" class="btn btn-success toggle-modal">
                 <span class="glyphicon glyphicon-home"></span>
                 Tạo bất động sản
             </button>
+            <a href="@Url.Action("RealEstateInitialize", "Account")" class="btn btn-default " style="font-size: 11px;">
+                <span class="glyphicon glyphicon-arrow-right"></span>
+                Tiếp tục
+            </a>
         </div>
     }
 </div>
@@ -46,16 +50,6 @@
         @{ Html.RenderAction("_RealEstateTable", "RealEstate"); }
     </div>
 </div>
-
-@if (!Model)
-{
-    <footer class="row text-right">
-        <a href="@Url.Action("RealEstateInitialize", "Account")" class="btn btn-default " style="font-size: 11px;">
-            <span class="glyphicon glyphicon-arrow-right"></span>
-            Tiếp tục
-        </a>
-    </footer>
-}
 
 <div id="modal">
 

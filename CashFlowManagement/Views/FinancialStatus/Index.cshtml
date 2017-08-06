@@ -6,7 +6,14 @@
 
 @{
     ViewBag.Title = "Index";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    if (Model.CompleteInitialization)
+    {
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_LiabilityLayout.cshtml";
+    }
 
     Users user = (Users)HttpContext.Current.Session["USER"];
 }
@@ -23,7 +30,7 @@
             }
         </div>
         <div class="clear10"></div>
-        <div class="col-md-12">
+        <div class="col-md-6">
             @if (Model.CompleteInitialization)
             {
                 <h4>Báo cáo ngân sách của bạn:</h4>
@@ -33,7 +40,17 @@
                 <h5 class="text-danger">Quý khách vui lòng kiểm tra lại Báo cáo ngân sách hiện thời.<br />Nếu thông tin đã chính xác, hãy chọn Hoàn tất khai báo thông tin tài chính</h5>
             }
         </div>
+        @if (!Model.CompleteInitialization)
+        {
+            <div class="col-md-6 text-right" style="padding-top: 15px">
+                <a href="@Url.Action("CompleteInitialization", "FinancialStatus")" class="btn btn-primary" style="font-size: 11px;">
+                    <span class="glyphicon glyphicon-ok"></span>
+                    Hoàn tất khai báo thông tin tài chính
+                </a>
+            </div>
+        }
     </div>
+    <div class="clear10"></div>
     <div class="col-md-3 text-center info">
         <span><strong>Dòng tiền tự do: </strong></span>
         @FormatUtility.DisplayThousandSeparatorsForNumber(Model.MonthlyCashflow) đồng
@@ -215,20 +232,7 @@
         </table>
     </div>
 </div>
-@if (!Model.CompleteInitialization)
-{
-    <footer class="col-md-12 text-right">
-        <div class="col-md-12">
-            <div class="col-md-12">
-                <a href="@Url.Action("CompleteInitialization", "FinancialStatus")" class="btn btn-primary" style="font-size: 11px;">
-                    <span class="glyphicon glyphicon-ok"></span>
-                    Hoàn tất khai báo thông tin tài chính
-                </a>
 
-            </div>
-        </div>
-    </footer>
-}
 
 <div id="modal">
 

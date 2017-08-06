@@ -43,11 +43,10 @@ button .glyphicon {
 
     /*Logo*/
     .header .logo {
-        margin-left: 100px;
+        margin-left: 20px;
     }
 
         .header .logo .logo-text {
-            margin-left: 5px;
             font-size: 15px;
             color: #ffffff;
             vertical-align: middle;
@@ -64,7 +63,6 @@ button .glyphicon {
             padding: 0;
             height: 50px;
             float: right;
-            margin-right: 100px;
         }
 
             .header .navigation .nav-bar li {
@@ -280,4 +278,8 @@ footer {
 
 .input-group-addon:hover {
     cursor: pointer;
+}
+
+.button-div {
+    padding-top: 25px;
 }

@@ -210,6 +210,11 @@
 </html>
 <script type="text/javascript">
     $(document).ready(function () {
+        var isChrome = !!window.chrome && !!window.chrome.webstore;
+        if (!isChrome) {
+            swal("Cảnh báo", "Ngansach.vn hoạt động hiệu quả nhất trên trình duyệt Google Chrome", "warning");
+        }
+
         var isRegister = false;
         $(document).ajaxStart(function () {
             $("#loading").show();
