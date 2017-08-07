@@ -42,9 +42,9 @@ namespace CashFlowManagement.Queries
                 var transactions = entities.StockTransactions.Where(x => x.Username.Equals(username) && x.AssetId == stock.Id && !x.DisabledDate.HasValue);
                 if(transactions.Any())
                 {
-                    double value = entities.StockTransactions.Where(x => x.Username.Equals(username) && x.AssetId == stock.Id && !x.DisabledDate.HasValue).Sum(x => x.Value);
+                    double quantity = entities.StockTransactions.Where(x => x.Username.Equals(username) && x.AssetId == stock.Id && !x.DisabledDate.HasValue).Sum(x => x.NumberOfShares);
                     double interestRate = entities.StockTransactions.Where(x => x.Username.Equals(username) && x.AssetId == stock.Id && !x.DisabledDate.HasValue).OrderByDescending(x => x.TransactionDate).FirstOrDefault().ExpectedDividend;
-                    result.DividendIncome += value * interestRate / 1200;
+                    result.DividendIncome += quantity * 10000 * interestRate / 100;
                 }
                 else
                 {

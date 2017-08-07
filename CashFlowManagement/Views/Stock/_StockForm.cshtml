@@ -12,22 +12,26 @@
             @Html.TextBoxFor(x => x.Name, new { @class = "form-control input-sm" })
             @Html.ValidationMessageFor(x => x.Name, null, new { @class = "text-danger" })
             @Html.ValidationMessage("DuplicateName", new { @class = "text-danger" })
+            <p class="note text-danger">VD: HPG</p>
         </div>
         <div class="form-group">
             @Html.LabelFor(x => x.NumberOfStock)
             @Html.EditorFor(x => x.NumberOfStock, new { htmlAttributes = new { @class = "form-control input-mask input-sm", @type = "text" } })
             @Html.ValidationMessageFor(x => x.NumberOfStock, null, new { @class = "text-danger" })
+            <p class="note text-danger">VD: 1.000</p>
         </div>
         <div class="form-group">
             @Html.LabelFor(x => x.SpotRice)
             @Html.EditorFor(x => x.SpotRice, new { htmlAttributes = new { @class = "form-control input-mask input-sm" } })
             @Html.ValidationMessageFor(x => x.SpotRice, null, new { @class = "text-danger" })
+            <p class="note text-danger">VD: 34.000</p>
         </div>
         <div class="form-group">
             @Html.LabelFor(x => x.StockValue)
             @Html.EditorFor(x => x.StockValue, new { htmlAttributes = new { @class = "form-control input-mask input-sm" } })
             @Html.ValidationMessageFor(x => x.StockValue, null, new { @class = "text-danger" })
             @Html.ValidationMessage("CompareStockValueAndLiabilityValue", new { @class = "text-danger" })
+            <p class="note text-danger">VD: 34.000.000</p>
         </div>
         <div class="form-group">
             @Html.LabelFor(x => x.ExpectedDividend)
@@ -38,6 +42,7 @@
                 </div>
             </div>
             @Html.ValidationMessageFor(x => x.ExpectedDividend, null, new { @class = "text-danger" })
+            <p class="note text-danger">VD: 30% mệnh giá / Năm</p>
             <span style="font-style: italic">(liên hệ quản trị viên để biết thêm chi tiết)</span>
         </div>
         <div class="form-group">
