@@ -347,7 +347,7 @@ namespace CashFlowManagement.Controllers
                             liabilityViewModel.MonthlyOriginalPayment = liabilityViewModel.Value.Value / liabilityViewModel.PaymentPeriod;
                             liabilityViewModel.MonthlyInterestPayment = liabilityViewModel.Value.Value * interestRate;
                             liabilityViewModel.TotalMonthlyPayment = liabilityViewModel.MonthlyOriginalPayment + liabilityViewModel.MonthlyInterestPayment;
-                            liabilityViewModel.TotalPayment = liabilityViewModel.TotalMonthlyPayment * currentPeriod;
+                            liabilityViewModel.TotalPayment = RealEstateLiabilityQueries.Helper.CalculateAnnualPayment(liability);
                             liabilityViewModel.RemainedValue = liabilityViewModel.Value.Value - liabilityViewModel.MonthlyOriginalPayment * (currentPeriod + 1);
                             liabilityViewModel.Status = "Đang nợ";
                             liabilityViewModel.StatusCode = "label-success";
@@ -359,7 +359,7 @@ namespace CashFlowManagement.Controllers
                             liabilityViewModel.RemainedValue = liabilityViewModel.Value.Value - liabilityViewModel.MonthlyOriginalPayment * (currentPeriod + 1);
                             liabilityViewModel.MonthlyInterestPayment = (liabilityViewModel.Value.Value - liabilityViewModel.MonthlyOriginalPayment * currentPeriod) * interestRate;
                             liabilityViewModel.TotalMonthlyPayment = liabilityViewModel.MonthlyOriginalPayment + liabilityViewModel.MonthlyInterestPayment;
-                            liabilityViewModel.TotalPayment = interestRate * (currentPeriod * liabilityViewModel.Value.Value + (currentPeriod * (currentPeriod + 1) / 2) * liabilityViewModel.MonthlyOriginalPayment);
+                            liabilityViewModel.TotalPayment = RealEstateLiabilityQueries.Helper.CalculateAnnualPayment(liability);
                             liabilityViewModel.Status = "Đang nợ";
                             liabilityViewModel.StatusCode = "label-success";
                         }

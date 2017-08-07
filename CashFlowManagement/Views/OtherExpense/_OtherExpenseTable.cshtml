@@ -28,7 +28,7 @@
                             @Html.DisplayFor(x => item.Source)<br />
                             @if (!Model.IsInitialized)
                             {
-                                <a href="#" title="Cập nhật chi tiêu" class="update-other-expense" data-value="@Html.DisplayFor(x => item.Id)"><span class="glyphicon glyphicon-edit text-success" style="font-size: 14px;"></span></a>
+                                <a href="#" title="Cập nhật chi tiêu" class="update-other-expense modal-toggle" data-value="@Html.DisplayFor(x => item.Id)"><span class="glyphicon glyphicon-edit text-success" style="font-size: 14px;"></span></a>
                                 <a href="#" title="Xóa chi tiêu" class="delete-other-expense" data-value="@Html.DisplayFor(x => item.Id)"><span class="glyphicon glyphicon-remove text-danger" style="font-size: 14px;"></span></a>
                             }
                         </td>

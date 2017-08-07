@@ -41,13 +41,13 @@
                         @if (!Model.IsInitialized)
                         {
                             <a href="#" title="Cập nhật kinh doanh">
-                                <span class="glyphicon glyphicon-edit text-success update-business" data-value="@Html.DisplayFor(x => business.Id)" style="font-size: 12px"></span>
+                                <span class="glyphicon glyphicon-edit text-success update-business modal-toggle" data-value="@Html.DisplayFor(x => business.Id)" style="font-size: 12px"></span>
                             </a>
                             <a href="#" title="Xóa kinh doanh">
                                 <span class="glyphicon glyphicon-remove text-danger delete-business" data-value="@Html.DisplayFor(x => business.Id)" style="font-size: 12px"></span>
                             </a>
                             <a href="#" title="Thêm nợ">
-                                <span class="fa fa-money text-primary add-business-liability" data-value="@Html.DisplayFor(x => business.Id)" style="font-size: 14px"></span>
+                                <span class="fa fa-money text-primary add-business-liability modal-toggle" data-value="@Html.DisplayFor(x => business.Id)" style="font-size: 14px"></span>
                             </a>
                         }
                     </td>
@@ -103,7 +103,7 @@
                                 @if (!Model.IsInitialized)
                                 {
                                     <a href="#" title="Cập nhật nợ">
-                                        <span class="glyphicon glyphicon-edit text-success update-business-liability" data-value="@Html.DisplayFor(x => liability.Id)" style="font-size: 12px"></span>
+                                        <span class="glyphicon glyphicon-edit text-success update-business-liability modal-toggle" data-value="@Html.DisplayFor(x => liability.Id)" style="font-size: 12px"></span>
                                     </a>
                                     <a href="#" title="Xóa">
                                         <span class="glyphicon glyphicon-remove text-danger delete-business-liability" data-value="@Html.DisplayFor(x => liability.Id)" style="font-size: 12px"></span>

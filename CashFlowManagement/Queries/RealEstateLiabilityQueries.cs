@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using static CashFlowManagement.Models.BaseLiabilityModels;
 
 namespace CashFlowManagement.Queries
 {
@@ -52,7 +53,7 @@ namespace CashFlowManagement.Queries
                     liabilityViewModel.MonthlyOriginalPayment = liabilityViewModel.Value.Value / liabilityViewModel.PaymentPeriod;
                     liabilityViewModel.MonthlyInterestPayment = liabilityViewModel.Value.Value * interestRate;
                     liabilityViewModel.TotalMonthlyPayment = liabilityViewModel.MonthlyOriginalPayment + liabilityViewModel.MonthlyInterestPayment;
-                    liabilityViewModel.TotalPayment = liabilityViewModel.TotalMonthlyPayment * currentPeriod;
+                    liabilityViewModel.TotalPayment = Helper.CalculateAnnualPayment(liability);
                     liabilityViewModel.RemainedValue = liabilityViewModel.Value.Value - liabilityViewModel.MonthlyOriginalPayment * (currentPeriod + 1);
                     liabilityViewModel.Status = "Đang nợ";
                     liabilityViewModel.StatusCode = "label-success";
@@ -64,7 +65,7 @@ namespace CashFlowManagement.Queries
                     liabilityViewModel.RemainedValue = liabilityViewModel.Value.Value - liabilityViewModel.MonthlyOriginalPayment * (currentPeriod + 1);
                     liabilityViewModel.MonthlyInterestPayment = (liabilityViewModel.Value.Value - liabilityViewModel.MonthlyOriginalPayment * currentPeriod) * interestRate;
                     liabilityViewModel.TotalMonthlyPayment = liabilityViewModel.MonthlyOriginalPayment + liabilityViewModel.MonthlyInterestPayment;
-                    liabilityViewModel.TotalPayment = interestRate * (currentPeriod * liabilityViewModel.Value.Value + (currentPeriod * (currentPeriod + 1) / 2) * liabilityViewModel.MonthlyOriginalPayment);
+                    liabilityViewModel.TotalPayment = Helper.CalculateAnnualPayment(liability);
                     liabilityViewModel.Status = "Đang nợ";
                     liabilityViewModel.StatusCode = "label-success";
                 }
@@ -76,7 +77,7 @@ namespace CashFlowManagement.Queries
                 liabilityViewModel.TotalMonthlyPayment = 0;
                 liabilityViewModel.TotalPayment = 0;
                 liabilityViewModel.RemainedValue = 0;
-                if(liabilityViewModel.EndDate < current)
+                if (liabilityViewModel.EndDate < current)
                 {
                     liabilityViewModel.StatusCode = "label-warning";
                     liabilityViewModel.Status = "Đã trả hết nợ";
@@ -192,7 +193,7 @@ namespace CashFlowManagement.Queries
                 if (endDate >= startDate)
                 {
                     int period = (endDate.Year - startDate.Year) * 12 + endDate.Month - startDate.Month;
-                    if((endDate.Day - startDate.Day) / 30 >= 0.5)
+                    if ((endDate.Day - startDate.Day) / 30 >= 0.5)
                     {
                         period += 1;
                     }
@@ -201,6 +202,78 @@ namespace CashFlowManagement.Queries
                 else
                 {
                     return 0;
+                }
+            }
+
+            public static double CalculateAnnualPayment(Liabilities liability)
+            {
+                DateTime start = new DateTime(DateTime.Now.Year, 1, 1);
+                DateTime end = new DateTime(DateTime.Now.Year, 12, 31);
+                if (liability.StartDate.Value > start) start = liability.StartDate.Value;
+                if (liability.EndDate.Value < end) end = liability.EndDate.Value;
+                int period = CalculateTimePeriod(start, end);
+                int paymentPeriod = Helper.CalculateTimePeriod(liability.StartDate.Value, liability.EndDate.Value);
+                double interestRate = liability.InterestRatePerX == (int)Constants.Constants.INTEREST_RATE_PER.MONTH ? liability.InterestRate / 100 : liability.InterestRate / 1200;
+
+                if (liability.InterestType == (int)Constants.Constants.INTEREST_TYPE.FIXED)
+                {
+                    double monthlyOriginalPayment = liability.Value / paymentPeriod;
+                    double monthlyInterestPayment = liability.Value * interestRate;
+                    return (monthlyOriginalPayment + monthlyInterestPayment) * period;
+                }
+                else
+                {
+                    double result = 0;
+                    DateTime originalStartDate = liability.StartDate.Value;
+                    while (liability.StartDate.Value <= liability.EndDate.Value)
+                    {
+                        int currentPeriod = CalculateTimePeriod(originalStartDate, liability.StartDate.Value);
+                        if (liability.StartDate.Value >= start && liability.StartDate.Value <= end)
+                        {
+                            double monthlyOriginalPayment = liability.Value / paymentPeriod;
+                            double remainedValue = liability.Value - monthlyOriginalPayment * (currentPeriod + 1);
+                            double monthlyInterestPayment = (liability.Value - monthlyOriginalPayment * currentPeriod) * interestRate;
+                            result += monthlyOriginalPayment + monthlyInterestPayment;
+                        }
+                        liability.StartDate = liability.StartDate.Value.AddMonths(1);
+                    }
+                    return result;
+                }
+            }
+
+            public static double CalculateAnnualPayment(LiabilityCreateViewModel liability)
+            {
+                DateTime start = new DateTime(DateTime.Now.Year, 1, 1);
+                DateTime end = new DateTime(DateTime.Now.Year, 12, 31);
+                if (liability.StartDate.Value > start) start = liability.StartDate.Value;
+                if (liability.EndDate.Value < end) end = liability.EndDate.Value;
+                int period = CalculateTimePeriod(start, end);
+                int paymentPeriod = Helper.CalculateTimePeriod(liability.StartDate.Value, liability.EndDate.Value);
+                double interestRate = liability.InterestRatePerX == (int)Constants.Constants.INTEREST_RATE_PER.MONTH ? liability.InterestRate.Value / 100 : liability.InterestRate.Value / 1200;
+
+                if (liability.InterestType == (int)Constants.Constants.INTEREST_TYPE.FIXED)
+                {
+                    double monthlyOriginalPayment = liability.Value.Value / paymentPeriod;
+                    double monthlyInterestPayment = liability.Value.Value * interestRate;
+                    return (monthlyOriginalPayment + monthlyInterestPayment) * period;
+                }
+                else
+                {
+                    double result = 0;
+                    DateTime originalStartDate = liability.StartDate.Value;
+                    while (liability.StartDate.Value <= liability.EndDate.Value)
+                    {
+                        int currentPeriod = CalculateTimePeriod(originalStartDate, liability.StartDate.Value);
+                        if (liability.StartDate.Value >= start && liability.StartDate.Value <= end)
+                        {
+                            double monthlyOriginalPayment = liability.Value.Value / paymentPeriod;
+                            double remainedValue = liability.Value.Value - monthlyOriginalPayment * (currentPeriod + 1);
+                            double monthlyInterestPayment = (liability.Value.Value - monthlyOriginalPayment * currentPeriod) * interestRate;
+                            result += monthlyOriginalPayment + monthlyInterestPayment;
+                        }
+                        liability.StartDate = liability.StartDate.Value.AddMonths(1);
+                    }
+                    return result;
                 }
             }
         }

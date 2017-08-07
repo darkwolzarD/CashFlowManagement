@@ -38,7 +38,7 @@
         }
     })
 
-    $('.modal').on('show.bs.modal', function (e) {
+    $(document).on("click", ".modal-toggle", function (e) {
         isModalShowing = true;
     })
 
