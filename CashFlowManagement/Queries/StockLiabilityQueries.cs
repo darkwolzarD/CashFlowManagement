@@ -63,8 +63,8 @@ namespace CashFlowManagement.Queries
                     liabilityViewModel.MonthlyOriginalPayment = liabilityViewModel.Value.Value / liabilityViewModel.PaymentPeriod;
                     liabilityViewModel.RemainedValue = liabilityViewModel.Value.Value - liabilityViewModel.MonthlyOriginalPayment * (currentPeriod + 1);
                     liabilityViewModel.MonthlyInterestPayment = (liabilityViewModel.Value.Value - liabilityViewModel.MonthlyOriginalPayment * currentPeriod) * interestRate;
-                    liabilityViewModel.TotalMonthlyPayment = RealEstateLiabilityQueries.Helper.CalculateAnnualPayment(liability);
-                    liabilityViewModel.TotalPayment = interestRate * (currentPeriod * liabilityViewModel.Value.Value + (currentPeriod * (currentPeriod + 1) / 2) * liabilityViewModel.MonthlyOriginalPayment);
+                    liabilityViewModel.TotalMonthlyPayment = liabilityViewModel.MonthlyOriginalPayment + liabilityViewModel.MonthlyInterestPayment;
+                    liabilityViewModel.TotalPayment = RealEstateLiabilityQueries.Helper.CalculateAnnualPayment(liability);
                     liabilityViewModel.Status = "Đang nợ";
                     liabilityViewModel.StatusCode = "label-success";
                 }

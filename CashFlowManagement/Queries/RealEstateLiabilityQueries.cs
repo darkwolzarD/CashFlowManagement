@@ -225,17 +225,18 @@ namespace CashFlowManagement.Queries
                 {
                     double result = 0;
                     DateTime originalStartDate = liability.StartDate.Value;
-                    while (liability.StartDate.Value <= liability.EndDate.Value)
+                    DateTime startDate = liability.StartDate.Value;
+                    while (startDate <= liability.EndDate.Value)
                     {
-                        int currentPeriod = CalculateTimePeriod(originalStartDate, liability.StartDate.Value);
-                        if (liability.StartDate.Value >= start && liability.StartDate.Value <= end)
+                        int currentPeriod = CalculateTimePeriod(originalStartDate, startDate);
+                        if (startDate >= start && startDate <= end)
                         {
                             double monthlyOriginalPayment = liability.Value / paymentPeriod;
                             double remainedValue = liability.Value - monthlyOriginalPayment * (currentPeriod + 1);
                             double monthlyInterestPayment = (liability.Value - monthlyOriginalPayment * currentPeriod) * interestRate;
                             result += monthlyOriginalPayment + monthlyInterestPayment;
                         }
-                        liability.StartDate = liability.StartDate.Value.AddMonths(1);
+                        startDate = startDate.AddMonths(1);
                     }
                     return result;
                 }
@@ -261,17 +262,18 @@ namespace CashFlowManagement.Queries
                 {
                     double result = 0;
                     DateTime originalStartDate = liability.StartDate.Value;
-                    while (liability.StartDate.Value <= liability.EndDate.Value)
+                    DateTime startDate = liability.StartDate.Value;
+                    while (startDate <= liability.EndDate.Value)
                     {
-                        int currentPeriod = CalculateTimePeriod(originalStartDate, liability.StartDate.Value);
-                        if (liability.StartDate.Value >= start && liability.StartDate.Value <= end)
+                        int currentPeriod = CalculateTimePeriod(originalStartDate, startDate);
+                        if (startDate >= start && startDate <= end)
                         {
                             double monthlyOriginalPayment = liability.Value.Value / paymentPeriod;
                             double remainedValue = liability.Value.Value - monthlyOriginalPayment * (currentPeriod + 1);
                             double monthlyInterestPayment = (liability.Value.Value - monthlyOriginalPayment * currentPeriod) * interestRate;
                             result += monthlyOriginalPayment + monthlyInterestPayment;
                         }
-                        liability.StartDate = liability.StartDate.Value.AddMonths(1);
+                        startDate = startDate.AddMonths(1);
                     }
                     return result;
                 }
