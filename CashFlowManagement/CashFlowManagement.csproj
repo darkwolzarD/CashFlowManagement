@@ -758,6 +758,10 @@
     <Content Include="Views\Salary\_SalarySummary.cshtml" />
     <Content Include="Views\AvailableMoney\_AvailableMoneyTable.cshtml" />
     <Content Include="Views\AvailableMoney\_AvailableMoneySummary.cshtml" />
+    <Content Include="Views\Insurance\_AssetSummary.cshtml" />
+    <Content Include="Views\Insurance\_OtherAssetForm.cshtml" />
+    <Content Include="Views\Insurance\_OtherAssetTable.cshtml" />
+    <Content Include="Views\Insurance\_OtherAssetUpdateForm.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
